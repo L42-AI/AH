@@ -1,1 +1,0 @@
-print("Lectures en roosters")
