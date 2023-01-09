@@ -7,7 +7,7 @@ git add main.py
 git commit -m "nieuwe main" 
 git push origin main
 '''
-# Jacob's test
+# Jacob's test for branch
 def assign(COURSES, ROOMS, STUDENT_COURSES):
     '''fill in lists and dictionaries with instances'''
     course_list = []
