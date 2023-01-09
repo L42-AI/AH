@@ -1,12 +1,7 @@
 from classes import *
 from data import COURSES, ROOMS, STUDENT_COURSES
 
-'''
-**UPLOADEN**
-git add main.py
-git commit -m "nieuwe main" 
-git push origin main
-'''
+
 def assign(COURSES, ROOMS, STUDENT_COURSES):
     '''fill in lists and dictionaries with instances'''
     course_list = []
@@ -33,4 +28,4 @@ def assign(COURSES, ROOMS, STUDENT_COURSES):
 course_list, student_list, rooms = assign(COURSES, ROOMS, STUDENT_COURSES)
 
 for student in student_list:
-    print(student.f_name)
+    print(student.courses)

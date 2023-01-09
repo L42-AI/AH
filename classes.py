@@ -6,7 +6,7 @@ class Student():
         self.id = info['Stud.Nr.']
 
         # create a list with courses that a student follows
-        self.courses = [course for course in info if str(course).startswith("Vak") and course != 'Nan']
+        self.courses = [course for course in info[3:] if str(course) != 'nan']
 
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
