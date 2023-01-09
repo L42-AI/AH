@@ -8,7 +8,9 @@ class Student():
         self.f_name = info['Voornaam']
         self.l_name = info['Achternaam']
         self.id = info['Stud.Nr.']
-        self.courses = [course for course in info if str(course).startswith("Vak")]
+
+        # create a list with courses that a student follows
+        self.courses = [course for course in info if str(course).startswith("Vak") and course != 'Nan']
 
         # here the results will be stored
         self.enrollment = {}
