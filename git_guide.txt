@@ -1,0 +1,9 @@
+git clone https://github.com/user/repo.git
+
+git checkout my-branch
+
+git add -A
+
+git commit -m "Added a new feature"
+
+git push origin my-branch
