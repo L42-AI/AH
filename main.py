@@ -1,8 +1,12 @@
 from classes import *
 from data import COURSES, ROOMS, STUDENT_COURSES
 
-# this is a test
-
+'''
+**UPLOADEN**
+git add main.py
+git commit -m "nieuwe main" 
+git push origin main
+'''
 def assign(COURSES, ROOMS, STUDENT_COURSES):
     '''fill in lists and dictionaries with instances'''
     course_list = []
