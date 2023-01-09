@@ -3,19 +3,16 @@
 '''
 
 class Student():
-    def __init__(self, last_name, first_name, id, courses):
+    def __init__(self, info):
 
-        self.name = f'{first_name} {last_name}'
-        self.id = id
-
-        # Set a list for the courses the student takes
-        self.courses = []
+        self.f_name = info['Voornaam']
+        self.l_name = info['Achternaam']
+        self.id = info['Stud.Nr.']
+        self.courses = [course for course in info if str(course).startswith("Vak")]
 
         # here the results will be stored
         self.enrollment = {}
 
-        # Run add_courses to add all courses to each student
-        self.add_courses(courses)
 
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
