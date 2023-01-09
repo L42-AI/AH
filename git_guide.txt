@@ -1,6 +1,6 @@
-git clone https://github.com/user/repo.git
+git clone https://github.com/L42-AI/AH.git
 
-git checkout my-branch
+git checkout Luka
 
 git add -A
 
