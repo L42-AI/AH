@@ -1,0 +1,46 @@
+how to write a program that makes a roster for lectures and students in python
+
+Sure, here's one way you could approach this problem:
+
+    First, define a Student class to represent a student. It should have at least the following attributes:
+
+    name: a string representing the student's name
+    enrollment_id: an integer representing the student's enrollment ID
+    lectures_attended: a list of strings representing the names of the lectures the student has attended
+
+    Define a Lecture class to represent a lecture. It should have at least the following attributes:
+
+    name: a string representing the lecture's name
+    students: a list of Student objects representing the students who have attended the lecture
+
+    Create a Roster class to represent a roster of lectures and students. It should have at least the following attributes:
+
+    lectures: a list of Lecture objects representing the lectures on the roster
+    students: a list of Student objects representing the students on the roster
+
+    Implement the following methods in the Roster class:
+
+    add_student(self, student: Student) -> None: adds a student to the roster
+    add_lecture(self, lecture: Lecture) -> None: adds a lecture to the roster
+    enroll_student_in_lecture(self, student_id: int, lecture_name: str) -> None: enrolls a student in a lecture by their enrollment ID and the name of the lecture
+    get_student_by_id(self, student_id: int) -> Union[Student, None]: returns the student with the given enrollment ID, or None if no such student exists
+    get_lecture_by_name(self, lecture_name: str) -> Union[Lecture, None]: returns the lecture with the given name, or None if no such lecture exists
+
+Here's some example code to demonstrate how these classes could be used:
+
+roster = Roster()
+
+student1 = Student("Alice", 123456, ["Lecture 1", "Lecture 2"])
+student2 = Student("Bob", 654321, ["Lecture 1"])
+lecture1 = Lecture("Lecture 1", [student1, student2])
+lecture2 = Lecture("Lecture 2", [student1])
+
+roster.add_student(student1)
+roster.add_student(student2)
+roster.add_lecture(lecture1)
+roster.add_lecture(lecture2)
+
+roster.enroll_student_in_lecture(123456, "Lecture 3")
+
+assert roster.get_student_by_id(123456).lectures_attended == ["Lecture 1", "Lecture 2", "Lecture 3"]
+assert roster.get_lecture_by_name("Lecture 3").students == [student1]
