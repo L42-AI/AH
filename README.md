@@ -1,2 +1,0 @@
-# AH
-Algoritmes en Heuristieken
