@@ -1,3 +1,5 @@
+# Self schedule argument
+# Self cost arguement
 class Student():
     def __init__(self, info):
 
@@ -16,10 +18,6 @@ class Student():
 
             # Add courses to the courses list
             self.courses.append(course)
-
-    def assign_tutorial_groups(self):
-        """ Assign the student's tutorial group per course """
-        pass
 
 
 class Course():

@@ -1,6 +1,18 @@
 from classes import *
 from data import COURSES, ROOMS, STUDENT_COURSES
 
+def courses_dictionary(COURSES):
+    dictionary = {}
+
+    for _, course in COURSES.iterrows():
+        dictionary[course['Vak']] = (course['#Hoorcolleges'],
+                                     course['#Werkcolleges'],
+                                     course['Max. stud. Werkcollege'],
+                                     course['#Practica'],
+                                     course['Max. stud. Practicum'],
+                                     course['Verwacht'])
+
+    return dictionary
 
 def assign(COURSES, ROOMS, STUDENT_COURSES):
     '''fill in lists and dictionaries with instances'''
@@ -25,7 +37,10 @@ def assign(COURSES, ROOMS, STUDENT_COURSES):
 
     return course_list, student_list, rooms
 
+
 course_list, student_list, rooms = assign(COURSES, ROOMS, STUDENT_COURSES)
+course_dict = courses_dictionary(COURSES)
 
 for student in student_list:
-    print(student.courses)
+    for course in student.courses:
+        print(course, course_dict[course])
