@@ -38,15 +38,14 @@ class Student():
 
 class Course():
     # *arg toevoegen
-    def __init__(self, name, lectures, tutorials, max_std, practicals, estimated_std):
-        self.name = name = str
-
-        self.lectures = lectures = int
-        self.tutorials = tutorials = int
-        self.practicals = practicals = int
-        self.max_std = max_std = int
-
-        self.estimated_std = estimated_std = int
+    def __init__(self, course):
+        self.name = course['Vak'] 
+        self.lectures = course['#Hoorcolleges']
+        self.tutorials = course['#Werkcolleges'] 
+        self.max_std = course['Max. stud. Werkcollege'] 
+        self.practica = course['#Practica']
+        self.max_std_practica = course['Max. stud. Practicum'] 
+        self.expected = course['Verwacht']
 
 
 
