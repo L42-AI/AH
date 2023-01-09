@@ -15,6 +15,8 @@ frame1.pack()
 frame2.pack()
 frame3.pack()
 frame4.pack()
+frame5.pack()
+frame6.pack()
 
 # Create a vertical scrollbar linked to the canvas
 scrollbar = tk.Scrollbar(frame, orient="vertical", command=canvas.yview, troughcolor="red")
