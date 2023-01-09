@@ -1,9 +1,10 @@
-git clone https://github.com/L42-AI/AH.git
-
 git checkout Luka
 
-git add -A
+'''
+**UPLOADEN**
+git add [file]
+git commit -m ["message"]
+git push origin [branch]
+'''
 
-git commit -m "Added a new feature"
-
-git push origin my-branch
+git pull https://github.com/L42-AI/AH.git
