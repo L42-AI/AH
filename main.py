@@ -20,10 +20,19 @@ for course in course_list:
 print(time_slot_count)
 
 # here 
-roster = Roster()
+roster = Roster(rooms)
 for course in course_list:
-    for i in range lecture
-        roster.fill_schedule(course.name, rooms)
+    for i in range(course.lectures):
+        roster.fill_schedule(course.name, "lecture")
+    for i in range(course.tutorials):
+        roster.fill_schedule(course.name, "tutorial")
+    for i in range(course.practica):
+        roster.fill_schedule(course.name, "practica")
+
+print(roster.schedule)
+
+
 
     
+
 
