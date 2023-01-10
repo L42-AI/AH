@@ -6,6 +6,9 @@
 
 ## mogelijke verbeteringen ##
 course naar dict veranderen
+rooms structuur veranderen, nu is elke room object binnen class Room met attributes: - id (type int)
+                                                                                     - cap (type int)
+                                                                                     - availability (type dict)
 
 ## structuur ##
 - class tutorial maken
