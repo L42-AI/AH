@@ -73,3 +73,7 @@ class Roster():
                             self.schedule[name] = f"{type} in  {room.id} on {day} at {timeslot}."
                         
                         room.availability[day][timeslot] = False
+
+
+
+    # hal test
