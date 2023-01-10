@@ -29,7 +29,10 @@ for course in course_list:
     for i in range(course.practica):
         roster.fill_schedule(course.name, "practica")
 
-print(roster.schedule)
+for key in roster.schedule:
+    print(key)
+    print(roster.schedule[key])
+    print("-----------------------------------")
 
 
 

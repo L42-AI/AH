@@ -63,14 +63,18 @@ class Roster():
 
 
     def fill_schedule(self, name, type):
+        # explicit definition needed somehow?
+        name = name
+        type = type
+
         # capacity and schedule logic is not important for now
         for room in self.rooms:
             for day in room.availability:
                 for timeslot in room.availability[day]:
                     if room.availability[day][timeslot]:
                         if name in self.schedule:
-                            self.schedule[name] += f"{type} in  {room.id} on {day} at {timeslot}."
+                            self.schedule[name] += f"{type} in  {room.id} on {day} at {timeslot}. "
                         else:
-                            self.schedule[name] = f"{type} in  {room.id} on {day} at {timeslot}."
-                        
+                            self.schedule[name] = f"{type} in  {room.id} on {day} at {timeslot}. "
                         room.availability[day][timeslot] = False
+                        return
