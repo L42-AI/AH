@@ -1,5 +1,5 @@
 from classes import *
-from data import COURSES, ROOMS, STUDENT_COURSES
+from data import *
 
 '''assign all classes'''
 
@@ -23,7 +23,5 @@ def assign(COURSES, ROOMS, STUDENT_COURSES):
     for _, room in ROOMS.iterrows():
 
         rooms.append(Room(room))
-
-    return course_list, student_list, rooms
 
     return course_list, student_list, rooms
