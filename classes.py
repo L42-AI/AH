@@ -49,8 +49,16 @@ class Course():
 
 
 class Roster():
-    def __init__(self):
-        pass
+    def __init__(self, rooms, type):
+        self.schedule = {}
+        self.rooms = rooms
+        self.type = type # this will be lecture, tutorial or practica
 
-    def assign_tutorial(self):
-        pass
+    def fill_schedule(self, name, rooms):
+        # capacity and schedule logic is not important for now
+        for room in self.rooms:
+            for day in room.availity:
+                for timeslot in room.availability[day]:
+                    if room.availability[day][timeslot]:
+                        room.availability[day][timeslot] = False
+                        self.schedule[name] = f"{room.type} in  {room.id} on {room.availability[day]} at {room.availability[day][timeslot]}"
