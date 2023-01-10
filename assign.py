@@ -8,7 +8,7 @@ def assign(COURSES, ROOMS, STUDENT_COURSES):
     '''fill in lists and dictionaries with instances'''
     course_list = []
     student_list = []
-    rooms = {}
+    rooms = []
 
     for _, course in COURSES.iterrows():
 
@@ -22,7 +22,6 @@ def assign(COURSES, ROOMS, STUDENT_COURSES):
 
     for _, room in ROOMS.iterrows():
 
-        # fill the dict with room numbers, and their occupational status
-        rooms[room['Zaalnummber']] = 'free'
+        rooms.append(Room(room))
 
     return course_list, student_list, rooms

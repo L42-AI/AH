@@ -31,7 +31,16 @@ class Course():
         self.max_std_practica = course['Max. stud. Practicum']
         self.expected = course['Verwacht']
 
+class Room():
+    def __init__(self, room):
+        self.id = room['Zaalnummber']
+        self.capacity = room['Max. capaciteit']
+        self.availability = {}
 
+    def initialize_availability(self):
+        for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']:
+            for timeslot in ['9:00 - 11:00', '11:00 - 13:00', '13:00 - 15:00', '15:00 - 17:00']:
+                self.availability[day][timeslot] = True
 
 class Roster():
     def __init__(self):
