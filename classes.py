@@ -1,5 +1,7 @@
 # Self schedule argument
 # Self cost arguement
+# Self schedule argument
+# Self cost arguement
 class Student():
     def __init__(self, info):
 
@@ -8,6 +10,7 @@ class Student():
         self.id = info['Stud.Nr.']
 
         # create a list with courses that a student follows
+        self.courses = [course for course in info[3:] if str(course) != 'nan']
         self.courses = [course for course in info[3:] if str(course) != 'nan']
 
     def add_courses(self, courses):
@@ -24,10 +27,14 @@ class Course():
     # *arg toevoegen
     def __init__(self, course):
         self.name = course['Vak']
+        self.name = course['Vak']
         self.lectures = course['#Hoorcolleges']
         self.tutorials = course['#Werkcolleges']
         self.max_std = course['Max. stud. Werkcollege']
+        self.tutorials = course['#Werkcolleges']
+        self.max_std = course['Max. stud. Werkcollege']
         self.practica = course['#Practica']
+        self.max_std_practica = course['Max. stud. Practicum']
         self.max_std_practica = course['Max. stud. Practicum']
         self.expected = course['Verwacht']
 
@@ -40,12 +47,21 @@ class Room():
         self.initialize_availability()
 
     def initialize_availability(self):
+        self.availability = {}
+
+        for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']:
+            if day not in self.availability:
+                self.availability[day] = {}
+            for timeslot in ['9:00 - 11:00', '11:00 - 13:00', '13:00 - 15:00', '15:00 - 17:00']:
+                self.availability[day][timeslot] = True
+
+    def initialize_availability(self):
         for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']:
             for timeslot in ['9:00 - 11:00', '11:00 - 13:00', '13:00 - 15:00', '15:00 - 17:00']:
                 self.availability[day][timeslot] = True
 class Roster():
     def __init__(self, rooms):
-        self.schedule = {}
+        self.schedule = {} # moet plus zijn en niet overschrijven, meerder values per vak
         self.rooms = rooms
 
 
@@ -56,5 +72,7 @@ class Roster():
                 for timeslot in room.availability[day]:
                     if room.availability[day][timeslot]:
                         room.availability[day][timeslot] = False
-                        self.schedule[name] = f"{type} in  {room.id} on {room.availability[day]} at {room.availability[day][timeslot]}"
-                        self.schedule[name] = f"{room.type} in  {room.id} on {room.availability[day]} at {room.availability[day][timeslot]}"
+                        if name in self.schedule:
+                            self.schedule[name] += f"{type} in  {room.id} on {day} at {timeslot}."
+                        else:
+                            self.schedule[name] = f"{type} in  {room.id} on {day} at {timeslot}."
