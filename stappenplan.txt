@@ -1,0 +1,12 @@
+(1) eerst elk vak 1 hoorcollege en 1 practica geven (40 studenten in een practica mag)
+(2) groepjes maken van studenten (22 studenten op een practica van max 10 kunnen bijv 3 groepen van ong 7 worden)
+(2.1) - class tutorial maken
+      - in de class roep je student id op
+
+
+## mogelijke verbeteringen ##
+course naar dict veranderen
+
+## structuur ##
+- class tutorial maken
+- in de class roep je student id op
