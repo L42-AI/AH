@@ -15,3 +15,6 @@ Rooster class __wrapper__ method
 ## structuur ##
 - class tutorial maken
 - in de class roep je student id op
+
+## problemen ##
+expliciet noemen type en naam in fill_schedule
