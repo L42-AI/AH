@@ -9,6 +9,8 @@ course naar dict veranderen
 rooms structuur veranderen, nu is elke room object binnen class Room met attributes: - id (type int)
                                                                                      - cap (type int)
                                                                                      - availability (type dict)
+                                                                                     
+Rooster class __wrapper__ method
 
 ## structuur ##
 - class tutorial maken
