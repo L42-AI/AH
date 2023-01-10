@@ -37,6 +37,8 @@ class Room():
         self.capacity = room['Max. capaciteit']
         self.availability = {}
 
+        self.initialize_availability()
+
     def initialize_availability(self):
         for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']:
             for timeslot in ['9:00 - 11:00', '11:00 - 13:00', '13:00 - 15:00', '15:00 - 17:00']:
