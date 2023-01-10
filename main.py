@@ -1,5 +1,5 @@
 from classes import *
-from data import COURSES, ROOMS, STUDENT_COURSES
+from data import *
 from assign import *
 
 '''
@@ -21,9 +21,4 @@ print(time_slot_count)
 
 roster = Roster(rooms)
 for course in course_list:
-    for i in range(course.lectures):
-        roster.fill_schedule(course.name, "lecture")
-    for i in range(course.tutorials):
-        roster.fill_schedule(course.name, "tutorial")
-    for i in range(course.practica):
-        roster.fill_schedule(course.name, "practica")
+    roster.fill_schedule(course)
