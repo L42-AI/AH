@@ -16,8 +16,8 @@ course_list, student_list, rooms = assign(COURSES, ROOMS, STUDENT_COURSES)
 ### timeslot needed for every lecture, tut, pract
 time_slot_count = 0
 for course in course_list:
-    time_slot_count += course.lectures + course.tutorials + course.practica
-print(time_slot_count)
+    time_slot_count += course.lectures + course.tutorial_rooms + course.practica_rooms
+# print(time_slot_count)
 
 roster = Roster(rooms)
 for course in course_list:
@@ -32,7 +32,7 @@ for course in course_list:
         roster.fill_schedule(course, "practica", class_count)
         class_count += 1
 
-for key in roster.schedule:
-    print(key)
-    print(roster.schedule[key])
-    print("---------------")
+# for key in roster.schedule:
+#     print(key)
+#     print(roster.schedule[key])
+#     print("---------------")

@@ -1,8 +1,10 @@
+import random
+
 # Self schedule argument
 # Self cost arguement
 
 class Student():
-    def __init__(self, info):
+    def __init__(self, info, courses):
         """ Initialize attributes of class from data """
 
         # Set attributes
@@ -12,6 +14,10 @@ class Student():
 
         # create a list with courses that a student follows
         self.courses = [course for course in info[3:] if str(course) != 'nan']
+        self.tut_group = None
+        self.pract_group = None
+        self.pick_group(courses)
+        print(self.tut_group, self.pract_group)
 
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -22,6 +28,39 @@ class Student():
             # Add courses to the courses list
             self.courses.append(course)
 
+    def pick_group(self, courses):
+
+        # go over all the courses a student is in 
+        for course in self.courses:
+            ### does not work! I will fix tomorrow! course = string not the object
+            if course.tutorials != 0:
+                dict = course.tut_group_dict
+                possible_groups = list(dict)[-1]
+                group_picked = False
+
+                # keep looking for a group untill student finds one with room
+                while not group_picked:
+                    group_picked = random. randint(1, possible_groups)
+                    if dict[group_picked] <= course.max_std:
+                        course.tut_group_dict[group_picked] += 1
+                        self.tut_group = group_picked
+                    else:
+                        group_picked = False
+            
+            if course.practical != 0:
+                dict = course.pract_group_dict
+                possible_groups = list(dict)[-1]
+                group_picked = False
+
+                # keep looking for a group untill student finds one with room
+                while not group_picked:
+                    group_picked = random. randint(1, possible_groups)
+                    if dict[group_picked] <= course.max_std:
+                        course.pract_group_dict[group_picked] += 1
+                        self.pract_group = group_picked
+                    else:
+                        group_picked = False
+    
 
 class Course():
     # *arg toevoegen
@@ -39,6 +78,8 @@ class Course():
         self.max_std_practica = course['Max. stud. Practicum']
         self.expected = course['Verwacht']
         self.rooms_needed()
+        self.group_dict()
+
     
     def rooms_needed(self):
         
@@ -49,11 +90,22 @@ class Course():
             # int cuts 3.1 to 3, but 3.1 would require 4 groups
             if self.expected % self.max_std != 0:
                 self.tutorial_rooms += 1
-                
+
         if self.practica != 0:
             self.practica_rooms = int(self.expected / self.max_std_practica)
             if self.expected % self.max_std_practica != 0:
                 self.practica_rooms += 1
+    
+    def group_dict(self):
+
+        self.tut_group_dict = {}
+        for i in range(self.tutorial_rooms):
+            self.tut_group_dict[i + 1] = 0
+        
+        self.pract_group_dict = {}
+        for i in range(self.practica_rooms):
+            self.pract_group_dict[i + 1] = 0
+
 
 class Room():
     def __init__(self, room):

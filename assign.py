@@ -18,7 +18,7 @@ def assign(COURSES, ROOMS, STUDENT_COURSES):
     for _, student in STUDENT_COURSES.iterrows():
 
         # fill in the list with student instances
-        student_list.append(Student(student))
+        student_list.append(Student(student, course_list))
 
     for _, room in ROOMS.iterrows():
 
