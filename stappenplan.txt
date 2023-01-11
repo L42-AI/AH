@@ -34,7 +34,7 @@ studenten een attribuut changed meegeven, zodat als ze later een ander rooster k
 - class tutorial maken
 - in de class roep je student id op
 
-## problemen ##
+## !!PROBLEMEN!! ##
 expliciet noemen type en naam in fill_schedule
 studenten van vak 1 kunnen een lecture hebben en tegelijkertijd een tutorial van vak 2
 
