@@ -26,4 +26,3 @@ def assign(COURSES, ROOMS, STUDENT_COURSES):
 
     return course_list, student_list, rooms
 
-    return course_list, student_list, rooms
