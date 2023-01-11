@@ -1,5 +1,5 @@
 from classes import *
-from data import COURSES, ROOMS, STUDENT_COURSES
+from data import *
 
 '''assign all classes'''
 
