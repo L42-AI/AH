@@ -118,11 +118,11 @@ class Roster():
                                 scheduled_classes += 1
 
                                 # Create dictionary and add all keys
-                                self.schedule[course.name][f'Class {class_type}'] = {}
-                                self.schedule[course.name][f'Class {class_type}']['day'] = day
-                                self.schedule[course.name][f'Class {class_type}']['timeslot'] = timeslot
-                                self.schedule[course.name][f'Class {class_type}']['type'] = class_type
-                                self.schedule[course.name][f'Class {class_type}']['room'] = room.id
+                                self.schedule[course.name][f'Class {scheduled_classes}'] = {}
+                                self.schedule[course.name][f'Class {scheduled_classes}']['day'] = day
+                                self.schedule[course.name][f'Class {scheduled_classes}']['timeslot'] = timeslot
+                                self.schedule[course.name][f'Class {scheduled_classes}']['type'] = class_type
+                                self.schedule[course.name][f'Class {scheduled_classes}']['room'] = room.id
 
                                 # Set availability to False
                                 room.availability[day][timeslot] = False
