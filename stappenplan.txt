@@ -25,6 +25,7 @@ rooms structuur veranderen, nu is elke room object binnen class Room met attribu
 Rooster class __wrapper__ method
 fill roster mogelijk naar assign
 tussenuren berekenen door dict met int als key en value de tijd string
+als een student niet een verandering in zn rooster had bij een iteratie, niet zn score opnieuw berekenen
 
 ## structuur ##
 - class tutorial maken
