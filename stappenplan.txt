@@ -24,6 +24,7 @@ rooms structuur veranderen, nu is elke room object binnen class Room met attribu
                                                                                      
 Rooster class __wrapper__ method
 fill roster mogelijk naar assign
+tussenuren berekenen door dict met int als key en value de tijd string
 
 ## structuur ##
 - class tutorial maken
