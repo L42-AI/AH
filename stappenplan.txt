@@ -29,6 +29,7 @@ fill roster mogelijk naar assign
 tussenuren berekenen door dict met int als key en value de tijd string
 als een student niet een verandering in zn rooster had bij een iteratie, niet zn score opnieuw berekenen
 studenten een attribuut changed meegeven, zodat als ze later een ander rooster krijgen we kunnen checken of hun score wel of niet moet worden uitgerekend.
+kan add classes weg bij student?
 
 ## structuur ##
 - class tutorial maken
