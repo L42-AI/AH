@@ -42,11 +42,19 @@ class Course():
     
     def rooms_needed(self):
         
+        # only create groups when there are tutorials and practica
         if self.tutorials != 0:
-            self.tutorial_rooms = int(self.expected / self.max_std + 1)
+            self.tutorial_rooms = int(self.expected / self.max_std)
+
+            # int cuts 3.1 to 3, but 3.1 would require 4 groups
+            if self.expected % self.max_std != 0:
+                self.tutorial_rooms += 1
+                
         if self.practica != 0:
-            self.practica_rooms = int(self.expected / self.max_std_practica + 1)
-            print(f"check {self.name} {self.practica_rooms}")
+            self.practica_rooms = int(self.expected / self.max_std_practica)
+            if self.expected % self.max_std_practica != 0:
+                self.practica_rooms += 1
+
 class Room():
     def __init__(self, room):
         """ Initialize attributes of class from data """
