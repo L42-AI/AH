@@ -23,6 +23,7 @@ rooms structuur veranderen, nu is elke room object binnen class Room met attribu
                                                                                      - availability (type dict)
                                                                                      
 Rooster class __wrapper__ method
+fill roster mogelijk naar assign
 
 ## structuur ##
 - class tutorial maken
