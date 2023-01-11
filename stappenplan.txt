@@ -5,8 +5,10 @@
 - mogelijk een dataframe?
 
 (2) groepjes maken van studenten (22 studenten op een practica van max 10 kunnen bijv 3 groepen van ong 7 worden) ##assign, classes
-(2.1) - class tutorial maken
-      - in de class roep je student id op
+(2.1) - groepen maken binnen course
+      - een dict attribuut maken met key groepnummer, value aantal studenten in de groep
+      - met die dict kan je dan studenten willekeurig een groepnummer geven, de value constant updaten tot de groep "vol" is
+      - daarna studenten in een random groepje zetten
 
 (3) kosten functie maken ##assign, classes
 - roster een attribute geven om maluspunten bij te houden
@@ -26,6 +28,7 @@ Rooster class __wrapper__ method
 fill roster mogelijk naar assign
 tussenuren berekenen door dict met int als key en value de tijd string
 als een student niet een verandering in zn rooster had bij een iteratie, niet zn score opnieuw berekenen
+studenten een attribuut changed meegeven, zodat als ze later een ander rooster krijgen we kunnen checken of hun score wel of niet moet worden uitgerekend.
 
 ## structuur ##
 - class tutorial maken
