@@ -124,7 +124,7 @@ class Room():
 
         # Set lists of days and times
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-        timeslots = ['9:00 - 11:00', '11:00 - 13:00', '13:00 - 15:00', '15:00 - 17:00']
+        timeslots = [9, 11, 13, 15, 17]
 
         # For each day:
         for day in days:
