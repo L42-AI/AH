@@ -39,12 +39,6 @@ class Student():
                 self.timeslots.append(Roster.schedule[course.name][f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"])
 
             for index in range(course.practica):
-                # print(self.id)
-                # print(self.timeslots)
-                # print()
-                # print(course.name)
-                # print(Roster.schedule[course.name])
-                # print(self.pract_group)
                 self.timeslots.append(Roster.schedule[course.name][f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"])
 
         # make the schedule before timeslots gets editted
@@ -101,7 +95,7 @@ class Student():
 
     def pick_group(self):
 
-        # go over all the courses a student is in 
+        # go over all the courses a student is in
         for course in self.courses:
 
             ### does not work! I will fix tomorrow! course = string not the object
