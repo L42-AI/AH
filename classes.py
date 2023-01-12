@@ -124,10 +124,15 @@ class Room():
 
         # Set lists of days and times
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-        timeslots = [9, 11, 13, 15, 17]
+        timeslots = [9, 11, 13, 15]
+        timeslots_biggest = [9, 11, 13, 15, 17]
 
         # For each day:
         for day in days:
+
+            # # check if it is the biggest room, if so use other timeslots
+            if self.id == 'C0.110':
+                timeslots = timeslots_biggest
 
             # If not yet in availability:
             if day not in self.availability:
