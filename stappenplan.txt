@@ -3,6 +3,7 @@
 - mogelijk een dict in een dict
 - mogelijk een json
 - mogelijk een dataframe?
+(1.2) courses van een student veranderen in object ipv strings met de naam vd course zodat course.tutorial_group makkelijker bereikt kan worden
 
 (2) groepjes maken van studenten (22 studenten op een practica van max 10 kunnen bijv 3 groepen van ong 7 worden) ##assign, classes
 (2.1) - groepen maken binnen course
