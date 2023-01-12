@@ -1,3 +1,5 @@
+from functions.count_students import *
+
 class Course():
 
     def __init__(self, course):
@@ -12,7 +14,6 @@ class Course():
         self.practica = course['#Practica']
         self.practica_rooms = 0
         self.max_std_practica = course['Max. stud. Practicum']
-        self.expected = course['Verwacht']
         self.rooms_needed()
         self.group_dict()
 
