@@ -1,6 +1,7 @@
 from classes.course import *
 from classes.room import *
 from classes.student import *
+from functions.count_students import *
 from data import COURSES, ROOMS, STUDENT_COURSES
 
 '''assign all classes'''
@@ -11,11 +12,13 @@ def assign(COURSES, STUDENT_COURSES, ROOMS):
     course_list = []
     student_list = []
     rooms = []
+    enrollment = count_students(STUDENT_COURSES)
+    print(enrollment)
 
     for _, course in COURSES.iterrows():
-
+        # print(enrollment[course['Vak']])
         # create an instance for every course
-        course_list.append(Course(course))
+        course_list.append(Course(course, enrollment[course['Vak']]))
 
     for _, student in STUDENT_COURSES.iterrows():
 

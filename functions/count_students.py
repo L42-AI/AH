@@ -7,7 +7,7 @@ def count_students(dataframe):
     # loop over each row of the dataframe and set the count plus 1
     for _, row in dataframe.iterrows():
         for course in list_courses:
-            if row[course] not in dict_count:
+            if row[course] not in dict_count and row[course] not 'nan':
                 dict_count[row[course]] = 0
             dict_count[row[course]] += 1
     return dict_count
