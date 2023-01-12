@@ -131,10 +131,13 @@ class Room():
     def initialize_availability(self):
         """ Set availability of all rooms """
 
-        # Set lists of days and times
+        # Set lists of days and times and randomly shuffle for the initialize
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+        random.shuffle(days)
         timeslots = [9, 11, 13, 15]
+        random.shuffle(timeslots)
         timeslots_biggest = [9, 11, 13, 15, 17]
+        random.shuffle(timeslots_biggest)
 
         # For each day:
         for day in days:
@@ -155,7 +158,6 @@ class Room():
                 # Set availability to True
                 self.availability[day][timeslot] = True
 
-
 class Roster():
     def __init__(self, rooms):
         """ Initialize attributes of class """
@@ -163,7 +165,6 @@ class Roster():
         self.rooms = rooms
         random.shuffle(self.rooms)
         self.cost = float
-
 
     def fill_schedule(self, course, class_type, count, attending):
         """" This function fills a schedule with with no student restraints """
@@ -174,16 +175,12 @@ class Roster():
 
         # For each room in the list of objects
         for room in self.rooms:
-            days = list(room.availability.keys())
-            random.shuffle(days)
 
             # For each day in its availability
-            for day in days:
-                timeslots = list(room.availability[day].keys())
-                random.shuffle(timeslots)
+            for day in room.availability:
 
                 # For each timeslot
-                for timeslot in timeslots:
+                for timeslot in room.availability[day]:
 
                     # If timeslot is availibale and capacity is good
                     if room.availability[day][timeslot] and room.capacity >= attending:
