@@ -30,3 +30,8 @@ for key in roster.schedule:
     print(key)
     print(roster.schedule[key])
     print("---------------")
+
+# # check if students get group
+# for student in student_list:
+#     print(student.tut_group, student.pract_group)
+#     break
