@@ -9,8 +9,14 @@ course_list, student_list, rooms = assign(COURSES, STUDENT_COURSES, ROOMS)
 # create a roster
 roster = Roster(rooms)
 
+
 # fill the roster
 schedule_fill(roster, course_list)
+# print(roster.schedule)
+roster.total_cost(student_list)
+
+malus_points = roster.cost
+print(malus_points)
 
 # # output
 # for key in roster.schedule:

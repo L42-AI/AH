@@ -13,7 +13,9 @@ class Roster():
         for student in student_list:
 
             student.student_cost(self)
-            break
+            self.cost += student.malus
+        
+
 
     def fill_schedule(self, course, class_type, count, attending):
         """" This function fills a schedule with with no student restraints """
@@ -47,4 +49,16 @@ class Roster():
                         self.cost += (attending - room.capacity) if attending > room.capacity else 0
 
                         room.availability[day][timeslot] = False
+
+                        self.check_malus(timeslot, room.capacity, attending)
                         return
+
+    def check_malus(self, timeslot, capacity, attending):
+
+        # penalty for late night lesson
+        if timeslot == 17:
+            self.cost += 5
+        
+        # penalty for capacity shortage
+        if attending > capacity:
+            self.cost += attending - capacity
