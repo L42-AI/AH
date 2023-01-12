@@ -52,6 +52,7 @@ class Roster():
 
                         self.check_malus(timeslot, room.capacity, attending)
                         return
+        print("No Room!!")
 
     def check_malus(self, timeslot, capacity, attending):
 
