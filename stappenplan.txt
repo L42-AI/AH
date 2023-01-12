@@ -20,6 +20,9 @@
 
 (5) nieuw maken met subgroepjes en kosten
 
+## HEURISTIEK ## 
+- random x10, neem beste, daar random aanpassingen (5 studenten met hoogste cost met willekeurige groep wisselen etc)
+- capaciteit overschrijden limiteren naar max 5 bijv, of een percentage, of welke het hoogst is
 
 ## mogelijke verbeteringen ##
 course naar dict veranderen
@@ -38,6 +41,7 @@ kan add classes weg bij student?
 ## structuur ##
 - class tutorial maken
 - in de class roep je student id op
+- met if statements condities erin zetten, zodat als we later een interactief algoritme willen je die statements aan en uit kan zetten
 
 ## !!PROBLEMEN!! ##
 expliciet noemen type en naam in fill_schedule
