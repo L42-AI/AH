@@ -2,17 +2,17 @@ import copy
 import random
 
 class Student():
-    def __init__(self, info, courses):
+    def __init__(self, input, courses):
         """ Initialize attributes of class from data """
 
         # Set attributes
-        self.f_name = info['Voornaam']
-        self.l_name = info['Achternaam']
-        self.id = info['Stud.Nr.']
+        self.f_name = input['Voornaam']
+        self.l_name = input['Achternaam']
+        self.id = input['Stud.Nr.']
 
         # create a list with courses that a student follows
         # self.course_names holds the strings, self.course holds the objects
-        self.courses_names = [course for course in info[3:] if str(course) != 'nan']
+        self.courses_names = [course for course in input[3:] if str(course) != 'nan']
         self.courses = []
         self.tut_group = None
         self.pract_group = None
