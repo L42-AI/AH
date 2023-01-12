@@ -10,11 +10,13 @@
       - een dict attribuut maken met key groepnummer, value aantal studenten in de groep
       - met die dict kan je dan studenten willekeurig een groepnummer geven, de value constant updaten tot de groep "vol" is
       - daarna studenten in een random groepje zetten
+(2.2) capaciteit check toegevoegd
 
 (3) kosten functie maken ##assign, classes
 - roster een attribute geven om maluspunten bij te houden
 
 (4) random initialize doen in plaats van boven naar beneden
+(4.1) dit doen door de room lijst random te shuffelen, en dan van boven naar beneden roosteren
 
 (5) nieuw maken met subgroepjes en kosten
 
