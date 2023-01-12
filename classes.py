@@ -16,8 +16,8 @@ class Student():
         self.courses = [course for course in info[3:] if str(course) != 'nan']
         self.tut_group = None
         self.pract_group = None
-        self.pick_group(courses)
-        print(self.tut_group, self.pract_group)
+        # self.pick_group(courses)
+        # print(self.tut_group, self.pract_group)
 
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -78,7 +78,7 @@ class Course():
         self.max_std_practica = course['Max. stud. Practicum']
         self.expected = course['Verwacht']
         self.rooms_needed()
-        self.group_dict()
+        # self.group_dict()
 
     
     def rooms_needed(self):
@@ -150,7 +150,7 @@ class Roster():
         self.cost = float
 
 
-    def fill_schedule(self, course, class_type, scheduled_classes):
+    def fill_schedule(self, course, class_type, scheduled_classes, count):
         """" This function fills a schedule with with no student restraints """
 
         # Make key if not existent
@@ -173,11 +173,10 @@ class Roster():
                         scheduled_classes += 1
 
                         # Create dictionary and add all keys
-                        self.schedule[course.name][f'Class {scheduled_classes}'] = {}
-                        self.schedule[course.name][f'Class {scheduled_classes}']['day'] = day
-                        self.schedule[course.name][f'Class {scheduled_classes}']['timeslot'] = timeslot
-                        self.schedule[course.name][f'Class {scheduled_classes}']['type'] = class_type
-                        self.schedule[course.name][f'Class {scheduled_classes}']['room'] = room.id
+                        self.schedule[course.name][f'{class_type} {count}'] = {}
+                        self.schedule[course.name][f'{class_type} {count}']['day'] = day
+                        self.schedule[course.name][f'{class_type} {count}']['timeslot'] = timeslot
+                        self.schedule[course.name][f'{class_type} {count}']['room'] = room.id
 
                         room.availability[day][timeslot] = False
                         return

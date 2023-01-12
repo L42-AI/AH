@@ -2,12 +2,6 @@ from classes import *
 from data import *
 from assign import *
 
-'''
-**UPLOADEN**
-git add main.py
-git commit -m "nieuwe main" 
-git push origin Jacob
-'''
 
 course_list, student_list, rooms = assign(COURSES, ROOMS, STUDENT_COURSES)
 
@@ -23,16 +17,16 @@ roster = Roster(rooms)
 for course in course_list:
     class_count = 0
     for i in range(course.lectures):
-        roster.fill_schedule(course, "lecture", class_count)
+        roster.fill_schedule(course, "lecture", class_count, i + 1)
         class_count += 1
     for i in range(course.tutorial_rooms):
-        roster.fill_schedule(course, "tutorials", class_count)
+        roster.fill_schedule(course, "tutorials", class_count, i + 1)
         class_count += 1
     for i in range(course.practica_rooms):
-        roster.fill_schedule(course, "practica", class_count)
+        roster.fill_schedule(course, "practica", class_count, i + 1)
         class_count += 1
 
-# for key in roster.schedule:
-#     print(key)
-#     print(roster.schedule[key])
-#     print("---------------")
+for key in roster.schedule:
+    print(key)
+    print(roster.schedule[key])
+    print("---------------")
