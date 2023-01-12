@@ -41,14 +41,13 @@ class Student():
 
         # go over all the courses a student is in 
         for course in self.courses:
-            print(course.name)
 
             ### does not work! I will fix tomorrow! course = string not the object
             if course.tutorials != 0:
                 dict = course.tut_group_dict
                 possible_groups = list(dict)[-1]
                 group_picked = False
-                print(dict)
+
                 # keep looking for a group untill student finds one with room
                 while not group_picked:
                     group_picked = random.randint(1, possible_groups)
@@ -62,9 +61,8 @@ class Student():
                 dict = course.pract_group_dict
                 possible_groups = list(dict)[-1]
                 group_picked = False
-                print(dict)
-                # keep looking for a group untill student finds one with room
 
+                # keep looking for a group untill student finds one with room
                 while not group_picked:
                     group_picked = random.randint(1, possible_groups)
                     if dict[group_picked] < course.max_std_practica:
