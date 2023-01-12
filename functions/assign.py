@@ -6,7 +6,7 @@ from data import COURSES, ROOMS, STUDENT_COURSES
 '''assign all classes'''
 
 
-def assign(COURSES, ROOMS, STUDENT_COURSES):
+def assign(COURSES, STUDENT_COURSES, ROOMS):
     '''fill in lists and dictionaries with instances'''
     course_list = []
     student_list = []

@@ -4,7 +4,7 @@ from functions.assign import *
 from data import *
 
 # create the lists
-course_list, rooms, student_list = assign(COURSES, ROOMS, STUDENT_COURSES)
+course_list, student_list, rooms = assign(COURSES, STUDENT_COURSES, ROOMS)
 
 # create a roster
 roster = Roster(rooms)

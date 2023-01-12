@@ -1,4 +1,5 @@
 def schedule_fill(roster, course_list):
+    
     for course in course_list:
 
         # go over the number of lectures, tutorials and practicals needed
