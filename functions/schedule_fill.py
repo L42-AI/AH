@@ -6,7 +6,7 @@ def schedule_fill(roster, course_list):
         for i in range(course.lectures):
 
             # check how many students will attend this lecture
-            attending = course.expected
+            attending = course.enrolled
             roster.fill_schedule(course, "lecture", i + 1, attending)
 
         # outer loop is incase more than one tut per group

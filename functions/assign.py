@@ -18,7 +18,10 @@ def assign(COURSES, STUDENT_COURSES, ROOMS):
     for _, course in COURSES.iterrows():
         # print(enrollment[course['Vak']])
         # create an instance for every course
-        course_list.append(Course(course, enrollment[course['Vak']]))
+        try:
+            course_list.append(Course(course, enrollment[course['Vak']]))
+        except:
+            course_list.append(Course(course, 42))
 
     for _, student in STUDENT_COURSES.iterrows():
 
