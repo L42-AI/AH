@@ -1,7 +1,7 @@
 
 # dict = {1:0, 2:0, 3:0}
 # print(list(dict)[-1])
-from assign import *
+from functions.assign import *
 course_list, student_list, rooms = assign(COURSES, ROOMS, STUDENT_COURSES)
 
 # i = 0

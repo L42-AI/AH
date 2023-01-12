@@ -1,5 +1,7 @@
-from classes import *
-from data import *
+from classes.course import *
+from classes.room import *
+from classes.student import *
+from data import COURSES, ROOMS, STUDENT_COURSES
 
 '''assign all classes'''
 
@@ -19,7 +21,7 @@ def assign(COURSES, ROOMS, STUDENT_COURSES):
 
         # fill in the list with student instances
         student_list.append(Student(student, course_list))
-        
+
     for _, room in ROOMS.iterrows():
 
         rooms.append(Room(room))
