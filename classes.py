@@ -161,6 +161,7 @@ class Roster():
         """ Initialize attributes of class """
         self.schedule = {}
         self.rooms = rooms
+        random.shuffle(self.rooms)
         self.cost = float
 
 
@@ -173,12 +174,16 @@ class Roster():
 
         # For each room in the list of objects
         for room in self.rooms:
+            days = list(room.availability.keys())
+            random.shuffle(days)
 
             # For each day in its availability
-            for day in room.availability:
+            for day in days:
+                timeslots = list(room.availability[day].keys())
+                random.shuffle(timeslots)
 
                 # For each timeslot
-                for timeslot in room.availability[day]:
+                for timeslot in timeslots:
 
                     # If timeslot is availibale and capacity is good
                     if room.availability[day][timeslot] and room.capacity >= attending:
