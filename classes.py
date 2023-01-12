@@ -88,7 +88,7 @@ class Course():
         self.max_std_practica = course['Max. stud. Practicum']
         self.expected = course['Verwacht']
         self.rooms_needed()
-        # self.group_dict()
+        self.group_dict()
 
     def __str__(self):
         return f"{self.name}"
