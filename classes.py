@@ -169,9 +169,6 @@ class Roster():
                     # If timeslot is availibale (True):
                     if room.availability[day][timeslot]:
 
-                        # Increase scheduled_classes count
-                        scheduled_classes += 1
-
                         # Create dictionary and add all keys
                         self.schedule[course.name][f'{class_type} {count}'] = {}
                         self.schedule[course.name][f'{class_type} {count}']['day'] = day
