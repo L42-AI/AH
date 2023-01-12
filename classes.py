@@ -15,12 +15,50 @@ class Student():
         self.courses = []
         self.tut_group = None
         self.pract_group = None
+        self.timeslots = []
         self.add_courses(courses)
         self.pick_group()
 
 
     def __str__(self):
         return f"{self.f_name} {self.l_name}"
+
+    def student_cost(self, Roster):
+
+        # first get all the education moments
+        
+        for course in self.courses:
+            for index in range(course.lectures):
+                self.timeslots.append(Roster.schedule[course.name][f"lecture {index + 1}"])
+
+            for index in range(course.tutorials):
+
+                # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
+                self.timeslots.append(Roster.schedule[course.name][f"tutorial {(self.tut_group + self.tut_group * index)}"])
+
+            for index in range(course.practica):
+                self.timeslots.append(Roster.schedule[course.name][f"practical {(self.pract_group + self.pract_group * index)}"])
+        
+        self.same_day()
+    
+    def same_day(self):
+        days = []
+        count = {}
+        for timeslot in self.timeslots:
+            days.append(timeslot['day'])
+        
+        for day in days:
+            if day in count:
+                count[day] += 1
+            else:
+                count[day] = 1
+
+        print(days)
+  
+        self.timeslots = [day for day in days if count[day] > 1]
+
+        # dict van maken met als values een lijst met daarin de timeslots
+        print(self.timeslots)
 
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -32,7 +70,6 @@ class Student():
             for course in courses:
                 if course.name == name:
                     self.courses.append(course)
-
 
     def pick_group(self):
 
@@ -162,8 +199,13 @@ class Roster():
         self.schedule = {}
         self.rooms = rooms
         random.shuffle(self.rooms)
-        self.cost = float
+        self.cost = 0
 
+    def total_cost(self, student_list):
+        for student in student_list:
+
+            student.student_cost(self)
+            break
 
     def fill_schedule(self, course, class_type, count, attending):
         """" This function fills a schedule with with no student restraints """
@@ -186,13 +228,15 @@ class Roster():
                 for timeslot in timeslots:
 
                     # If timeslot is availibale and capacity is good
-                    if room.availability[day][timeslot] and room.capacity >= attending:
+                    if room.availability[day][timeslot]:
 
                         # Create dictionary and add all keys
                         self.schedule[course.name][f'{class_type} {count}'] = {}
                         self.schedule[course.name][f'{class_type} {count}']['day'] = day
                         self.schedule[course.name][f'{class_type} {count}']['timeslot'] = timeslot
                         self.schedule[course.name][f'{class_type} {count}']['room'] = room.id
+
+                        self.cost += (attending - room.capacity) if attending > room.capacity else 0
 
                         room.availability[day][timeslot] = False
                         return

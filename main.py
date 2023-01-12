@@ -17,26 +17,33 @@ for course in course_list:
         attending = course.expected
         roster.fill_schedule(course, "lecture", i + 1, attending)
 
-    for i in range(course.tutorial_rooms):
+    # outer loop is incase more than one tut per group
+    ## in csv there is always one tut or pract, but we want to make the program scalable 
+    for _ in range(course.tutorials):
+        for i in range(course.tutorial_rooms):
 
-        # check how many students will attend this tutorial
-        attending = course.tut_group_dict[i + 1]
-        roster.fill_schedule(course, "tutorials", i + 1, attending)
+            # check how many students will attend this tutorial
+            attending = course.tut_group_dict[i + 1]
+            roster.fill_schedule(course, "tutorial", i + 1, attending)
 
-    for i in range(course.practica_rooms):
+    for _ in range(course.practica):
+        for i in range(course.practica_rooms):
 
-        # check how many students will attend this practical
-        attending = course.pract_group_dict[i + 1]
-        roster.fill_schedule(course, "practica", i + 1, attending)
+            # check how many students will attend this practical
+            attending = course.pract_group_dict[i + 1]
+            roster.fill_schedule(course, "practical", i + 1, attending)
 
 
-# output
-for key in roster.schedule:
-    print("------------------------")
-    print(key)
-    print("------------------------")
-    print(roster.schedule[key])
-    print()
+
+# # output
+# for key in roster.schedule:
+#     print("------------------------")
+#     print(key)
+#     print("------------------------")
+#     print(roster.schedule[key])
+#     print()
+
+roster.total_cost(student_list)
 
 
 # # check if students get group
