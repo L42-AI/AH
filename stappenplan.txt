@@ -39,6 +39,7 @@ kan add classes weg bij student?
 ## !!PROBLEMEN!! ##
 expliciet noemen type en naam in fill_schedule
 studenten van vak 1 kunnen een lecture hebben en tegelijkertijd een tutorial van vak 2
+!!45 enrolmments in bioinfo, maar csv zegt 40. Hebben het nu veranderd maar even vragen wat ze bedoelen met 'expected'!!
 
 tijdsloten zijn strings, dus tussenuren bereken word lastig. Als je 9-11 en 13-15 hebt, heb je 1 tussenuur maar met strings kan je dit niet uitrekenen.
 - in de data wellicht geen strings maar integers gebruiken, 1=9-11, 2=11-13 etc. Dan kan je de tussenuren uitrekenen door (3 - 1)= je uren - 1 omdat je niet twee maar 1 tussenuur hebt. 
