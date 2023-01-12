@@ -19,8 +19,8 @@ class Student():
         self.tut_group = None
         self.pract_group = None
         self.add_courses(courses)
-        self.pick_group(courses)
-        
+        self.pick_group()
+
 
     def __str__(self):
         return f"{self.f_name} {self.l_name}"
@@ -35,39 +35,39 @@ class Student():
             for course in courses:
                 if course.name == name:
                     self.courses.append(course)
-          
+
 
     def pick_group(self):
 
         # go over all the courses a student is in 
         for course in self.courses:
-            # print(course.name)
+            print(course.name)
 
             ### does not work! I will fix tomorrow! course = string not the object
             if course.tutorials != 0:
                 dict = course.tut_group_dict
                 possible_groups = list(dict)[-1]
                 group_picked = False
-
+                print(dict)
                 # keep looking for a group untill student finds one with room
                 while not group_picked:
                     group_picked = random.randint(1, possible_groups)
-                    if dict[group_picked] <= course.max_std:
+                    if dict[group_picked] < course.max_std:
                         course.tut_group_dict[group_picked] += 1
                         self.tut_group = group_picked
                     else:
                         group_picked = False
-            
+
             if course.practica != 0:
                 dict = course.pract_group_dict
                 possible_groups = list(dict)[-1]
                 group_picked = False
-                
+                print(dict)
                 # keep looking for a group untill student finds one with room
-                i = 0
+
                 while not group_picked:
                     group_picked = random.randint(1, possible_groups)
-                    if dict[group_picked] <= course.max_std_practica:
+                    if dict[group_picked] < course.max_std_practica:
                         course.pract_group_dict[group_picked] += 1
                         self.pract_group = group_picked
                     else:
