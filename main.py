@@ -2,7 +2,6 @@ from classes import *
 from data import *
 from assign import *
 
-
 course_list, student_list, rooms = assign(COURSES, ROOMS, STUDENT_COURSES)
 
 # create a roster
