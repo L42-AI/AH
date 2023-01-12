@@ -1,8 +1,5 @@
 import random
 
-# Self schedule argument
-# Self cost arguement
-
 class Student():
     def __init__(self, info, courses):
         """ Initialize attributes of class from data """
@@ -73,7 +70,7 @@ class Student():
 
 
 class Course():
-    # *arg toevoegen
+
     def __init__(self, course):
         """ Initialize attributes of class from data """
 
@@ -92,9 +89,9 @@ class Course():
 
     def __str__(self):
         return f"{self.name}"
-    
+
     def rooms_needed(self):
-        
+
         # only create groups when there are tutorials and practica
         if self.tutorials != 0:
             self.tutorial_rooms = int(self.expected / self.max_std)
@@ -107,13 +104,13 @@ class Course():
             self.practica_rooms = int(self.expected / self.max_std_practica)
             if self.expected % self.max_std_practica != 0:
                 self.practica_rooms += 1
-    
+
     def group_dict(self):
 
         self.tut_group_dict = {}
         for i in range(self.tutorial_rooms):
             self.tut_group_dict[i + 1] = 0
-        
+
         self.pract_group_dict = {}
         for i in range(self.practica_rooms):
             self.pract_group_dict[i + 1] = 0
@@ -142,7 +139,7 @@ class Room():
         # For each day:
         for day in days:
 
-            # # check if it is the biggest room, if so use other timeslots
+            # check if it is the biggest room, if so use other timeslots
             if self.id == 'C0.110':
                 timeslots = timeslots_biggest
 
@@ -167,7 +164,7 @@ class Roster():
         self.cost = float
 
 
-    def fill_schedule(self, course, class_type, scheduled_classes, count):
+    def fill_schedule(self, course, class_type, count, attending):
         """" This function fills a schedule with with no student restraints """
 
         # Make key if not existent
@@ -184,7 +181,7 @@ class Roster():
                 for timeslot in room.availability[day]:
 
                     # If timeslot is availibale (True):
-                    if room.availability[day][timeslot]:
+                    if room.availability[day][timeslot] and room.capacity >= attending:
 
                         # Create dictionary and add all keys
                         self.schedule[course.name][f'{class_type} {count}'] = {}
@@ -194,6 +191,3 @@ class Roster():
 
                         room.availability[day][timeslot] = False
                         return
-                  
-
-                        
