@@ -180,7 +180,7 @@ class Roster():
                 # For each timeslot
                 for timeslot in room.availability[day]:
 
-                    # If timeslot is availibale (True):
+                    # If timeslot is availibale and capacity is good
                     if room.availability[day][timeslot] and room.capacity >= attending:
 
                         # Create dictionary and add all keys
