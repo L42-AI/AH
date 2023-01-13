@@ -2,48 +2,26 @@ from classes.roster import *
 from functions.schedule_fill import *
 from functions.assign import *
 from data import *
-import matplotlib.pyplot as plt
+from classes.baseline import *
 
-def initialize_random_state(roster, course_list, student_list, malus_points):
+def main():
+    # create the lists
+    course_list, student_list, rooms = assign(COURSES, STUDENT_COURSES, ROOMS)
+
+    # create a roster
+    roster = Roster(rooms)
 
     # fill the roster
     schedule_fill(roster, course_list)
     roster.total_cost(student_list)
 
-    malus_points.append(roster.cost)
-
+    # Calculate costs of roster
     roster.total_cost(student_list)
-    return
 
-list_std = []
-list_course = []
-list_room = []
-malus_points = []
-run = []
-roster = []
+    # Save as malus points
+    malus_points = roster.cost
 
-# test
+    return malus_points
 
-for i in range(10):
-
-    std = "student" + str(i)
-    course = "course" + str(i)
-    rooms = "course" + str(i)
-
-    # create the lists
-    course, std, rooms = assign(COURSES, STUDENT_COURSES, ROOMS)
-
-    # put the new object lists in the list
-    list_std.append(std)
-    list_course.append(course)
-    list_room.append(rooms)
-
-    run.append(i)
-    # create a roster
-    roster.append(Roster(rooms))
-
-    # run model on new objects
-    initialize_random_state(roster[i], list_course[i], list_std[i], malus_points)
-
-plt.plot(run, malus_points)
-plt.show()
+if __name__ == '__main__':
+    baseline = Baseline(1000)
