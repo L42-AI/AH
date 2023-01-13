@@ -1,5 +1,5 @@
 from data import *
-from assign import *
+from functions.assign import *
 from main import student_list, roster
 
 # Make lists to put into schedule dataframe
