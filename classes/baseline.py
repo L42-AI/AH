@@ -1,26 +1,50 @@
-from main import main
-from collections import Counter
+from main import initialise
+import os
 import matplotlib.pyplot as plt
-from tqdm import tqdm
-
+import numpy as np
 
 class Baseline():
-    def __init__(self, iters):
-        self.costs = {}
+    def __init__(self, iters=2):
+        self.costs = []
+        self.iterations = []
         self.run(iters)
-        self.plot()
+        self.plot_startup()
 
     def run(self, iters):
-        costs = []
-        for _ in tqdm(range(iters)):
-            costs.append(main())
-        self.costs = Counter(costs)
+        for i in (range(iters)):
+            self.costs.append(initialise())
+            self.iterations.append(i)
 
-    def plot(self):
+    def plot_startup(self):
 
-        plt.title('Schedule algorithm baseline (based on random)')
-        plt.bar(x = self.costs.keys(), height = self.costs.values(), width=2, edgecolor='black', color='red')
-        plt.xlabel('Malus points')
-        plt.ylabel('Frequency')
+        fig_name = "startups.png"
+           
+        # Current working directory
+        current_dir = os.getcwd()
+
+        # Parent directory
+        parent_dir = os.path.dirname(current_dir)
+
+        # Directory "plots"
+        directory_plots = os.path.join(parent_dir, 'AH/plots')
+
+        # Fit a polynomial of degree 1 (i.e. a linear regression) to the data
+        coefficients = np.polyfit(self.iterations, self.costs, 1)
+
+        # Create a new set of x values for the regression line
+        x_reg = np.linspace(min(self.iterations), max(self.iterations), 300)
+
+        # Use the coefficients to calculate the y values for the regression line
+        y_reg = np.polyval(coefficients, x_reg)
+
+        plt.title('300 random startups of the algorithm with no restrictions')
+        plt.plot(self.iterations, self.costs)
+
+        # Plot the regression line
+        plt.plot(x_reg, y_reg, 'r')
+        plt.xlabel('run #')
+        plt.ylabel('malus points')
+        plt.savefig(os.path.join(directory_plots, fig_name))
         plt.show()
+
 

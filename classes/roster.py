@@ -3,7 +3,6 @@
 
 import random
 
-
 class Roster():
     def __init__(self, rooms):
         self.schedule = {}

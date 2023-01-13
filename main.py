@@ -1,19 +1,22 @@
-from classes.roster import *
-from functions.schedule_fill import *
-from functions.assign import *
-from data import *
-from classes.baseline import *
+import classes.roster as RosterClass
+import classes.baseline as BaselineClass
+import functions.schedule_fill as schedule
+import functions.assign  as assign
 
 
-def main():
+from data import COURSES, STUDENT_COURSES, ROOMS
+
+
+
+def initialise():
     # create the lists
-    course_list, student_list, rooms = assign(COURSES, STUDENT_COURSES, ROOMS)
+    course_list, student_list, rooms = assign.assign(COURSES, STUDENT_COURSES, ROOMS)
 
     # create a roster
-    roster = Roster(rooms)
+    roster = RosterClass.Roster(rooms)
 
     # fill the roster
-    schedule_fill(roster, course_list)
+    schedule.schedule_fill(roster, course_list)
 
     # Calculate costs of roster
     roster.total_malus(student_list)
@@ -24,4 +27,4 @@ def main():
     return malus_points
 
 if __name__ == '__main__':
-    print(main())
+    BaselineClass.Baseline(iters=300)
