@@ -1,6 +1,5 @@
 import random
 
-
 class Roster():
     def __init__(self, rooms):
         """ Initialize attributes of class """
