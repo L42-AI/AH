@@ -6,19 +6,19 @@ class Roster():
         """ Initialize attributes of class """
         self.schedule = {}
         self.rooms = rooms
-        random.shuffle(self.rooms)
         self.cost = 0
+
+        # shuffle the list of room object for the random initialze
+        random.shuffle(self.rooms)
 
     def total_cost(self, student_list):
         for student in student_list:
 
             student.student_cost(self)
             self.cost += student.malus
-        
-
 
     def fill_schedule(self, course, class_type, count, attending):
-        """" This function fills a schedule with with no student restraints """
+        """" This function fills a schedule with no student restraints"""
 
         # Make key if not existent
         if course.name not in self.schedule:
@@ -33,7 +33,7 @@ class Roster():
                 # For each timeslot
                 for timeslot in room.availability[day]:
 
-                    # If timeslot is availibale and capacity is good
+                    # If timeslot is availibale
                     if room.availability[day][timeslot]:
 
                         # Create dictionary and add all keys
@@ -48,7 +48,9 @@ class Roster():
 
                         self.check_malus(timeslot, room.capacity, attending)
                         return
-        print("No Room!!")
+        
+        # If there are no rooms available at all
+        print("Error. No Room!!!")
 
     def check_malus(self, timeslot, capacity, attending):
 
