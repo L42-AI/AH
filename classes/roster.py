@@ -1,21 +1,26 @@
+# This class takes in a list of objects called rooms and makes a roster. 
+# It can also calculate the total amount maluspoints
+
 import random
 
 
 class Roster():
     def __init__(self, rooms):
-        """ Initialize attributes of class """
         self.schedule = {}
         self.rooms = rooms
-        self.cost = 0
+        self.malus = 0
 
         # shuffle the list of room object for the random initialze
         random.shuffle(self.rooms)
 
     def total_cost(self, student_list):
+        """This function loops over the list filled with Student objects and calculates the total maluspoints"""
+
+        # loop over each student and add to the total
         for student in student_list:
 
             student.student_cost(self)
-            self.cost += student.malus
+            self.malus += student.malus
 
     def fill_schedule(self, course, class_type, count, attending):
         """" This function fills a schedule with no student restraints"""
@@ -53,11 +58,16 @@ class Roster():
         print("Error. No Room!!!")
 
     def check_malus(self, timeslot, capacity, attending):
+        """
+        This function checks if a course group is in the late timeslot and 
+        whether the amount of attending students is higher then the capacity of that room.
+        It then increases the maluspoints respectively.
+        """
 
         # penalty for late night lesson
         if timeslot == 17:
-            self.cost += 5
+            self.malus += 5
         
         # penalty for capacity shortage
         if attending > capacity:
-            self.cost += attending - capacity
+            self.malus += attending - capacity
