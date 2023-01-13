@@ -2,40 +2,46 @@ from classes.roster import *
 from functions.schedule_fill import *
 from functions.assign import *
 from data import *
+import matplotlib.pyplot as plt
 
-# create the lists
-course_list, student_list, rooms = assign(COURSES, STUDENT_COURSES, ROOMS)
+def initialize_random_state(roster, course_list, student_list, malus_points):
 
-# create a roster
-roster = Roster(rooms)
+    # fill the roster
+    schedule_fill(roster, course_list)
+    roster.total_cost(student_list)
 
+    malus_points.append(roster.cost)
 
-# fill the roster
-schedule_fill(roster, course_list)
-# print(roster.schedule)
-roster.total_cost(student_list)
+    roster.total_cost(student_list)
+    return
 
-malus_points = roster.cost
-print(malus_points)
+list_std = []
+list_course = []
+list_room = []
+malus_points = []
+run = []
+roster = []
 
-# # output
-# for key in roster.schedule:
-#     print("------------------------")
-#     print(key)
-#     print("------------------------")
-#     print(roster.schedule[key])
-#     print()
+for i in range(100):
 
-roster.total_cost(student_list)
+    std = "student" + str(i)
+    course = "course" + str(i)
+    rooms = "course" + str(i)
 
+    # create the lists
+    course, std, rooms = assign(COURSES, STUDENT_COURSES, ROOMS)
 
-# # check if students get group
-# for student in student_list:
-#     print(student.tut_group, student.pract_group)
-#     break
+    # put the new object lists in the list
+    list_std.append(std)
+    list_course.append(course)
+    list_room.append(rooms)
 
-## timeslot needed for every lecture, tut, pract
-# time_slot_count = 0
-# for course in course_list:
-#     time_slot_count += course.lectures + course.tutorial_rooms + course.practica_rooms
-#  print(time_slot_count)
+    run.append(i)
+    # create a roster
+    roster.append(Roster(rooms))
+
+    # run model on new objects
+    initialize_random_state(roster[i], list_course[i], list_std[i], malus_points)
+
+plt.plot(run, malus_points)
+plt.show()
