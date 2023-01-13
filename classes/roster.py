@@ -26,16 +26,12 @@ class Roster():
 
         # For each room in the list of objects
         for room in self.rooms:
-            days = list(room.availability.keys())
-            random.shuffle(days)
 
             # For each day in its availability
-            for day in days:
-                timeslots = list(room.availability[day].keys())
-                random.shuffle(timeslots)
+            for day in room.availability:
 
                 # For each timeslot
-                for timeslot in timeslots:
+                for timeslot in room.availability[day]:
 
                     # If timeslot is availibale and capacity is good
                     if room.availability[day][timeslot]:

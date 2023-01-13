@@ -1,3 +1,5 @@
+import random
+
 class Room():
     def __init__(self, room):
         """ Initialize attributes of class from data """
@@ -17,6 +19,9 @@ class Room():
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         timeslots = [9, 11, 13, 15]
         timeslots_biggest = [9, 11, 13, 15, 17]
+        random.shuffle(days)
+        random.shuffle(timeslots)
+        random.shuffle(timeslots_biggest)
 
         # For each day:
         for day in days:
