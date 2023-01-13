@@ -3,11 +3,12 @@ import classes.baseline as BaselineClass
 import functions.schedule_fill as schedule
 import functions.assign  as assign
 
+
 from data import COURSES, STUDENT_COURSES, ROOMS
 
 
 
-def main():
+def initialise():
     # create the lists
     course_list, student_list, rooms = assign.assign(COURSES, STUDENT_COURSES, ROOMS)
 
@@ -26,4 +27,4 @@ def main():
     return malus_points
 
 if __name__ == '__main__':
-    BaselineClass.Baseline()
+    BaselineClass.Baseline(iters=300)
