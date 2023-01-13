@@ -13,7 +13,6 @@ def main():
 
     # fill the roster
     schedule_fill(roster, course_list)
-    roster.total_cost(student_list)
 
     # Calculate costs of roster
     roster.total_cost(student_list)
@@ -24,4 +23,4 @@ def main():
     return malus_points
 
 if __name__ == '__main__':
-    baseline = Baseline(1000)
+    print(main())
