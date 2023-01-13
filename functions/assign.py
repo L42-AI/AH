@@ -4,8 +4,6 @@ from classes.student import *
 from functions.count_students import *
 from data import COURSES, ROOMS, STUDENT_COURSES
 
-'''assign all classes'''
-
 
 def assign(COURSES, STUDENT_COURSES, ROOMS):
     '''fill in lists and dictionaries with instances'''
