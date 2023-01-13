@@ -1,6 +1,6 @@
-from classes.roster import *
-from functions.schedule_fill import *
-from functions.assign import *
+import classes.roster as roster
+import functions.schedule_fill as schedule
+import functions.assign 
 from data import *
 from classes.baseline import *
 
@@ -10,10 +10,10 @@ def main():
     course_list, student_list, rooms = assign(COURSES, STUDENT_COURSES, ROOMS)
 
     # create a roster
-    roster = Roster(rooms)
+    roster = roster.Roster(rooms)
 
     # fill the roster
-    schedule_fill(roster, course_list)
+    schedule.schedule_fill(roster, course_list)
 
     # Calculate costs of roster
     roster.total_cost(student_list)

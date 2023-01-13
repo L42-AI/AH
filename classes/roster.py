@@ -41,8 +41,6 @@ class Roster():
                         self.schedule[course.name][f'{class_type} {count}']['timeslot'] = timeslot
                         self.schedule[course.name][f'{class_type} {count}']['room'] = room.id
 
-                        self.cost += (attending - room.capacity) if attending > room.capacity else 0
-
                         room.availability[day][timeslot] = False
 
                         self.check_malus(timeslot, room.capacity, attending)
