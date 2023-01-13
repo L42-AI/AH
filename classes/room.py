@@ -1,18 +1,20 @@
-# This class Room takes its data from a dataframe that it is initialized with.
-# It then Makes a dictionary with key the weekdays and value another dictionary.
-# The nested dictionary has the timeslots as keys and True as value. True means the room is available.
+"""
+This fule includes the class Room which represents the classrooms
+It has one method which is initializing its availablility
+"""
 
 import random
 
 
 class Room():
-    def __init__(self, room):
-        # Set attributes from the dataframe room
-        self.id = room['Zaalnummber']
-        self.capacity = room['Max. capaciteit']
-        self.availability = {}
+    def __init__(self, data):
+
+        # Set attributes from data
+        self.id = data['Zaalnummber']
+        self.capacity = data['Max. capaciteit']
 
         # Run initializing funciton
+        self.availability = {}
         self.initialize_availability()
 
     def initialize_availability(self):
@@ -20,19 +22,23 @@ class Room():
 
         # Set lists of days and times
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+
+        # Set possible timeslots
         timeslots = [9, 11, 13, 15]
         timeslots_biggest = [9, 11, 13, 15, 17]
 
-        # shuffle the days and timeslots for the random initiate
+        # Randomly shuffle all lists
         random.shuffle(days)
         random.shuffle(timeslots)
         random.shuffle(timeslots_biggest)
 
-        # Loop over each day and 
+        # For each dat:
         for day in days:
 
-            # check if it is the biggest room, if so use other timeslots
+            # Check if it is the biggest room
             if self.id == 'C0.110':
+
+                # Use other timeslot list
                 timeslots = timeslots_biggest
 
             # If not yet in availability:
