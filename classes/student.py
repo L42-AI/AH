@@ -171,6 +171,8 @@ class Student():
                     # some cases, double booking might be allowed, but we do not want to add 2 malus
                     if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
                         self.malus += int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
+                    else:
+                        self.malus += 1
 
     def compute_malus(self, Roster):
         """ Run required functions to compute student malus """
