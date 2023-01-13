@@ -4,6 +4,7 @@ from functions.assign import *
 from data import *
 from classes.baseline import *
 
+
 def main():
     # create the lists
     course_list, student_list, rooms = assign(COURSES, STUDENT_COURSES, ROOMS)
