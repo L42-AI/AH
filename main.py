@@ -13,6 +13,7 @@ def main():
 
     # fill the roster
     schedule_fill(roster, course_list)
+    roster.total_cost(student_list)
 
     # Calculate costs of roster
     roster.total_cost(student_list)
@@ -24,14 +25,3 @@ def main():
 
 if __name__ == '__main__':
     baseline = Baseline(1000)
-
-# # check if students get group
-# for student in student_list:
-#     print(student.tut_group, student.pract_group)
-#     break
-
-## timeslot needed for every lecture, tut, pract
-# time_slot_count = 0
-# for course in course_list:
-#     time_slot_count += course.lectures + course.tutorial_rooms + course.practica_rooms
-#  print(time_slot_count)

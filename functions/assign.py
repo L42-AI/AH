@@ -13,11 +13,11 @@ def assign(COURSES, STUDENT_COURSES, ROOMS):
     student_list = []
     rooms = []
     enrollment = count_students(STUDENT_COURSES)
-    # print(enrollment)
 
+    # create an instance for every course
     for _, course in COURSES.iterrows():
-        # print(enrollment[course['Vak']])
-        # create an instance for every course
+        # Zoeken, sturen en bewegen has "" in the name so can't be found when looking in dict
+        ## therefore explicit argument is needed
         try:
             course_list.append(Course(course, enrollment[course['Vak']]))
         except:
