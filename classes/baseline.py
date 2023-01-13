@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 
 class Baseline():
-    def __init__(self, iters):
+    def __init__(self, iters=2):
         self.costs = {}
         self.run(iters)
         self.plot()
