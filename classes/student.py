@@ -1,71 +1,42 @@
-import copy 
+"""
+This file includes the class Student which represents each student.
+The data used comes from the given dataframe.
+add_courses and select_groups are part of the initialisation.
+student_timeslot, malus_point are two methods to compute the malus points.
+compute_malus runs these functions.
+"""
+
 import random
 
 class Student():
-    def __init__(self, input, courses):
-        """ Initialize attributes of class from data """
+    def __init__(self, data, courses):
 
         # Set attributes
-        self.f_name = input['Voornaam']
-        self.l_name = input['Achternaam']
-        self.id = input['Stud.Nr.']
+        self.f_name = data['Voornaam']
+        self.l_name = data['Achternaam']
+        self.id = data['Stud.Nr.']
 
-        # create a list with courses that a student follows
-        # self.course_names holds the strings, self.course holds the objects
-        self.courses_names = [course for course in input[3:] if str(course) != 'nan']
+        # Import the name of the course from the data
+        self.courses_names = [course for course in data[3:] if str(course) != 'nan']
+
+        # Create the list of which course objects
         self.courses = []
+        self.add_courses(courses)
+
+        # Make dictionaries for practicum and tutorial groups
         self.tut_group = {}
         self.pract_group = {}
+        self.select_groups()
+
+        # Make list of timeslots
         self.timeslots = []
-        self.schedule = []
+
+        # Set malus point counter
         self.malus = 0
-        self.add_courses(courses)
-        self.pick_group()
 
     def __str__(self):
         return f"{self.f_name} {self.l_name}"
 
-    def student_cost(self, Roster):
-        # reset malus points so they do not increase over iterations
-        self.malus = 0
-
-        # first get all the education moments
-        for course in self.courses:
-            for index in range(course.lectures):
-                self.timeslots.append(Roster.schedule[course.name][f"lecture {index + 1}"])
-
-            for index in range(course.tutorials):
-                # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
-                self.timeslots.append(Roster.schedule[course.name][f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"])
-
-            for index in range(course.practica):
-                self.timeslots.append(Roster.schedule[course.name][f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"])
-
-        # make the schedule before timeslots gets editted
-        self.schedule = copy.deepcopy(self.timeslots)
-
-        self.malus_points()
-        # print(self.timeslots, self.malus)
-
-    def malus_points(self):
-        days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
-
-        # dictionary that holds the timeslots for every day student has
-        for timeslots in self.timeslots:
-              days[timeslots['day']].append(timeslots['timeslot'])
-        
-        for day in days:
-            days[day].sort(reverse=True)
-            list = days[day]
-            
-            # only run when there is a list
-            if len(list) > 1:
-                for i in range(len(list) - 1):
-
-                    # some cases, double booking might be allowed, but we do not want to add 2 malus
-                    if list[i] - list[i + 1] != 0:
-                        self.malus += int((list[i] - (list[i+1] + 2)) / 2)
-        
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
 
@@ -77,36 +48,131 @@ class Student():
                 if course.name == name:
                     self.courses.append(course)
 
-    def pick_group(self):
+    def select_groups(self):
+        """ This function selects groups of tutorial and practica for each course """
 
-        # go over all the courses a student is in
+        def set_type(course, class_type):
+            """ This function sets parameters used in pick_group"""
+
+            # If class is tutorial:
+            if class_type == 'Tutorial':
+
+                # Set all values of tutorial
+                group_dict = course.tut_group_dict
+                class_num = course.tutorials
+                max_std = course.max_std
+                group = self.tut_group
+            else:
+                # Set all values of practica
+                group_dict = course.pract_group_dict
+                class_num = course.practica
+                max_std = course.max_std_practica
+                group = self.pract_group
+
+            return group_dict, class_num, max_std, group
+
+        def pick_group(group_dict, class_num, max_std, group):
+            """ This function picks a group based on the given arguments """
+
+            # Only run if there are 1 or more classes
+            if class_num >= 1:
+
+                # Set completed boolean
+                group_picked = None
+
+                # Set amount of possible groups
+                possible_groups = list(group_dict)[-1]
+
+                # While no group is picked
+                while not group_picked:
+
+                    # Generate a random group
+                    group_picked = random.randint(1, possible_groups)
+
+                    # If group is not full (smaller than max_std)
+                    if group_dict[group_picked] < max_std:
+
+                        # Add group count
+                        group_dict[group_picked] += 1
+
+                        # Set the picked group as student attribute
+                        group[course.name] = group_picked
+                    else:
+                        # Reset group picked to remain in loop
+                        group_picked = None
+
+        # For each course
         for course in self.courses:
 
-            ### does not work! I will fix tomorrow! course = string not the object
-            if course.tutorials != 0:
-                dict = course.tut_group_dict
-                possible_groups = list(dict)[-1]
-                group_picked = False
+            # For each of the class types (with groups):
+            for class_type in ['Tutorial', 'Practica']:
 
-                # keep looking for a group untill student finds one with room
-                while not group_picked:
-                    group_picked = random.randint(1, possible_groups)
-                    if dict[group_picked] < course.max_std:
-                        course.tut_group_dict[group_picked] += 1
-                        self.tut_group[course.name] = group_picked
-                    else:
-                        group_picked = False
+                # Set the variable of the correct class
+                group_dict, class_num, max_std, group = set_type(course, class_type)
 
-            if course.practica != 0:
-                dict = course.pract_group_dict
-                possible_groups = list(dict)[-1]
-                group_picked = False
+                # Run the pick group function
+                pick_group(group_dict, class_num, max_std, group)
 
-                # keep looking for a group untill student finds one with room
-                while not group_picked:
-                    group_picked = random.randint(1, possible_groups)
-                    if dict[group_picked] < course.max_std_practica:
-                        course.pract_group_dict[group_picked] += 1
-                        self.pract_group[course.name] = group_picked
-                    else:
-                        group_picked = False
+    def student_timeslots(self, Roster):
+        """ This method adds the timeslots for classes per week """
+
+        # Reset malus points to avoid summing dubble malus
+        self.malus = 0
+
+        # Go over all courses:
+        for course in self.courses:
+
+            # For each lecture in the course:
+            for index in range(course.lectures):
+
+                # Add the class to the timeslots of the student (Every student attends all lectures)
+                self.timeslots.append(Roster.schedule[course.name][f"lecture {index + 1}"])
+
+            # For each tutorial in the course:
+            for index in range(course.tutorials):
+
+                # Add the tutorial where the student is enrolled to the timeslots of the student # Ask Jacob
+                # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
+                self.timeslots.append(Roster.schedule[course.name][f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"])
+
+            # For each practicum in the course:
+            for index in range(course.practica):
+
+                # Add the practicum where the student is enrolled to the timeslots of the student
+                self.timeslots.append(Roster.schedule[course.name][f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"])
+
+    def malus_points(self):
+        """ This method calculates the malus points point for the student """
+
+        # Create a days dictionary
+        days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
+
+        # For each timeslot:
+        for timeslots in self.timeslots:
+
+            # Add the timeslots into the days dictionary
+            days[timeslots['day']].append(timeslots['timeslot'])
+
+        # For each day in days:
+        for day in days:
+
+            # Sort the timeslots in the day:
+            days[day].sort(reverse=True)
+
+            # Set the dictionary key as list
+            timeslot_list = days[day]
+
+            # Only compute if list includes more than 1 timeslot
+            if len(timeslot_list) > 1:
+
+                # For each timeslot number: (range is -1 to ensure the use of index + 1)
+                for timeslot_num in range(len(timeslot_list) - 1):
+
+                    # some cases, double booking might be allowed, but we do not want to add 2 malus
+                    if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
+                        self.malus += int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
+
+    def compute_malus(self, Roster):
+        """ Run required functions to compute student malus """
+        self.student_timeslots(Roster)
+        self.malus_points()
