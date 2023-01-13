@@ -35,6 +35,7 @@ class Student():
                 self.timeslots.append(Roster.schedule[course.name][f"lecture {index + 1}"])
 
             for index in range(course.tutorials):
+
                 # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
                 self.timeslots.append(Roster.schedule[course.name][f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"])
 
@@ -82,7 +83,6 @@ class Student():
         # go over all the courses a student is in
         for course in self.courses:
 
-            ### does not work! I will fix tomorrow! course = string not the object
             if course.tutorials != 0:
                 dict = course.tut_group_dict
                 possible_groups = list(dict)[-1]
