@@ -64,3 +64,5 @@ hoe veranderen we het makkelijkst studenten? wanneer lectures veranderen en wann
 
 
 
+# Zeg dit tegen wouter #
+In vakken csv staat Zoeken sturen en bewegen al "Zoeken, sturen en bewegen. Maar bij studenten_en_vakken.csv staat het als: Zoeken sturen en bewegen. 
