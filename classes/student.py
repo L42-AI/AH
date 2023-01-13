@@ -48,58 +48,58 @@ class Student():
                 if course.name == name:
                     self.courses.append(course)
 
+    def set_type(self, course, class_type):
+        """ This function sets parameters used in pick_group"""
+
+        # If class is tutorial:
+        if class_type == 'Tutorial':
+
+            # Set all values of tutorial
+            group_dict = course.tut_group_dict
+            class_num = course.tutorials
+            max_std = course.max_std
+            group = self.tut_group
+        else:
+            # Set all values of practica
+            group_dict = course.pract_group_dict
+            class_num = course.practica
+            max_std = course.max_std_practica
+            group = self.pract_group
+
+        return group_dict, class_num, max_std, group
+
+    def pick_group(self, course, group_dict, class_num, max_std, group):
+        """ This function picks a group based on the given arguments """
+
+        # Only run if there are 1 or more classes
+        if class_num >= 1:
+
+            # Set completed boolean
+            group_picked = None
+
+            # Set amount of possible groups
+            possible_groups = list(group_dict)[-1]
+
+            # While no group is picked
+            while not group_picked:
+
+                # Generate a random group
+                group_picked = random.randint(1, possible_groups)
+
+                # If group is not full (smaller than max_std)
+                if group_dict[group_picked] < max_std:
+
+                    # Add group count
+                    group_dict[group_picked] += 1
+
+                    # Set the picked group as student attribute
+                    group[course.name] = group_picked
+                else:
+                    # Reset group picked to remain in loop
+                    group_picked = None
+
     def select_groups(self):
         """ This function selects groups of tutorial and practica for each course """
-
-        def set_type(course, class_type):
-            """ This function sets parameters used in pick_group"""
-
-            # If class is tutorial:
-            if class_type == 'Tutorial':
-
-                # Set all values of tutorial
-                group_dict = course.tut_group_dict
-                class_num = course.tutorials
-                max_std = course.max_std
-                group = self.tut_group
-            else:
-                # Set all values of practica
-                group_dict = course.pract_group_dict
-                class_num = course.practica
-                max_std = course.max_std_practica
-                group = self.pract_group
-
-            return group_dict, class_num, max_std, group
-
-        def pick_group(group_dict, class_num, max_std, group):
-            """ This function picks a group based on the given arguments """
-
-            # Only run if there are 1 or more classes
-            if class_num >= 1:
-
-                # Set completed boolean
-                group_picked = None
-
-                # Set amount of possible groups
-                possible_groups = list(group_dict)[-1]
-
-                # While no group is picked
-                while not group_picked:
-
-                    # Generate a random group
-                    group_picked = random.randint(1, possible_groups)
-
-                    # If group is not full (smaller than max_std)
-                    if group_dict[group_picked] < max_std:
-
-                        # Add group count
-                        group_dict[group_picked] += 1
-
-                        # Set the picked group as student attribute
-                        group[course.name] = group_picked
-                    else:
-                        # Reset group picked to remain in loop
-                        group_picked = None
 
         # For each course
         for course in self.courses:
@@ -108,10 +108,10 @@ class Student():
             for class_type in ['Tutorial', 'Practica']:
 
                 # Set the variable of the correct class
-                group_dict, class_num, max_std, group = set_type(course, class_type)
+                group_dict, class_num, max_std, group = self.set_type(course, class_type)
 
                 # Run the pick group function
-                pick_group(group_dict, class_num, max_std, group)
+                self.pick_group(course, group_dict, class_num, max_std, group)
 
     def student_timeslots(self, Roster):
         """ This method adds the timeslots for classes per week """
