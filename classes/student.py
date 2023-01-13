@@ -1,4 +1,3 @@
-import copy 
 import random
 
 class Student():
@@ -41,9 +40,6 @@ class Student():
 
             for index in range(course.practica):
                 self.timeslots.append(Roster.schedule[course.name][f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"])
-
-        # make the schedule before timeslots gets editted
-        self.schedule = copy.deepcopy(self.timeslots)
 
         self.malus_points()
         # print(self.timeslots, self.malus)
