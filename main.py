@@ -22,7 +22,7 @@ malus_points = []
 run = []
 roster = []
 
-for i in range(100):
+for i in range(10):
 
     std = "student" + str(i)
     course = "course" + str(i)

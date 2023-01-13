@@ -44,23 +44,8 @@ class Student():
         # make the schedule before timeslots gets editted
         self.schedule = copy.deepcopy(self.timeslots)
 
-        # remove days that only occur once and calc malus
-        self.same_day()
         self.malus_points()
         # print(self.timeslots, self.malus)
-
-    def same_day(self):
-        days = []
-        count = {}
-        for timeslot in self.timeslots:
-            days.append(timeslot['day'])
-        for day in days:
-            if day in count:
-                count[day] += 1
-            else:
-                count[day] = 1
-  
-        self.timeslots = [timeslot for timeslot in self.timeslots if count[timeslot['day']] > 1]
 
     def malus_points(self):
         days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
@@ -74,14 +59,13 @@ class Student():
             list = days[day]
             
             # only run when there is a list
-            if list:
+            if len(list) > 1:
                 for i in range(len(list) - 1):
 
                     # some cases, double booking might be allowed, but we do not want to add 2 malus
                     if list[i] - list[i + 1] != 0:
                         self.malus += int((list[i] - (list[i+1] + 2)) / 2)
         
-
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
 
