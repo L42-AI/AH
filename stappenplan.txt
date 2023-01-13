@@ -29,10 +29,15 @@ course naar dict veranderen
 rooms structuur veranderen, nu is elke room object binnen class Room met attributes: - id (type int)
                                                                                      - cap (type int)
                                                                                      - availability (type dict)
+Snakevis en profilers to check which functions take a long time 
+                                                                                
                                                                                      
 Rooster class __wrapper__ method
 fill roster mogelijk naar assign
 tussenuren berekenen door dict met int als key en value de tijd string
+
+## Presentatie##
+Show that multiple workgroups and tutorials are possible
 als een student niet een verandering in zn rooster had bij een iteratie, niet zn score opnieuw berekenen
 studenten een attribuut changed meegeven, zodat als ze later een ander rooster krijgen we kunnen checken of hun score wel of niet moet worden uitgerekend.
 kan add classes weg bij student?
@@ -42,6 +47,7 @@ kan add classes weg bij student?
 - class tutorial maken
 - in de class roep je student id op
 - met if statements condities erin zetten, zodat als we later een interactief algoritme willen je die statements aan en uit kan zetten
+beter om een sterkere hillclimber te maken ongeacht de initiele stand
 
 ## !!PROBLEMEN!! ##
 expliciet noemen type en naam in fill_schedule
@@ -55,5 +61,6 @@ tijdsloten zijn strings, dus tussenuren bereken word lastig. Als je 9-11 en 13-1
 ## Vragen TA##
 mogen we ervan uitgaan dat er altijd maar 1 practica of wg is?
 hoe veranderen we het makkelijkst studenten? wanneer lectures veranderen en wanneer practicals? deel van de randoms hieraan toeschrijven?
+
 
 

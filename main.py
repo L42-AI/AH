@@ -4,6 +4,7 @@ from functions.assign import *
 from data import *
 from classes.baseline import *
 
+
 def main():
     # create the lists
     course_list, student_list, rooms = assign(COURSES, STUDENT_COURSES, ROOMS)
@@ -13,7 +14,6 @@ def main():
 
     # fill the roster
     schedule_fill(roster, course_list)
-    roster.total_cost(student_list)
 
     # Calculate costs of roster
     roster.total_cost(student_list)
@@ -24,4 +24,4 @@ def main():
     return malus_points
 
 if __name__ == '__main__':
-    baseline = Baseline(1)
+    print(main())
