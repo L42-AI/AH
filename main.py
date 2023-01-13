@@ -16,7 +16,7 @@ def main():
     schedule_fill(roster, course_list)
 
     # Calculate costs of roster
-    roster.total_cost(student_list)
+    roster.total_malus(student_list)
 
     # Save as malus points
     malus_points = roster.cost

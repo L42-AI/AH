@@ -13,7 +13,7 @@ class Roster():
         # shuffle the list of room object for the random initialze
         random.shuffle(self.rooms)
 
-    def total_cost(self, student_list):
+    def total_malus(self, student_list):
         """This function loops over the list filled with Student objects and calculates the total maluspoints"""
 
         # loop over each student and add to the total
@@ -23,7 +23,7 @@ class Roster():
             self.malus += student.malus
 
     def fill_schedule(self, course, class_type, count, attending):
-        """" This function fills a schedule with no student restraints"""
+        """ This function fills a schedule with no student restraints. If there are no rooms available it prints an Error message."""
 
         # Make key if not existent
         if course.name not in self.schedule:
@@ -46,8 +46,6 @@ class Roster():
                         self.schedule[course.name][f'{class_type} {count}']['day'] = day
                         self.schedule[course.name][f'{class_type} {count}']['timeslot'] = timeslot
                         self.schedule[course.name][f'{class_type} {count}']['room'] = room.id
-
-                        self.cost += (attending - room.capacity) if attending > room.capacity else 0
 
                         room.availability[day][timeslot] = False
 
