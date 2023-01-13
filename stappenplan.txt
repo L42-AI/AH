@@ -45,6 +45,7 @@ kan add classes weg bij student?
 - class tutorial maken
 - in de class roep je student id op
 - met if statements condities erin zetten, zodat als we later een interactief algoritme willen je die statements aan en uit kan zetten
+beter om een sterkere hillclimber te maken ongeacht de initiele stand
 
 ## !!PROBLEMEN!! ##
 expliciet noemen type en naam in fill_schedule
@@ -57,4 +58,5 @@ tijdsloten zijn strings, dus tussenuren bereken word lastig. Als je 9-11 en 13-1
 
 ## Vragen TA##
 mogen we ervan uitgaan dat er altijd maar 1 practica of wg is?
+
 
