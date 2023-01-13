@@ -19,7 +19,7 @@ def main():
     roster.total_malus(student_list)
 
     # Save as malus points
-    malus_points = roster.cost
+    malus_points = roster.malus
 
     return malus_points
 
