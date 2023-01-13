@@ -1,15 +1,16 @@
 import classes.course as CourseClass
 import classes.room  as RoomClass
 import classes.student as StudentClass
-import functions.count as counts
+from functions.count import count_students
 import re
+from data import COURSES, ROOMS, STUDENT_COURSES
 
 def assign(COURSES, STUDENT_COURSES, ROOMS):
     '''fill in lists and dictionaries with instances'''
     course_list = []
     student_list = []
     rooms = []
-    dict_enrollment = counts(STUDENT_COURSES)
+    dict_enrollment = count_students(STUDENT_COURSES)
 
     # create an instance for every course
     for _, course in COURSES.iterrows():
@@ -19,17 +20,17 @@ def assign(COURSES, STUDENT_COURSES, ROOMS):
         course_name = re.sub(r',', "", str(course['Vak']))
 
         # fill in the list with course objects 
-        course_list.append(CourseClass(course, dict_enrollment[course_name]))
+        course_list.append(CourseClass.Course(course, dict_enrollment[course_name]))
 
     for _, student in STUDENT_COURSES.iterrows():
 
         # fill in the list with student objects
-        student_list.append(StudentClass(student, course_list))
+        student_list.append(StudentClass.Student(student, course_list))
 
     for _, room in ROOMS.iterrows():
 
         # fill in the list with room objects
-        rooms.append(RoomClass(room))
+        rooms.append(RoomClass.Room(room))
 
     return course_list, student_list, rooms
 
