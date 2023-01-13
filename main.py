@@ -2,26 +2,28 @@ from classes.roster import *
 from functions.schedule_fill import *
 from functions.assign import *
 from data import *
+from classes.baseline import *
 
-# create the lists
-course_list, student_list, rooms = assign(COURSES, STUDENT_COURSES, ROOMS)
+def main():
+    # create the lists
+    course_list, student_list, rooms = assign(COURSES, STUDENT_COURSES, ROOMS)
 
-# create a roster
-roster = Roster(rooms)
+    # create a roster
+    roster = Roster(rooms)
 
-# fill the roster
-schedule_fill(roster, course_list)
+    # fill the roster
+    schedule_fill(roster, course_list)
 
-# # output
-# for key in roster.schedule:
-#     print("------------------------")
-#     print(key)
-#     print("------------------------")
-#     print(roster.schedule[key])
-#     print()
+    # Calculate costs of roster
+    roster.total_cost(student_list)
 
-roster.total_cost(student_list)
+    # Save as malus points
+    malus_points = roster.cost
 
+    return malus_points
+
+if __name__ == '__main__':
+    baseline = Baseline(1000)
 
 # # check if students get group
 # for student in student_list:

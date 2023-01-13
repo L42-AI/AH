@@ -13,7 +13,7 @@ def assign(COURSES, STUDENT_COURSES, ROOMS):
     student_list = []
     rooms = []
     enrollment = count_students(STUDENT_COURSES)
-    print(enrollment)
+    # print(enrollment)
 
     for _, course in COURSES.iterrows():
         # print(enrollment[course['Vak']])

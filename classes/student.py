@@ -57,12 +57,12 @@ class Student():
             else:
                 count[day] = 1
 
-        print(days)
+        # print(days)
   
         self.timeslots = [day for day in days if count[day] > 1]
 
         # dict van maken met als values een lijst met daarin de timeslots
-        print(self.timeslots)
+        # print(self.timeslots)
 
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
