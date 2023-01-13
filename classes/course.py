@@ -7,8 +7,6 @@ student_timeslot, malus_point are two methods to compute the malus points.
 compute_malus runs these functions.
 """
 
-from functions.count_students import *
-
 class Course():
 
     def __init__(self, data, enrolled):
@@ -16,6 +14,7 @@ class Course():
         # Set from the given data
         self.name = data['Vak']
         self.lectures = data['#Hoorcolleges']
+        self.enrolled = enrolled
 
         # Set the attributes about the tutorials
         self.tutorials = data['#Werkcolleges']
@@ -28,9 +27,6 @@ class Course():
         self.practica_rooms = 0
 
         self.rooms_needed()
-
-        self.enrolled = enrolled
-
         self.group_dict()
 
     def __str__(self):

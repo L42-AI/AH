@@ -8,7 +8,7 @@ class Baseline():
         self.costs = []
         self.iterations = []
         self.run(iters)
-        self.plot_startup()
+    
 
     def run(self, iters):
         for i in (range(iters)):

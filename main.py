@@ -3,7 +3,6 @@ import classes.baseline as BaselineClass
 import functions.schedule_fill as schedule
 import functions.assign  as assign
 
-
 from data import COURSES, STUDENT_COURSES, ROOMS
 
 
@@ -27,4 +26,5 @@ def initialise():
     return malus_points
 
 if __name__ == '__main__':
-    BaselineClass.Baseline(iters=300)
+    baseline = BaselineClass.Baseline(iters=3)
+    # baseline.plot_startup(3)
