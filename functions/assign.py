@@ -6,10 +6,13 @@ import re
 from data import COURSES, ROOMS, STUDENT_COURSES
 
 def assign(COURSES, STUDENT_COURSES, ROOMS):
-    '''fill in lists and dictionaries with instances'''
+    """This Function takes in 3 Dataframes, loops over the dataframe and fills a list with the respective Class objects."""
+
     course_list = []
     student_list = []
     rooms = []
+
+    # count the students that have enrolled for each course
     dict_enrollment = count_students(STUDENT_COURSES)
 
     # create an instance for every course
