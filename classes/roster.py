@@ -13,8 +13,6 @@ class Roster():
 
             student.student_cost(self)
             self.cost += student.malus
-        
-
 
     def fill_schedule(self, course, class_type, count, attending):
         """" This function fills a schedule with with no student restraints """
