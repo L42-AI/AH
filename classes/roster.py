@@ -12,7 +12,7 @@ class Roster():
     def total_cost(self, student_list):
         for student in student_list:
 
-            student.student_cost(self)
+            student.compute_malus(self)
             self.cost += student.malus
         
 
