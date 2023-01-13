@@ -1,5 +1,6 @@
+
 def count_students(dataframe):
-    """Counts the amount of students enrolled for each course"""
+    """This function Counts the amount of students enrolled for each course"""
 
     list_courses = ['Vak1', 'Vak2', 'Vak3', 'Vak4', 'Vak5']
     dict_count = {}
@@ -7,7 +8,17 @@ def count_students(dataframe):
     # loop over each row of the dataframe and set the count plus 1
     for _, row in dataframe.iterrows():
         for course in list_courses:
-            if row[course] not in dict_count and row[course] != 'nan':
-                dict_count[row[course]] = 0
-            dict_count[row[course]] += 1
+
+            # make it a string, in order to easily check if it is nan
+            course_str = str(row[course])
+
+            if course_str != 'nan':
+                
+                # check if its in the dict, if not make a key and set value to 0
+                if course_str not in dict_count:
+                    dict_count[course_str] = 0
+
+                # count the students
+                dict_count[course_str] += 1
+            
     return dict_count
