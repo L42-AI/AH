@@ -24,4 +24,4 @@ def main():
     return malus_points
 
 if __name__ == '__main__':
-    baseline = Baseline(1000)
+    baseline = Baseline(1)
