@@ -5,6 +5,7 @@ It has one method which is initializing its availablility
 
 import random
 
+
 class Room():
     def __init__(self, data):
 
@@ -17,7 +18,7 @@ class Room():
         self.initialize_availability()
 
     def initialize_availability(self):
-        """ Set availability of all rooms """
+        """ Set availability of all rooms in a random order for days and timeslots"""
 
         # Set lists of days and times
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
@@ -31,13 +32,13 @@ class Room():
         random.shuffle(timeslots)
         random.shuffle(timeslots_biggest)
 
-        # For each day:
+        # For each dat:
         for day in days:
 
             # Check if it is the biggest room
             if self.id == 'C0.110':
 
-                # use other timeslot list
+                # Use other timeslot list
                 timeslots = timeslots_biggest
 
             # If not yet in availability:

@@ -11,4 +11,3 @@ def count_students(dataframe):
                 dict_count[row[course]] = 0
             dict_count[row[course]] += 1
     return dict_count
-        

@@ -1,20 +1,31 @@
-from functions.count_students import *
+"""
+This file includes the class Course which represents a course.
+The data used comes from the given dataframe.
+The class includes 5 methods.
+add_courses and pick_group are part of the initialisation.
+student_timeslot, malus_point are two methods to compute the malus points.
+compute_malus runs these functions.
+"""
 
 class Course():
 
-    def __init__(self, course, enrolled):
-        """ Initialize attributes of class from data """
+    def __init__(self, data, enrolled):
 
-        # Set attributes
-        self.name = course['Vak']
-        self.lectures = course['#Hoorcolleges']
-        self.tutorials = course['#Werkcolleges']
-        self.tutorial_rooms = 0
-        self.max_std = course['Max. stud. Werkcollege']
-        self.practica = course['#Practica']
-        self.practica_rooms = 0
-        self.max_std_practica = course['Max. stud. Practicum']
+        # Set from the given data
+        self.name = data['Vak']
+        self.lectures = data['#Hoorcolleges']
         self.enrolled = enrolled
+
+        # Set the attributes about the tutorials
+        self.tutorials = data['#Werkcolleges']
+        self.max_std = data['Max. stud. Werkcollege']
+        self.tutorial_rooms = 0
+
+        # Set the attributes about the practica
+        self.practica = data['#Practica']
+        self.max_std_practica = data['Max. stud. Practicum']
+        self.practica_rooms = 0
+
         self.rooms_needed()
         self.group_dict()
 

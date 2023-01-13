@@ -1,24 +1,28 @@
-import random
+# This class takes in a list of objects called rooms and makes a roster. 
+# It can also calculate the total amount maluspoints
 
+import random
 
 class Roster():
     def __init__(self, rooms):
-        """ Initialize attributes of class """
         self.schedule = {}
         self.rooms = rooms
-        random.shuffle(self.rooms)
-        self.cost = 0
+        self.malus = 0
 
-    def total_cost(self, student_list):
+        # shuffle the list of room object for the random initialze
+        random.shuffle(self.rooms)
+
+    def total_malus(self, student_list):
+        """This function loops over the list filled with Student objects and calculates the total maluspoints"""
+
+        # loop over each student and add to the total
         for student in student_list:
 
-            student.student_cost(self)
-            self.cost += student.malus
-        
-
+            student.compute_malus(self)
+            self.malus += student.malus
 
     def fill_schedule(self, course, class_type, count, attending):
-        """" This function fills a schedule with with no student restraints """
+        """ This function fills a schedule with no student restraints. If there are no rooms available it prints an Error message."""
 
         # Make key if not existent
         if course.name not in self.schedule:
@@ -33,7 +37,7 @@ class Roster():
                 # For each timeslot
                 for timeslot in room.availability[day]:
 
-                    # If timeslot is availibale and capacity is good
+                    # If timeslot is availibale
                     if room.availability[day][timeslot]:
 
                         # Create dictionary and add all keys
@@ -42,20 +46,25 @@ class Roster():
                         self.schedule[course.name][f'{class_type} {count}']['timeslot'] = timeslot
                         self.schedule[course.name][f'{class_type} {count}']['room'] = room.id
 
-                        self.cost += (attending - room.capacity) if attending > room.capacity else 0
-
                         room.availability[day][timeslot] = False
 
                         self.check_malus(timeslot, room.capacity, attending)
                         return
-        print("No Room!!")
+        
+        # If there are no rooms available at all
+        print("Error. No Room!!!")
 
     def check_malus(self, timeslot, capacity, attending):
+        """
+        This function checks if a course group is in the late timeslot and 
+        whether the amount of attending students is higher then the capacity of that room.
+        It then increases the maluspoints respectively.
+        """
 
         # penalty for late night lesson
         if timeslot == 17:
-            self.cost += 5
+            self.malus += 5
         
         # penalty for capacity shortage
         if attending > capacity:
-            self.cost += attending - capacity
+            self.malus += attending - capacity
