@@ -2,23 +2,24 @@ from main import initialise
 import os
 import matplotlib.pyplot as plt
 import numpy as np
+from tqdm import tqdm
 
 class Baseline():
     def __init__(self, iters=2):
         self.costs = []
         self.iterations = []
         self.run(iters)
-    
+
 
     def run(self, iters):
-        for i in (range(iters)):
+        for i in tqdm(range(iters)):
             self.costs.append(initialise())
             self.iterations.append(i)
 
     def plot_startup(self):
 
         fig_name = "startups.png"
-           
+
         # Current working directory
         current_dir = os.getcwd()
 
@@ -44,7 +45,7 @@ class Baseline():
         plt.plot(x_reg, y_reg, 'r')
         plt.xlabel('run #')
         plt.ylabel('malus points')
-        plt.savefig(os.path.join(directory_plots, fig_name))
+        # plt.savefig(os.path.join(directory_plots, fig_name))
         plt.show()
 
 

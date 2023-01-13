@@ -27,4 +27,4 @@ def initialise():
 
 if __name__ == '__main__':
     baseline = BaselineClass.Baseline(iters=300)
-    # baseline.plot_startup()
+    baseline.plot_startup()
