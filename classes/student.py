@@ -122,24 +122,32 @@ class Student():
         # Go over all courses:
         for course in self.courses:
 
+            current_course = Roster.schedule[course.name]
+
             # For each lecture in the course:
             for index in range(course.lectures):
 
+                current_lecture = f"lecture {index + 1}"
+
                 # Add the class to the timeslots of the student (Every student attends all lectures)
-                self.timeslots.append(Roster.schedule[course.name][f"lecture {index + 1}"])
+                self.timeslots.append(current_course[current_lecture])
 
             # For each tutorial in the course:
             for index in range(course.tutorials):
 
+                current_tutorial = f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"
+
                 # Add the tutorial where the student is enrolled to the timeslots of the student # Ask Jacob
                 # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
-                self.timeslots.append(Roster.schedule[course.name][f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"])
+                self.timeslots.append(current_course[current_tutorial])
 
             # For each practicum in the course:
             for index in range(course.practica):
 
+                current_practicum = f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"
+
                 # Add the practicum where the student is enrolled to the timeslots of the student
-                self.timeslots.append(Roster.schedule[course.name][f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"])
+                self.timeslots.append(current_course[current_practicum])
 
     def malus_points(self):
         """ This method calculates the malus points point for the student """

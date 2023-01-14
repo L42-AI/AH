@@ -26,6 +26,7 @@ class Course():
         self.max_std_practica = data['Max. stud. Practicum']
         self.practica_rooms = 0
 
+        # Run initializing functions
         self.rooms_needed()
         self.group_dict()
 

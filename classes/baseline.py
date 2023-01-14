@@ -5,14 +5,14 @@ import numpy as np
 from tqdm import tqdm
 
 class Baseline():
-    def __init__(self, iters=2):
+    def __init__(self, iters=1):
         self.costs = []
         self.iterations = []
         self.run(iters)
 
 
     def run(self, iters):
-        for i in tqdm(range(iters)):
+        for i in range(iters):
             self.costs.append(initialise())
             self.iterations.append(i)
 
