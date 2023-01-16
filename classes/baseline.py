@@ -5,14 +5,14 @@ import numpy as np
 from tqdm import tqdm
 
 class Baseline():
-    def __init__(self, iters=2):
+    def __init__(self, iters=1):
         self.costs = []
         self.iterations = []
         self.run(iters)
 
 
     def run(self, iters):
-        for i in tqdm(range(iters)):
+        for i in range(iters):
             self.costs.append(initialise())
             self.iterations.append(i)
 
@@ -26,8 +26,8 @@ class Baseline():
         # Parent directory
         parent_dir = os.path.dirname(current_dir)
 
-        # Directory "plots"
-        directory_plots = os.path.join(parent_dir, 'AH/plots')
+        # Directory "visualize"
+        directory_plots = os.path.join(parent_dir, 'AH/vizualize')
 
         # Fit a polynomial of degree 1 (i.e. a linear regression) to the data
         coefficients = np.polyfit(self.iterations, self.costs, 1)
