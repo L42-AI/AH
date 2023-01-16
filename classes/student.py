@@ -34,8 +34,8 @@ class Student():
         # Set malus point counter
         self.malus = 0
 
-    def __str__(self):
-        return f"{self.f_name} {self.l_name}"
+    # def __str__(self):
+    #     return f"{self.f_name} {self.l_name}"
 
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """

@@ -3,6 +3,7 @@ import classes.baseline as BaselineClass
 import functions.schedule_fill as schedule
 import functions.assign  as assign
 import functions.dataframes as dataframe
+import functions.change_students as change
 
 from data import COURSES, STUDENT_COURSES, ROOMS
 
@@ -22,7 +23,9 @@ def initialise():
     Roster.total_malus(student_list)
 
     # Create a dataframe and export to excel for visual representation
-    dataframe.schedule_dataframe(Roster, student_list, visualize=True)
+    df = dataframe.schedule_dataframe(Roster, student_list)
+
+    change.change_students(df, course_list)
 
     # Save as malus points
     malus_points = Roster.malus

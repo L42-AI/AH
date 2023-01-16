@@ -28,6 +28,9 @@ class Course():
 
         # Run initializing functions
         self.rooms_needed()
+
+        self.tut_group_dict = {}
+        self.pract_group_dict = {}
         self.group_dict()
 
     def __str__(self):
@@ -50,11 +53,9 @@ class Course():
 
     def group_dict(self):
 
-        self.tut_group_dict = {}
         for i in range(self.tutorial_rooms):
             self.tut_group_dict[i + 1] = 0
 
-        self.pract_group_dict = {}
         for i in range(self.practica_rooms):
             self.pract_group_dict[i + 1] = 0
 
