@@ -25,7 +25,18 @@
 We zijn hier
 """
 
-(6) Begin maken aan mogelijkheid om studenten om te roosteren
+(6) Begin maken aan omroosteren
+      - Studenten wisselen
+      - geheele lessen
+
+(!) visual schedules maken per:
+      - student
+      - room
+      - course
+      week / month
+
+(!) lectures per lokaal doen:
+      - greedy
 
 ## HEURISTIEK ## 
 - random x10, neem beste, daar random aanpassingen (5 studenten met hoogste cost met willekeurige groep wisselen etc)

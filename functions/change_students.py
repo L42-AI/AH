@@ -2,7 +2,7 @@
 def change_students(df, course_list, num=10):
     student_list = find_worst_students(df, num)
     space_dict = find_space(course_list)
-    print(space_dict)
+    # shuffle_students(student_list, space_dict)
 
 def find_worst_students(df, num=10):
     df.sort_values(['Student Malus'], ascending=True, inplace=True)
@@ -44,4 +44,19 @@ def find_space(course_list):
                     space_dict[course.name][f'Practical {practical}'] = space
 
     return space_dict
+
+def shuffle_students(student_list, space_dict):
+    for student in student_list:
+        for course in student.courses:
+            if course.name in space_dict:
+                print('=======')
+                print(student.f_name)
+                print(course.name)
+                print()
+                print('tut')
+                print(student.tut_group)
+                print('prac')
+                print(student.pract_group)
+                print()
+                print(space_dict[course.name])
 

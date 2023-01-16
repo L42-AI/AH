@@ -31,11 +31,15 @@ class Student():
         # Make list of timeslots
         self.timeslots = []
 
-        # Set malus point counter
-        self.malus = 0
+        # Set malus point dict
+        self.malus = {}
+        self.init_malus()
 
     # def __str__(self):
     #     return f"{self.f_name} {self.l_name}"
+
+    def init_malus(self):
+        self.malus['Classes Gap'] = 0
 
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -168,7 +172,7 @@ class Student():
         """ This method calculates the malus points point for the student """
 
         # Reset malus points to avoid summing dubble malus
-        self.malus = 0
+        self.init_malus()
 
         # Create a days dictionary
         days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
@@ -196,9 +200,9 @@ class Student():
 
                     # some cases, double booking might be allowed, but we do not want to add 2 malus
                     if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
-                        self.malus += int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
+                        self.malus['Classes Gap'] += int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
                     else:
-                        self.malus += 1
+                        self.malus['Classes Gap'] += 1
 
     def compute_malus(self, Roster):
         """ Run required functions to compute student malus """
