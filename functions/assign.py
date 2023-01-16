@@ -18,12 +18,8 @@ def assign(COURSES, STUDENT_COURSES, ROOMS):
     # create an instance for every course
     for _, course in COURSES.iterrows():
 
-        # because the data in vakken.csv is not the same as in student_en_vakken.csv
-        # we choose to put in this regex
-        course_name = re.sub(r',', "", str(course['Vak']))
-
         # fill in the list with course objects 
-        course_list.append(CourseClass.Course(course, dict_enrollment[course_name]))
+        course_list.append(CourseClass.Course(course, dict_enrollment[course['Vak']]))
 
     for _, student in STUDENT_COURSES.iterrows():
 
