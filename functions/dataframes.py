@@ -7,6 +7,7 @@ import os
 
 def schedule_dataframe(Roster, student_list, visualize=False):
     # Make lists to put into schedule dataframe
+    df_list_student_object = []
     df_list_student_malus = []
     df_list_students = []
     df_list_courses = []
@@ -22,6 +23,7 @@ def schedule_dataframe(Roster, student_list, visualize=False):
         for timeslot in student.timeslots:
 
             # Add all relevant information ito lists
+            df_list_student_object.append(student)
             df_list_student_malus.append(student.malus)
             df_list_students.append(f'{student.f_name} {student.l_name}')
             df_list_courses.append(timeslot['course'])
@@ -32,7 +34,8 @@ def schedule_dataframe(Roster, student_list, visualize=False):
 
 
     # Create schedule
-    schedule_df = pd.DataFrame({'Student': df_list_students,
+    schedule_df = pd.DataFrame({'Object': df_list_student_object,
+                                'Student': df_list_students,
                                 'Course': df_list_courses,
                                 'Activity': df_list_type,
                                 'Room': df_list_rooms,
