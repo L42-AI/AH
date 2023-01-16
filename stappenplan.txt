@@ -61,6 +61,7 @@ tijdsloten zijn strings, dus tussenuren bereken word lastig. Als je 9-11 en 13-1
 ## Vragen TA##
 mogen we ervan uitgaan dat er altijd maar 1 practica of wg is?
 hoe veranderen we het makkelijkst studenten? wanneer lectures veranderen en wanneer practicals? deel van de randoms hieraan toeschrijven?
+Moeten we rekening houden met volgorde van lessen(Lecture1, Tutorial1, Lecture2, Tutorial2, Tutorial3)
 
 
 
