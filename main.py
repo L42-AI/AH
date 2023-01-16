@@ -22,8 +22,7 @@ def initialise():
     Roster.total_malus(student_list)
 
     # Create a dataframe and export to excel for visual representation
-    schedule_df = dataframe.schedule_dataframe(Roster, student_list)
-    schedule_df.to_excel('Schedule.xlsx', index=False)
+    dataframe.schedule_dataframe(Roster, student_list, visualize=True)
 
     # Save as malus points
     malus_points = Roster.malus

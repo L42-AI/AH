@@ -26,8 +26,8 @@ class Baseline():
         # Parent directory
         parent_dir = os.path.dirname(current_dir)
 
-        # Directory "plots"
-        directory_plots = os.path.join(parent_dir, 'AH/plots')
+        # Directory "visualize"
+        directory_plots = os.path.join(parent_dir, 'AH/vizualize')
 
         # Fit a polynomial of degree 1 (i.e. a linear regression) to the data
         coefficients = np.polyfit(self.iterations, self.costs, 1)

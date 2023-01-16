@@ -3,8 +3,9 @@ This file contains a function that transforms the schedule into a excel
 """
 
 import pandas as pd
+import os
 
-def schedule_dataframe(Roster, student_list):
+def schedule_dataframe(Roster, student_list, visualize=False):
     # Make lists to put into schedule dataframe
     df_list_student_malus = []
     df_list_students = []
@@ -18,21 +19,17 @@ def schedule_dataframe(Roster, student_list):
     for student in student_list:
 
         # For each course the student is enrolled at
-        for course in student.courses:
+        for timeslot in student.timeslots:
 
-            # For each class:
-            for class_name in Roster.schedule[course.name]:
+            # Add all relevant information ito lists
+            df_list_student_malus.append(student.malus)
+            df_list_students.append(f'{student.f_name} {student.l_name}')
+            df_list_courses.append(timeslot[0])
+            df_list_type.append(timeslot[1])
+            df_list_rooms.append(timeslot[2]['room'])
+            df_list_day.append(timeslot[2]['day'])
+            df_list_time.append(timeslot[2]['timeslot'])
 
-                current_class = Roster.schedule[course.name][class_name]
-
-                # Add all relevant information ito lists
-                df_list_student_malus.append(student.malus)
-                df_list_students.append(f'{student.f_name} {student.l_name}')
-                df_list_courses.append(course)
-                df_list_rooms.append(current_class['room'])
-                df_list_day.append(current_class['day'])
-                df_list_time.append(current_class['timeslot'])
-                df_list_type.append(class_name)
 
     # Create schedule
     schedule_df = pd.DataFrame({'Student': df_list_students,
@@ -43,4 +40,18 @@ def schedule_dataframe(Roster, student_list):
                                 'Time': df_list_time,
                                 'Student Malus': df_list_student_malus,
                                 'Total Malus': Roster.malus})
+
+    if visualize:
+        # Current working directory
+        current_dir = os.getcwd()
+
+        # Parent directory
+        parent_dir = os.path.dirname(current_dir)
+
+        # Directory "visualize"
+        visualize_directory = os.path.join(parent_dir, 'AH/visualize')
+
+        # Export to excel file
+        schedule_df.to_excel(f"{visualize_directory}/schedule.xlsx", index=False)
+
     return schedule_df

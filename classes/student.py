@@ -129,25 +129,34 @@ class Student():
 
                 current_lecture = f"lecture {index + 1}"
 
+                # Make tuple indluding the course, class, and class info
+                timeslot = (course.name, current_lecture, current_course[current_lecture])
+
                 # Add the class to the timeslots of the student (Every student attends all lectures)
-                self.timeslots.append(current_course[current_lecture])
+                self.timeslots.append(timeslot)
 
             # For each tutorial in the course:
             for index in range(course.tutorials):
 
                 current_tutorial = f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"
 
+                # Make tuple indluding the course, class, and class info
+                timeslot = (course.name, current_tutorial, current_course[current_tutorial])
+
                 # Add the tutorial where the student is enrolled to the timeslots of the student # Ask Jacob
                 # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
-                self.timeslots.append(current_course[current_tutorial])
+                self.timeslots.append(timeslot)
 
             # For each practicum in the course:
             for index in range(course.practica):
 
                 current_practicum = f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"
 
+                # Make tuple indluding the course, class, and class info
+                timeslot = (course.name, current_practicum, current_course[current_practicum])
+
                 # Add the practicum where the student is enrolled to the timeslots of the student
-                self.timeslots.append(current_course[current_practicum])
+                self.timeslots.append(timeslot)
 
     def malus_points(self):
         """ This method calculates the malus points point for the student """
@@ -158,8 +167,11 @@ class Student():
         # For each timeslot:
         for timeslots in self.timeslots:
 
+            # Take the info about the class
+            class_info = timeslots[2]
+
             # Add the timeslots into the days dictionary
-            days[timeslots['day']].append(timeslots['timeslot'])
+            days[class_info['day']].append(class_info['timeslot'])
 
         # For each day in days:
         for day in days:
