@@ -24,11 +24,11 @@ def schedule_dataframe(Roster, student_list, visualize=False):
             # Add all relevant information ito lists
             df_list_student_malus.append(student.malus)
             df_list_students.append(f'{student.f_name} {student.l_name}')
-            df_list_courses.append(timeslot[0])
-            df_list_type.append(timeslot[1])
-            df_list_rooms.append(timeslot[2]['room'])
-            df_list_day.append(timeslot[2]['day'])
-            df_list_time.append(timeslot[2]['timeslot'])
+            df_list_courses.append(timeslot['course'])
+            df_list_type.append(timeslot['class'])
+            df_list_rooms.append(timeslot['room'])
+            df_list_day.append(timeslot['day'])
+            df_list_time.append(timeslot['timeslot'])
 
 
     # Create schedule

@@ -12,6 +12,7 @@
       - daarna studenten in een random groepje zetten
 (2.2) alleen groepen indelen als studenten in die groep niet al 2 lessen hadden
 
+
 (3) kosten functie maken ##assign, classes
 - roster een attribute geven om maluspunten bij te houden
 
@@ -19,6 +20,12 @@
 (4.1) dit doen door de room lijst random te shuffelen, en dan van boven naar beneden roosteren
 
 (5) nieuw maken met subgroepjes en kosten
+
+"""
+We zijn hier
+"""
+
+(6) Begin maken aan mogelijkheid om studenten om te roosteren
 
 ## HEURISTIEK ## 
 - random x10, neem beste, daar random aanpassingen (5 studenten met hoogste cost met willekeurige groep wisselen etc)
