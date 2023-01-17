@@ -36,6 +36,11 @@ def initialise():
     return malus_points, course_list, student_list, rooms, Roster
 
 def swap_lecture(courses, course, roster):
+    """
+    This function takes in a list of object courses, a single object course and the object roster.
+    It then takes a random course of the list courses and switches the lecture timeslots of the two.
+    Because the roster schedule is changed, the student timeslots dictionary is changed as well.
+    """
     
     # pick a random course to swap with that is not the same as as the course and the new course does have lectures
     random_course = random.choice([c for c in courses if c != course and c.lectures > 0])
