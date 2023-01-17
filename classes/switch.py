@@ -1,4 +1,4 @@
-class Switch():
+class Change():
     def __init__(self, df, course_list, student_list, Roster):
         self.df = df
         self.course_list = course_list
@@ -11,11 +11,17 @@ class Switch():
         worst_students = self.df['Object'].unique()[:num]
         return worst_students
 
-
     def shuffle_students(self, student_list, space_dict):
 
-        for student in student_list:
-            self.shuffle(student)
+        for i in range(len(student_list) - 1):
+
+            student_1 = student_list[i]
+            student_2 = student_list[i + 1]
+
+            for course in student_1.courses:
+
+                if course in student_2.courses:
+                    self.shuffle(course, student_1, student_2)
 
     def test_classses(self, timeslot):
 
@@ -32,15 +38,8 @@ class Switch():
 
         return switch_dict
 
-    def shuffle(self, student):
-
-
-
-        for course in student.timeslots:
-            for classes in student.timeslots[course]:
-                if classes.startswith('lecture'):
-                    print(student.timeslots[course][classes])
-                    self.test_classses(student.timeslots[course][classes])
+    def shuffle(self, course, student1, student2):
+        course
 
 
 

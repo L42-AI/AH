@@ -34,7 +34,7 @@ def initialise():
     return malus_points, course_list, student_list, rooms, Roster
 
 def swap_lecture(courses, course, students, roster):
-    
+
     # pick a random course to swap with that is not the same as as the course and the new course does have lectures
     random_course = random.choice([c for c in courses if c != course and c.lectures > 0])
 
@@ -44,11 +44,11 @@ def swap_lecture(courses, course, students, roster):
     # if there are more then 1 lecture choose a random one
     if len(lecture_switch) > 1:
         lecture_switch = random.choice(lecture_switch)
-    
+
     # else make from list string again
     else:
         lecture_switch = lecture_switch[0]
-    
+
     # make a list of all the lectures for the random
     lecture_random = [key for key in roster.schedule[random_course.name].keys() if "lecture" in key]
 
@@ -69,7 +69,7 @@ def swap_lecture(courses, course, students, roster):
         roster.schedule[course.name][lecture_switch][key] = dict_random[key]
         roster.schedule[random_course.name][lecture_random][key] = dict_switch[key]
 
-    
+
 
 if __name__ == '__main__':
     baseline = BaselineClass.Baseline()
