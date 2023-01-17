@@ -67,8 +67,9 @@ if __name__ == '__main__':
     # baseline.plot_startup()
 
     malus_points, courses, students, rooms, roster = initialise()
-
+    
     # print(courses[0].name)
 
-    swap_lecture(courses, courses[0], students, roster)
+    swap_lecture(courses, courses[0], roster)
+    print(roster.schedule)
 
