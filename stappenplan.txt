@@ -12,6 +12,7 @@
       - daarna studenten in een random groepje zetten
 (2.2) alleen groepen indelen als studenten in die groep niet al 2 lessen hadden
 
+
 (3) kosten functie maken ##assign, classes
 - roster een attribute geven om maluspunten bij te houden
 
@@ -19,6 +20,12 @@
 (4.1) dit doen door de room lijst random te shuffelen, en dan van boven naar beneden roosteren
 
 (5) nieuw maken met subgroepjes en kosten
+
+"""
+We zijn hier
+"""
+
+(6) Begin maken aan mogelijkheid om studenten om te roosteren
 
 ## HEURISTIEK ## 
 - random x10, neem beste, daar random aanpassingen (5 studenten met hoogste cost met willekeurige groep wisselen etc)
@@ -61,6 +68,9 @@ tijdsloten zijn strings, dus tussenuren bereken word lastig. Als je 9-11 en 13-1
 ## Vragen TA##
 mogen we ervan uitgaan dat er altijd maar 1 practica of wg is?
 hoe veranderen we het makkelijkst studenten? wanneer lectures veranderen en wanneer practicals? deel van de randoms hieraan toeschrijven?
+Moeten we rekening houden met volgorde van lessen(Lecture1, Tutorial1, Lecture2, Tutorial2, Tutorial3)
 
 
 
+# Zeg dit tegen wouter #
+In vakken csv staat Zoeken sturen en bewegen al "Zoeken, sturen en bewegen. Maar bij studenten_en_vakken.csv staat het als: Zoeken sturen en bewegen. 

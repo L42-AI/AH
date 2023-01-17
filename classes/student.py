@@ -34,8 +34,8 @@ class Student():
         # Set malus point counter
         self.malus = 0
 
-    def __str__(self):
-        return f"{self.f_name} {self.l_name}"
+    # def __str__(self):
+    #     return f"{self.f_name} {self.l_name}"
 
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -48,58 +48,58 @@ class Student():
                 if course.name == name:
                     self.courses.append(course)
 
+    def set_type(self, course, class_type):
+        """ This function sets parameters used in pick_group"""
+
+        # If class is tutorial:
+        if class_type == 'Tutorial':
+
+            # Set all values of tutorial
+            group_dict = course.tut_group_dict
+            class_num = course.tutorials
+            max_std = course.max_std
+            group = self.tut_group
+        else:
+            # Set all values of practica
+            group_dict = course.pract_group_dict
+            class_num = course.practica
+            max_std = course.max_std_practica
+            group = self.pract_group
+
+        return group_dict, class_num, max_std, group
+
+    def pick_group(self, course, group_dict, class_num, max_std, group):
+        """ This function picks a group based on the given arguments """
+
+        # Only run if there are 1 or more classes
+        if class_num >= 1:
+
+            # Set completed boolean
+            group_picked = None
+
+            # Set amount of possible groups
+            possible_groups = list(group_dict)[-1]
+
+            # While no group is picked
+            while not group_picked:
+
+                # Generate a random group
+                group_picked = random.randint(1, possible_groups)
+
+                # If group is not full (smaller than max_std)
+                if group_dict[group_picked] < max_std:
+
+                    # Add group count
+                    group_dict[group_picked] += 1
+
+                    # Set the picked group as student attribute
+                    group[course.name] = group_picked
+                else:
+                    # Reset group picked to remain in loop
+                    group_picked = None
+
     def select_groups(self):
         """ This function selects groups of tutorial and practica for each course """
-
-        def set_type(course, class_type):
-            """ This function sets parameters used in pick_group"""
-
-            # If class is tutorial:
-            if class_type == 'Tutorial':
-
-                # Set all values of tutorial
-                group_dict = course.tut_group_dict
-                class_num = course.tutorials
-                max_std = course.max_std
-                group = self.tut_group
-            else:
-                # Set all values of practica
-                group_dict = course.pract_group_dict
-                class_num = course.practica
-                max_std = course.max_std_practica
-                group = self.pract_group
-
-            return group_dict, class_num, max_std, group
-
-        def pick_group(group_dict, class_num, max_std, group):
-            """ This function picks a group based on the given arguments """
-
-            # Only run if there are 1 or more classes
-            if class_num >= 1:
-
-                # Set completed boolean
-                group_picked = None
-
-                # Set amount of possible groups
-                possible_groups = list(group_dict)[-1]
-
-                # While no group is picked
-                while not group_picked:
-
-                    # Generate a random group
-                    group_picked = random.randint(1, possible_groups)
-
-                    # If group is not full (smaller than max_std)
-                    if group_dict[group_picked] < max_std:
-
-                        # Add group count
-                        group_dict[group_picked] += 1
-
-                        # Set the picked group as student attribute
-                        group[course.name] = group_picked
-                    else:
-                        # Reset group picked to remain in loop
-                        group_picked = None
 
         # For each course
         for course in self.courses:
@@ -108,50 +108,76 @@ class Student():
             for class_type in ['Tutorial', 'Practica']:
 
                 # Set the variable of the correct class
-                group_dict, class_num, max_std, group = set_type(course, class_type)
+                group_dict, class_num, max_std, group = self.set_type(course, class_type)
 
                 # Run the pick group function
-                pick_group(group_dict, class_num, max_std, group)
+                self.pick_group(course, group_dict, class_num, max_std, group)
 
     def student_timeslots(self, Roster):
         """ This method adds the timeslots for classes per week """
 
-        # Reset malus points to avoid summing dubble malus
-        self.malus = 0
-
         # Go over all courses:
         for course in self.courses:
+
+            current_course = Roster.schedule[course.name]
 
             # For each lecture in the course:
             for index in range(course.lectures):
 
+                # Set the current class
+                current_lecture = f"lecture {index + 1}"
+
+                # Add course and class to timeslot info
+                timeslot_dict = current_course[current_lecture]
+                timeslot_dict['course'] = course.name
+                timeslot_dict['class'] = current_lecture
+
                 # Add the class to the timeslots of the student (Every student attends all lectures)
-                self.timeslots.append(Roster.schedule[course.name][f"lecture {index + 1}"])
+                self.timeslots.append(timeslot_dict)
 
             # For each tutorial in the course:
             for index in range(course.tutorials):
 
+                # Set the current class
+                current_tutorial = f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"
+
+                # Add course and class to timeslot info
+                timeslot_dict = current_course[current_tutorial]
+                timeslot_dict['course'] = course.name
+                timeslot_dict['class'] = current_tutorial
+
                 # Add the tutorial where the student is enrolled to the timeslots of the student # Ask Jacob
                 # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
-                self.timeslots.append(Roster.schedule[course.name][f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"])
+                self.timeslots.append(timeslot_dict)
 
             # For each practicum in the course:
             for index in range(course.practica):
 
+                # Set the current class
+                current_practicum = f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"
+
+                # Add course and class to timeslot info
+                timeslot_dict = current_course[current_practicum]
+                timeslot_dict['course'] = course.name
+                timeslot_dict['class'] = current_practicum
+
                 # Add the practicum where the student is enrolled to the timeslots of the student
-                self.timeslots.append(Roster.schedule[course.name][f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"])
+                self.timeslots.append(timeslot_dict)
 
     def malus_points(self):
         """ This method calculates the malus points point for the student """
+
+        # Reset malus points to avoid summing dubble malus
+        self.malus = 0
 
         # Create a days dictionary
         days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
 
         # For each timeslot:
-        for timeslots in self.timeslots:
+        for timeslot in self.timeslots:
 
             # Add the timeslots into the days dictionary
-            days[timeslots['day']].append(timeslots['timeslot'])
+            days[timeslot['day']].append(timeslot['timeslot'])
 
         # For each day in days:
         for day in days:
