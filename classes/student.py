@@ -42,6 +42,7 @@ class Student():
 
     def init_malus(self):
         self.malus_cause['Classes Gap'] = 0
+        self.malus_cause['Dubble Classes'] = 0
 
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -216,8 +217,16 @@ class Student():
             # Only compute if list includes more than 1 timeslot
             if len(timeslot_list) > 1:
 
+                timeslots_taken = []
+
                 # For each timeslot number: (range is -1 to ensure the use of index + 1)
                 for timeslot_num in range(len(timeslot_list) - 1):
+
+                    if timeslot_list[timeslot_num] in timeslots_taken:
+                        self.malus_cause['Dubble Classes'] += 1
+                        self.malus_count += 1
+                    else:
+                        timeslots_taken.append(timeslot_list[timeslot_num])
 
                     # some cases, double booking might be allowed, but we do not want to add 2 malus
                     if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
