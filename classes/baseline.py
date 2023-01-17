@@ -18,7 +18,7 @@ class Baseline():
     def plot_startup(self):
 
         fig_name = "startups.png"
-           
+
         # Current working directory
         current_dir = os.getcwd()
 
