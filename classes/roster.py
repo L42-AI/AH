@@ -1,6 +1,6 @@
 # This class takes in a list of objects called rooms and makes a roster. 
 # It can also calculate the total amount maluspoints
-
+import functions.schedule_fill as schedule_fill
 import random
 import functions.helpers as help_function
 
@@ -79,15 +79,11 @@ class Roster():
 
                     # If timeslot is availibale
                     if room.availability[day][timeslot]:
-
-                        # Create dictionary and add all keys
+                        
                         self.schedule[course.name][f'{class_type} {count}'] = {}
-                        self.schedule[course.name][f'{class_type} {count}']['day'] = day
-                        self.schedule[course.name][f'{class_type} {count}']['timeslot'] = timeslot
-                        self.schedule[course.name][f'{class_type} {count}']['room'] = room.id
-
-                        room.availability[day][timeslot] = False
-
+                        clas_number = f"{class_type} {count}"
+                        schedule_fill.place_in_schedule(self, room, day, timeslot, course.name, clas_number)
+                        
                         self.check_malus(timeslot, room.capacity, attending)
                         return
 
