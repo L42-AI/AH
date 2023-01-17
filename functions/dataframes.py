@@ -34,8 +34,8 @@ def schedule_dataframe(Roster, student_list, visualize=False):
 
 
     # Create schedule
-    schedule_df = pd.DataFrame({'Object': df_list_student_object,
-                                'Student': df_list_students,
+    schedule_df = pd.DataFrame({'Student Object': df_list_student_object,
+                                'Student Name': df_list_students,
                                 'Course': df_list_courses,
                                 'Activity': df_list_type,
                                 'Room': df_list_rooms,

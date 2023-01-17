@@ -18,6 +18,7 @@ def initialise():
 
     # fill the roster
     schedule.schedule_fill(Roster, course_list)
+    print(Roster.schedule["No course"])
 
     # Calculate costs of roster
     Roster.total_malus(student_list)
