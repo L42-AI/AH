@@ -71,5 +71,5 @@ if __name__ == '__main__':
     # print(courses[0].name)
 
     swap_lecture(courses, courses[0], roster)
-    print(roster.schedule)
+    print(roster.schedule['No course'])
 
