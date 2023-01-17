@@ -31,7 +31,7 @@ def initialise():
     # Save as malus points
     malus_points = Roster.malus_count
 
-    return malus_points, course_list, student_list, rooms, Roster
+    return df, malus_points, course_list, student_list, rooms, Roster
 
 def swap_lecture(courses, course, students, roster):
 
@@ -73,12 +73,13 @@ def swap_lecture(courses, course, students, roster):
 
 if __name__ == '__main__':
     baseline = BaselineClass.Baseline()
-    baseline.run(1)
+    print(baseline.malus)
+    baseline.rearrange()
 
 
-    malus_points, courses, students, rooms, roster = initialise()
+    # df, malus_points, courses, students, rooms, roster = initialise()
 
-    # print(courses[0].name)
+    # # print(courses[0].name)
 
-    swap_lecture(courses, courses[0], students, roster)
+    # swap_lecture(courses, courses[0], students, roster)
 
