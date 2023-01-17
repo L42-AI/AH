@@ -82,6 +82,13 @@ hoe veranderen we het makkelijkst studenten? wanneer lectures veranderen en wann
 Moeten we rekening houden met volgorde van lessen(Lecture1, Tutorial1, Lecture2, Tutorial2, Tutorial3)
 
 
+## Dingen die gedraaid kunnen worden ##
+- studenten van 2 tut of pract groepen van het zelfde vak
+- tijdslot van een tut of pract groep van 2 verschillende vakken
+- tijdslot van een tut of pract groep binnen een vak (moeten er wel meerdere zijn)
+- tijdslot van een lecture van 2 verschillende vakken
+- tijdslot van een lecture binnen een vak (moeten er wel meerdere zijn) --> doet niks!!
+
 
 # Zeg dit tegen wouter #
 In vakken csv staat Zoeken sturen en bewegen al "Zoeken, sturen en bewegen. Maar bij studenten_en_vakken.csv staat het als: Zoeken sturen en bewegen. 
