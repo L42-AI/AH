@@ -1,5 +1,5 @@
 def schedule_fill(roster, course_list):
-    
+
     for course in course_list:
 
         # go over the number of lectures, tutorials and practicals needed
@@ -24,6 +24,7 @@ def schedule_fill(roster, course_list):
                 # check how many students will attend this practical
                 attending = course.pract_group_dict[i + 1]
                 roster.fill_schedule(course, "practical", i + 1, attending)
+
     fill_empty_slots(roster)
 
 def fill_empty_slots(roster):

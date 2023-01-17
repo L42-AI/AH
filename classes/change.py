@@ -1,3 +1,7 @@
+
+import random
+
+
 class Change():
     def __init__(self, df, course_list, student_list, Roster):
         self.df = df
@@ -104,9 +108,39 @@ class Change():
                         if student1_classes in student1.timeslots[course.name]:
                             student1.timeslots[course.name].pop(student2_classes)
 
-
     def switch_2_students(self, num = 100):
 
         switch_student_list = self.__find_worst_students(num)
 
         self.__students_to_shuffle(switch_student_list)
+
+
+    def __swap_lecture(self, course):
+        """
+        This function takes in a list of object courses, a single object course and the object roster.
+        It then takes a random course of the list courses and switches the lecture timeslots of the two.
+        Because the roster schedule is changed, the student timeslots dictionary is changed as well.
+        """
+
+        # pick a random course to swap with that is not the same as as the course and the new course does have lectures
+        random_course = random.choice([c for c in self.course_list if c != course and c.lectures > 0])
+
+        # get all the lectures
+        lecture_switch = [key for key in self.Roster.schedule[course.name].keys() if "lecture" in key]
+        lecture_random = [key for key in self.Roster.schedule[random_course.name].keys() if "lecture" in key]
+
+        # take a random lecture (if only one it will take the one)
+        lecture_switch = random.choice(lecture_switch)
+        lecture_random = random.choice(lecture_random)
+
+        # define in order to be easier to read and switch key values
+        dict_switch = self.Roster.schedule[course.name][lecture_switch]
+        dict_random = self.Roster.schedule[random_course.name][lecture_random]
+
+        # switch the times in the schedule roster
+        self.Roster.schedule[course.name][lecture_switch] = dict(zip(dict_switch, dict_random.values()))
+        self.Roster.schedule[random_course.name][lecture_random] = dict(zip(dict_random, dict_switch.values()))
+
+    def swap_2_lectures(self):
+        for course in self.course_list:
+            self.__swap_lecture(course)

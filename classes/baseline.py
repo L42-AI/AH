@@ -3,7 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import classes.change as ChangeClass
-from tqdm import tqdm 
+from tqdm import tqdm
 
 class Baseline():
     def __init__(self, visualize=False):
@@ -13,14 +13,14 @@ class Baseline():
         if visualize:
             self.plot_startup()
 
-    def run(self, iters=1):
+    def initialize(self, iters=1):
         for i in tqdm(range(iters)):
             self.costs.append(initialise()[1])
             self.iterations.append(i)
 
     def plot_startup(self):
 
-        self.run(300)
+        self.initialize(300)
 
         fig_name = "startups.png"
 
@@ -52,6 +52,12 @@ class Baseline():
         plt.savefig(os.path.join(directory_plots, fig_name))
         plt.show()
 
+    def run(self, iters = 200):
+        for i in tqdm(range(iters)):
+            self.costs.append()
+            self.iterations.append(i)
+
     def rearrange(self):
         Schuffeler = ChangeClass.Change(self.df, self.course_list, self.student_list, self.Roster)
-        Schuffeler.switch_2_students(num=10)
+        Schuffeler.swap_2_lectures()
+        # Schuffeler.switch_2_students(num=10)

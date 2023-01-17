@@ -1,8 +1,8 @@
-# This class takes in a list of objects called rooms and makes a roster. 
+# This class takes in a list of objects called rooms and makes a roster.
 # It can also calculate the total amount maluspoints
 import functions.schedule_fill as schedule_fill
-import random
 import functions.helpers as help_function
+import random
 
 class Roster():
     def __init__(self, rooms):

@@ -2,7 +2,6 @@ import classes.course as CourseClass
 import classes.room  as RoomClass
 import classes.student as StudentClass
 from functions.count import count_students
-from data import COURSES, ROOMS, STUDENT_COURSES
 
 def assign(COURSES, STUDENT_COURSES, ROOMS):
     """This Function takes in 3 Dataframes, loops over the dataframe and fills a list with the respective Class objects."""
@@ -17,7 +16,7 @@ def assign(COURSES, STUDENT_COURSES, ROOMS):
     # create an instance for every course
     for _, course in COURSES.iterrows():
 
-        # fill in the list with course objects 
+        # fill in the list with course objects
         course_list.append(CourseClass.Course(course, dict_enrollment[course['Vak']]))
 
     for _, student in STUDENT_COURSES.iterrows():
