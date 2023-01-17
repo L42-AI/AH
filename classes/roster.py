@@ -9,22 +9,25 @@ class Roster():
         self.schedule = {}
         self.rooms = rooms
 
-        self.malus = {}
+        self.malus_count = 0
+
+        self.malus_cause = {}
         self.init_malus()
 
         # shuffle the list of room object for the random initialze
         random.shuffle(self.rooms)
 
     def init_malus(self):
-        self.malus['Night'] = 0
-        self.malus['Capacity'] = 0
+        self.malus_cause['Night'] = 0
+        self.malus_cause['Capacity'] = 0
+
 
     def total_malus(self, student_list):
         """This function loops over the list filled with Student objects and calculates the total maluspoints"""
-        
-        student_malus = {'Classes Gap': 0}
 
-        self.complete_malus = self.complile_malus(student_malus)
+        student_malus_cause = {'Classes Gap': 0}
+
+        self.all_malus_cause = self.complile_malus(student_malus_cause)
 
         # For each student
         for student in student_list:
@@ -33,20 +36,33 @@ class Roster():
             student.compute_malus(self)
 
             # Add this to the complete malus counter
-            self.complete_malus['Classes Gap'] += student.malus['Classes Gap']
+            self.malus_count += student.malus_count
 
-        self.complile_malus(student_malus)
+            # Add this to the complete malus counter
+            self.all_malus_cause['Classes Gap'] += student.malus_cause['Classes Gap']
+
 
     def complile_malus(self, student_malus):
+        return help_function.merge(self.malus_cause, student_malus)
 
-        return help_function.merge(self.malus, student_malus)
+
+    def find_best_room(attending, rooms):
+        # For each room in the list of objects
+        for room in rooms:
+
+            # Set high number
+            old_difference = 999
+            new_difference = abs(attending - room.capacity)
+
+            if new_difference < old_difference:
+                selected_room = room
+                old_difference = new_difference
+
+        return selected_room
+
 
     def fill_schedule(self, course, class_type, count, attending):
         """ This function fills a schedule with no student restraints. If there are no rooms available it prints an Error message."""
-
-        print('\nAttending:')
-        print(attending)
-        print()
 
         # Make key if not existent
         if course.name not in self.schedule:
@@ -54,10 +70,6 @@ class Roster():
 
         # For each room in the list of objects
         for room in self.rooms:
-
-            print(f'\n{room.id}')
-            print(room.capacity)
-            print()
 
             # For each day in its availability
             for day in room.availability:
@@ -78,9 +90,10 @@ class Roster():
 
                         self.check_malus(timeslot, room.capacity, attending)
                         return
-        
+
         # If there are no rooms available at all
         print("Error. No Room!!!")
+
 
     def check_malus(self, timeslot, capacity, attending):
         """
@@ -91,8 +104,10 @@ class Roster():
 
         # penalty for late night lesson
         if timeslot == 17:
-            self.malus['Night'] += 5
+            self.malus_cause['Night'] += 5
+            self.malus_count += 5
 
         # penalty for capacity shortage
         if attending > capacity:
-            self.malus['Capacity'] += attending - capacity
+            self.malus_cause['Capacity'] += attending - capacity
+            self.malus_count += attending - capacity

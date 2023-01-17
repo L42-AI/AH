@@ -22,15 +22,13 @@ def initialise():
     # Calculate costs of roster
     Roster.total_malus(student_list)
 
-    print(Roster.complete_malus)
-
     # Create a dataframe and export to excel for visual representation
     df = dataframe.schedule_dataframe(Roster, student_list)
 
-    change.change_students(df, course_list)
+    change.change_students(df, course_list, Roster)
 
     # Save as malus points
-    malus_points = sum(Roster.complete_malus.values())
+    malus_points = Roster.malus_count
 
     return malus_points
 

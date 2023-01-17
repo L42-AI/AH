@@ -31,15 +31,17 @@ class Student():
         # Make list of timeslots
         self.timeslots = []
 
+        self.malus_count = 0
+
         # Set malus point dict
-        self.malus = {}
+        self.malus_cause = {}
         self.init_malus()
 
     # def __str__(self):
     #     return f"{self.f_name} {self.l_name}"
 
     def init_malus(self):
-        self.malus['Classes Gap'] = 0
+        self.malus_cause['Classes Gap'] = 0
 
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -117,14 +119,9 @@ class Student():
                 # Run the pick group function
                 self.pick_group(course, group_dict, class_num, max_std, group)
 
-    def student_timeslots(self, Roster):
-        """ This method adds the timeslots for classes per week """
+    def lecture_timeslot(self, course, current_course):
 
-        # Go over all courses:
-        for course in self.courses:
-
-            current_course = Roster.schedule[course.name]
-
+        if course.lectures > 0:
             # For each lecture in the course:
             for index in range(course.lectures):
 
@@ -136,13 +133,16 @@ class Student():
                 timeslot_dict['course'] = course.name
                 timeslot_dict['class'] = current_lecture
 
-                # Add the class to the timeslots of the student (Every student attends all lectures)
-                self.timeslots.append(timeslot_dict)
+            return timeslot_dict
 
+    def tutorial_timeslot(self, course, current_course):
+
+        if course.tutorials > 0:
             # For each tutorial in the course:
             for index in range(course.tutorials):
 
                 # Set the current class
+                # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
                 current_tutorial = f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"
 
                 # Add course and class to timeslot info
@@ -150,14 +150,16 @@ class Student():
                 timeslot_dict['course'] = course.name
                 timeslot_dict['class'] = current_tutorial
 
-                # Add the tutorial where the student is enrolled to the timeslots of the student # Ask Jacob
-                # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
-                self.timeslots.append(timeslot_dict)
+            return timeslot_dict
 
+    def practicum_timeslot(self, course, current_course):
+
+        if course.practica > 0:
             # For each practicum in the course:
             for index in range(course.practica):
 
                 # Set the current class
+                # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
                 current_practicum = f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"
 
                 # Add course and class to timeslot info
@@ -165,7 +167,30 @@ class Student():
                 timeslot_dict['course'] = course.name
                 timeslot_dict['class'] = current_practicum
 
-                # Add the practicum where the student is enrolled to the timeslots of the student
+            return timeslot_dict
+
+    def student_timeslots(self, Roster):
+        """ This method adds the timeslots for classes per week """
+
+        # For each course:
+        for course in self.courses:
+
+            # Set the current course dict
+            current_course = Roster.schedule[course.name]
+
+            # Find and save the lecture timeslot
+            timeslot_dict = self.lecture_timeslot(course, current_course)
+            if timeslot_dict is not None:
+                self.timeslots.append(timeslot_dict)
+
+            # Find and save the tutorial timeslot
+            timeslot_dict = self.tutorial_timeslot(course, current_course)
+            if timeslot_dict is not None:
+                self.timeslots.append(timeslot_dict)
+
+            # Find and save the practicum timeslot
+            timeslot_dict = self.practicum_timeslot(course, current_course)
+            if timeslot_dict is not None:
                 self.timeslots.append(timeslot_dict)
 
     def malus_points(self):
@@ -200,9 +225,13 @@ class Student():
 
                     # some cases, double booking might be allowed, but we do not want to add 2 malus
                     if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
-                        self.malus['Classes Gap'] += int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
+                        malus = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
+                        self.malus_cause['Classes Gap'] += malus
+                        self.malus_count += malus
+
                     else:
-                        self.malus['Classes Gap'] += 1
+                        self.malus_cause['Classes Gap'] += 1
+                        self.malus_count += 1
 
     def compute_malus(self, Roster):
         """ Run required functions to compute student malus """
