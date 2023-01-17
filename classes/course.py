@@ -11,7 +11,7 @@ class Course():
 
     def __init__(self, data, enrolled):
 
-        # Set from the given data
+        # Set the lectures from the given data
         self.name = data['Vak']
         self.lectures = data['#Hoorcolleges']
         self.enrolled = enrolled
@@ -26,11 +26,12 @@ class Course():
         self.max_std_practica = data['Max. stud. Practicum']
         self.practica_rooms = 0
 
-        # Run initializing functions
-        self.rooms_needed()
-
+        # initiate the libararies
         self.tut_group_dict = {}
         self.pract_group_dict = {}
+
+        # Run initializing functions
+        self.rooms_needed()
         self.group_dict()
 
     def __str__(self):
