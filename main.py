@@ -35,7 +35,7 @@ def initialise():
 
     return malus_points, course_list, student_list, rooms, Roster
 
-def swap_lecture(courses, course, students, roster):
+def swap_lecture(courses, course, roster):
     
     # pick a random course to swap with that is not the same as as the course and the new course does have lectures
     random_course = random.choice([c for c in courses if c != course and c.lectures > 0])
