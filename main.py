@@ -17,12 +17,12 @@ def initialise():
     # create a roster
     Roster = RosterClass.Roster(rooms)
 
-    # fill the roster
+    # # fill the roster
     schedule.schedule_fill(Roster, course_list)
-    for key in Roster.schedule:
-        print(key)
-        print(Roster.schedule[key])
-        print("-----------------------")
+    # for key in Roster.schedule:
+    #     print(key)
+    #     print(Roster.schedule[key])
+    #     print("-----------------------")
 
     # Calculate costs of roster
     Roster.total_malus(student_list)
@@ -40,21 +40,22 @@ def swap_lecture(courses, course, students, roster):
     # pick a random course to swap with that is not the same as as the course and the new course does have lectures
     random_course = random.choice([c for c in courses if c != course and c.lectures > 0])
 
-    # make a list of all the lectures
+    # get all the lectures
     lecture_switch = [key for key in roster.schedule[course.name].keys() if "lecture" in key]
     lecture_random = [key for key in roster.schedule[random_course.name].keys() if "lecture" in key]
 
-    # take a random one (if only one it will take the one)
+    # take a random lecture (if only one it will take the one)
     lecture_switch = random.choice(lecture_switch)
     lecture_random = random.choice(lecture_random)
 
-    # hard copy the dictionaries in order to switch the keys
+    # define in order to be easier to read and switch key values
     dict_switch = roster.schedule[course.name][lecture_switch]
     dict_random = roster.schedule[random_course.name][lecture_random]
 
     # switch the times in the schedule roster
     roster.schedule[course.name][lecture_switch] = dict(zip(dict_switch, dict_random.values()))
     roster.schedule[random_course.name][lecture_random] = dict(zip(dict_random, dict_switch.values()))
+
 
 if __name__ == '__main__':
     # baseline = BaselineClass.Baseline()
