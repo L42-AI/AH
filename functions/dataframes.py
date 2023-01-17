@@ -19,18 +19,24 @@ def schedule_dataframe(Roster, student_list, visualize=False):
     # For each student:
     for student in student_list:
 
-        # For each course the student is enrolled at
-        for timeslot in student.timeslots:
+        # For each course:
+        for course_timeslot in student.timeslots:
 
-            # Add all relevant information ito lists
-            df_list_student_object.append(student)
-            df_list_student_malus.append(student.malus_count)
-            df_list_students.append(f'{student.f_name} {student.l_name}')
-            df_list_courses.append(timeslot['course'])
-            df_list_type.append(timeslot['class'])
-            df_list_rooms.append(timeslot['room'])
-            df_list_day.append(timeslot['day'])
-            df_list_time.append(timeslot['timeslot'])
+            # For each class:
+            for class_timeslot in student.timeslots[course_timeslot]:
+
+                # Set timeslot
+                timeslot = student.timeslots[course_timeslot][class_timeslot]
+
+                # Add all relevant information ito lists
+                df_list_student_object.append(student)
+                df_list_student_malus.append(student.malus_count)
+                df_list_students.append(f'{student.f_name} {student.l_name}')
+                df_list_courses.append(course_timeslot)
+                df_list_type.append(class_timeslot)
+                df_list_rooms.append(timeslot['room'])
+                df_list_day.append(timeslot['day'])
+                df_list_time.append(timeslot['timeslot'])
 
 
     # Create schedule

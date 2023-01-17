@@ -25,7 +25,7 @@ def initialise():
     # Create a dataframe and export to excel for visual representation
     df = dataframe.schedule_dataframe(Roster, student_list)
 
-    change.change_students(df, course_list, Roster)
+    # change.change_students(df, course_list, Roster)
 
     # Save as malus points
     malus_points = Roster.malus_count
@@ -33,5 +33,6 @@ def initialise():
     return malus_points
 
 if __name__ == '__main__':
-    baseline = BaselineClass.Baseline(1)
-    # baseline.plot_startup()
+    baseline = BaselineClass.Baseline()
+    baseline.run(1)
+

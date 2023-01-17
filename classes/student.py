@@ -29,7 +29,7 @@ class Student():
         self.select_groups()
 
         # Make list of timeslots
-        self.timeslots = []
+        self.timeslots = {}
 
         self.malus_count = 0
 
@@ -130,10 +130,8 @@ class Student():
 
                 # Add course and class to timeslot info
                 timeslot_dict = current_course[current_lecture]
-                timeslot_dict['course'] = course.name
-                timeslot_dict['class'] = current_lecture
 
-            return timeslot_dict
+                self.timeslots[course.name][current_lecture] = timeslot_dict
 
     def tutorial_timeslot(self, course, current_course):
 
@@ -147,10 +145,8 @@ class Student():
 
                 # Add course and class to timeslot info
                 timeslot_dict = current_course[current_tutorial]
-                timeslot_dict['course'] = course.name
-                timeslot_dict['class'] = current_tutorial
 
-            return timeslot_dict
+                self.timeslots[course.name][current_tutorial] = timeslot_dict
 
     def practicum_timeslot(self, course, current_course):
 
@@ -164,10 +160,8 @@ class Student():
 
                 # Add course and class to timeslot info
                 timeslot_dict = current_course[current_practicum]
-                timeslot_dict['course'] = course.name
-                timeslot_dict['class'] = current_practicum
 
-            return timeslot_dict
+                self.timeslots[course.name][current_practicum] = timeslot_dict
 
     def student_timeslots(self, Roster):
         """ This method adds the timeslots for classes per week """
@@ -175,23 +169,19 @@ class Student():
         # For each course:
         for course in self.courses:
 
+            self.timeslots[course.name] = {}
+
             # Set the current course dict
             current_course = Roster.schedule[course.name]
 
             # Find and save the lecture timeslot
-            timeslot_dict = self.lecture_timeslot(course, current_course)
-            if timeslot_dict is not None:
-                self.timeslots.append(timeslot_dict)
+            self.lecture_timeslot(course, current_course)
 
             # Find and save the tutorial timeslot
-            timeslot_dict = self.tutorial_timeslot(course, current_course)
-            if timeslot_dict is not None:
-                self.timeslots.append(timeslot_dict)
+            self.tutorial_timeslot(course, current_course)
 
             # Find and save the practicum timeslot
-            timeslot_dict = self.practicum_timeslot(course, current_course)
-            if timeslot_dict is not None:
-                self.timeslots.append(timeslot_dict)
+            self.practicum_timeslot(course, current_course)
 
     def malus_points(self):
         """ This method calculates the malus points point for the student """
@@ -203,10 +193,13 @@ class Student():
         days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
 
         # For each timeslot:
-        for timeslot in self.timeslots:
+        for timeslot_course in self.timeslots:
+            for timeslot_class in self.timeslots[timeslot_course]:
 
-            # Add the timeslots into the days dictionary
-            days[timeslot['day']].append(timeslot['timeslot'])
+                timeslot = self.timeslots[timeslot_course][timeslot_class]
+
+                # Add the timeslots into the days dictionary
+                days[timeslot['day']].append(timeslot['timeslot'])
 
         # For each day in days:
         for day in days:

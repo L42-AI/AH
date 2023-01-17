@@ -2,12 +2,13 @@
 def change_students(df, course_list, Roster, num=10):
     student_list = find_worst_students(df, num)
     space_dict = find_space(course_list)
-    # shuffle_students(student_list, space_dict, Roster)
+    shuffle_students(student_list, space_dict, Roster)
 
 def find_worst_students(df, num=10):
     df.sort_values(['Student Malus'], ascending=False, inplace=True)
     worst_students = df['Object'].unique()[:num]
     return worst_students
+
 
 def find_space(course_list):
 
@@ -45,6 +46,7 @@ def find_space(course_list):
 
     return space_dict
 
+
 def shuffle_pra(class_indexes, student, course, space_dict, Roster):
 
     print('PRA')
@@ -58,7 +60,6 @@ def shuffle_pra(class_indexes, student, course, space_dict, Roster):
         # if timeslot['class'].startswith('practical'):
             # student.timeslots.remove(timeslot)
     return
-
 
 
 def shuffle_tut(class_indexes, student, course, space_dict, Roster):
@@ -112,9 +113,7 @@ def shuffle_students(student_list, space_dict, Roster):
 
                 class_indexes = []
 
-                for i, timeslot in enumerate(student.timeslots):
-                    if course.name in timeslot['course'] == course.name:
-                        class_indexes.append(i)
+
 
                 if course.name in student.tut_group:
                     shuffle_tut(class_indexes, student, course, space_dict, Roster)
