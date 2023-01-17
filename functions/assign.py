@@ -2,7 +2,6 @@ import classes.course as CourseClass
 import classes.room  as RoomClass
 import classes.student as StudentClass
 from functions.count import count_students
-import re
 from data import COURSES, ROOMS, STUDENT_COURSES
 
 def assign(COURSES, STUDENT_COURSES, ROOMS):
