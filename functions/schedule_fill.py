@@ -33,11 +33,15 @@ def fill_empty_slots(roster):
     timeslots = [9, 11, 13, 15]
     roster.schedule["No course"] = {}
     i = 1
+
+    # check every room if they are being used at every moment
     for room in roster.rooms:
         for day in days:
             for timeslot in timeslots:
                 if room.availability[day][timeslot]:
                     classes = f"No classes {i}"
+
+                    # schedule the room as empty
                     place_in_schedule(roster, room, day, timeslot, "No course", classes)
                     i += 1
             if room.id == 'C0.110':
