@@ -164,7 +164,10 @@ class Student():
                 self.timeslots[course.name][current_practicum] = timeslot_dict
 
     def student_timeslots(self, Roster):
-        """ This method adds the timeslots for classes per week """
+        """ 
+        This method adds the timeslots for classes per week. 
+        The dictionary timeslots is linked to the Roster schedule.
+        """
 
         # For each course:
         for course in self.courses:
