@@ -22,7 +22,7 @@ class Baseline():
 
         self.initialize(300)
 
-        fig_name = "startups.png"
+        fig_name = "startup_.png"
 
         # Current working directory
         current_dir = os.getcwd()
@@ -33,20 +33,13 @@ class Baseline():
         # Directory "visualize"
         directory_plots = os.path.join(parent_dir, 'AH/visualize')
 
-        # Fit a polynomial of degree 1 (i.e. a linear regression) to the data
-        coefficients = np.polyfit(self.iterations, self.costs, 1)
-
-        # Create a new set of x values for the regression line
-        x_reg = np.linspace(min(self.iterations), max(self.iterations), 300)
-
-        # Use the coefficients to calculate the y values for the regression line
-        y_reg = np.polyval(coefficients, x_reg)
+        average = sum(self.costs) / len(self.costs)
 
         plt.title('300 random startups of the algorithm with no restrictions')
         plt.plot(self.iterations, self.costs)
 
         # Plot the regression line
-        plt.plot(x_reg, y_reg, 'r')
+        plt.axhline(average, color='r', linestyle='--')
         plt.xlabel('run #')
         plt.ylabel('malus points')
         plt.savefig(os.path.join(directory_plots, fig_name))
