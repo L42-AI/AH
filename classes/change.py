@@ -8,7 +8,6 @@ class Change():
         self.course_list = course_list
         self.student_list = student_list
         self.Roster = Roster
-        pass
 
     def __find_worst_students(self, num):
         self.df.sort_values(['Student Malus'], ascending=False, inplace=True)
@@ -142,9 +141,8 @@ class Change():
         self.Roster.schedule[random_course.name][lecture_random] = dict(zip(dict_random, dict_switch.values()))
 
     def swap_2_lectures(self):
-        for course in self.course_list:
-            if course.lectures > 0:
-                self.__swap_lecture(course)
+        random_course = random.choice(self.course_list)
+        self.__swap_lecture(random_course)
 
     def __swap_lecture_empty_room(self, course):
         """
@@ -170,6 +168,5 @@ class Change():
         self.Roster.schedule['No course'][random_empty_room] = dict(zip(dict_random, dict_switch.values()))
 
     def swap_lecture_empty_room(self):
-        for course in self.course_list:
-            if course.lecture > 0:
-                self.__swap_lecture_empty_room(course)
+        random_course = random.choice(self.course_list)
+        self.__swap_lecture_empty_room(random_course)
