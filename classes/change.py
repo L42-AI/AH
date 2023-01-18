@@ -108,7 +108,7 @@ class Change():
                         if student1_classes in student1.timeslots[course.name]:
                             student1.timeslots[course.name].pop(student2_classes)
 
-    def switch_2_students(self, num = 100):
+    def swap_2_students(self, num = 100):
 
         switch_student_list = self.__find_worst_students(num)
 
@@ -145,3 +145,11 @@ class Change():
         for course in self.course_list:
             if course.lectures > 0:
                 self.__swap_lecture(course)
+
+
+    def swap_rooms(self):
+
+        for course in self.Roster.schedule:
+            print()
+            print(course)
+            print(self.Roster.schedule[course])

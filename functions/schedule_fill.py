@@ -7,7 +7,7 @@ def schedule_fill(roster, course_list):
 
             # check how many students will attend this lecture
             attending = course.enrolled
-            roster.fill_schedule(course, "lecture", i + 1, attending)
+            roster.fill_schedule_random(course, "lecture", i + 1, attending)
 
         # outer loop is incase more than one tut per group
         ## in csv there is always one tut or pract, but we want to make the program scalable 
@@ -16,14 +16,14 @@ def schedule_fill(roster, course_list):
 
                 # check how many students will attend this tutorial
                 attending = course.tut_group_dict[i + 1]
-                roster.fill_schedule(course, "tutorial", i + 1, attending)
+                roster.fill_schedule_random(course, "tutorial", i + 1, attending)
 
         for _ in range(course.practica):
             for i in range(course.practica_rooms):
 
                 # check how many students will attend this practical
                 attending = course.pract_group_dict[i + 1]
-                roster.fill_schedule(course, "practical", i + 1, attending)
+                roster.fill_schedule_random(course, "practical", i + 1, attending)
 
     fill_empty_slots(roster)
 
