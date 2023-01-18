@@ -27,7 +27,6 @@ class Roster():
 
     def total_malus(self, student_list):
         """This function loops over the list filled with Student objects and calculates the total maluspoints"""
-
         student_malus_cause = {'Classes Gap': 0}
 
         self.all_malus_cause = self.complile_malus(student_malus_cause)
