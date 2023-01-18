@@ -55,6 +55,12 @@ class Baseline():
     def get_schedule(self):
         return self.Roster.schedule
 
+    def get_malus(self):
+        return self.Roster.malus_count
+
+    def get_malus_cause(self):
+        return self.Roster.all_malus_cause
+
     def run(self, iters = 200):
         for i in tqdm(range(iters)):
             self.costs.append()
@@ -63,3 +69,4 @@ class Baseline():
     def rearrange(self):
         Schuffeler = ChangeClass.Change(self.df, self.course_list, self.student_list, self.Roster)
         Schuffeler.swap_2_students(num=100)
+        self.Roster.total_malus(self.student_list)
