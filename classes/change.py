@@ -141,7 +141,7 @@ class Change():
         self.Roster.schedule[random_course.name][lecture_random] = dict(zip(dict_random, dict_switch.values()))
 
     def swap_2_lectures(self):
-        random_course = random.choice(self.course_list)
+        random_course = random.choice([c for c in self.course_list if c.lectures > 0])
         self.__swap_lecture(random_course)
 
     def __swap_lecture_empty_room(self, course):
@@ -168,5 +168,8 @@ class Change():
         self.Roster.schedule['No course'][random_empty_room] = dict(zip(dict_random, dict_switch.values()))
 
     def swap_lecture_empty_room(self):
-        random_course = random.choice(self.course_list)
+        # pick a random course that which does have one or more lectures
+        random_course = random.choice([c for c in self.course_list if c.lectures > 0])
+
+        # call the swap function
         self.__swap_lecture_empty_room(random_course)

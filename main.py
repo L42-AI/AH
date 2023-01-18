@@ -5,6 +5,7 @@ import functions.assign  as assign
 import functions.dataframes as dataframe
 import classes.change as change
 from data.data import COURSES, STUDENT_COURSES, ROOMS
+import copy
 
 
 
@@ -29,19 +30,29 @@ def initialise():
 
     return df, malus_points, course_list, student_list, rooms, Roster
 
-def hill_climber(malus_points, courses, students, rooms, Roster):
+def hill_climber(df, malus_points, course_list, student_list, rooms, Roster):
 
-    list_copies = []
-    # list_functions = [change.switch_2_students, change.swap_2_lectures, change.swap_lecture_empty_room  ]
-    print(Roster.schedule)
-    swapper = Change()
-    swapper.swap_lecture_empty_room()
+    # set roster to original roster and set the best score and roster to original roster
+    original_roster = Roster
+    best_roster = original_roster
+    best_malus_score = original_roster.malus_count
+    print(original_roster.malus_count)
 
-    # for i in range(50):
-    #     roster
-    #     list_copies.append(copy.deepcopy(roster))
+    for i in range(50):
+        current_roster = copy.deepcopy(original_roster)
+        swapper = change.Change(df, course_list, student_list, current_roster)
+        swapper.swap_lecture_empty_room()
+        current_roster.total_malus(student_list)
+        current_malus_points = current_roster.malus_count
 
+        if best_malus_score > current_malus_points:
+            best_roster = current_roster
+            best_malus_score = current_malus_points
 
 if __name__ == '__main__':
-    baseline = BaselineClass.Baseline(visualize=True)
-    baseline.rearrange()
+    # baseline = BaselineClass.Baseline()
+    # baseline.rearrange()
+
+    df, malus_points, course_list, student_list, rooms, Roster = initialise()
+
+    hill_climber(df, malus_points, course_list, student_list, rooms, Roster)
