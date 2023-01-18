@@ -11,6 +11,9 @@ class Roster():
 
         self.malus_count = 0
 
+        self.lecture_fill_preference = -10
+        self.class_fill_preference = -5
+
         self.malus_cause = {}
         self.init_malus()
 
@@ -61,6 +64,30 @@ class Roster():
         return selected_room
 
 
+    def fill_schedule_random(self, course, class_type, count, attending):
+        """ This function fills a schedule with no student restraints. If there are no rooms available it prints an Error message."""
+
+        # Make key if not existent
+        if course.name not in self.schedule:
+            self.schedule[course.name] = {}
+
+        succes = False
+        while not succes:
+            room = random.choice(self.rooms)
+            day = random.choice(list(room.availability.keys()))
+            timeslot = random.choice(list(room.availability[day].keys()))
+
+            # If timeslot is available
+            if room.availability[day][timeslot]:
+
+                self.schedule[course.name][f'{class_type} {count}'] = {}
+                clas_number = f"{class_type} {count}"
+                schedule_fill.place_in_schedule(self, room, day, timeslot, course.name, clas_number)
+
+                self.check_malus(timeslot, room.capacity, attending)
+                succes = True
+
+
     def fill_schedule(self, course, class_type, count, attending):
         """ This function fills a schedule with no student restraints. If there are no rooms available it prints an Error message."""
 
@@ -79,11 +106,11 @@ class Roster():
 
                     # If timeslot is availibale
                     if room.availability[day][timeslot]:
-                        
+
                         self.schedule[course.name][f'{class_type} {count}'] = {}
                         clas_number = f"{class_type} {count}"
                         schedule_fill.place_in_schedule(self, room, day, timeslot, course.name, clas_number)
-                        
+
                         self.check_malus(timeslot, room.capacity, attending)
                         return
 
