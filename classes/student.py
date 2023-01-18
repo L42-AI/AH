@@ -43,6 +43,7 @@ class Student():
     def init_malus(self):
         self.malus_cause['Classes Gap'] = 0
         self.malus_cause['Dubble Classes'] = 0
+        self.malus_count = 0
 
     def add_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -186,7 +187,6 @@ class Student():
 
             # Find and save the practicum timeslot
             self.practicum_timeslot(course, current_course)
-    
 
 
     def malus_points(self):

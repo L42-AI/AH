@@ -28,18 +28,11 @@ class Change():
 
     def __shuffle(self, course, student1, student2):
 
-        print('COURSE:')
-        print(course)
-        print()
-
         student1.malus_points()
         student2.malus_points()
 
         student1_old_malus = student1.malus_count
         student2_old_malus = student2.malus_count
-
-        print(f'Student1 old malus: {student1_old_malus}')
-        print(f'Student2 old malus: {student2_old_malus}')
 
         for type in ['tutorial', 'practical']:
 
@@ -49,14 +42,6 @@ class Change():
             # If group of both students is the same group, skip
             if student1_possible_classes == student2_possible_classes:
                 continue
-
-            print(student2_possible_classes)
-            print(student1_possible_classes)
-
-            print(student2.timeslots[course.name][student2_possible_classes[0]])
-            print(student1.timeslots[course.name][student1_possible_classes[0]])
-
-
 
             for student1_classes in student1_possible_classes:
                 for student2_classes in student2_possible_classes:
@@ -79,23 +64,14 @@ class Change():
                     student1_new_malus = student1.malus_count
                     student2_new_malus = student2.malus_count
 
-                    print(f'Student1 new malus: {student1_new_malus}')
-                    print(f'Student2 new malus: {student2_new_malus}')
-
                     student1_difference = student1_new_malus - student1_old_malus
                     student2_difference = student2_new_malus - student2_old_malus
-
-                    print(student1_difference)
-                    print(student2_difference)
-
-                    print(student2.timeslots[course.name][student1_possible_classes[0]])
-                    print(student1.timeslots[course.name][student2_possible_classes[0]])
 
                     if student1_difference + student2_difference < 0:
                         student1_old_malus = student1_new_malus
                         student2_old_malus = student2_new_malus
-                    else:
 
+                    else:
                         if student2_classes in student2.timeslots[course.name]:
                             student2.timeslots[course.name][student2_classes] = student1.timeslots[course.name][student1_classes]
 
