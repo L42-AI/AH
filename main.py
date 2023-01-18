@@ -32,22 +32,26 @@ def initialise():
 
 def hill_climber(df, malus_points, course_list, student_list, rooms, Roster):
 
-    # set roster to original roster and set the best score and roster to original roster
-    original_roster = Roster
-    best_roster = original_roster
-    best_malus_score = original_roster.malus_count
-    print(original_roster.malus_count)
+    roster_list = []
+    best_roster = Roster
+    roster_list.append(best_roster)
+    best_malus_score = best_roster.malus_count
+    roster_list.append(best_roster)
 
-    for i in range(50):
-        current_roster = copy.deepcopy(original_roster)
-        swapper = change.Change(df, course_list, student_list, current_roster)
-        swapper.swap_lecture_empty_room()
-        current_roster.total_malus(student_list)
-        current_malus_points = current_roster.malus_count
+    for i in range(300):
 
-        if best_malus_score > current_malus_points:
-            best_roster = current_roster
-            best_malus_score = current_malus_points
+        for j in range(50):
+            current_roster = copy.deepcopy(best_roster)
+            swapper = change.Change(df, course_list, student_list, current_roster)
+            swapper.swap_lecture_empty_room()
+            current_roster.total_malus(student_list)
+            current_malus_points = current_roster.malus_count
+
+            if best_malus_score > current_malus_points:
+                best_roster = current_roster
+                best_malus_score = current_malus_points
+        
+        roster_list.append(best_roster)
 
 if __name__ == '__main__':
     # baseline = BaselineClass.Baseline()
