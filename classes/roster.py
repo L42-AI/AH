@@ -76,6 +76,8 @@ class Roster():
 
         succes = False
         while not succes:
+
+            # Generate a random room, day and timeslot:
             room = random.choice(self.rooms)
             day = random.choice(list(room.availability.keys()))
             timeslot = random.choice(list(room.availability[day].keys()))

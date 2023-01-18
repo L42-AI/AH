@@ -138,7 +138,7 @@ class Change():
         # define in order to be easier to read and to be able to switch keys and values of the dict
         dict_switch = self.Roster.schedule[course.name][lecture_switch]
         dict_random = self.Roster.schedule['No course'][random_empty_room]
-        
+
         # switch the times in the schedule roster
         self.Roster.schedule[course.name][lecture_switch] = dict(zip(dict_switch, dict_random.values()))
         self.Roster.schedule['No course'][random_empty_room] = dict(zip(dict_random, dict_switch.values()))

@@ -63,7 +63,7 @@ def hill_climber(df, malus_points, course_list, student_list, rooms, Roster):
             if best_malus_score > current_malus_points:
                 best_roster = current_roster
                 best_malus_score = current_malus_points
-        
+
         # append the new best roster
         roster_list.append(best_roster)
         print(best_malus_score)
