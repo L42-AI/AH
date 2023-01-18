@@ -50,9 +50,7 @@ def hill_climber(df, malus_points, course_list, student_list, rooms, Roster):
             best_malus_score = current_malus_points
 
 if __name__ == '__main__':
-    # baseline = BaselineClass.Baseline()
-    # baseline.rearrange()
-
-    df, malus_points, course_list, student_list, rooms, Roster = initialise()
+    baseline = BaselineClass.Baseline()
+    baseline.rearrange()
 
     hill_climber(df, malus_points, course_list, student_list, rooms, Roster)
