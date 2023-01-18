@@ -52,6 +52,9 @@ class Baseline():
         plt.savefig(os.path.join(directory_plots, fig_name))
         plt.show()
 
+    def get_schedule(self):
+        return self.Roster.schedule
+
     def run(self, iters = 200):
         for i in tqdm(range(iters)):
             self.costs.append()

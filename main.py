@@ -30,5 +30,5 @@ def initialise():
     return df, malus_points, course_list, student_list, rooms, Roster
 
 if __name__ == '__main__':
-    baseline = BaselineClass.Baseline()
+    baseline = BaselineClass.Baseline(visualize=True)
     baseline.rearrange()
