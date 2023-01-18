@@ -10,7 +10,7 @@ from data.data import COURSES, STUDENT_COURSES, ROOMS
 
 def initialise():
     # create the lists
-    course_list, student_list, rooms = assign.assign(COURSES, STUDENT_COURSES, ROOMS)
+    course_list, student_list, rooms = assign.assign(COURSES, STUDENT_COURSES, ROOMS, LARGEST_FIRST=True)
 
     # create a roster
     Roster = RosterClass.Roster(rooms)

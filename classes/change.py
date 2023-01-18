@@ -1,6 +1,4 @@
-
 import random
-
 
 class Change():
     def __init__(self, df, course_list, student_list, Roster):

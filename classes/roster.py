@@ -2,12 +2,14 @@
 # It can also calculate the total amount maluspoints
 import functions.schedule_fill as schedule_fill
 import functions.helpers as help_function
+from functions.count import count_students
 import random
 
 class Roster():
-    def __init__(self, rooms, CAPACITY=False, CAPACITY_MARGIN=5):
+    def __init__(self, rooms, STUDENT_COURSES, CAPACITY=False, CAPACITY_MARGIN=5):
         self.schedule = {}
         self.rooms = rooms
+        self.student_courses = STUDENT_COURSES
         self.CAPACITY = CAPACITY
         self.CAPACITY_MARGIN = CAPACITY_MARGIN
         self.malus_count = 0
@@ -97,7 +99,7 @@ class Roster():
 
                     self.check_malus(timeslot, room.capacity, attending)
                     succes = True
-
+   
     def check_malus(self, timeslot, capacity, attending):
         """
         This function checks if a course group is in the late timeslot and 
