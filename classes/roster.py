@@ -6,12 +6,14 @@ from functions.count import count_students
 import random
 
 class Roster():
-    def __init__(self, rooms, STUDENT_COURSES, CAPACITY=False, CAPACITY_MARGIN=5):
+    def __init__(self, rooms, STUDENT_COURSES, CAPACITY=False, CAPACITY_MARGIN=5, LARGEST_FIRST=False, LECTURES_ONLY=False):
         self.schedule = {}
         self.rooms = rooms
         self.student_courses = STUDENT_COURSES
         self.CAPACITY = CAPACITY
         self.CAPACITY_MARGIN = CAPACITY_MARGIN
+        self.LARGEST_FIRST = LARGEST_FIRST
+        self.LECTURES_ONLY = LECTURES_ONLY
         self.malus_count = 0
         self.room_malus_count = 0
         self.malus_cause = {}
@@ -75,7 +77,20 @@ class Roster():
 
         succes = False
         while not succes:
+
             room = random.choice(self.rooms)
+
+            # heuristic to limit the largest rooms to lectures
+            if self.LECTURES_ONLY: 
+
+                # only schedule non-lectures in smaller rooms
+                if class_type != "lecture" and room == 'C0.110':
+                    continue
+
+                # only schedule lectures in big rooms
+                if class_type == 'lecture' and room == 'A1.06' or room == 'A1.08':
+                    continue
+
             day = random.choice(list(room.availability.keys()))
             timeslot = random.choice(list(room.availability[day].keys()))
 

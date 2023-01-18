@@ -2,6 +2,7 @@ import classes.course as CourseClass
 import classes.room  as RoomClass
 import classes.student as StudentClass
 from functions.count import count_students
+import pandas as pd
 
 def assign(COURSES, STUDENT_COURSES, ROOMS, LARGEST_FIRST=False):
     """This Function takes in 3 Dataframes, loops over the dataframe and fills a list with the respective Class objects."""
@@ -14,9 +15,12 @@ def assign(COURSES, STUDENT_COURSES, ROOMS, LARGEST_FIRST=False):
     dict_enrollment = count_students(STUDENT_COURSES)
 
     if LARGEST_FIRST: 
-        sorted_courses = __largest_course(dict_enrollment)
-        COURSES =  COURSES.sort_values(by='Vak', key=lambda x: sorted_courses[x])
+        # create a new column 'most enrollments' as a categorical column 
+        COURSES['most enrollments'] = pd.Categorical(COURSES['Vak'], categories=dict_enrollment.keys(), ordered=True)
 
+        # Sort the dataframe by the new column 'most enrollments'
+        COURSES = COURSES.sort_values(by='most enrollments')
+        
     # create an instance for every course
     for _, course in COURSES.iterrows():
 

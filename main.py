@@ -9,13 +9,17 @@ from data.data import COURSES, STUDENT_COURSES, ROOMS
 
 
 def initialise():
+    # if you want largest classes to be assigned first, set to true
+    LECTURES = False
+    LARGEST = False
+
     # create the lists
-    course_list, student_list, rooms = assign.assign(COURSES, STUDENT_COURSES, ROOMS, LARGEST_FIRST=True)
+    course_list, student_list, rooms = assign.assign(COURSES, STUDENT_COURSES, ROOMS, LARGEST_FIRST=LARGEST)
 
     # create a roster
-    Roster = RosterClass.Roster(rooms)
+    Roster = RosterClass.Roster(rooms, STUDENT_COURSES, LARGEST_FIRST=LARGEST, LECTURES_ONLY=LECTURES)
 
-    # # fill the roster
+    # fill the roster
     schedule.schedule_fill(Roster, course_list)
 
     # Calculate costs of roster
@@ -31,6 +35,6 @@ def initialise():
     return df, malus_points, course_list, student_list, rooms, Roster
 
 if __name__ == '__main__':
-    baseline = BaselineClass.Baseline()
-    baseline.rearrange()
-    print(baseline.get_malus())
+    baseline = BaselineClass.Baseline(visualize=True)
+    # baseline.rearrange()
+    # print(baseline.get_malus())
