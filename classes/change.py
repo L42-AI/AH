@@ -6,7 +6,6 @@ class Change():
         self.course_list = course_list
         self.student_list = student_list
         self.Roster = Roster
-        pass
 
     def __find_worst_students(self, num):
         self.df.sort_values(['Student Malus'], ascending=False, inplace=True)
@@ -24,48 +23,63 @@ class Change():
 
                         self.__shuffle(course, student1, student2)
 
-    def __shuffle(self, course, student1, student2):
+    def __shuffle(self, course, s1, s2):
 
-        student1.compute_malus(self.Roster)
-        student2.compute_malus(self.Roster)
+        def compute_student_malus(self, s):
+            s.compute_malus(self.Roster)
+            return s.malus_count
 
-        student1_old_malus = student1.malus_count
-        student2_old_malus = student2.malus_count
+        def set_tut_group(s):
+            return s.tut_group[course.name]
 
-        # Set group
-        if course.name in student1.tut_group:
-            student1_tutorial_group = student1.tut_group[course.name]
-            student2_tutorial_group = student2.tut_group[course.name]
+        def set_pra_group(s):
+            return s.pract_group[course.name]
 
-            student1.tut_group[course.name] = student2_tutorial_group
-            student2.tut_group[course.name] = student1_tutorial_group
+        def shuffle_tutorial(course, s1, s2):
+            if course.name in s1.tut_group:
+                s1_tut_group = set_tut_group(s1)
+                s2_tut_group = set_tut_group(s2)
 
-        if course.name in student1.pract_group:
-            student1_practicum_group = student1.pract_group[course.name]
-            student2_practicum_group = student2.pract_group[course.name]
+                s1.tut_group[course.name] = s2_tut_group
+                s2.tut_group[course.name] = s1_tut_group
+            return s1_tut_group, s2_tut_group
 
-            student1.pract_group[course.name] = student2_practicum_group
-            student2.pract_group[course.name] = student1_practicum_group
+        def shuffle_practicum(course, s1, s2):
+            if course.name in s1.pract_group:
+                s1_pra_group = set_pra_group(s1)
+                s2_pra_group = set_pra_group(s2)
 
-        student1.compute_malus(self.Roster)
-        student2.compute_malus(self.Roster)
+                s1.pract_group[course.name] = s2_pra_group
+                s2.pract_group[course.name] = s1_pra_group
+            return s1_pra_group, s2_pra_group
 
-        student1_new_malus = student1.malus_count
-        student2_new_malus = student2.malus_count
+        def reset_shuffle(s1, s2, s1_tut_group, s2_tut_group, s1_pra_group, s2_pra_group):
+            if course.name in s1.tut_group:
+                s1.tut_group[course.name] = s1_tut_group
+                s2.tut_group[course.name] = s2_tut_group
+            if course.name in s1.pract_group:
+                s1.pract_group[course.name] = s1_pra_group
+                s2.pract_group[course.name] = s2_pra_group
 
-        student1_difference = student1_new_malus - student1_old_malus
-        student2_difference = student2_new_malus - student2_old_malus
 
-        if student1_difference + student2_difference < 0:
-            student1_old_malus = student1_new_malus
-            student2_old_malus = student2_new_malus
+        s1_old_malus = compute_student_malus(self, s1)
+        s2_old_malus = compute_student_malus(self, s2)
+
+        s1_tut_group, s2_tut_group = shuffle_tutorial(course, s1, s2)
+        s1_pra_group, s2_pra_group = shuffle_practicum(course, s1, s2)
+
+        s1_new_malus = compute_student_malus(self, s1)
+        s2_new_malus = compute_student_malus(self, s2)
+
+        s1_difference = s1_new_malus - s1_old_malus
+        s2_difference = s2_new_malus - s2_old_malus
+
+        if s1_difference + s2_difference < 0:
+            s1_old_malus = s1_new_malus
+            s2_old_malus = s2_new_malus
         else:
-            if course.name in student1.tut_group:
-                student1.tut_group[course.name] = student1_tutorial_group
-                student2.tut_group[course.name] = student2_tutorial_group
-            if course.name in student1.pract_group:
-                student1.pract_group[course.name] = student1_practicum_group
-                student2.pract_group[course.name] = student2_practicum_group
+            reset_shuffle(s1, s2, s1_tut_group, s2_tut_group, s1_pra_group, s2_pra_group)
+
 
     def swap_2_students(self, num = 100):
 
@@ -101,9 +115,8 @@ class Change():
         self.Roster.schedule[random_course.name][lecture_random] = dict(zip(dict_random, dict_switch.values()))
 
     def swap_2_lectures(self):
-        for course in self.course_list:
-            if course.lectures > 0:
-                self.__swap_lecture(course)
+        random_course = random.choice([c for c in self.course_list if c.lectures > 0])
+        self.__swap_lecture(random_course)
 
     def __swap_lecture_empty_room(self, course):
         """
@@ -123,12 +136,14 @@ class Change():
         # define in order to be easier to read and to be able to switch keys and values of the dict
         dict_switch = self.Roster.schedule[course.name][lecture_switch]
         dict_random = self.Roster.schedule['No course'][random_empty_room]
-        
+
         # switch the times in the schedule roster
         self.Roster.schedule[course.name][lecture_switch] = dict(zip(dict_switch, dict_random.values()))
         self.Roster.schedule['No course'][random_empty_room] = dict(zip(dict_random, dict_switch.values()))
 
     def swap_lecture_empty_room(self):
-        for course in self.course_list:
-            if course.lecture > 0:
-                self.__swap_lecture_empty_room(course)
+        # pick a random course that which does have one or more lectures
+        random_course = random.choice([c for c in self.course_list if c.lectures > 0])
+
+        # call the swap function
+        self.__swap_lecture_empty_room(random_course)

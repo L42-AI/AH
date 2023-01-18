@@ -78,6 +78,7 @@ class Roster():
         succes = False
         while not succes:
 
+            # Generate a random room, day and timeslot:
             room = random.choice(self.rooms)
 
             # heuristic to limit the largest rooms to lectures
