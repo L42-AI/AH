@@ -32,14 +32,19 @@ def initialise():
 
 def hill_climber(df, malus_points, course_list, student_list, rooms, Roster):
 
+    # list with the original and the path of the improved roster objects
     roster_list = []
+
+    # set best roster and malus score
     best_roster = Roster
-    roster_list.append(best_roster)
     best_malus_score = best_roster.malus_count
+
+    # append the original roster
     roster_list.append(best_roster)
 
     for i in range(300):
 
+        # change the roster 50 times and calculate the maluspoints
         for j in range(50):
             current_roster = copy.deepcopy(best_roster)
             swapper = change.Change(df, course_list, student_list, current_roster)
@@ -47,10 +52,12 @@ def hill_climber(df, malus_points, course_list, student_list, rooms, Roster):
             current_roster.total_malus(student_list)
             current_malus_points = current_roster.malus_count
 
+            # if the malus points are lower then the previous lowest malus points set the best to the new object
             if best_malus_score > current_malus_points:
                 best_roster = current_roster
                 best_malus_score = current_malus_points
         
+        # append the new best roster
         roster_list.append(best_roster)
 
 if __name__ == '__main__':
