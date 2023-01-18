@@ -16,11 +16,6 @@ def initialise():
     # fill the roster
     schedule.schedule_fill(Roster, course_list)
 
-    # for key in Roster.schedule:
-    #     print(key)
-    #     print(Roster.schedule[key])
-    #     print("-----------------------")
-
     # Calculate costs of roster
     Roster.total_malus(student_list)
 
