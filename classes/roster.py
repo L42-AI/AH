@@ -12,8 +12,6 @@ class Roster():
         self.CAPACITY_MARGIN = CAPACITY_MARGIN
         self.malus_count = 0
         self.room_malus_count = 0
-        self.lecture_fill_preference = -10
-        self.class_fill_preference = -5
         self.malus_cause = {}
         self.init_malus()
 
