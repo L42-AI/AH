@@ -3,9 +3,7 @@ import classes.baseline as BaselineClass
 import functions.schedule_fill as schedule
 import functions.assign  as assign
 import functions.dataframes as dataframe
-from classes.change import Change
-import copy
-
+import classes.change as change
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 
 
@@ -19,10 +17,6 @@ def initialise():
 
     # # fill the roster
     schedule.schedule_fill(Roster, course_list)
-    # for key in Roster.schedule:
-    #     print(key)
-    #     print(Roster.schedule[key])
-    #     print("-----------------------")
 
     # Calculate costs of roster
     Roster.total_malus(student_list)
@@ -33,7 +27,7 @@ def initialise():
     # Save as malus points
     malus_points = Roster.malus_count
 
-    return malus_points, course_list, student_list, rooms, Roster
+    return df, malus_points, course_list, student_list, rooms, Roster
 
 def hill_climber(malus_points, courses, students, rooms, Roster):
 
@@ -49,10 +43,5 @@ def hill_climber(malus_points, courses, students, rooms, Roster):
 
 
 if __name__ == '__main__':
-    # baseline = BaselineClass.Baseline()
-    # baseline.plot_startup()
-
-    malus_points, courses, students, rooms, Roster = initialise()
-
-    
-    hill_climber(malus_points, courses, students, rooms, Roster)
+    baseline = BaselineClass.Baseline(visualize=True)
+    baseline.rearrange()

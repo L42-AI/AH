@@ -31,7 +31,7 @@ class Baseline():
         parent_dir = os.path.dirname(current_dir)
 
         # Directory "visualize"
-        directory_plots = os.path.join(parent_dir, 'AH/vizualize')
+        directory_plots = os.path.join(parent_dir, 'AH/visualize')
 
         # Fit a polynomial of degree 1 (i.e. a linear regression) to the data
         coefficients = np.polyfit(self.iterations, self.costs, 1)
@@ -52,6 +52,9 @@ class Baseline():
         plt.savefig(os.path.join(directory_plots, fig_name))
         plt.show()
 
+    def get_schedule(self):
+        return self.Roster.schedule
+
     def run(self, iters = 200):
         for i in tqdm(range(iters)):
             self.costs.append()
@@ -59,5 +62,4 @@ class Baseline():
 
     def rearrange(self):
         Schuffeler = ChangeClass.Change(self.df, self.course_list, self.student_list, self.Roster)
-        Schuffeler.swap_2_lectures()
-        # Schuffeler.switch_2_students(num=10)
+        Schuffeler.swap_2_students(num=100)
