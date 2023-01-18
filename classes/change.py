@@ -70,8 +70,8 @@ class Change():
                     if student1_difference + student2_difference < 0:
                         student1_old_malus = student1_new_malus
                         student2_old_malus = student2_new_malus
-                    else:
 
+                    else:
                         if student2_classes in student2.timeslots[course.name]:
                             student2.timeslots[course.name][student2_classes] = student1.timeslots[course.name][student1_classes]
 
