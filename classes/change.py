@@ -16,7 +16,6 @@ class Change():
         return worst_students
 
     def __students_to_shuffle(self, student_list):
-
         for student1 in student_list:
             for student2 in student_list:
                 if student1 == student2:
@@ -24,65 +23,51 @@ class Change():
 
                 for course in student1.courses:
                     if course in student2.courses:
+
                         self.__shuffle(course, student1, student2)
 
     def __shuffle(self, course, student1, student2):
 
-        student1.malus_points()
-        student2.malus_points()
+        student1.compute_malus(self.Roster)
+        student2.compute_malus(self.Roster)
 
         student1_old_malus = student1.malus_count
         student2_old_malus = student2.malus_count
 
-        for type in ['tutorial', 'practical']:
+        # Set group
+        if course.name in student1.tut_group:
+            student1_tutorial_group = student1.tut_group[course.name]
+            student2_tutorial_group = student2.tut_group[course.name]
 
-            student1_possible_classes = [key for key in student1.timeslots[course.name].keys() if key.startswith(type)]
-            student2_possible_classes = [key for key in student2.timeslots[course.name].keys() if key.startswith(type)]
+            student1.tut_group[course.name] = student2_tutorial_group
+            student2.tut_group[course.name] = student1_tutorial_group
 
-            # If group of both students is the same group, skip
-            if student1_possible_classes == student2_possible_classes:
-                continue
+        if course.name in student1.pract_group:
+            student1_practicum_group = student1.pract_group[course.name]
+            student2_practicum_group = student2.pract_group[course.name]
 
-            for student1_classes in student1_possible_classes:
-                for student2_classes in student2_possible_classes:
+            student1.pract_group[course.name] = student2_practicum_group
+            student2.pract_group[course.name] = student1_practicum_group
 
-                    if student1_classes not in student2.timeslots[course.name]:
-                        student2.timeslots[course.name][student1_classes] = student1.timeslots[course.name][student1_classes]
+        student1.compute_malus(self.Roster)
+        student2.compute_malus(self.Roster)
 
-                    if student2_classes not in student1.timeslots[course.name]:
-                        student1.timeslots[course.name][student2_classes] = student2.timeslots[course.name][student2_classes]
+        student1_new_malus = student1.malus_count
+        student2_new_malus = student2.malus_count
 
-                    if student2_classes in student2.timeslots[course.name]:
-                        student2.timeslots[course.name].pop(student2_classes)
+        student1_difference = student1_new_malus - student1_old_malus
+        student2_difference = student2_new_malus - student2_old_malus
 
-                    if student1_classes in student1.timeslots[course.name]:
-                        student1.timeslots[course.name].pop(student1_classes)
-
-                    student1.malus_points()
-                    student2.malus_points()
-
-                    student1_new_malus = student1.malus_count
-                    student2_new_malus = student2.malus_count
-
-                    student1_difference = student1_new_malus - student1_old_malus
-                    student2_difference = student2_new_malus - student2_old_malus
-
-                    if student1_difference + student2_difference < 0:
-                        student1_old_malus = student1_new_malus
-                        student2_old_malus = student2_new_malus
-
-                    else:
-                        if student2_classes in student2.timeslots[course.name]:
-                            student2.timeslots[course.name][student2_classes] = student1.timeslots[course.name][student1_classes]
-
-                        if student2_classes not in student1.timeslots[course.name]:
-                            student1.timeslots[course.name][student1_classes] = student2.timeslots[course.name][student2_classes]
-
-                        if student2_classes in student2.timeslots[course.name]:
-                            student2.timeslots[course.name].pop(student1_classes)
-
-                        if student1_classes in student1.timeslots[course.name]:
-                            student1.timeslots[course.name].pop(student2_classes)
+        if student1_difference + student2_difference < 0:
+            student1_old_malus = student1_new_malus
+            student2_old_malus = student2_new_malus
+        else:
+            if course.name in student1.tut_group:
+                student1.tut_group[course.name] = student1_tutorial_group
+                student2.tut_group[course.name] = student2_tutorial_group
+            if course.name in student1.pract_group:
+                student1.pract_group[course.name] = student1_practicum_group
+                student2.pract_group[course.name] = student2_practicum_group
 
     def swap_2_students(self, num = 100):
 
