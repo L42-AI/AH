@@ -56,7 +56,10 @@ class Baseline():
         return self.Roster.schedule
 
     def get_malus(self):
-        return self.malus
+        return self.Roster.malus_count
+
+    def get_malus_cause(self):
+        return self.Roster.all_malus_cause
 
     def run(self, iters = 200):
         for i in tqdm(range(iters)):

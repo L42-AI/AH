@@ -10,6 +10,7 @@ class Roster():
         self.rooms = rooms
 
         self.malus_count = 0
+        self.room_malus_count = 0
 
         self.lecture_fill_preference = -10
         self.class_fill_preference = -5
@@ -27,7 +28,9 @@ class Roster():
 
     def total_malus(self, student_list):
         """This function loops over the list filled with Student objects and calculates the total maluspoints"""
-
+        self.malus_count = 0
+        self.malus_count += self.room_malus_count
+        
         student_malus_cause = {'Classes Gap': 0}
 
         self.all_malus_cause = self.complile_malus(student_malus_cause)
@@ -128,9 +131,9 @@ class Roster():
         # penalty for late night lesson
         if timeslot == 17:
             self.malus_cause['Night'] += 5
-            self.malus_count += 5
+            self.room_malus_count += 5
 
         # penalty for capacity shortage
         if attending > capacity:
             self.malus_cause['Capacity'] += attending - capacity
-            self.malus_count += attending - capacity
+            self.room_malus_count += attending - capacity
