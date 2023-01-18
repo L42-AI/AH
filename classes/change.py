@@ -26,48 +26,59 @@ class Change():
 
                         self.__shuffle(course, student1, student2)
 
-    def __shuffle(self, course, student1, student2):
+    def __shuffle(self, course, s1, s2):
 
-        student1.compute_malus(self.Roster)
-        student2.compute_malus(self.Roster)
+        def shuffle_tutorial(self, course, s1, s2):
+            pass
 
-        student1_old_malus = student1.malus_count
-        student2_old_malus = student2.malus_count
+        def shuffle_practicum(self, course, s1, s2):
+            pass
+
+        def compute_student_malus(self, s):
+            s.compute_malus(self.Roster)
+            return s.malus_count
+
+        def set_tut_group(s):
+            return s.tut_group[course.name]
+
+        def set_pra_group(s):
+            return s.pract_group[course.name]
+
+        s1_old_malus = compute_student_malus(self, s1)
+        s2_old_malus = compute_student_malus(self, s2)
 
         # Set group
-        if course.name in student1.tut_group:
-            student1_tutorial_group = student1.tut_group[course.name]
-            student2_tutorial_group = student2.tut_group[course.name]
+        if course.name in s1.tut_group:
+            s1_tut_group = set_tut_group(s1)
+            s2_tut_group = set_tut_group(s2)
 
-            student1.tut_group[course.name] = student2_tutorial_group
-            student2.tut_group[course.name] = student1_tutorial_group
+            s1.tut_group[course.name] = s2_tut_group
+            s2.tut_group[course.name] = s1_tut_group
 
-        if course.name in student1.pract_group:
-            student1_practicum_group = student1.pract_group[course.name]
-            student2_practicum_group = student2.pract_group[course.name]
+        if course.name in s1.pract_group:
+            s1_pra_group = set_pra_group(s1)
+            s2_pra_group = set_pra_group(s2)
 
-            student1.pract_group[course.name] = student2_practicum_group
-            student2.pract_group[course.name] = student1_practicum_group
+            s1.pract_group[course.name] = s2_pra_group
+            s2.pract_group[course.name] = s1_pra_group
 
-        student1.compute_malus(self.Roster)
-        student2.compute_malus(self.Roster)
+        s1_new_malus = compute_student_malus(self, s1)
+        s2_new_malus = compute_student_malus(self, s2)
 
-        student1_new_malus = student1.malus_count
-        student2_new_malus = student2.malus_count
+        s1_difference = s1_new_malus - s1_old_malus
+        s2_difference = s2_new_malus - s2_old_malus
 
-        student1_difference = student1_new_malus - student1_old_malus
-        student2_difference = student2_new_malus - student2_old_malus
-
-        if student1_difference + student2_difference < 0:
-            student1_old_malus = student1_new_malus
-            student2_old_malus = student2_new_malus
+        if s1_difference + s2_difference < 0:
+            s1_old_malus = s1_new_malus
+            s2_old_malus = s2_new_malus
         else:
-            if course.name in student1.tut_group:
-                student1.tut_group[course.name] = student1_tutorial_group
-                student2.tut_group[course.name] = student2_tutorial_group
-            if course.name in student1.pract_group:
-                student1.pract_group[course.name] = student1_practicum_group
-                student2.pract_group[course.name] = student2_practicum_group
+            if course.name in s1.tut_group:
+                s1.tut_group[course.name] = s1_tut_group
+                s2.tut_group[course.name] = s2_tut_group
+            if course.name in s1.pract_group:
+                s1.pract_group[course.name] = s1_pra_group
+                s2.pract_group[course.name] = s2_pra_group
+
 
     def swap_2_students(self, num = 100):
 
