@@ -66,6 +66,7 @@ def hill_climber(df, malus_points, course_list, student_list, rooms, Roster):
         
         # append the new best roster
         roster_list.append(best_roster)
+        print(best_malus_score)
 
 if __name__ == '__main__':
     # baseline = BaselineClass.Baseline()
