@@ -126,12 +126,12 @@ class Change():
         random_course = random.choice([c for c in self.course_list if c != course and c.lectures > 0])
 
         # get all the lectures
-        lecture_switch = [key for key in self.Roster.schedule[course.name].keys() if "lecture" in key]
-        lecture_random = [key for key in self.Roster.schedule[random_course.name].keys() if "lecture" in key]
+        all_lectures_switch = [key for key in self.Roster.schedule[course.name].keys() if "lecture" in key]
+        all_lectures_random = [key for key in self.Roster.schedule[random_course.name].keys() if "lecture" in key]
 
         # take a random lecture (if only one it will take the one)
-        lecture_switch = random.choice(lecture_switch)
-        lecture_random = random.choice(lecture_random)
+        lecture_switch = random.choice(all_lectures_switch)
+        lecture_random = random.choice(all_lectures_random)
 
         # define in order to be easier to read and switch key values
         dict_switch = self.Roster.schedule[course.name][lecture_switch]
@@ -145,3 +145,31 @@ class Change():
         for course in self.course_list:
             if course.lectures > 0:
                 self.__swap_lecture(course)
+
+    def __swap_lecture_empty_room(self, course):
+        """
+        This function takes in the roster object and a course. It then takes a random available room and
+        switches the two rooms and timeslots. Each student roster is automatically changed as well,
+        because their roster is linked to the roster schedule
+        """
+
+        # get all the lectures in the course and get all the empty rooms
+        all_lectures_switch = [key for key in self.Roster.schedule[course.name].keys() if "lecture" in key]
+        all_empty_rooms = [key for key in self.Roster.schedule['No course'].keys()]
+
+        # choose a random lecture of that course
+        lecture_switch = random.choice(all_lectures_switch)
+        random_empty_room = random.choice(all_empty_rooms)
+
+        # define in order to be easier to read and to be able to switch keys and values of the dict
+        dict_switch = self.Roster.schedule[course.name][lecture_switch]
+        dict_random = self.Roster.schedule['No course'][random_empty_room]
+        
+        # switch the times in the schedule roster
+        self.Roster.schedule[course.name][lecture_switch] = dict(zip(dict_switch, dict_random.values()))
+        self.Roster.schedule['No course'][random_empty_room] = dict(zip(dict_random, dict_switch.values()))
+
+    def swap_lecture_empty_room(self):
+        for course in self.course_list:
+            if course.lecture > 0:
+                self.__swap_lecture_empty_room(course)

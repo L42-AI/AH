@@ -6,7 +6,7 @@ import functions.dataframes as dataframe
 import classes.change as change
 import random
 
-from data import COURSES, STUDENT_COURSES, ROOMS
+from data.data import COURSES, STUDENT_COURSES, ROOMS
 
 
 
@@ -61,15 +61,23 @@ def swap_lectures(courses, course, roster):
     roster.schedule[course.name][lecture_switch] = dict(zip(dict_switch, dict_random.values()))
     roster.schedule[random_course.name][lecture_random] = dict(zip(dict_random, dict_switch.values()))
 
-    def swap_lecture_emtpy_room(roster, course):
+def swap_lecture_empty_room(roster, course):
 
-        lecture_switch = [key for key in roster.schedule[course.name].keys() if "lecture" in key]
+    # get all the lectures in the course and get all the empty rooms
+    lecture_switch = [key for key in roster.schedule[course.name].keys() if "lecture" in key]
+    all_empty_rooms = [key for key in roster.schedule['No course'].keys()]
 
-        lecture_switch = random.choice(lecture_switch)
+    # choose a random lecture of that course
+    lecture_switch = random.choice(lecture_switch)
+    random_empty_room = random.choice(all_empty_rooms)
 
-        random_empty_room = random.choice(roster.schedule['No Room'])
-        
-        roster.schedule[course.name][lecture_switch] = random_empty_room
+    # define in order to be easier to read and to be able to switch keys and values of the dict
+    dict_switch = roster.schedule[course.name][lecture_switch]
+    dict_random = roster.schedule['No course'][random_empty_room]
+    
+    # switch the times in the schedule roster
+    roster.schedule[course.name][lecture_switch] = dict(zip(dict_switch, dict_random.values()))
+    roster.schedule['No course'][random_empty_room] = dict(zip(dict_random, dict_switch.values()))
 
 
 if __name__ == '__main__':
@@ -80,6 +88,8 @@ if __name__ == '__main__':
     
     # print(courses[0].name)
 
-    swap_lectures(courses, courses[0], roster)
-    print(roster.schedule['No course'])
+    # swap_lectures(courses, courses[0], roster)
+    # print(roster.schedule['No course'])
+    
+    swap_lecture_empty_room(roster, courses[0])
 
