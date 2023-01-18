@@ -5,16 +5,15 @@ import functions.helpers as help_function
 import random
 
 class Roster():
-    def __init__(self, rooms):
+    def __init__(self, rooms, CAPACITY=False, CAPACITY_MARGIN=5):
         self.schedule = {}
         self.rooms = rooms
-
+        self.CAPACITY = CAPACITY
+        self.CAPACITY_MARGIN = CAPACITY_MARGIN
         self.malus_count = 0
         self.room_malus_count = 0
-
         self.lecture_fill_preference = -10
         self.class_fill_preference = -5
-
         self.malus_cause = {}
         self.init_malus()
 
@@ -83,43 +82,23 @@ class Roster():
             # If timeslot is available
             if room.availability[day][timeslot]:
 
-                self.schedule[course.name][f'{class_type} {count}'] = {}
-                clas_number = f"{class_type} {count}"
-                schedule_fill.place_in_schedule(self, room, day, timeslot, course.name, clas_number)
-
-                self.check_malus(timeslot, room.capacity, attending)
-                succes = True
-
-
-    def fill_schedule(self, course, class_type, count, attending):
-        """ This function fills a schedule with no student restraints. If there are no rooms available it prints an Error message."""
-
-        # Make key if not existent
-        if course.name not in self.schedule:
-            self.schedule[course.name] = {}
-
-        # For each room in the list of objects
-        for room in self.rooms:
-
-            # For each day in its availability
-            for day in room.availability:
-
-                # For each timeslot
-                for timeslot in room.availability[day]:
-
-                    # If timeslot is availibale
-                    if room.availability[day][timeslot]:
+                # HEURISTIC FOR CAPACITY
+                if self.CAPACITY:
+                    if room.capacity + self.CAPACITY_MARGIN >= attending:
 
                         self.schedule[course.name][f'{class_type} {count}'] = {}
                         clas_number = f"{class_type} {count}"
                         schedule_fill.place_in_schedule(self, room, day, timeslot, course.name, clas_number)
 
                         self.check_malus(timeslot, room.capacity, attending)
-                        return
+                        succes = True
+                else:
+                    self.schedule[course.name][f'{class_type} {count}'] = {}
+                    clas_number = f"{class_type} {count}"
+                    schedule_fill.place_in_schedule(self, room, day, timeslot, course.name, clas_number)
 
-        # If there are no rooms available at all
-        print("Error. No Room!!!")
-
+                    self.check_malus(timeslot, room.capacity, attending)
+                    succes = True
 
     def check_malus(self, timeslot, capacity, attending):
         """
