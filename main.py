@@ -44,11 +44,12 @@ def hill_climber(df, malus_points, course_list, student_list, rooms, Roster):
 
     # list with all the different changes we want to use
     # list_changes = [swap_lecture_empty_room, swap_2_lectures, swap_2_students]
+    list_changes = ['swap_lecture_empty_room', 'swap_2_lectures']
 
     for i in range(300):
 
-        # make 50 changes to the roster
-        for j in range(50):
+        # make j changes to the roster
+        for j in range(25):
 
             # make a deep copy, initiate the swapper with the right roster and change that roster
             current_roster = copy.deepcopy(best_roster)
