@@ -27,11 +27,8 @@ def initialise():
     # Save as malus points
     malus_points = Roster.malus_count
 
-    return malus_points, course_list, student_list, rooms, Roster
+    return df, malus_points, course_list, student_list, rooms, Roster
 
 if __name__ == '__main__':
-    # baseline = BaselineClass.Baseline()
-    # baseline.plot_startup()
-
-    malus_points, courses, students, rooms, roster = initialise()
-    
+    baseline = BaselineClass.Baseline()
+    baseline.rearrange()
