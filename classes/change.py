@@ -143,4 +143,5 @@ class Change():
 
     def swap_2_lectures(self):
         for course in self.course_list:
-            self.__swap_lecture(course)
+            if course.lectures > 0:
+                self.__swap_lecture(course)
