@@ -63,3 +63,4 @@ class Baseline():
     def rearrange(self):
         Schuffeler = ChangeClass.Change(self.df, self.course_list, self.student_list, self.Roster)
         Schuffeler.swap_2_students(num=100)
+        print(self.Roster.malus_count)

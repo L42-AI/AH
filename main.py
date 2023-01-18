@@ -26,9 +26,10 @@ def initialise():
 
     # Save as malus points
     malus_points = Roster.malus_count
+    print(malus_points)
 
     return df, malus_points, course_list, student_list, rooms, Roster
 
 if __name__ == '__main__':
-    baseline = BaselineClass.Baseline(visualize=True)
+    baseline = BaselineClass.Baseline(visualize=False)
     baseline.rearrange()
