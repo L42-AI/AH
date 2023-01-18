@@ -121,6 +121,7 @@ class Student():
                 # Run the pick group function
                 self.pick_group(course, group_dict, class_num, max_std, group)
 
+
     def lecture_timeslot(self, course, current_course):
 
         if course.lectures > 0:

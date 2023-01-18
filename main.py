@@ -32,8 +32,4 @@ def initialise():
 
 if __name__ == '__main__':
     baseline = BaselineClass.Baseline()
-    print(baseline.get_malus())
-    print(baseline.get_malus_cause())
     baseline.rearrange()
-    print(baseline.get_malus())
-    print(baseline.get_malus_cause())
