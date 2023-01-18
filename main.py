@@ -4,8 +4,6 @@ import functions.schedule_fill as schedule
 import functions.assign  as assign
 import functions.dataframes as dataframe
 import classes.change as change
-import random
-
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 
 

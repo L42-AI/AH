@@ -186,12 +186,54 @@ class Student():
 
             # Find and save the practicum timeslot
             self.practicum_timeslot(course, current_course)
+    
+
 
     def malus_points(self):
         """ This method calculates the malus points point for the student """
 
         # Reset malus points to avoid summing dubble malus
         self.init_malus()
+
+        # find how often student has classes per day
+        days = self.__days_in_schedule()
+
+        # go over the days
+        for day in days:
+
+            # Sort the timeslots in the day:
+            days[day].sort(reverse=True)
+
+            # Set the dictionary key as list
+            timeslot_list = days[day]
+
+            # Only compute if list includes more than 1 timeslot
+            if len(timeslot_list) > 1:
+
+                # keep track if students have double classes that day
+                timeslots_double_classes = []
+
+                # For each timeslot number: (range is -1 to ensure the use of index + 1)
+                for timeslot_num in range(len(timeslot_list) - 1):
+
+                    # malus for double classes
+                    if timeslot_list[timeslot_num] in timeslots_double_classes:
+                        self.malus_cause['Dubble Classes'] += 1
+                        self.malus_count += 1
+                    else:
+                        timeslots_double_classes.append(timeslot_list[timeslot_num])
+
+                    # some cases, double booking might be allowed, but we do not want to add 2 malus
+                    if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
+                        malus = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
+                        self.malus_cause['Classes Gap'] += malus
+                        self.malus_count += malus
+
+                    else:
+                        self.malus_cause['Classes Gap'] += 1
+                        self.malus_count += 1
+
+    def __days_in_schedule(self):
 
         # Create a days dictionary
         days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
@@ -204,39 +246,7 @@ class Student():
 
                 # Add the timeslots into the days dictionary
                 days[timeslot['day']].append(timeslot['timeslot'])
-
-        # For each day in days:
-        for day in days:
-
-            # Sort the timeslots in the day:
-            days[day].sort(reverse=True)
-
-            # Set the dictionary key as list
-            timeslot_list = days[day]
-
-            # Only compute if list includes more than 1 timeslot
-            if len(timeslot_list) > 1:
-
-                timeslots_taken = []
-
-                # For each timeslot number: (range is -1 to ensure the use of index + 1)
-                for timeslot_num in range(len(timeslot_list) - 1):
-
-                    if timeslot_list[timeslot_num] in timeslots_taken:
-                        self.malus_cause['Dubble Classes'] += 1
-                        self.malus_count += 1
-                    else:
-                        timeslots_taken.append(timeslot_list[timeslot_num])
-
-                    # some cases, double booking might be allowed, but we do not want to add 2 malus
-                    if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
-                        malus = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
-                        self.malus_cause['Classes Gap'] += malus
-                        self.malus_count += malus
-
-                    else:
-                        self.malus_cause['Classes Gap'] += 1
-                        self.malus_count += 1
+        return days
 
     def compute_malus(self, Roster):
         """ Run required functions to compute student malus """
