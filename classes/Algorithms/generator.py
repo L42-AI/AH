@@ -69,6 +69,9 @@ class Generator():
             # fill in the list with room objects
             rooms_list.append(RoomClass.Room(room))
 
+        for course in course_list:
+            course.enroll_students(student_list)
+
         return course_list, student_list, rooms_list
 
 
@@ -248,5 +251,8 @@ class Generator():
 
     def rearrange(self):
         Mutate = MutateClass.Mutate(self.df, self.course_list, self.student_list, self.Roster)
-        Mutate.swap_2_students(num=100)
-        self.Roster.total_malus(self.student_list)
+        
+        for i in range(100):
+            Mutate.swap_worst_student()
+            self.Roster.total_malus(self.student_list)
+            print(self.Roster.malus_count)
