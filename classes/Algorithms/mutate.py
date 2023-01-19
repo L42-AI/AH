@@ -95,65 +95,6 @@ class Mutate():
             s1.timeslots[course.name].pop(s1_timeslot)
             s2.timeslots[course.name].pop(s2_timeslot)
 
-
-    # def __shuffle(self, course, s1, s2):
-
-    #     def compute_student_malus(self, s):
-    #         s.compute_malus(self.Roster)
-    #         return s.malus_count
-
-    #     def set_tut_group(s):
-    #         return s.tut_group[course.name]
-
-    #     def set_pra_group(s):
-    #         return s.pract_group[course.name]
-
-    #     def shuffle_tutorial(course, s1, s2):
-    #         if course.name in s1.tut_group:
-    #             s1_tut_group = set_tut_group(s1)
-    #             s2_tut_group = set_tut_group(s2)
-
-    #             s1.tut_group[course.name] = s2_tut_group
-    #             s2.tut_group[course.name] = s1_tut_group
-    #         return s1_tut_group, s2_tut_group
-
-    #     def shuffle_practicum(course, s1, s2):
-    #         if course.name in s1.pract_group:
-    #             s1_pra_group = set_pra_group(s1)
-    #             s2_pra_group = set_pra_group(s2)
-
-    #             s1.pract_group[course.name] = s2_pra_group
-    #             s2.pract_group[course.name] = s1_pra_group
-    #         return s1_pra_group, s2_pra_group
-
-    #     def reset_shuffle(s1, s2, s1_tut_group, s2_tut_group, s1_pra_group, s2_pra_group):
-    #         if course.name in s1.tut_group:
-    #             s1.tut_group[course.name] = s1_tut_group
-    #             s2.tut_group[course.name] = s2_tut_group
-    #         if course.name in s1.pract_group:
-    #             s1.pract_group[course.name] = s1_pra_group
-    #             s2.pract_group[course.name] = s2_pra_group
-
-
-    #     s1_old_malus = compute_student_malus(self, s1)
-    #     s2_old_malus = compute_student_malus(self, s2)
-
-    #     s1_tut_group, s2_tut_group = shuffle_tutorial(course, s1, s2)
-    #     s1_pra_group, s2_pra_group = shuffle_practicum(course, s1, s2)
-
-    #     s1_new_malus = compute_student_malus(self, s1)
-    #     s2_new_malus = compute_student_malus(self, s2)
-
-    #     s1_difference = s1_new_malus - s1_old_malus
-    #     s2_difference = s2_new_malus - s2_old_malus
-
-    #     if s1_difference + s2_difference < 0:
-    #         s1_old_malus = s1_new_malus
-    #         s2_old_malus = s2_new_malus
-    #     else:
-    #         reset_shuffle(s1, s2, s1_tut_group, s2_tut_group, s1_pra_group, s2_pra_group)
-
-
     def swap_2_students(self, num = 100):
 
         switch_student_list = self.__find_worst_students(num)
