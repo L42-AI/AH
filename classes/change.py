@@ -10,77 +10,148 @@ class Change():
         self.Roster = Roster
 
     def __find_worst_students(self, num):
+        """ This function returns the N worst students in terms of malus points """
+        
+        # Sort the Student Malus column
         self.df.sort_values(['Student Malus'], ascending=False, inplace=True)
+        
+        # Take N students
         worst_students = self.df['Student Object'].unique()[:num]
         return worst_students
 
     def __students_to_shuffle(self, student_list):
+        """ This function goes through every student in the input list and shuffels them """
+        
+        # For each student:
         for student1 in student_list:
+            
+            # Find a second student
             for student2 in student_list:
+                
+                # Skip if the same student
                 if student1 == student2:
                     continue
-
+                
+                # For each course
                 for course in student1.courses:
+                    
+                    # If course in other students course list
                     if course in student2.courses:
 
+                        # Shuffle students
                         self.__shuffle(course, student1, student2)
 
+    def __students_to_shuffle_random(self):
+        """ This function shuffles two random students """
+        
+        # Set a value that is not equal to enter while loop
+        student1 = 'a'
+        student2 = 'b'
+        
+        # While students are not equal
+        while student1 != student2:
+            
+            # Randomly select students
+            student1 = random.choice(self.student_list)
+            student2 = random.choice(self.student_list)
+            
+            # Randomly select a course from student1
+            course = random.choice(student1.courses)
+            
+            # Skip if course not in other student
+            if course not in student2.courses:
+                continue
+                
+        # When different students found:
+        self.__shuffle(course, student1, student2)
+                        
     def __shuffle(self, course, s1, s2):
+        """ This function shuffles two students classes """
+        
+        def find_timeslots(course, s, class_type):
+            """ This local function returns the timeslot of the student """
+            
+            # For each timeslot in the courses
+            for timeslot in timeslots[course.name]:
+                if timeslot.startswith(class_type):
+                    return timeslot
 
-        def compute_student_malus(self, s):
-            s.compute_malus(self.Roster)
-            return s.malus_count
+        # Loop over the class types we want to change
+        for class_type in ['tutorial', 'practical']:
 
-        def set_tut_group(s):
-            return s.tut_group[course.name]
+            # Find timeslot
+            s1_timeslot = find_timeslots(course, s1, class_type)
+            s2_timeslot = find_timeslots(course, s2, class_type)
 
-        def set_pra_group(s):
-            return s.pract_group[course.name]
+            # Skip if equal
+            if s1_timeslot == s2_timeslot:
+                continue
 
-        def shuffle_tutorial(course, s1, s2):
-            if course.name in s1.tut_group:
-                s1_tut_group = set_tut_group(s1)
-                s2_tut_group = set_tut_group(s2)
+            # Switch the timeslots
+            s1.timeslots[course.name][s2_timeslot] = s2.timeslots[course.name][s2_timeslot]
+            s2.timeslots[course.name][s1_timeslot] = s1.timeslots[course.name][s1_timeslot]
 
-                s1.tut_group[course.name] = s2_tut_group
-                s2.tut_group[course.name] = s1_tut_group
-            return s1_tut_group, s2_tut_group
-
-        def shuffle_practicum(course, s1, s2):
-            if course.name in s1.pract_group:
-                s1_pra_group = set_pra_group(s1)
-                s2_pra_group = set_pra_group(s2)
-
-                s1.pract_group[course.name] = s2_pra_group
-                s2.pract_group[course.name] = s1_pra_group
-            return s1_pra_group, s2_pra_group
-
-        def reset_shuffle(s1, s2, s1_tut_group, s2_tut_group, s1_pra_group, s2_pra_group):
-            if course.name in s1.tut_group:
-                s1.tut_group[course.name] = s1_tut_group
-                s2.tut_group[course.name] = s2_tut_group
-            if course.name in s1.pract_group:
-                s1.pract_group[course.name] = s1_pra_group
-                s2.pract_group[course.name] = s2_pra_group
+            # Delete the old timeslots
+            s1.timeslots[course.name].pop(s1_timeslot)
+            s2.timeslots[course.name].pop(s2_timeslot)
 
 
-        s1_old_malus = compute_student_malus(self, s1)
-        s2_old_malus = compute_student_malus(self, s2)
+    # def __shuffle(self, course, s1, s2):
 
-        s1_tut_group, s2_tut_group = shuffle_tutorial(course, s1, s2)
-        s1_pra_group, s2_pra_group = shuffle_practicum(course, s1, s2)
+    #     def compute_student_malus(self, s):
+    #         s.compute_malus(self.Roster)
+    #         return s.malus_count
 
-        s1_new_malus = compute_student_malus(self, s1)
-        s2_new_malus = compute_student_malus(self, s2)
+    #     def set_tut_group(s):
+    #         return s.tut_group[course.name]
 
-        s1_difference = s1_new_malus - s1_old_malus
-        s2_difference = s2_new_malus - s2_old_malus
+    #     def set_pra_group(s):
+    #         return s.pract_group[course.name]
 
-        if s1_difference + s2_difference < 0:
-            s1_old_malus = s1_new_malus
-            s2_old_malus = s2_new_malus
-        else:
-            reset_shuffle(s1, s2, s1_tut_group, s2_tut_group, s1_pra_group, s2_pra_group)
+    #     def shuffle_tutorial(course, s1, s2):
+    #         if course.name in s1.tut_group:
+    #             s1_tut_group = set_tut_group(s1)
+    #             s2_tut_group = set_tut_group(s2)
+
+    #             s1.tut_group[course.name] = s2_tut_group
+    #             s2.tut_group[course.name] = s1_tut_group
+    #         return s1_tut_group, s2_tut_group
+
+    #     def shuffle_practicum(course, s1, s2):
+    #         if course.name in s1.pract_group:
+    #             s1_pra_group = set_pra_group(s1)
+    #             s2_pra_group = set_pra_group(s2)
+
+    #             s1.pract_group[course.name] = s2_pra_group
+    #             s2.pract_group[course.name] = s1_pra_group
+    #         return s1_pra_group, s2_pra_group
+
+    #     def reset_shuffle(s1, s2, s1_tut_group, s2_tut_group, s1_pra_group, s2_pra_group):
+    #         if course.name in s1.tut_group:
+    #             s1.tut_group[course.name] = s1_tut_group
+    #             s2.tut_group[course.name] = s2_tut_group
+    #         if course.name in s1.pract_group:
+    #             s1.pract_group[course.name] = s1_pra_group
+    #             s2.pract_group[course.name] = s2_pra_group
+
+
+    #     s1_old_malus = compute_student_malus(self, s1)
+    #     s2_old_malus = compute_student_malus(self, s2)
+
+    #     s1_tut_group, s2_tut_group = shuffle_tutorial(course, s1, s2)
+    #     s1_pra_group, s2_pra_group = shuffle_practicum(course, s1, s2)
+
+    #     s1_new_malus = compute_student_malus(self, s1)
+    #     s2_new_malus = compute_student_malus(self, s2)
+
+    #     s1_difference = s1_new_malus - s1_old_malus
+    #     s2_difference = s2_new_malus - s2_old_malus
+
+    #     if s1_difference + s2_difference < 0:
+    #         s1_old_malus = s1_new_malus
+    #         s2_old_malus = s2_new_malus
+    #     else:
+    #         reset_shuffle(s1, s2, s1_tut_group, s2_tut_group, s1_pra_group, s2_pra_group)
 
 
     def swap_2_students(self, num = 100):
@@ -88,8 +159,11 @@ class Change():
         switch_student_list = self.__find_worst_students(num)
 
         self.__students_to_shuffle(switch_student_list)
-
-
+    
+    def swap_2_students_random(self)
+        
+        self.__students_to_shuffle_random()
+        
     def __swap_lecture(self, course):
         """
         This function takes in a list of object courses, a single object course and the object roster.
