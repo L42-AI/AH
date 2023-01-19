@@ -42,6 +42,7 @@ class __HillClimber():
     def save_better(self):
         # append the new best roster
         self.roster_list.append(self.best_roster)
+        self.Roster = self.best_roster
         print(self.best_malus_score)
 
     def climb(self):
@@ -57,7 +58,7 @@ class __HillClimber():
 
 class HC_LectureLocate(__HillClimber):
     def step_method(self, M):
-        M.swap_lecure_empty_room()
+        M.swap_lecture_empty_room()
 
 class HC_LectureSwap(__HillClimber):
     def step_method(self, M):

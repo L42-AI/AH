@@ -11,13 +11,7 @@ class Mutate():
 
     def __find_worst_student(self):
         """ This function returns the N worst students in terms of malus points """
-
-        # Sort the Student Malus column
-        self.df.sort_values(['Student Malus'], ascending=False, inplace=True)
-
-        # Take N students
-        worst_students = self.df['Student Object'].unique()[0]
-        return worst_students
+        return random.choice(self.student_list)
 
     def __students_to_shuffle(self, student_list):
         """ This function goes through every student in the input list and shuffels them """
@@ -130,7 +124,7 @@ class Mutate():
             if timeslot.startswith(class_type):
                 return timeslot
 
-    def __change_tutorial(self, s):
+    def __change_class(self, s):
         """ This function shuffles two students classes """
 
         course = random.choice(self.course_list)
@@ -144,13 +138,16 @@ class Mutate():
         # Find timeslot
         s_timeslot = self.__find_timeslots(course, s, class_type)
 
-
         for classes in self.Roster.schedule[course.name]:
             if classes.startswith(class_type):
+
                 if self.Roster.schedule[course.name][s_timeslot] != self.Roster.schedule[course.name][classes] and group_dict[int(classes[-1])] < max_std:
+
                     s.timeslots[course.name][classes] = self.Roster.schedule[course.name][classes]
                     s.timeslots[course.name].pop(s_timeslot)
-                    self.Roster.df = self.Roster.create_dataframe(self.student_list)
+
+                    group_dict[int(classes[-1])] += 1
+                    group_dict[int(s_timeslot[-1])] -= 1
                     return
 
 
@@ -158,7 +155,7 @@ class Mutate():
 
         student = self.__find_worst_student()
 
-        self.__change_tutorial(student)
+        self.__change_class(student)
 
 
     def swap_2_students(self):

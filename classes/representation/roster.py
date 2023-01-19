@@ -28,7 +28,7 @@ class Roster():
         self.malus_count = 0
         self.malus_count += self.room_malus_count
 
-        student_malus_cause = {'Classes Gap': 0}
+        student_malus_cause = {'Classes Gap': 0, 'Dubble Classes': 0}
 
         self.all_malus_cause = self.complile_malus(student_malus_cause)
 
@@ -43,6 +43,7 @@ class Roster():
 
             # Add this to the complete malus counter
             self.all_malus_cause['Classes Gap'] += student.malus_cause['Classes Gap']
+            self.all_malus_cause['Dubble Classes'] += student.malus_cause['Dubble Classes']
 
 
     def complile_malus(self, student_malus):

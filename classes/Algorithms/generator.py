@@ -1,4 +1,5 @@
 import classes.Algorithms.mutate as MutateClass
+import classes.Algorithms.hillclimber as HillClimberClass
 
 import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
@@ -244,6 +245,6 @@ class Generator():
             self.iterations.append(i)
 
     def rearrange(self):
-        Mutate = MutateClass.Mutate(self.df, self.course_list, self.student_list, self.Roster)
-        Mutate.swap_2_students(num=100)
-        self.Roster.total_malus(self.student_list)
+        HC1 = HillClimberClass.HC_StudentSwitch(self.Roster, self.df, self.course_list, self.student_list)
+        HC1.climb()
+
