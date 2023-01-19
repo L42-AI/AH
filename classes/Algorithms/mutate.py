@@ -9,15 +9,15 @@ class Mutate():
         self.student_list = student_list
         self.Roster = Roster
 
-    def __find_worst_students(self, num):
+    def __find_worst_students(self):
         """ This function returns the N worst students in terms of malus points """
 
         # Sort the Student Malus column
         self.df.sort_values(['Student Malus'], ascending=False, inplace=True)
 
-        # Take N students
-        worst_students = self.df['Student Object'].unique()[:num]
-        return worst_students
+        # Take worst student
+        worst_student = self.df['Student Object'].unique()[0]
+        return worst_student
 
     def __students_to_shuffle(self, student_list):
         """ This function goes through every student in the input list and shuffels them """
@@ -154,11 +154,11 @@ class Mutate():
     #         reset_shuffle(s1, s2, s1_tut_group, s2_tut_group, s1_pra_group, s2_pra_group)
 
 
-    def swap_2_students(self, num = 100):
+    def swap_2_students(self, num=100):
+        for i in range(num):
+            switch_student_list = self.__find_worst_students()
 
-        switch_student_list = self.__find_worst_students(num)
-
-        self.__students_to_shuffle(switch_student_list)
+            self.__students_to_shuffle(switch_student_list)
 
     def swap_2_students_random(self):
 
