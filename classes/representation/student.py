@@ -56,7 +56,8 @@ class Student():
                 if course.name == name:
                     self.courses.append(course)
 
-    def set_type(self, course, class_type):
+
+    def __set_type(self, course, class_type):
         """ This function sets parameters used in pick_group"""
 
         # If class is tutorial:
@@ -76,7 +77,7 @@ class Student():
 
         return group_dict, class_num, max_std, group
 
-    def pick_group(self, course, group_dict, class_num, max_std, group):
+    def __pick_group(self, course, group_dict, class_num, max_std, group):
         """ This function picks a group based on the given arguments """
 
         # Only run if there are 1 or more classes
@@ -116,13 +117,13 @@ class Student():
             for class_type in ['Tutorial', 'Practica']:
 
                 # Set the variable of the correct class
-                group_dict, class_num, max_std, group = self.set_type(course, class_type)
+                group_dict, class_num, max_std, group = self.__set_type(course, class_type)
 
                 # Run the pick group function
-                self.pick_group(course, group_dict, class_num, max_std, group)
+                self.__pick_group(course, group_dict, class_num, max_std, group)
 
 
-    def lecture_timeslot(self, course, current_course):
+    def __lecture_timeslot(self, course, current_course):
 
         if course.lectures > 0:
             # For each lecture in the course:
@@ -136,7 +137,7 @@ class Student():
 
                 self.timeslots[course.name][current_lecture] = timeslot_dict
 
-    def tutorial_timeslot(self, course, current_course):
+    def __tutorial_timeslot(self, course, current_course):
 
         if course.tutorials > 0:
             # For each tutorial in the course:
@@ -151,7 +152,7 @@ class Student():
 
                 self.timeslots[course.name][current_tutorial] = timeslot_dict
 
-    def practicum_timeslot(self, course, current_course):
+    def __practicum_timeslot(self, course, current_course):
 
         if course.practica > 0:
             # For each practicum in the course:
@@ -181,14 +182,29 @@ class Student():
             current_course = Roster.schedule[course.name]
 
             # Find and save the lecture timeslot
-            self.lecture_timeslot(course, current_course)
+            self.__lecture_timeslot(course, current_course)
 
             # Find and save the tutorial timeslot
-            self.tutorial_timeslot(course, current_course)
+            self.__tutorial_timeslot(course, current_course)
 
             # Find and save the practicum timeslot
-            self.practicum_timeslot(course, current_course)
+            self.__practicum_timeslot(course, current_course)
 
+
+    def __days_in_schedule(self):
+
+        # Create a days dictionary
+        days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
+
+        # For each timeslot:
+        for timeslot_course in self.timeslots:
+            for timeslot_class in self.timeslots[timeslot_course]:
+
+                timeslot = self.timeslots[timeslot_course][timeslot_class]
+
+                # Add the timeslots into the days dictionary
+                days[timeslot['day']].append(timeslot['timeslot'])
+        return days
 
     def malus_points(self):
         """ This method calculates the malus points point for the student """
@@ -234,20 +250,6 @@ class Student():
                         self.malus_cause['Classes Gap'] += 1
                         self.malus_count += 1
 
-    def __days_in_schedule(self):
-
-        # Create a days dictionary
-        days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
-
-        # For each timeslot:
-        for timeslot_course in self.timeslots:
-            for timeslot_class in self.timeslots[timeslot_course]:
-
-                timeslot = self.timeslots[timeslot_course][timeslot_class]
-
-                # Add the timeslots into the days dictionary
-                days[timeslot['day']].append(timeslot['timeslot'])
-        return days
 
     def compute_malus(self, Roster):
         """ Run required functions to compute student malus """
