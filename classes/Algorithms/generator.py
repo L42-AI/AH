@@ -4,7 +4,6 @@ import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
 import classes.representation.room as RoomClass
 import classes.representation.roster as RosterClass
-
 import os
 import matplotlib.pyplot as plt
 import numpy as np
@@ -74,6 +73,7 @@ class Generator():
 
 
     def schedule_fill(self, Roster, course_list, student_list):
+        ''''method schedules a timeslot for every lecture, tutorial or practical that takes place'''
 
         for course in course_list:
             # go over the number of lectures, tutorials and practicals needed
@@ -98,6 +98,7 @@ class Generator():
                     attending = course.pract_group_dict[i + 1]
                     Roster.fill_schedule_random(course, "practical", i + 1, attending)
 
+        # timeslots in rooms that did not get used will be placed in the schedule as empty
         Roster.fill_empty_slots()
 
         Roster.init_student_timeslots(student_list)
@@ -165,6 +166,7 @@ class Generator():
 
 
     def initialise(self, COURSES, STUDENT_COURSES, ROOMS):
+        # starts up a random Roster
 
         course_list, student_list, rooms_list = self.assign(COURSES, STUDENT_COURSES, ROOMS)
 
@@ -196,6 +198,7 @@ class Generator():
             self.iterations.append(i)
 
     def plot_startup(self, COURSES, STUDENT_COURSES, ROOMS):
+        '''plots 300 random startups to get an idea of what a random score would be'''
 
         self.__run_random(COURSES, STUDENT_COURSES, ROOMS)
 
