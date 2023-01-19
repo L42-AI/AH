@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import copy
+import time
 import random
 
 from tqdm import tqdm
@@ -176,7 +177,7 @@ class Generator():
         course_list, student_list, rooms_list = self.assign(COURSES, STUDENT_COURSES, ROOMS)
 
         # create a roster
-        Roster = RosterClass.Roster(rooms_list)
+        Roster = RosterClass.Roster(rooms_list, student_list, course_list)
 
         # fill the roster
         self.schedule_fill(Roster, course_list, student_list)
@@ -252,35 +253,39 @@ class Generator():
             self.iterations.append(i)
 
     def rearrange(self):
-        for i in range(300):
-            RosterList = [self.Roster]
-            for i in range(4):
-                Roster1 = copy.deepcopy(self.Roster)
-                Roster2 = copy.deepcopy(self.Roster)
-                Roster3 = copy.deepcopy(self.Roster)
-                Roster4 = copy.deepcopy(self.Roster)
-                # print(i)
-                if i == 0:
-                    HC1 = HillCLimberClass.HC_WorstStudentRandomGroup(self.Roster, self.df, self.course_list, self.student_list)
-                    HC1.climb()
-                    RosterList.append(HC1.Roster)
-                if i == 1:
-                    HC2 = HillCLimberClass.HC_LectureLocate(Roster2, self.df, self.course_list, self.student_list)
-                    HC2.climb()
-                    RosterList.append(HC2.Roster)
-                if i == 2: 
-                    HC3 = HillCLimberClass.HC_LectureSwap(Roster3, self.df, self.course_list, self.student_list)
-                    HC3.climb()
-                    RosterList.append(HC3.Roster)
-                # if i == 3:
-                #     HC4 = HillCLimberClass.HC_StudentSwap(Roster4, self.df, self.course_list, self.student_list)
-                #     HC4.climb()
-            # print(RosterList)
-            for roster in RosterList:
-                # print(len(RosterList))
-                if roster.malus_count < self.Roster.malus_count:
-                    self.Roster = roster
 
-          
+        start = time.time()
+        start_cost = self.Roster.malus_count
+        for i in range(10):
+            for _ in range(5):
+                i = random.randint(0,5)
+                if i == 0:
+                    HC1 = HillCLimberClass.HC_StudentSwap(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC1.climb()
+
+                elif i == 1:
+                    HC2 = HillCLimberClass.HC_StudentSwapRandom(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC2.climb()
+
+                elif i == 2:
+                    HC3 = HillCLimberClass.HC_StudentSwitch(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC3.climb()
+
+                elif i == 3:
+                    HC4 = HillCLimberClass.HC_LectureLocate(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC4.climb()
+
+                else:
+                    HC5 = HillCLimberClass.HC_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC5.climb()
+
+        finish = time.time()
+        final_cost = self.Roster.malus_count
+        print('100 iters')
+        print(f'start: {start_cost}')
+        print(f'finish: {final_cost}')
+        print(f'Time taken: {finish - start}')
+
+
 
 

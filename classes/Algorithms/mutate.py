@@ -13,8 +13,14 @@ class Mutate():
     def __find_worst_student(self):
         """ This function returns the N worst students in terms of malus points """
 
-        worst_student = max(self.student_list, key=lambda obj: obj.malus_count)
+        worst_student = sorted(self.student_list, key=lambda obj: obj.malus_count)[:10]
         return worst_student
+
+    def __find_random_student(self):
+        """ This function returns the N worst students in terms of malus points """
+
+        return random.choice(self.student_list)
+
 
     def __students_to_shuffle(self, student_list):
         """ This function goes through every student in the input list and shuffels them """
@@ -73,94 +79,92 @@ class Mutate():
                 if timeslot.startswith(class_type):
                     return timeslot
 
-        # Loop over the class types we want to change
-        for class_type in ['tutorial', 'practical']:
+        # take a random class types to change
+        class_type = random.choice(['tutorial', 'practical'])
 
-            # Find timeslot
-            s1_timeslot = find_timeslots(course, s1, class_type)
-            s2_timeslot = find_timeslots(course, s2, class_type)
+        # Find timeslot
+        s1_timeslot = find_timeslots(course, s1, class_type)
+        s2_timeslot = find_timeslots(course, s2, class_type)
 
-            # Skip if equal
-            if s1_timeslot == s2_timeslot:
-                continue
+        # Skip if equal
+        if s1_timeslot == s2_timeslot:
+            return
 
-            # Switch the timeslots
-            s1.timeslots[course.name][s2_timeslot] = s2.timeslots[course.name][s2_timeslot]
-            s2.timeslots[course.name][s1_timeslot] = s1.timeslots[course.name][s1_timeslot]
+        # Switch the timeslots
+        s1.timeslots[course.name][s2_timeslot] = s2.timeslots[course.name][s2_timeslot]
+        s2.timeslots[course.name][s1_timeslot] = s1.timeslots[course.name][s1_timeslot]
 
-            # Delete the old timeslots
-            s1.timeslots[course.name].pop(s1_timeslot)
-            s2.timeslots[course.name].pop(s2_timeslot)
+        # Delete the old timeslots
+        s1.timeslots[course.name].pop(s1_timeslot)
+        s2.timeslots[course.name].pop(s2_timeslot)
 
-    def swap_worst_student(self):
+    def __set_type(self, course):
 
-        # find student with highest malus
-        self.switch_student = self.__find_worst_student()
+        # take a random class types to change
+        class_type = random.choice(['tutorial', 'practical'])
 
-        # pick a tutorial or practical to switch
-        course, class_type = self.__pract_or_tut()
+        if class_type == 'tutorial':
+            group_dict = course.tut_group_dict
+            max_std = course.max_std
+        else:
+            group_dict = course.pract_group_dict
+            max_std = course.max_std_practica
 
-        # check if tut or pract group is needed
-        course_group_type, student_group = self.__type_detect(class_type, course)
+        return class_type, group_dict, max_std
 
+    def __find_timeslots(self, course, s, class_type):
+        """ This local function returns the timeslot of the student """
 
-        # pick a group to switch to
-        groups = list(course_group_type.keys())
-        group_to_switch_to = random.choice(groups)
+        # For each timeslot in the courses
+        for timeslot in s.timeslots[course.name]:
+            if timeslot.startswith(class_type):
+                return timeslot
 
-        # check if student is not already in it
-        if group_to_switch_to != student_group:
-            # check if there is room, given the type of the class
-            if course_group_type[group_to_switch_to] < course.max_std and class_type == 'tut':
-                course_group_type[group_to_switch_to] += 1
-                course_group_type[student_group] -= 1
-                self.switch_student.tut_group[course.name] = group_to_switch_to
-                self.switch_student.student_timeslots(self.Roster)
+    def __change_group(self, s):
+        """ This function shuffles two students classes """
 
-            if course_group_type[group_to_switch_to] < course.max_std_practica and class_type == 'pract':
-                course_group_type[group_to_switch_to] += 1
-                course_group_type[student_group] -= 1
-                self.switch_student.pract_group[course.name] = group_to_switch_to
-                self.switch_student.student_timeslots(self.Roster)
+        course = random.choice(self.course_list)
 
+        while course.name not in list(s.timeslots.keys()):
+            course = random.choice(self.course_list)
 
-            # if there is no room, switch students
-            if course_group_type[group_to_switch_to] == course.max_std and class_type == 'tut':
-                possible_students = {}
-                for student in course.enrolled_students:
-                    if student.tut_group[course.name] == group_to_switch_to:
-                        possible_students[student] = student.malus_count
-                
-                        # find worst student in that group
-                        worst_student = max(possible_students, key=possible_students.get)
+        # Set class type
+        class_type, group_dict, max_std = self.__set_type(course)
 
-                        # switch students
-                        worst_student.tut_group[course.name] = self.switch_student.tut_group[course.name]
-                        self.switch_student.tut_group[course.name] = group_to_switch_to
-                        self.switch_student.student_timeslots(self.Roster)
-                        worst_student.student_timeslots(self.Roster)
+        # Find timeslot
+        s_timeslot = self.__find_timeslots(course, s, class_type)
 
+        for classes in self.Roster.schedule[course.name]:
+            if classes.startswith(class_type):
 
-            if course_group_type[group_to_switch_to] == course.max_std_practica and class_type == 'pract':
-                possible_students = {}
-                for student in course.enrolled_students:
-                    if student.pract_group[course.name] == group_to_switch_to:
-                        possible_students[student] = student.malus_count
-                
-                # find worst student in that group
-                worst_student = max(possible_students, key=possible_students.get)
+                if self.Roster.schedule[course.name][s_timeslot] != self.Roster.schedule[course.name][classes] and group_dict[int(classes[-1])] < max_std:
 
-                # switch students
-                worst_student.pract_group[course.name] = self.switch_student.pract_group[course.name]
-                self.switch_student.pract_group[course.name] = group_to_switch_to
-                self.switch_student.student_timeslots(self.Roster)
-                worst_student.student_timeslots(self.Roster)
+                    s.timeslots[course.name][classes] = self.Roster.schedule[course.name][classes]
+                    s.timeslots[course.name].pop(s_timeslot)
+
+                    group_dict[int(classes[-1])] += 1
+                    group_dict[int(s_timeslot[-1])] -= 1
+                    return
 
 
+    def change_student_group(self):
 
-    def swap_worst_students_random(self):
+        student = self.__find_random_student()
+
+        self.__change_group(student)
+
+
+    def swap_2_students(self):
+
+        switch_student_list = self.__find_worst_student()
+
+        self.__students_to_shuffle(switch_student_list)
+
+    def swap_2_students_random(self):
 
         self.__students_to_shuffle_random()
+
+    # def swap_worst_students_random(self):
 
     def __swap_lecture(self, course):
         """
@@ -191,6 +195,7 @@ class Mutate():
     def swap_2_lectures(self):
         random_course = random.choice([c for c in self.course_list if c.lectures > 0])
         self.__swap_lecture(random_course)
+
 
     def __swap_lecture_empty_room(self, course):
         """
