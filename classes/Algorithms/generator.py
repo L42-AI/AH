@@ -253,38 +253,34 @@ class Generator():
 
     def rearrange(self):
         for i in range(300):
+            RosterList = [self.Roster]
             for i in range(4):
                 Roster1 = copy.deepcopy(self.Roster)
                 Roster2 = copy.deepcopy(self.Roster)
                 Roster3 = copy.deepcopy(self.Roster)
                 Roster4 = copy.deepcopy(self.Roster)
-                RosterList = [self.Roster]
+                # print(i)
                 if i == 0:
-                    HC1 = HillCLimberClass.HC_WorstStudentRandomGroup(Roster1, self.df, self.course_list, self.student_list)
+                    HC1 = HillCLimberClass.HC_WorstStudentRandomGroup(self.Roster, self.df, self.course_list, self.student_list)
                     HC1.climb()
-                    print(HC1.best_roster)
-                    RosterList.append(HC1.best_roster)
+                    RosterList.append(HC1.Roster)
                 if i == 1:
                     HC2 = HillCLimberClass.HC_LectureLocate(Roster2, self.df, self.course_list, self.student_list)
                     HC2.climb()
-                    RosterList.append(HC2.best_roster)
+                    RosterList.append(HC2.Roster)
                 if i == 2: 
                     HC3 = HillCLimberClass.HC_LectureSwap(Roster3, self.df, self.course_list, self.student_list)
                     HC3.climb()
-                    RosterList.append(HC3.best_roster)
+                    RosterList.append(HC3.Roster)
                 # if i == 3:
                 #     HC4 = HillCLimberClass.HC_StudentSwap(Roster4, self.df, self.course_list, self.student_list)
                 #     HC4.climb()
             # print(RosterList)
             for roster in RosterList:
-                print('=====')
-                print(roster.malus_count)
+                # print(len(RosterList))
                 if roster.malus_count < self.Roster.malus_count:
-                    print("Roster")
-                    print(roster)
                     self.Roster = roster
-            print('Self')
-            print(self.Roster)
+
           
 
 
