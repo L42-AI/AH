@@ -252,32 +252,63 @@ class Generator():
             self.costs.append()
             self.iterations.append(i)
 
-    def rearrange(self):
+    def rearrange_HC(self):
+        T = 0
 
         start = time.time()
         start_cost = self.Roster.malus_count
         for i in range(10):
             for _ in range(5):
-                i = random.randint(0,5)
+                
                 if i == 0:
                     HC1 = HillCLimberClass.HC_StudentSwap(self.Roster, self.df, self.course_list, self.student_list)
-                    self.Roster = HC1.climb()
+                    self.Roster = HC1.climb(T)
 
                 elif i == 1:
                     HC2 = HillCLimberClass.HC_StudentSwapRandom(self.Roster, self.df, self.course_list, self.student_list)
-                    self.Roster = HC2.climb()
+                    self.Roster = HC2.climb(T)
 
                 elif i == 2:
                     HC3 = HillCLimberClass.HC_StudentSwitch(self.Roster, self.df, self.course_list, self.student_list)
-                    self.Roster = HC3.climb()
+                    self.Roster = HC3.climb(T)
 
                 elif i == 3:
                     HC4 = HillCLimberClass.HC_LectureLocate(self.Roster, self.df, self.course_list, self.student_list)
-                    self.Roster = HC4.climb()
+                    self.Roster = HC4.climb(T)
 
                 else:
                     HC5 = HillCLimberClass.HC_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
-                    self.Roster = HC5.climb()
+                    self.Roster = HC5.climb(T)
+        
+    def rearrange_SA(self):
+
+        T = .99
+        start = time.time()
+        start_cost = self.Roster.malus_count
+        for i in range(100):
+            T -= (0.0009999 * 1.9)
+            print(T)
+            for _ in range(5):
+                
+                if i == 0:
+                    HC1 = HillCLimberClass.SA_StudentSwap(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC1.climb(T)
+
+                elif i == 1:
+                    HC2 = HillCLimberClass.SA_StudentSwapRandom(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC2.climb(T)
+
+                elif i == 2:
+                    HC3 = HillCLimberClass.SA_StudentSwitch(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC3.climb(T)
+
+                elif i == 3:
+                    HC4 = HillCLimberClass.SA_LectureLocate(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC4.climb(T)
+
+                else:
+                    HC5 = HillCLimberClass.SA_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC5.climb(T)
 
         finish = time.time()
         final_cost = self.Roster.malus_count
@@ -285,6 +316,7 @@ class Generator():
         print(f'start: {start_cost}')
         print(f'finish: {final_cost}')
         print(f'Time taken: {finish - start}')
+
 
 
 
