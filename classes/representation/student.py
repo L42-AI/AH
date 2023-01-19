@@ -208,7 +208,6 @@ class Student():
 
     def malus_points(self):
         """ This method calculates the malus points point for the student """
-
         # Reset malus points to avoid summing dubble malus
         self.init_malus()
 

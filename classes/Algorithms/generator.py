@@ -1,15 +1,15 @@
 import classes.Algorithms.mutate as MutateClass
-import classes.Algorithms.hillclimber as HillClimberClass
-
+import classes.Algorithms.hillclimber as HillCLimberClass
 import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
 import classes.representation.room as RoomClass
 import classes.representation.roster as RosterClass
-
 import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import copy
+import random
 
 from tqdm import tqdm
 
@@ -71,10 +71,14 @@ class Generator():
             # fill in the list with room objects
             rooms_list.append(RoomClass.Room(room))
 
+        for course in course_list:
+            course.enroll_students(student_list)
+
         return course_list, student_list, rooms_list
 
 
     def schedule_fill(self, Roster, course_list, student_list):
+        ''''method schedules a timeslot for every lecture, tutorial or practical that takes place'''
 
         for course in course_list:
             # go over the number of lectures, tutorials and practicals needed
@@ -99,6 +103,7 @@ class Generator():
                     attending = course.pract_group_dict[i + 1]
                     Roster.fill_schedule_random(course, "practical", i + 1, attending)
 
+        # timeslots in rooms that did not get used will be placed in the schedule as empty
         Roster.fill_empty_slots()
 
         Roster.init_student_timeslots(student_list)
@@ -166,6 +171,7 @@ class Generator():
 
 
     def initialise(self, COURSES, STUDENT_COURSES, ROOMS):
+        # starts up a random Roster
 
         course_list, student_list, rooms_list = self.assign(COURSES, STUDENT_COURSES, ROOMS)
 
@@ -197,6 +203,7 @@ class Generator():
             self.iterations.append(i)
 
     def plot_startup(self, COURSES, STUDENT_COURSES, ROOMS):
+        '''plots 300 random startups to get an idea of what a random score would be'''
 
         self.__run_random(COURSES, STUDENT_COURSES, ROOMS)
 
@@ -245,6 +252,39 @@ class Generator():
             self.iterations.append(i)
 
     def rearrange(self):
-        HC1 = HillClimberClass.HC_StudentSwitch(self.Roster, self.df, self.course_list, self.student_list)
-        HC1.climb()
+        for i in range(300):
+            for i in range(4):
+                Roster1 = copy.deepcopy(self.Roster)
+                Roster2 = copy.deepcopy(self.Roster)
+                Roster3 = copy.deepcopy(self.Roster)
+                Roster4 = copy.deepcopy(self.Roster)
+                RosterList = [self.Roster]
+                if i == 0:
+                    HC1 = HillCLimberClass.HC_WorstStudentRandomGroup(Roster1, self.df, self.course_list, self.student_list)
+                    HC1.climb()
+                    print(HC1.best_roster)
+                    RosterList.append(HC1.best_roster)
+                if i == 1:
+                    HC2 = HillCLimberClass.HC_LectureLocate(Roster2, self.df, self.course_list, self.student_list)
+                    HC2.climb()
+                    RosterList.append(HC2.best_roster)
+                if i == 2: 
+                    HC3 = HillCLimberClass.HC_LectureSwap(Roster3, self.df, self.course_list, self.student_list)
+                    HC3.climb()
+                    RosterList.append(HC3.best_roster)
+                # if i == 3:
+                #     HC4 = HillCLimberClass.HC_StudentSwap(Roster4, self.df, self.course_list, self.student_list)
+                #     HC4.climb()
+            # print(RosterList)
+            for roster in RosterList:
+                print('=====')
+                print(roster.malus_count)
+                if roster.malus_count < self.Roster.malus_count:
+                    print("Roster")
+                    print(roster)
+                    self.Roster = roster
+            print('Self')
+            print(self.Roster)
+          
+
 

@@ -14,7 +14,6 @@ class __HillClimber():
         # set best roster and malus score
         self.best_roster = self.Roster
         self.best_malus_score = self.best_roster.malus_count
-
         # append the original roster
         self.roster_list.append(self.best_roster)
 
@@ -49,7 +48,7 @@ class __HillClimber():
 
         self.set_roster()
 
-        for _ in range(300):
+        for _ in range(1):
             for _ in range(50):
                 self.step()
                 self.calc_malus()
@@ -71,3 +70,7 @@ class HC_StudentSwap(__HillClimber):
 class HC_StudentSwitch(__HillClimber):
     def step_method(self, M):
         M.change_student_group()
+
+class HC_WorstStudentRandomGroup(__HillClimber):
+    def step_method(self, M):
+        M.swap_worst_student()

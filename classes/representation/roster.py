@@ -174,8 +174,3 @@ class Roster():
         if timeslot == 17:
             self.malus_cause['Night'] += 5
             self.room_malus_count += 5
-
-        # penalty for capacity shortage
-        if attending > capacity:
-            self.malus_cause['Capacity'] += attending - capacity
-            self.room_malus_count += attending - capacity
