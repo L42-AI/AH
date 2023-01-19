@@ -38,7 +38,7 @@ We zijn hier
 (!) lectures per lokaal doen:
       - greedy
 
-## HEURISTIEK ## 
+## HEURISTIEK ##
 - random x10, neem beste, daar random aanpassingen (5 studenten met hoogste cost met willekeurige groep wisselen etc)
 - capaciteit overschrijden limiteren naar max 5 bijv, of een percentage, of welke het hoogst is
 
@@ -47,9 +47,9 @@ course naar dict veranderen
 rooms structuur veranderen, nu is elke room object binnen class Room met attributes: - id (type int)
                                                                                      - cap (type int)
                                                                                      - availability (type dict)
-Snakevis en profilers to check which functions take a long time 
-                                                                                
-                                                                                     
+Snakevis en profilers to check which functions take a long Time
+
+
 Rooster class __wrapper__ method
 fill roster mogelijk naar assign
 tussenuren berekenen door dict met int als key en value de tijd string
@@ -88,7 +88,3 @@ Moeten we rekening houden met volgorde van lessen(Lecture1, Tutorial1, Lecture2,
 - tijdslot van een tut of pract groep binnen een vak (moeten er wel meerdere zijn)
 - tijdslot van een lecture van 2 verschillende vakken
 - tijdslot van een lecture binnen een vak (moeten er wel meerdere zijn) --> doet niks!!
-
-
-# Zeg dit tegen wouter #
-In vakken csv staat Zoeken sturen en bewegen al "Zoeken, sturen en bewegen. Maar bij studenten_en_vakken.csv staat het als: Zoeken sturen en bewegen. 
