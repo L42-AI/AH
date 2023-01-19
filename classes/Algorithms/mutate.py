@@ -254,3 +254,7 @@ class Mutate():
             course_group_type = course.pract_group_dict
             student_group = self.switch_student.pract_group[course.name]
         return course_group_type, student_group
+
+    def swap_timeslots(self):
+        worst_student = self.__find_worst_student()
+

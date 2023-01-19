@@ -194,7 +194,7 @@ class Student():
     def __days_in_schedule(self):
 
         # Create a days dictionary
-        days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
+        self.days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
 
         # For each timeslot:
         for timeslot_course in self.timeslots:
@@ -203,8 +203,8 @@ class Student():
                 timeslot = self.timeslots[timeslot_course][timeslot_class]
 
                 # Add the timeslots into the days dictionary
-                days[timeslot['day']].append(timeslot['timeslot'])
-        return days
+                self.days[timeslot['day']].append(timeslot['timeslot'])
+        return self.days
 
     def malus_points(self):
         """ This method calculates the malus points point for the student """
