@@ -6,5 +6,10 @@ import copy
 
 
 if __name__ == '__main__':
-    G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, visualize=True)
-    # G.rearrange()
+    G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS)
+    # print(G.get_schedule()['No course'])
+
+    G.rearrange()
+
+    # print(G.get_schedule()['No course'])
+

@@ -91,8 +91,8 @@ class Generator():
                     attending = course.tut_group_dict[i + 1]
                     Roster.fill_schedule_random(course, "tutorial", i + 1, attending)
 
-            for _ in range(course.practica):
-                for i in range(course.practica_rooms):
+            for _ in range(course.practicals):
+                for i in range(course.practical_rooms):
 
                     # check how many students will attend this practical
                     attending = course.pract_group_dict[i + 1]
@@ -245,5 +245,7 @@ class Generator():
 
     def rearrange(self):
         Mutate = MutateClass.Mutate(self.df, self.course_list, self.student_list, self.Roster)
-        Mutate.swap_2_students(num=100)
+        Mutate.swap_practical_empty_room()
+
+
         self.Roster.total_malus(self.student_list)
