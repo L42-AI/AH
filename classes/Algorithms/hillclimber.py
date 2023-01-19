@@ -2,7 +2,7 @@ import classes.Algorithms.mutate as MutateClass
 
 import copy
 
-class HillClimber():
+class __HillClimber():
     def __init__(self, Roster, df, course_list, student_list):
         self.roster_list = []
         self.course_list = course_list
@@ -32,6 +32,7 @@ class HillClimber():
         self.current_roster.total_malus(self.student_list)
         self.current_malus_points = self.current_roster.malus_count
 
+
     def set_better(self):
         # if the malus points are lower then the previous lowest malus points set the best to the new object
         if self.best_malus_score > self.current_malus_points:
@@ -54,14 +55,18 @@ class HillClimber():
                 self.set_better()
             self.save_better()
 
-class HC_LectureLocate(HillClimber):
+class HC_LectureLocate(__HillClimber):
     def step_method(self, M):
         M.swap_lecure_empty_room()
 
-class HC_LectureSwap(HillClimber):
+class HC_LectureSwap(__HillClimber):
     def step_method(self, M):
         M.swap_2_lectures()
 
-class HC_StudentSwap(HillClimber):
+class HC_StudentSwap(__HillClimber):
     def step_method(self, M):
         M.swap_2_students_random()
+
+class HC_StudentSwitch(__HillClimber):
+    def step_method(self, M):
+        M.change_student_group()
