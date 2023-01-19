@@ -296,15 +296,15 @@ class Mutate():
 
     def test_swap_empty(self, lesson_type):
 
-         # pick a random course that does have one or more lessons of said type
+        # pick a random course that does have one or more lessons of said type
         random_course = random.choice([c for c in self.course_list if getattr(c, f'{lesson_type}s') > 0])
 
         # get all the tutorials in the course and get all the empty rooms
-        all_lectures_switch = [key for key in self.Roster.schedule[random_course.name].keys() if lesson_type in key]
+        all_lectures_random_1 = [key for key in self.Roster.schedule[random_course.name].keys() if lesson_type in key]
         all_empty_rooms = [key for key in self.Roster.schedule['No course'].keys()]
 
         # choose a random lecture of that course
-        lecture_switch = random.choice(all_lectures_switch)
+        lecture_switch = random.choice(all_lectures_random_1)
         random_empty_room = random.choice(all_empty_rooms)
 
         # define in order to be easier to read and to be able to switch keys and values of the dict
@@ -315,24 +315,35 @@ class Mutate():
         self.Roster.schedule[random_course.name][lecture_switch] = dict(zip(dict_switch, dict_random.values()))
         self.Roster.schedule['No course'][random_empty_room] = dict(zip(dict_random, dict_switch.values()))
 
-    def test_swap_2_lessons(self, lesson_type):
+    def swap_lessons(self, lesson_type, empty):
 
-        # pick two random courses that have at least one lecture
-        random_course_1, random_course_2 = random.sample([c for c in self.course_list if c.practicals > 0], 2)
+        # check if you swap with an empty room or another course
+        if empty:
+            # pick a random course that does have one or more lessons of said type
+            random_course_1 = random.choice([c for c in self.course_list if getattr(c, f'{lesson_type}s') > 0])
+            
+            all_lessons_random_2 = [key for key in self.Roster.schedule['No course'].keys()]
 
-        # get all the lectures
-        all_tutorial_random_1 = [key for key in self.Roster.schedule[random_course_1.name].keys() if lesson_type in key]
-        all_tutorial_random_2 = [key for key in self.Roster.schedule[random_course_2.name].keys() if lesson_type in key]
+            course_two = 'No course'
+        
+        else:
+            # pick random lesson that has at leas one of the lesson type
+            random_course_1, random_course_2 = random.sample([c for c in self.course_list if getattr(c, f'{lesson_type}s') > 0], 2)
+            all_lessons_random_2 = [key for key in self.Roster.schedule[random_course_2.name].keys() if lesson_type in key]
+            course_two = random_course_2.name
+        
 
-        # take a random lecture (if only one it will take the one)
-        tutorial_random_1 = random.choice(all_tutorial_random_1)
-        tutorial_random_2 = random.choice(all_tutorial_random_2)
+        # get all the tutorials in the course and get all the empty rooms
+        all_lessons_random_1 = [key for key in self.Roster.schedule[random_course_1.name].keys() if lesson_type in key]
 
-        # define in order to be easier to read and switch key values
-        dict_random_1 = self.Roster.schedule[random_course_1.name][tutorial_random_1]
-        dict_random_2 = self.Roster.schedule[random_course_2.name][tutorial_random_2]
+        # choose a random lecture of that course
+        lesson_1 = random.choice(all_lessons_random_1)
+        lesson_2 = random.choice(all_lessons_random_2)
+
+        # define in order to be easier to read and to be able to switch keys and values of the dict
+        dict_1 = self.Roster.schedule[random_course_1.name][lesson_1]
+        dict_2 = self.Roster.schedule[course_two][lesson_2]
 
         # switch the times in the schedule roster
-        self.Roster.schedule[random_course_1.name][tutorial_random_1] = dict(zip(dict_random_1, dict_random_2.values()))
-        self.Roster.schedule[random_course_2.name][tutorial_random_2] = dict(zip(dict_random_2, dict_random_1.values()))
-        
+        self.Roster.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
+        self.Roster.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
