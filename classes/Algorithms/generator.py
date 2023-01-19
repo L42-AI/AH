@@ -1,5 +1,5 @@
 import classes.Algorithms.mutate as MutateClass
-
+import classes.Algorithms.hillclimber as HillCLimberClass
 import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
 import classes.representation.room as RoomClass
@@ -8,6 +8,8 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import copy
+import random
 
 from tqdm import tqdm
 
@@ -250,9 +252,39 @@ class Generator():
             self.iterations.append(i)
 
     def rearrange(self):
-        Mutate = MutateClass.Mutate(self.df, self.course_list, self.student_list, self.Roster)
-        
-        for i in range(100):
-            Mutate.swap_worst_student()
-            self.Roster.total_malus(self.student_list)
-            print(self.Roster.malus_count)
+        for i in range(300):
+            for i in range(4):
+                Roster1 = copy.deepcopy(self.Roster)
+                Roster2 = copy.deepcopy(self.Roster)
+                Roster3 = copy.deepcopy(self.Roster)
+                Roster4 = copy.deepcopy(self.Roster)
+                RosterList = [self.Roster]
+                if i == 0:
+                    HC1 = HillCLimberClass.HC_WorstStudentRandomGroup(Roster1, self.df, self.course_list, self.student_list)
+                    HC1.climb()
+                    print(HC1.best_roster)
+                    RosterList.append(HC1.best_roster)
+                if i == 1:
+                    HC2 = HillCLimberClass.HC_LectureLocate(Roster2, self.df, self.course_list, self.student_list)
+                    HC2.climb()
+                    RosterList.append(HC2.best_roster)
+                if i == 2: 
+                    HC3 = HillCLimberClass.HC_LectureSwap(Roster3, self.df, self.course_list, self.student_list)
+                    HC3.climb()
+                    RosterList.append(HC3.best_roster)
+                # if i == 3:
+                #     HC4 = HillCLimberClass.HC_StudentSwap(Roster4, self.df, self.course_list, self.student_list)
+                #     HC4.climb()
+            # print(RosterList)
+            for roster in RosterList:
+                print('=====')
+                print(roster.malus_count)
+                if roster.malus_count < self.Roster.malus_count:
+                    print("Roster")
+                    print(roster)
+                    self.Roster = roster
+            print('Self')
+            print(self.Roster)
+          
+
+

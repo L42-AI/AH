@@ -96,7 +96,6 @@ class Mutate():
 
         # find student with highest malus
         self.switch_student = self.__find_worst_student()
-        print(self.switch_student.id)
 
         # pick a tutorial or practical to switch
         course, class_type = self.__pract_or_tut()
