@@ -245,7 +245,7 @@ class Generator():
 
     def rearrange(self):
         Mutate = MutateClass.Mutate(self.df, self.course_list, self.student_list, self.Roster)
-        Mutate.swap_practical_empty_room()
+        Mutate.test_swap_empty('lecture')
 
 
         self.Roster.total_malus(self.student_list)
