@@ -81,9 +81,9 @@ class HC_StudentSwitch(__HillClimber):
     def step_method(self, M):
         M.change_student_group()
 
-# class HC_WorstStudentRandomGroup(__HillClimber):
-#     def step_method(self, M):
-#         M.swap_worst_student()
+class HC_WorstStudentRandomGroup(__HillClimber):
+    def step_method(self, M):
+        M.swap_worst_student()
 
 class Simulated_Annealing(__HillClimber):
 
