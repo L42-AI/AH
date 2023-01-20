@@ -258,7 +258,7 @@ class Generator():
         start_cost = self.Roster.malus_count
         for i in range(10):
             for _ in range(25):
-                i = random.randint(0,5)
+                i = random.randint(0, 4)
                 if i == 0:
                     HC1 = HillCLimberClass.HC_StudentSwap(self.Roster, self.df, self.course_list, self.student_list)
                     self.Roster = HC1.climb()
@@ -270,10 +270,6 @@ class Generator():
                 elif i == 2:
                     HC3 = HillCLimberClass.HC_StudentSwitch(self.Roster, self.df, self.course_list, self.student_list)
                     self.Roster = HC3.climb()
-
-                elif i == 3:
-                    HC4 = HillCLimberClass.HC_LectureLocate(self.Roster, self.df, self.course_list, self.student_list)
-                    self.Roster = HC4.climb()
 
                 else:
                     HC5 = HillCLimberClass.HC_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
