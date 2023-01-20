@@ -338,7 +338,6 @@ class Mutate():
             all_lessons_random_2 = [key for key in self.Roster.schedule[random_course_2.name].keys() if lesson_type in key]
             course_two = random_course_2.name
         
-
         # get all the tutorials in the course and get all the empty rooms
         all_lessons_random_1 = [key for key in self.Roster.schedule[random_course_1.name].keys() if lesson_type in key]
 
@@ -356,21 +355,23 @@ class Mutate():
 
     def swap_random_lessons(self, empty):
 
+        # check if you want to swap with an empty room or not
         if empty:
+            # get one random course and all the empty room time slots
             random_course_1 = random.choice(self.course_list)
             all_lessons_random_2 = [key for key in self.Roster.schedule['No course'].keys()]
-
             course_two = 'No course'
 
         else:
+            # get two random courses
             random_course_1, random_course_2 = random.sample(self.course_list, 2)
             all_lessons_random_2 = list(self.Roster.schedule[random_course_2.name].keys())
-
             course_two = random_course_2.name
 
 
         all_lessons_random_1 = list(self.Roster.schedule[random_course_1.name].keys())
 
+        # choose two random lessons
         lesson_1 = random.choice(all_lessons_random_1)
         lesson_2 = random.choice(all_lessons_random_2)
 
