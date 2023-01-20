@@ -13,8 +13,11 @@ class __HillClimber():
 
     def step_method(self, M):
         pass
+    
+    def get_name(self):
+        pass
 
-    def climb(self, T):
+    def climb(self):
 
         # set best roster and malus score
         self.best_roster = self.Roster
@@ -59,11 +62,15 @@ class HC_LectureLocate(__HillClimber):
 
 class HC_LectureSwap(__HillClimber):
     def step_method(self, M):
-        M.swap_2_lectures()
+        M.swap_random_lessons(True)
+        M.swap_random_lessons(False)
 
 class HC_StudentSwap(__HillClimber):
     def step_method(self, M):
         M.swap_2_students()
+        
+    def get_name(self):
+        print("students swapped random")
 
 class HC_StudentSwapRandom(__HillClimber):
     def step_method(self, M):

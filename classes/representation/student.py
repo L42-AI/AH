@@ -68,8 +68,8 @@ class Student():
         else:
             # Set all values of practica
             group_dict = course.pract_group_dict
-            class_num = course.practica
-            max_std = course.max_std_practica
+            class_num = course.practicals
+            max_std = course.max_std_practical
             group = self.pract_group
 
         return group_dict, class_num, max_std, group
@@ -105,7 +105,7 @@ class Student():
                     group_picked = None
 
     def select_groups(self):
-        """ This function selects groups of tutorial and practica for each course """
+        """ This function selects groups of tutorial and practical for each course """
 
         self.tut_group = {}
         self.pract_group = {}
@@ -114,7 +114,7 @@ class Student():
         for course in self.courses:
 
             # For each of the class types (with groups):
-            for class_type in ['Tutorial', 'Practica']:
+            for class_type in ['Tutorial', 'Practicals']:
 
                 # Set the variable of the correct class
                 group_dict, class_num, max_std, group = self.__set_type(course, class_type)
@@ -154,9 +154,9 @@ class Student():
 
     def __practicum_timeslot(self, course, current_course):
 
-        if course.practica > 0:
+        if course.practicals > 0:       ## This if is unnecassary, because if it is zero it will not do the for loop even once
             # For each practicum in the course:
-            for index in range(course.practica):
+            for index in range(course.practicals):
 
                 # Set the current class
                 # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries

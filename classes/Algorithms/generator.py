@@ -97,8 +97,8 @@ class Generator():
                     attending = course.tut_group_dict[i + 1]
                     Roster.fill_schedule_random(course, "tutorial", i + 1, attending)
 
-            for _ in range(course.practica):
-                for i in range(course.practica_rooms):
+            for _ in range(course.practicals):
+                for i in range(course.practical_rooms):
 
                     # check how many students will attend this practical
                     attending = course.pract_group_dict[i + 1]
@@ -258,8 +258,8 @@ class Generator():
         start = time.time()
         start_cost = self.Roster.malus_count
         for i in range(10):
-            for _ in range(5):
-                
+            for _ in range(25):
+                i = random.randint(0,5)
                 if i == 0:
                     HC1 = HillCLimberClass.HC_StudentSwap(self.Roster, self.df, self.course_list, self.student_list)
                     self.Roster = HC1.climb(T)

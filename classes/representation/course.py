@@ -15,6 +15,7 @@ class Course():
         self.name = data['Vak']
         self.lectures = data['#Hoorcolleges']
         self.enrolled = enrolled
+        self.enrolled_students = set()
 
         # Set the attributes about the tutorials
         self.tutorials = data['#Werkcolleges']
@@ -22,10 +23,9 @@ class Course():
         self.tutorial_rooms = 0
 
         # Set the attributes about the practica
-        self.practica = data['#Practica']
-        self.max_std_practica = data['Max. stud. Practicum']
-        self.practica_rooms = 0
-        self.enrolled_students = set()
+        self.practicals = data['#Practica']
+        self.max_std_practical = data['Max. stud. Practicum']
+        self.practical_rooms = 0
 
         # initiate the libararies
         self.tut_group_dict = {}
@@ -47,7 +47,7 @@ class Course():
 
     def rooms_needed(self):
 
-        # only create groups when there are tutorials and practica
+        # only create groups when there are tutorials and practical
         if self.tutorials != 0:
             self.tutorial_rooms = int(self.enrolled / self.max_std)
 
@@ -55,16 +55,16 @@ class Course():
             if self.enrolled % self.max_std != 0:
                 self.tutorial_rooms += 1
 
-        if self.practica != 0:
-            self.practica_rooms = int(self.enrolled / self.max_std_practica)
-            if self.enrolled % self.max_std_practica != 0:
-                self.practica_rooms += 1
+        if self.practicals != 0:
+            self.practical_rooms = int(self.enrolled / self.max_std_practical)
+            if self.enrolled % self.max_std_practical != 0:
+                self.practical_rooms += 1
 
     def group_dict(self):
 
         for i in range(self.tutorial_rooms):
             self.tut_group_dict[i + 1] = 0
 
-        for i in range(self.practica_rooms):
+        for i in range(self.practical_rooms):
             self.pract_group_dict[i + 1] = 0
 
