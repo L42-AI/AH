@@ -167,11 +167,13 @@ class Student():
 
                 self.timeslots[course.name][current_practicum] = timeslot_dict
 
-    def student_timeslots(self, Roster):
+    def student_timeslots(self, schedule):
         """ 
         This method adds the timeslots for classes per week. 
         The dictionary timeslots is linked to the Roster schedule.
         """
+
+        # print(schedule.schedule)
 
         # For each course:
         for course in self.courses:
@@ -179,7 +181,7 @@ class Student():
             self.timeslots[course.name] = {}
 
             # Set the current course dict
-            current_course = Roster.schedule[course.name]
+            current_course = schedule[course.name]
 
             # Find and save the lecture timeslot
             self.__lecture_timeslot(course, current_course)
@@ -206,10 +208,13 @@ class Student():
                 days[timeslot['day']].append(timeslot['timeslot'])
         return days
 
-    def malus_points(self):
+    def malus_points(self, schedule):
         """ This method calculates the malus points for the student """
         # Reset malus points to avoid summing dubble malus
         self.init_malus()
+
+        # update the dictionary (later this should be linked to the roster schedule)'
+        self.student_timeslots(schedule)
 
         # find how often student has classes per day
         days = self.__days_in_schedule()

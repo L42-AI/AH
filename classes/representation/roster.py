@@ -14,7 +14,7 @@ class Roster():
 
     def init_student_timeslots(self, student_list):
         for student in student_list:
-            student.student_timeslots(self)
+            student.student_timeslots(self.schedule)
 
     def __merge(self, dict1, dict2):
         return{**dict1, **dict2}
@@ -41,7 +41,7 @@ class Roster():
         for student in student_list:
 
             # Compute the malus
-            student.malus_points()
+            student.malus_points(self.schedule)
 
             # Add to complete malus counter
             self.malus_count += student.malus_count
