@@ -47,10 +47,6 @@ class __HillClimber():
             print(self.best_roster.malus_cause)
         return self.best_roster
 
-class HC_LectureLocate(__HillClimber):
-    def step_method(self, M):
-        M.swap_lecture_empty_room()
-
 class HC_LectureSwap(__HillClimber):
     def step_method(self, M):
         M.swap_random_lessons(True)
