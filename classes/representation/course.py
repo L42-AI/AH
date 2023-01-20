@@ -15,6 +15,7 @@ class Course():
         self.name = data['Vak']
         self.lectures = data['#Hoorcolleges']
         self.enrolled = enrolled
+        self.enrolled_students = set()
 
         # Set the attributes about the tutorials
         self.tutorials = data['#Werkcolleges']

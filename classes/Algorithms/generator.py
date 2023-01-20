@@ -257,7 +257,7 @@ class Generator():
         start = time.time()
         start_cost = self.Roster.malus_count
         for i in range(10):
-            for _ in range(5):
+            for _ in range(25):
                 i = random.randint(0,5)
                 if i == 0:
                     HC1 = HillCLimberClass.HC_StudentSwap(self.Roster, self.df, self.course_list, self.student_list)
@@ -278,7 +278,7 @@ class Generator():
                 else:
                     HC5 = HillCLimberClass.HC_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
                     self.Roster = HC5.climb()
-
+                
         finish = time.time()
         final_cost = self.Roster.malus_count
         print('100 iters')
