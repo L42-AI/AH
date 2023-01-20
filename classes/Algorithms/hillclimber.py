@@ -34,8 +34,9 @@ class __HillClimber():
 
                 M = MutateClass.Mutate(self.df, self.course_list, self.student_list, self.current_roster)
                 self.step_method(M)
-
+                self.current_roster.init_student_timeslots(self.student_list)
                 # calculate the maluspoints
+                self.current_roster.init_student_timeslots(self.current_roster.student_list)
                 self.current_roster.total_malus(self.student_list)
                 self.current_malus_points = self.current_roster.malus_count
 
@@ -44,7 +45,6 @@ class __HillClimber():
                     self.best_malus_score = self.current_malus_points
                     self.get_name()
 
-            self.roster_list.append(self.best_roster)
             print(self.best_roster.malus_cause)
         return self.best_roster
 
