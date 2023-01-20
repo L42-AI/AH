@@ -231,57 +231,57 @@ class Mutate():
         self.Roster.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
         self.Roster.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
 
-    def __pract_or_tut(self):
-        picked = False
-        while not picked:
-            # pick random if tut or pract should be switched
-            tut_or_pract = ['tut', 'pract']
+    # def __pract_or_tut(self):
+    #     picked = False
+    #     while not picked:
+    #         # pick random if tut or pract should be switched
+    #         tut_or_pract = ['tut', 'pract']
 
-            class_type = random.choice(tut_or_pract)
+    #         class_type = random.choice(tut_or_pract)
 
-            # pick a random course that should switch
-            course = random.choice(self.switch_student.courses)
+    #         # pick a random course that should switch
+    #         course = random.choice(self.switch_student.courses)
 
-            if course.tutorials > 0 and class_type == 'tut':
-                picked = True
-            if course.practica > 0 and class_type == 'pract':
-                picked = True
-        return course, class_type
+    #         if course.tutorials > 0 and class_type == 'tut':
+    #             picked = True
+    #         if course.practica > 0 and class_type == 'pract':
+    #             picked = True
+    #     return course, class_type
 
-    def __type_detect(self, class_type, course):
+    # def __type_detect(self, class_type, course):
 
-        if class_type == 'tut':
-            course_group_type = course.tut_group_dict
-            student_group = self.switch_student.tut_group[course.name]
-        else:
-            course_group_type = course.pract_group_dict
-            student_group = self.switch_student.pract_group[course.name]
-        return course_group_type, student_group
+    #     if class_type == 'tut':
+    #         course_group_type = course.tut_group_dict
+    #         student_group = self.switch_student.tut_group[course.name]
+    #     else:
+    #         course_group_type = course.pract_group_dict
+    #         student_group = self.switch_student.pract_group[course.name]
+    #     return course_group_type, student_group
 
-    def __pract_or_tut(self):
-        picked = False
-        while not picked:
-            # pick random if tut or pract should be switched
-            tut_or_pract = ['tut', 'pract']
+    # def __pract_or_tut(self):
+    #     picked = False
+    #     while not picked:
+    #         # pick random if tut or pract should be switched
+    #         tut_or_pract = ['tut', 'pract']
 
-            class_type = random.choice(tut_or_pract)
+    #         class_type = random.choice(tut_or_pract)
             
 
-            # pick a random course that should switch
-            course = random.choice(self.switch_student.courses)
+    #         # pick a random course that should switch
+    #         course = random.choice(self.switch_student.courses)
 
-            if course.tutorials > 0 and class_type == 'tut':
-                picked = True
-            if course.practica > 0 and class_type == 'pract':
-                picked = True
-        return course, class_type
+    #         if course.tutorials > 0 and class_type == 'tut':
+    #             picked = True
+    #         if course.practica > 0 and class_type == 'pract':
+    #             picked = True
+    #     return course, class_type
 
-    def __type_detect(self, class_type, course):
+    # def __type_detect(self, class_type, course):
 
-        if class_type == 'tut':
-            course_group_type = course.tut_group_dict
-            student_group = self.switch_student.tut_group[course.name]
-        else:
-            course_group_type = course.pract_group_dict
-            student_group = self.switch_student.pract_group[course.name]
-        return course_group_type, student_group
+    #     if class_type == 'tut':
+    #         course_group_type = course.tut_group_dict
+    #         student_group = self.switch_student.tut_group[course.name]
+    #     else:
+    #         course_group_type = course.pract_group_dict
+    #         student_group = self.switch_student.pract_group[course.name]
+    #     return course_group_type, student_group
