@@ -3,14 +3,13 @@
 import random
 
 class Roster():
-    def __init__(self, rooms_list, student_list, course_list):
+    def __init__(self, rooms_list, student_list, course_list, capacity=False):
         self.schedule = {}
         self.rooms_list = rooms_list
         self.student_list = student_list
         self.course_list = course_list
 
-        self.lecture_fill_preference = -10
-        self.class_fill_preference = -5
+        self.CAPACITY = capacity
 
         # shuffle the list of room object for the random initialze
         random.shuffle(self.rooms_list)
@@ -49,6 +48,7 @@ class Roster():
             self.malus_count += student.malus_count
 
             # Add to complete malus counter
+           
             self.malus_cause['Classes Gap'] += student.malus_cause['Classes Gap']
             self.malus_cause['Dubble Classes'] += student.malus_cause['Dubble Classes']
 
@@ -93,9 +93,10 @@ class Roster():
         if course.name not in self.schedule:
             self.schedule[course.name] = {}
 
+        i = 0 
         succes = False
         while not succes:
-
+            i += 1
             # Generate a random room, day and timeslot:
             room = random.choice(self.rooms_list)
             day = random.choice(list(room.availability.keys()))
@@ -103,6 +104,14 @@ class Roster():
 
             # If timeslot is available
             if room.availability[day][timeslot]:
+
+                # first try with specific room for the type of class
+                if self.CAPACITY:
+                    if i < 20:
+                        if class_type == 'lecture' and room.id == 'A1.08' or room.id == 'A1.06':
+                            continue
+                        if class_type != 'lecture' and room.id == 'C0.110' or room.id == 'C0.112':
+                            continue
 
                 self.schedule[course.name][f'{class_type} {count}'] = {}
                 clas_number = f"{class_type} {count}"

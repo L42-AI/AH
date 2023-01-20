@@ -27,9 +27,6 @@ class __HillClimber():
         self.roster_list.append(self.best_roster)
 
         for _ in range(1):
-            self.rosters = []
-            
-
             for _ in range(50):
 
                 # make a deep copy, initiate the swapper with the right roster and change that roster
@@ -41,9 +38,11 @@ class __HillClimber():
                 # calculate the maluspoints
                 self.current_roster.total_malus(self.student_list)
                 self.current_malus_points = self.current_roster.malus_count
-                self.rosters.append(self.current_roster)
 
-            self.replace_roster(T)
+                if self.best_malus_score > self.current_malus_points:
+                    self.best_roster = self.current_roster
+                    self.best_malus_score = self.current_malus_points
+                    self.get_name()
 
             self.roster_list.append(self.best_roster)
             print(self.best_roster.malus_cause)
@@ -111,7 +110,7 @@ class SA_LectureSwap(Simulated_Annealing):
 
 class SA_StudentSwap(Simulated_Annealing):
     def step_method(self, M):
-        M.swap_2_students()
+        M.swap_worst_student()
 
 class SA_StudentSwapRandom(Simulated_Annealing):
     def step_method(self, M):
