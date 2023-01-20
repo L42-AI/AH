@@ -202,6 +202,73 @@ class Mutate():
         self.Roster.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
         self.Roster.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
 
+    def swap_worst_student(self):
+        '''method finds the student with the worst score and swaps either its pract or tut group
+           if it wants to place a student in a group that is full, it will swap it with the student
+           in that group that has the worst score'''
+
+        # find students with highest malus
+        self.switch_student = self.__find_worst_student()
+
+        # pick randomly one of the worst students
+        self.switch_student = random.choice(self.switch_student)
+
+
+        # pick a tutorial or practical to switch
+        course, class_type = self.__pract_or_tut()
+
+        # if there is no tut or practical, you cannot switch
+        if class_type == None:
+            return
+
+        # check if tut or pract group is needed
+        course_group_type, student_group = self.__type_detect(class_type, course)
+
+        # pick a group to switch to
+        groups = list(course_group_type.keys())
+
+        # if there is only one group, you cannot switch
+        if len(groups) == 1:
+            return
+
+        group_to_switch_to = random.choice(groups)
+
+        # check if student is not already in it
+        if group_to_switch_to != student_group:
+
+            # check if there is room, given the type of the class
+            if course_group_type[group_to_switch_to] < course.max_std and class_type == 'tut':
+                course_group_type[group_to_switch_to] += 1
+                course_group_type[student_group] -= 1
+                self.switch_student.tut_group[course.name] = group_to_switch_to
+                self.switch_student.student_timeslots(self.Roster)
+                
+            elif course_group_type[group_to_switch_to] < course.max_std_practical and class_type == 'pract':
+                course_group_type[group_to_switch_to] += 1
+                course_group_type[student_group] -= 1
+                self.switch_student.pract_group[course.name] = group_to_switch_to
+                self.switch_student.student_timeslots(self.Roster)
+                
+            # swap with a student if its full
+            elif course_group_type[group_to_switch_to] == course.max_std and class_type == 'tut':
+
+                # if full, swap with the worst student in the group
+                students_in_group = [student for student in course.enrolled_students if student.tut_group[course.name] == group_to_switch_to]
+                self.worst_student = min(students_in_group, key=lambda x: x.malus_count)
+                self.worst_student.tut_group[course.name] = student_group
+                self.switch_student.tut_group[course.name] = group_to_switch_to
+                self.switch_student.student_timeslots(self.Roster)
+                self.worst_student.student_timeslots(self.Roster)
+            else:
+                # if full, swap with the worst student in the group
+                students_in_group = [student for student in course.enrolled_students if student.pract_group[course.name] == group_to_switch_to]
+                self.worst_student = min(students_in_group, key=lambda x: x.malus_count)
+
+                self.worst_student.pract_group[course.name] = student_group
+                self.switch_student.pract_group[course.name] = group_to_switch_to
+                self.switch_student.student_timeslots(self.Roster)
+                self.worst_student.student_timeslots(self.Roster)
+
     def swap_random_lessons(self, empty):
 
         # check if you want to swap with an empty room or not
@@ -245,7 +312,7 @@ class Mutate():
 
             if course.tutorials > 0 and class_type == 'tut':
                 picked = True
-            if course.practica > 0 and class_type == 'pract':
+            if course.practicals > 0 and class_type == 'pract':
                 picked = True
         return course, class_type
 
@@ -273,8 +340,10 @@ class Mutate():
 
             if course.tutorials > 0 and class_type == 'tut':
                 picked = True
-            if course.practica > 0 and class_type == 'pract':
+            elif course.practicals > 0 and class_type == 'pract':
                 picked = True
+            else:
+                return [], None
         return course, class_type
 
     def __type_detect(self, class_type, course):
