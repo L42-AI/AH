@@ -316,6 +316,12 @@ class Mutate():
         self.Roster.schedule['No course'][random_empty_room] = dict(zip(dict_random, dict_switch.values()))
 
     def swap_lessons(self, lesson_type, empty):
+        """
+        This function swaps two of the same lesson_type with the help of two input variables. 
+        Lesson type is a string of they type of lesson for example tutorial.
+        The second variable is a boolean whether you want to swap with an empty room or not. If empty is set to Fals
+        you swap the lesson with a random other lesson. If it is True you swap with an empty room.
+        """
 
         # check if you swap with an empty room or another course
         if empty:
@@ -337,6 +343,34 @@ class Mutate():
         all_lessons_random_1 = [key for key in self.Roster.schedule[random_course_1.name].keys() if lesson_type in key]
 
         # choose a random lecture of that course
+        lesson_1 = random.choice(all_lessons_random_1)
+        lesson_2 = random.choice(all_lessons_random_2)
+
+        # define in order to be easier to read and to be able to switch keys and values of the dict
+        dict_1 = self.Roster.schedule[random_course_1.name][lesson_1]
+        dict_2 = self.Roster.schedule[course_two][lesson_2]
+
+        # switch the times in the schedule roster
+        self.Roster.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
+        self.Roster.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
+
+    def swap_random_lessons(self, empty):
+
+        if empty:
+            random_course_1 = random.choice(self.course_list)
+            all_lessons_random_2 = [key for key in self.Roster.schedule['No course'].keys()]
+
+            course_two = 'No course'
+
+        else:
+            random_course_1, random_course_2 = random.sample(self.course_list, 2)
+            all_lessons_random_2 = list(self.Roster.schedule[random_course_2.name].keys())
+
+            course_two = random_course_2.name
+
+
+        all_lessons_random_1 = list(self.Roster.schedule[random_course_1.name].keys())
+
         lesson_1 = random.choice(all_lessons_random_1)
         lesson_2 = random.choice(all_lessons_random_2)
 
