@@ -24,6 +24,9 @@ class __HillClimber():
         self.roster_list.append(self.best_roster)
 
         for _ in range(1):
+            self.rosters = []
+            
+
             for _ in range(50):
 
                 # make a deep copy, initiate the swapper with the right roster and change that roster
@@ -35,18 +38,20 @@ class __HillClimber():
                 # calculate the maluspoints
                 self.current_roster.total_malus(self.student_list)
                 self.current_malus_points = self.current_roster.malus_count
+                self.rosters.append(self.current_roster)
 
-                self.replace_roster(T)
+            self.replace_roster(T)
 
             self.roster_list.append(self.best_roster)
             print(self.best_roster.malus_cause)
         return self.best_roster
 
     def replace_roster(self, T=None):
+        self.current_best_roster = min(self.rosters, key=lambda x: x.malus_count)
 
-            if self.best_malus_score > self.current_malus_points:
-                self.best_roster = self.current_roster
-                self.best_malus_score = self.current_malus_points
+        if self.best_malus_score > self.current_best_roster.malus_count:
+            self.best_roster = self.current_best_roster
+
             
 class HC_LectureLocate(__HillClimber):
     def step_method(self, M):
