@@ -31,7 +31,7 @@ class Course():
         self.tut_group_dict = {}
         self.pract_group_dict = {}
 
-        # Run initializing functions
+        # Run initializing function 
         self.rooms_needed()
         self.group_dict()
         

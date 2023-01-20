@@ -11,13 +11,9 @@ class Roster():
 
         self.CAPACITY = capacity
 
-        # shuffle the list of room object for the random initialze
-        random.shuffle(self.rooms_list)
-
-
     def init_student_timeslots(self, student_list):
         for student in student_list:
-            student.student_timeslots(self)
+            student.student_timeslots(self.schedule)
 
     def __merge(self, dict1, dict2):
         return{**dict1, **dict2}
@@ -28,6 +24,8 @@ class Roster():
         self.malus_cause['Night'] = 0
         self.malus_cause['Capacity'] = 0
 
+        # you can call this somewhere apart so that it doesnt get merged every single iteration of total malus,
+        # then set everything to 0
         student_malus_cause = {'Classes Gap': 0, 'Dubble Classes': 0}
         self.malus_cause = self.__merge(self.malus_cause, student_malus_cause)
 
@@ -42,7 +40,7 @@ class Roster():
         for student in student_list:
 
             # Compute the malus
-            student.malus_points()
+            student.malus_points(self.schedule)
 
             # Add to complete malus counter
             self.malus_count += student.malus_count

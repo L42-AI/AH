@@ -17,10 +17,9 @@ class Mutate():
         return worst_student
 
     def __find_random_student(self):
-        """ This function returns the N worst students in terms of malus points """
+        """ This function returns a random student from the list students """
 
         return random.choice(self.student_list)
-
 
     def __students_to_shuffle(self, student_list):
         """ This function goes through every student in the input list and shuffels them """
@@ -28,12 +27,8 @@ class Mutate():
         # For each student:
         for student1 in student_list:
 
-            # Find a second student
-            for student2 in student_list:
-
-                # Skip if the same student
-                if student1 == student2:
-                    continue
+            # Find a second student beside the first student
+            for student2 in (s for s in student_list if s != student1):
 
                 # For each course
                 for course in student1.courses:
@@ -164,43 +159,44 @@ class Mutate():
 
         self.__students_to_shuffle_random()
 
-    def swap_lessons(self, lesson_type, empty):
-        """
-        This function swaps two of the same lesson_type with the help of two input variables. 
-        Lesson type is a string of they type of lesson for example tutorial.
-        The second variable is a boolean whether you want to swap with an empty room or not. If empty is set to Fals
-        you swap the lesson with a random other lesson. If it is True you swap with an empty room.
-        """
+    # def swap_lessons(self, lesson_type, empty):
+    #     """
+    #     This function swaps two of the same lesson_type with the help of two input variables. 
+    #     Lesson type is a string of they type of lesson for example tutorial.
+    #     The second variable is a boolean whether you want to swap with an empty room or not. If empty is set to Fals
+    #     you swap the lesson with a random other lesson. If it is True you swap with an empty room.
+    #     """
 
-        # check if you swap with an empty room or another course
-        if empty:
-            # pick a random course that does have one or more lessons of said type
-            random_course_1 = random.choice([c for c in self.course_list if getattr(c, f'{lesson_type}s') > 0])
+    #     # check if you swap with an empty room or another course
+    #     if empty:
+    #         # pick a random course that does have one or more lessons of said type
+    #         random_course_1 = random.choice([c for c in self.course_list if getattr(c, f'{lesson_type}s') > 0])
             
-            all_lessons_random_2 = [key for key in self.Roster.schedule['No course'].keys()]
+    #         all_lessons_random_2 = [key for key in self.Roster.schedule['No course'].keys()]
 
-            course_two = 'No course'
+    #         course_two = 'No course'
         
-        else:
-            # pick random lesson that has at leas one of the lesson type
-            random_course_1, random_course_2 = random.sample([c for c in self.course_list if getattr(c, f'{lesson_type}s') > 0], 2)
-            all_lessons_random_2 = [key for key in self.Roster.schedule[random_course_2.name].keys() if lesson_type in key]
-            course_two = random_course_2.name
+    #     else:
+    #         # pick random lesson that has at leas one of the lesson type
+    #         random_course_1, random_course_2 = random.sample([c for c in self.course_list if getattr(c, f'{lesson_type}s') > 0], 2)
+    #         all_lessons_random_2 = [key for key in self.Roster.schedule[random_course_2.name].keys() if lesson_type in key]
+    #         course_two = random_course_2.name
         
         # get all the tutorials in the course and get all the empty rooms
         all_lessons_random_1 = [key for key in self.Roster.schedule[random_course_1.name].keys() if lesson_type in key]
 
-        # choose a random lecture of that course
-        lesson_1 = random.choice(all_lessons_random_1)
-        lesson_2 = random.choice(all_lessons_random_2)
+    #     # choose a random lecture of that course
+    #     lesson_1 = random.choice(all_lessons_random_1)
+    #     lesson_2 = random.choice(all_lessons_random_2)
 
-        # define in order to be easier to read and to be able to switch keys and values of the dict
-        dict_1 = self.Roster.schedule[random_course_1.name][lesson_1]
-        dict_2 = self.Roster.schedule[course_two][lesson_2]
+    #     # define in order to be easier to read and to be able to switch keys and values of the dict
+    #     dict_1 = self.Roster.schedule[random_course_1.name][lesson_1]
+    #     dict_2 = self.Roster.schedule[course_two][lesson_2]
 
-        # switch the times in the schedule roster
-        self.Roster.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
-        self.Roster.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
+                self.worst_student.pract_group[course.name] = student_group
+                self.switch_student.pract_group[course.name] = group_to_switch_to
+                self.switch_student.student_timeslots(self.Roster)
+                self.worst_student.student_timeslots(self.Roster)
 
     def swap_worst_student(self):
         '''method finds the student with the worst score and swaps either its pract or tut group
@@ -299,16 +295,16 @@ class Mutate():
         self.Roster.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
         self.Roster.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
 
-    def __pract_or_tut(self):
-        picked = False
-        while not picked:
-            # pick random if tut or pract should be switched
-            tut_or_pract = ['tut', 'pract']
+    # def __pract_or_tut(self):
+    #     picked = False
+    #     while not picked:
+    #         # pick random if tut or pract should be switched
+    #         tut_or_pract = ['tut', 'pract']
 
-            class_type = random.choice(tut_or_pract)
+    #         class_type = random.choice(tut_or_pract)
 
-            # pick a random course that should switch
-            course = random.choice(self.switch_student.courses)
+    #         # pick a random course that should switch
+    #         course = random.choice(self.switch_student.courses)
 
             if course.tutorials > 0 and class_type == 'tut':
                 picked = True
@@ -316,27 +312,27 @@ class Mutate():
                 picked = True
         return course, class_type
 
-    def __type_detect(self, class_type, course):
+    # def __type_detect(self, class_type, course):
 
-        if class_type == 'tut':
-            course_group_type = course.tut_group_dict
-            student_group = self.switch_student.tut_group[course.name]
-        else:
-            course_group_type = course.pract_group_dict
-            student_group = self.switch_student.pract_group[course.name]
-        return course_group_type, student_group
+    #     if class_type == 'tut':
+    #         course_group_type = course.tut_group_dict
+    #         student_group = self.switch_student.tut_group[course.name]
+    #     else:
+    #         course_group_type = course.pract_group_dict
+    #         student_group = self.switch_student.pract_group[course.name]
+    #     return course_group_type, student_group
 
-    def __pract_or_tut(self):
-        picked = False
-        while not picked:
-            # pick random if tut or pract should be switched
-            tut_or_pract = ['tut', 'pract']
+    # def __pract_or_tut(self):
+    #     picked = False
+    #     while not picked:
+    #         # pick random if tut or pract should be switched
+    #         tut_or_pract = ['tut', 'pract']
 
-            class_type = random.choice(tut_or_pract)
+    #         class_type = random.choice(tut_or_pract)
             
 
-            # pick a random course that should switch
-            course = random.choice(self.switch_student.courses)
+    #         # pick a random course that should switch
+    #         course = random.choice(self.switch_student.courses)
 
             if course.tutorials > 0 and class_type == 'tut':
                 picked = True
@@ -346,15 +342,19 @@ class Mutate():
                 return [], None
         return course, class_type
 
-    def __type_detect(self, class_type, course):
+    # def __type_detect(self, class_type, course):
 
-        if class_type == 'tut':
-            course_group_type = course.tut_group_dict
-            student_group = self.switch_student.tut_group[course.name]
-        else:
-            course_group_type = course.pract_group_dict
-            student_group = self.switch_student.pract_group[course.name]
-        return course_group_type, student_group
+    #     if class_type == 'tut':
+    #         course_group_type = course.tut_group_dict
+    #         student_group = self.switch_student.tut_group[course.name]
+    #     else:
+    #         course_group_type = course.pract_group_dict
+    #         student_group = self.switch_student.pract_group[course.name]
+    #     return course_group_type, student_group
+
+    def swap_timeslots(self):
+        worst_student = self.__find_worst_student()
+
 
     def swap_timeslots(self):
         worst_student = self.__find_worst_student()
