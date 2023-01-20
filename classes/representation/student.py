@@ -207,7 +207,7 @@ class Student():
         return days
 
     def malus_points(self):
-        """ This method calculates the malus points point for the student """
+        """ This method calculates the malus points for the student """
         # Reset malus points to avoid summing dubble malus
         self.init_malus()
 
@@ -239,16 +239,22 @@ class Student():
                     else:
                         timeslots_double_classes.append(timeslot_list[timeslot_num])
 
-                    # some cases, double booking might be allowed, but we do not want to add 2 malus
+                    # claculate the amount of gaps between lessons
                     if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
-                        malus = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
-                        self.malus_cause['Classes Gap'] += malus
-                        self.malus_count += malus
+                        lesson_gaps = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
+                        
+                        # check if one gap hour
+                        if lesson_gaps == 1:
+                            self.malus_cause['Classes Gap'] += 1
+                            self.malus_count += 1
 
-                    else:
-                        self.malus_cause['Classes Gap'] += 1
-                        self.malus_count += 1
+                        elif lesson_gaps == 2:
+                            self.malus_cause['Classes Gap'] += 3
+                            self.malus_count += 3
 
+                        elif lesson_gaps > 2:
+                            self.malus_cause['Classes Gap'] += 1000
+                            self.malus_count += 1000
 
     def compute_malus(self, Roster):
         """ Run required functions to compute student malus """

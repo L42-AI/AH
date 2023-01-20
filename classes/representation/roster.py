@@ -12,10 +12,6 @@ class Roster():
         self.lecture_fill_preference = -10
         self.class_fill_preference = -5
 
-        # shuffle the list of room object for the random initialze
-        random.shuffle(self.rooms_list)
-
-
     def init_student_timeslots(self, student_list):
         for student in student_list:
             student.student_timeslots(self)
@@ -29,6 +25,8 @@ class Roster():
         self.malus_cause['Night'] = 0
         self.malus_cause['Capacity'] = 0
 
+        # you can call this somewhere apart so that it doesnt get merged every single iteration of total malus,
+        # then set everything to 0
         student_malus_cause = {'Classes Gap': 0, 'Dubble Classes': 0}
         self.malus_cause = self.__merge(self.malus_cause, student_malus_cause)
 
