@@ -33,9 +33,16 @@ class Course():
         # Run initializing functions
         self.rooms_needed()
         self.group_dict()
+        
 
     def __str__(self):
         return f"{self.name}"
+
+    def enroll_students(self, student_list):
+        for student in student_list:
+            for course in student.courses:
+                if course.name == self.name:
+                    self.enrolled_students.add(student)
 
     def rooms_needed(self):
 

@@ -20,33 +20,30 @@ class Student():
         self.courses_names = [course for course in data[3:] if str(course) != 'nan']
 
         # Create the list of which course objects
-        self.courses = []
-        self.add_courses(courses)
+        self.init_courses(courses)
 
         # Make dictionaries for practicum and tutorial groups
-        self.tut_group = {}
-        self.pract_group = {}
         self.select_groups()
 
         # Make list of timeslots
         self.timeslots = {}
 
-        self.malus_count = 0
-
-        # Set malus point dict
-        self.malus_cause = {}
+        # Initiate malus
         self.init_malus()
 
     # def __str__(self):
     #     return f"{self.f_name} {self.l_name}"
 
     def init_malus(self):
+        self.malus_count = 0
+        self.malus_cause = {}
         self.malus_cause['Classes Gap'] = 0
         self.malus_cause['Dubble Classes'] = 0
-        self.malus_count = 0
 
-    def add_courses(self, courses):
+    def init_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
+
+        self.courses = []
 
         # For each course:
         for name in self.courses_names:
@@ -109,6 +106,9 @@ class Student():
 
     def select_groups(self):
         """ This function selects groups of tutorial and practical for each course """
+
+        self.tut_group = {}
+        self.pract_group = {}
 
         # For each course
         for course in self.courses:
@@ -208,7 +208,6 @@ class Student():
 
     def malus_points(self):
         """ This method calculates the malus points point for the student """
-
         # Reset malus points to avoid summing dubble malus
         self.init_malus()
 

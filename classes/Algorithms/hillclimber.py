@@ -2,57 +2,67 @@ import classes.Algorithms.mutate as MutateClass
 
 import copy
 
-class HillClimber():
-    def __init__(self, malus_points, Roster, df, course_list, student_list, room_list):
+class __HillClimber():
+    def __init__(self, Roster, df, course_list, student_list):
         self.roster_list = []
+        self.course_list = course_list
+        self.student_list = student_list
+        self.df = df
+        self.Roster = Roster
+
+    def step_method(self, M):
         pass
 
-    def set_roster(self, Roster):
+    def climb(self):
+
         # set best roster and malus score
-        best_roster = Roster
-        best_malus_score = best_roster.malus_count
+        self.best_roster = self.Roster
+        self.best_malus_score = self.best_roster.malus_count
 
         # append the original roster
-        self.roster_list.append(best_roster)
+        self.roster_list.append(self.best_roster)
 
+        for _ in range(1):
+            for _ in range(50):
 
-def hill_climber(df, malus_points, course_list, student_list, rooms, Roster):
+                # make a deep copy, initiate the swapper with the right roster and change that roster
+                self.current_roster = copy.deepcopy(self.best_roster)
 
-    # list with the original and the path of the improved roster objects
-    roster_list = []
+                M = MutateClass.Mutate(self.df, self.course_list, self.student_list, self.current_roster)
+                self.step_method(M)
 
-    # set best roster and malus score
-    best_roster = Roster
-    best_malus_score = best_roster.malus_count
+                # calculate the maluspoints
+                self.current_roster.total_malus(self.student_list)
+                self.current_malus_points = self.current_roster.malus_count
 
-    # append the original roster
-    roster_list.append(best_roster)
+                if self.best_malus_score > self.current_malus_points:
+                    self.best_roster = self.current_roster
+                    self.best_malus_score = self.current_malus_points
 
-    # list with all the different changes we want to use
-    # list_changes = [swap_lecture_empty_room, swap_2_lectures, swap_2_students]
+            self.roster_list.append(self.best_roster)
+            print(self.best_roster.malus_cause)
+        return self.best_roster
 
-    for i in range(300):
+class HC_LectureLocate(__HillClimber):
+    def step_method(self, M):
+        M.swap_lecture_empty_room()
 
-        # make 50 changes to the roster
-        for j in range(50):
+class HC_LectureSwap(__HillClimber):
+    def step_method(self, M):
+        M.swap_2_lectures()
 
-            # make a deep copy, initiate the swapper with the right roster and change that roster
-            current_roster = copy.deepcopy(best_roster)
-            M = MutateClass.Mutate(df, course_list, student_list, current_roster)
-            M.swap_lecture_empty_room()
+class HC_StudentSwap(__HillClimber):
+    def step_method(self, M):
+        M.swap_2_students()
 
-            # calculate the maluspoints
-            current_roster.total_malus(student_list)
-            current_malus_points = current_roster.malus_count
+class HC_StudentSwapRandom(__HillClimber):
+    def step_method(self, M):
+        M.swap_2_students_random()
 
-            # if the malus points are lower then the previous lowest malus points set the best to the new object
-            if best_malus_score > current_malus_points:
-                best_roster = current_roster
-                best_malus_score = current_malus_points
+class HC_StudentSwitch(__HillClimber):
+    def step_method(self, M):
+        M.change_student_group()
 
-        # append the new best roster
-        roster_list.append(best_roster)
-        print(best_malus_score)
-
-if __name__ == '__main__':
-    hill_climber(df, malus_points, course_list, student_list, rooms, Roster)
+# class HC_WorstStudentRandomGroup(__HillClimber):
+#     def step_method(self, M):
+#         M.swap_worst_student()
