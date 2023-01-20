@@ -167,11 +167,13 @@ class Student():
 
                 self.timeslots[course.name][current_practicum] = timeslot_dict
 
-    def student_timeslots(self, Roster):
+    def student_timeslots(self, schedule):
         """ 
         This method adds the timeslots for classes per week. 
         The dictionary timeslots is linked to the Roster schedule.
         """
+
+        # print(schedule.schedule)
 
         # For each course:
         for course in self.courses:
@@ -179,7 +181,7 @@ class Student():
             self.timeslots[course.name] = {}
 
             # Set the current course dict
-            current_course = Roster.schedule[course.name]
+            current_course = schedule[course.name]
 
             # Find and save the lecture timeslot
             self.__lecture_timeslot(course, current_course)
@@ -206,10 +208,13 @@ class Student():
                 days[timeslot['day']].append(timeslot['timeslot'])
         return days
 
-    def malus_points(self):
-        """ This method calculates the malus points point for the student """
+    def malus_points(self, schedule):
+        """ This method calculates the malus points for the student """
         # Reset malus points to avoid summing dubble malus
         self.init_malus()
+
+        # update the dictionary (later this should be linked to the roster schedule)'
+        self.student_timeslots(schedule)
 
         # find how often student has classes per day
         days = self.__days_in_schedule()
@@ -239,16 +244,22 @@ class Student():
                     else:
                         timeslots_double_classes.append(timeslot_list[timeslot_num])
 
-                    # some cases, double booking might be allowed, but we do not want to add 2 malus
+                    # claculate the amount of gaps between lessons
                     if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
-                        malus = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
-                        self.malus_cause['Classes Gap'] += malus
-                        self.malus_count += malus
+                        lesson_gaps = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
+                        
+                        # check if one gap hour
+                        if lesson_gaps == 1:
+                            self.malus_cause['Classes Gap'] += 1
+                            self.malus_count += 1
 
-                    else:
-                        self.malus_cause['Classes Gap'] += 1
-                        self.malus_count += 1
+                        elif lesson_gaps == 2:
+                            self.malus_cause['Classes Gap'] += 3
+                            self.malus_count += 3
 
+                        elif lesson_gaps > 2:
+                            self.malus_cause['Classes Gap'] += 1000
+                            self.malus_count += 1000
 
     def compute_malus(self, Roster):
         """ Run required functions to compute student malus """
