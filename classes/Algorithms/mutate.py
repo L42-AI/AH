@@ -21,7 +21,6 @@ class Mutate():
 
         return random.choice(self.student_list)
 
-
     def __students_to_shuffle(self, student_list):
         """ This function goes through every student in the input list and shuffels them """
 
