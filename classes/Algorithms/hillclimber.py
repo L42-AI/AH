@@ -35,7 +35,11 @@ class __HillClimber():
                 M = MutateClass.Mutate(self.df, self.course_list, self.student_list, self.current_roster)
                 self.step_method(M)
                 self.current_roster.init_student_timeslots(self.student_list)
+                
                 # calculate the maluspoints
+                if self.current_roster.student_list != M.student_list:
+                    print("not the same!")
+                self.current_roster.student_list = M.student_list
                 self.current_roster.init_student_timeslots(self.current_roster.student_list)
                 self.current_roster.total_malus(self.student_list)
                 self.current_malus_points = self.current_roster.malus_count
@@ -83,7 +87,7 @@ class HC_StudentSwitch(__HillClimber):
 
 class HC_WorstStudentRandomGroup(__HillClimber):
     def step_method(self, M):
-        M.swap_worst_student()
+        M.swap_bad_student()
 
 class Simulated_Annealing(__HillClimber):
 

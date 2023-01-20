@@ -46,8 +46,9 @@ class Roster():
             self.malus_count += student.malus_count
 
             # Add to complete malus counter
-           
-            self.malus_cause['Classes Gap'] += student.malus_cause['Classes Gap']
+            for day in student.malus_cause['Classes Gap']:
+
+                self.malus_cause['Classes Gap'] += student.malus_cause['Classes Gap'][day]
             self.malus_cause['Dubble Classes'] += student.malus_cause['Dubble Classes']
 
     def __place_in_schedule(self, room, day, timeslot, course_name, classes):

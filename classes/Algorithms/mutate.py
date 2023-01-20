@@ -198,130 +198,130 @@ class Mutate():
     #             self.switch_student.student_timeslots(self.Roster)
     #             self.worst_student.student_timeslots(self.Roster)
 
-    def swap_worst_student(self):
-        '''method finds the student with the worst score and swaps either its pract or tut group
-           if it wants to place a student in a group that is full, it will swap it with the student
-           in that group that has the worst score'''
+    # def swap_worst_student(self):
+    #     '''method finds the student with the worst score and swaps either its pract or tut group
+    #        if it wants to place a student in a group that is full, it will swap it with the student
+    #        in that group that has the worst score'''
 
-        # find students with highest malus
-        self.switch_student = self.__find_worst_student()
+    #     # find students with highest malus
+    #     self.switch_student = self.__find_worst_student()
 
-        # pick randomly one of the worst students
-        self.switch_student = random.choice(self.switch_student)
+    #     # pick randomly one of the worst students
+    #     self.switch_student = random.choice(self.switch_student)
 
 
-        # pick a tutorial or practical to switch
-        course, class_type = self.__pract_or_tut()
+    #     # pick a tutorial or practical to switch
+    #     course, class_type = self.__pract_or_tut()
 
-        # if there is no tut or practical, you cannot switch
-        if class_type == None:
-            return
+    #     # if there is no tut or practical, you cannot switch
+    #     if class_type == None:
+    #         return
 
-        # check if tut or pract group is needed
-        course_group_type, student_group = self.__type_detect(class_type, course)
+    #     # check if tut or pract group is needed
+    #     course_group_type, student_group = self.__type_detect(class_type, course)
 
-        # pick a group to switch to
-        groups = list(course_group_type.keys())
+    #     # pick a group to switch to
+    #     groups = list(course_group_type.keys())
 
-        # if there is only one group, you cannot switch
-        if len(groups) == 1:
-            return
+    #     # if there is only one group, you cannot switch
+    #     if len(groups) == 1:
+    #         return
 
-        group_to_switch_to = random.choice(groups)
+    #     group_to_switch_to = random.choice(groups)
 
-        # check if student is not already in it
-        if group_to_switch_to != student_group:
+    #     # check if student is not already in it
+    #     if group_to_switch_to != student_group:
 
-            # check if there is room, given the type of the class
-            if course_group_type[group_to_switch_to] < course.max_std and class_type == 'tut':
-                course_group_type[group_to_switch_to] += 1
-                course_group_type[student_group] -= 1
-                for student in self.student_list:
+    #         # check if there is room, given the type of the class
+    #         if course_group_type[group_to_switch_to] < course.max_std and class_type == 'tut':
+    #             course_group_type[group_to_switch_to] += 1
+    #             course_group_type[student_group] -= 1
+    #             for student in self.student_list:
             
-                    if course in student.courses:
-                        if student.tut_group[course.name] == group_to_switch_to:
-                            self.worst_student = student
-                            continue
+    #                 if course in student.courses:
+    #                     if student.tut_group[course.name] == group_to_switch_to:
+    #                         self.worst_student = student
+    #                         continue
 
-                self.switch_student.tut_group[course.name] = group_to_switch_to
+    #             self.switch_student.tut_group[course.name] = group_to_switch_to
 
-                # Get the value of f'practical {group_to_switch_to}' in self.worst_student's timeslots dictionary
-                practical_group_to_switch_to_value = self.worst_student.timeslots[course.name][f'tutorial {group_to_switch_to}']
+    #             # Get the value of f'practical {group_to_switch_to}' in self.worst_student's timeslots dictionary
+    #             practical_group_to_switch_to_value = self.worst_student.timeslots[course.name][f'tutorial {group_to_switch_to}']
 
-                # Remove the key f'practical {student_group}' from self.switch_student's timeslots dictionary
-                del self.switch_student.timeslots[course.name][f'tutorial {student_group}']
+    #             # Remove the key f'practical {student_group}' from self.switch_student's timeslots dictionary
+    #             del self.switch_student.timeslots[course.name][f'tutorial {student_group}']
 
-                # Add the key f'practical {student_group}' with the value of f'practical {group_to_switch_to}' in self.switch_student's timeslots dictionary
-                self.switch_student.timeslots[course.name][f'tutorial {group_to_switch_to}'] = practical_group_to_switch_to_value
+    #             # Add the key f'practical {student_group}' with the value of f'practical {group_to_switch_to}' in self.switch_student's timeslots dictionary
+    #             self.switch_student.timeslots[course.name][f'tutorial {group_to_switch_to}'] = practical_group_to_switch_to_value
                 
-            elif course_group_type[group_to_switch_to] < course.max_std_practical and class_type == 'pract':
-                course_group_type[group_to_switch_to] += 1
-                course_group_type[student_group] -= 1
-                for student in self.student_list:
-                    if course in student.courses:
-                        if student.pract_group[course.name] == group_to_switch_to:
-                            self.worst_student = student
-                            continue
-                self.switch_student.pract_group[course.name] = group_to_switch_to
+    #         elif course_group_type[group_to_switch_to] < course.max_std_practical and class_type == 'pract':
+    #             course_group_type[group_to_switch_to] += 1
+    #             course_group_type[student_group] -= 1
+    #             for student in self.student_list:
+    #                 if course in student.courses:
+    #                     if student.pract_group[course.name] == group_to_switch_to:
+    #                         self.worst_student = student
+    #                         continue
+    #             self.switch_student.pract_group[course.name] = group_to_switch_to
 
-                # Get the value of f'practical {group_to_switch_to}' in self.worst_student's timeslots dictionary
-                practical_group_to_switch_to_value = self.worst_student.timeslots[course.name][f'practical {group_to_switch_to}']
+    #             # Get the value of f'practical {group_to_switch_to}' in self.worst_student's timeslots dictionary
+    #             practical_group_to_switch_to_value = self.worst_student.timeslots[course.name][f'practical {group_to_switch_to}']
 
-                # Remove the key f'practical {student_group}' from self.switch_student's timeslots dictionary
-                del self.switch_student.timeslots[course.name][f'practical {student_group}']
+    #             # Remove the key f'practical {student_group}' from self.switch_student's timeslots dictionary
+    #             del self.switch_student.timeslots[course.name][f'practical {student_group}']
 
-                # Add the key f'practical {student_group}' with the value of f'practical {group_to_switch_to}' in self.switch_student's timeslots dictionary
-                self.switch_student.timeslots[course.name][f'practical {group_to_switch_to}'] = practical_group_to_switch_to_value
+    #             # Add the key f'practical {student_group}' with the value of f'practical {group_to_switch_to}' in self.switch_student's timeslots dictionary
+    #             self.switch_student.timeslots[course.name][f'practical {group_to_switch_to}'] = practical_group_to_switch_to_value
 
-            # swap with a student if its full
-            elif course_group_type[group_to_switch_to] == course.max_std and class_type == 'tut':
+    #         # swap with a student if its full
+    #         elif course_group_type[group_to_switch_to] == course.max_std and class_type == 'tut':
 
-                # if full, swap with the worst student in the group
-                students_in_group = [student for student in course.enrolled_students if student.tut_group[course.name] == group_to_switch_to]
-                self.worst_student = min(students_in_group, key=lambda x: x.malus_count)
+    #             # if full, swap with the worst student in the group
+    #             students_in_group = [student for student in course.enrolled_students if student.tut_group[course.name] == group_to_switch_to]
+    #             self.worst_student = min(students_in_group, key=lambda x: x.malus_count)
                
 
-                self.worst_student.tut_group[course.name] = student_group
-                self.switch_student.tut_group[course.name] = group_to_switch_to
-                self.Roster.init_student_timeslots(self.Roster.student_list)
+    #             self.worst_student.tut_group[course.name] = student_group
+    #             self.switch_student.tut_group[course.name] = group_to_switch_to
+    #             self.Roster.init_student_timeslots(self.Roster.student_list)
 
-                # Get the value of f'practical {student_group}' in self.switch_student's timeslots dictionary
-                practical_student_group_value = self.switch_student.timeslots[course.name][f'tutorial {student_group}']
-                # Get the value of f'practical {group_to_switch_to}' in self.worst_student's timeslots dictionary
-                practical_group_to_switch_to_value = self.worst_student.timeslots[course.name][f'tutorial {group_to_switch_to}']
+    #             # Get the value of f'practical {student_group}' in self.switch_student's timeslots dictionary
+    #             practical_student_group_value = self.switch_student.timeslots[course.name][f'tutorial {student_group}']
+    #             # Get the value of f'practical {group_to_switch_to}' in self.worst_student's timeslots dictionary
+    #             practical_group_to_switch_to_value = self.worst_student.timeslots[course.name][f'tutorial {group_to_switch_to}']
 
-                # Remove the key f'practical {student_group}' from self.switch_student's timeslots dictionary
-                del self.switch_student.timeslots[course.name][f'tutorial {student_group}']
-                # Remove the key f'practical {group_to_switch_to}' from self.worst_student's timeslots dictionary
-                del self.worst_student.timeslots[course.name][f'tutorial {group_to_switch_to}']
+    #             # Remove the key f'practical {student_group}' from self.switch_student's timeslots dictionary
+    #             del self.switch_student.timeslots[course.name][f'tutorial {student_group}']
+    #             # Remove the key f'practical {group_to_switch_to}' from self.worst_student's timeslots dictionary
+    #             del self.worst_student.timeslots[course.name][f'tutorial {group_to_switch_to}']
 
-                # Add the key f'practical {student_group}' with the value of f'practical {group_to_switch_to}' in self.switch_student's timeslots dictionary
-                self.switch_student.timeslots[course.name][f'tutorial {group_to_switch_to}'] = practical_group_to_switch_to_value
-                # Add the key f'practical {group_to_switch_to}' with the value of f'practical {student_group}' in self.worst_student's timeslots dictionary
-                self.worst_student.timeslots[course.name][f'tutorial {student_group}'] = practical_student_group_value
+    #             # Add the key f'practical {student_group}' with the value of f'practical {group_to_switch_to}' in self.switch_student's timeslots dictionary
+    #             self.switch_student.timeslots[course.name][f'tutorial {group_to_switch_to}'] = practical_group_to_switch_to_value
+    #             # Add the key f'practical {group_to_switch_to}' with the value of f'practical {student_group}' in self.worst_student's timeslots dictionary
+    #             self.worst_student.timeslots[course.name][f'tutorial {student_group}'] = practical_student_group_value
         
-            else:
-                # if full, swap with the worst student in the group
-                students_in_group = [student for student in course.enrolled_students if student.pract_group[course.name] == group_to_switch_to]
-                self.worst_student = min(students_in_group, key=lambda x: x.malus_count)
-                self.worst_student.pract_group[course.name] = student_group
-                self.switch_student.pract_group[course.name] = group_to_switch_to
-                self.Roster.init_student_timeslots(self.Roster.student_list)
+    #         else:
+    #             # if full, swap with the worst student in the group
+    #             students_in_group = [student for student in course.enrolled_students if student.pract_group[course.name] == group_to_switch_to]
+    #             self.worst_student = min(students_in_group, key=lambda x: x.malus_count)
+    #             self.worst_student.pract_group[course.name] = student_group
+    #             self.switch_student.pract_group[course.name] = group_to_switch_to
+    #             self.Roster.init_student_timeslots(self.Roster.student_list)
 
-                # Get the value of f'practical {student_group}' in self.switch_student's timeslots dictionary
-                practical_student_group_value = self.switch_student.timeslots[course.name][f'practical {student_group}']
-                # Get the value of f'practical {group_to_switch_to}' in self.worst_student's timeslots dictionary
-                practical_group_to_switch_to_value = self.worst_student.timeslots[course.name][f'practical {group_to_switch_to}']
+    #             # Get the value of f'practical {student_group}' in self.switch_student's timeslots dictionary
+    #             practical_student_group_value = self.switch_student.timeslots[course.name][f'practical {student_group}']
+    #             # Get the value of f'practical {group_to_switch_to}' in self.worst_student's timeslots dictionary
+    #             practical_group_to_switch_to_value = self.worst_student.timeslots[course.name][f'practical {group_to_switch_to}']
 
-                # Remove the key f'practical {student_group}' from self.switch_student's timeslots dictionary
-                del self.switch_student.timeslots[course.name][f'practical {student_group}']
-                # Remove the key f'practical {group_to_switch_to}' from self.worst_student's timeslots dictionary
-                del self.worst_student.timeslots[course.name][f'practical {group_to_switch_to}']
+    #             # Remove the key f'practical {student_group}' from self.switch_student's timeslots dictionary
+    #             del self.switch_student.timeslots[course.name][f'practical {student_group}']
+    #             # Remove the key f'practical {group_to_switch_to}' from self.worst_student's timeslots dictionary
+    #             del self.worst_student.timeslots[course.name][f'practical {group_to_switch_to}']
 
-                # Add the key f'practical {student_group}' with the value of f'practical {group_to_switch_to}' in self.switch_student's timeslots dictionary
-                self.switch_student.timeslots[course.name][f'practical {group_to_switch_to}'] = practical_group_to_switch_to_value
-                # Add the key f'practical {group_to_switch_to}' with the value of f'practical {student_group}' in self.worst_student's timeslots dictionary
-                self.worst_student.timeslots[course.name][f'practical {student_group}'] = practical_student_group_value
+    #             # Add the key f'practical {student_group}' with the value of f'practical {group_to_switch_to}' in self.switch_student's timeslots dictionary
+    #             self.switch_student.timeslots[course.name][f'practical {group_to_switch_to}'] = practical_group_to_switch_to_value
+    #             # Add the key f'practical {group_to_switch_to}' with the value of f'practical {student_group}' in self.worst_student's timeslots dictionary
+    #             self.worst_student.timeslots[course.name][f'practical {student_group}'] = practical_student_group_value
 
     def swap_random_lessons(self, empty):
 
@@ -388,4 +388,131 @@ class Mutate():
 
     def swap_timeslots(self):
         worst_student = self.__find_worst_student()
+
+    def swap_bad_student(self):
+        # find the worst 10 students
+        worst_student = self.__find_random_student()
+     
+        worst_score = 0
+        worst_day = None
+
+        # go over the timeslot and find day with most gap hour
+        for day in worst_student.malus_cause['Classes Gap']:
+            if worst_student.malus_cause['Classes Gap'][day] > worst_score:
+                
+                worst_day = day
+        if worst_day == None:
+            return
+
+        # find classes that day
+        classes = []
+        courses = []
+        for course in worst_student.timeslots:
+            for class_moment in worst_student.timeslots[course]:
+
+                if worst_student.timeslots[course][class_moment]['day'] == worst_day:
+                    # check if it is tut or pract, not a lecture
+                    if class_moment[0] == 't' or class_moment[0] == 'p':
+                        classes.append(class_moment)
+                        courses.append(course)
+        
+        # pick a random class
+        if len(classes) == 0:
+            return
+        class_to_switch = random.choice(classes)
+        course = courses[classes.index(class_to_switch)]
+
+        # get the course object
+        for _course in self.course_list:
+            if _course.name == course:
+                course = _course
+                break
+
+        # check the type of class
+        if class_to_switch[0] == 't':
+
+            if course.tutorial_rooms < 2:
+                return
+
+            picked = False
+            while not picked:
+
+                # pick a group to switch to
+                groups = list(course.tut_group_dict.keys())
+                new_group = random.choice(groups)
+                if new_group != worst_student.tut_group[course.name]:
+                    picked = True
+
+            # check if there is room, given the type of the class
+            if course.tut_group_dict[new_group] < course.max_std:
+                course.tut_group_dict[new_group] += 1
+                course.tut_group_dict[worst_student.tut_group[course.name]] -= 1
+                worst_student.tut_group[course.name] = new_group
+
+                for student in self.student_list:
+                    if student.id == worst_student.id:
+                        student = worst_student
+
+            else:
+                #  if full, swap with the worst student in the group
+                students_in_group = [student for student in course.enrolled_students if student.tut_group[course.name] == new_group]
+                worst_student_new_group = max(students_in_group, key=lambda x: x.malus_count)
+
+                # swap students
+                worst_student_new_group.tut_group[course.name] = worst_student.tut_group[course.name]
+                worst_student.tut_group[course.name] = new_group
+
+                # make new timeslots for the students
+                worst_student_new_group.student_timeslots(self.Roster.schedule)
+                worst_student.student_timeslots(self.Roster.schedule)  
+                for student in self.student_list:
+                    if student.id == worst_student.id:
+                        student = worst_student
+                    if student.id == worst_student_new_group.id:
+                        student = worst_student_new_group
+        else:
+            
+            if course.practical_rooms < 2:
+                return
+
+            picked = False
+            while not picked:
+
+                # pick a group to switch to
+                groups = list(course.pract_group_dict.keys())
+                new_group = random.choice(groups)
+                if new_group != worst_student.pract_group[course.name]:
+                    picked = True
+
+            # check if there is room, given the type of the class
+            if course.pract_group_dict[new_group] < course.max_std_practical:
+                course.pract_group_dict[new_group] += 1
+                course.pract_group_dict[worst_student.pract_group[course.name]] -= 1
+                worst_student.pract_group[course.name] = new_group
+
+                for student in self.student_list:
+                    if student.id == worst_student.id:
+                        
+                        student = worst_student
+
+            else:
+                #  if full, swap with the worst student in the group
+                students_in_group = [student for student in course.enrolled_students if student.pract_group[course.name] == new_group]
+                worst_student_new_group = max(students_in_group, key=lambda x: x.malus_count)
+
+                # swap students
+                worst_student_new_group.pract_group[course.name] = worst_student.pract_group[course.name]
+                worst_student.pract_group[course.name] = new_group
+
+                # make new timeslots for the students
+                worst_student_new_group.student_timeslots(self.Roster.schedule)
+                worst_student.student_timeslots(self.Roster.schedule) 
+
+                for student in self.student_list:
+                    if student.id == worst_student.id:
+                        student = worst_student
+                        
+                    if student.id == worst_student_new_group.id:
+                        student = worst_student_new_group
+
 
