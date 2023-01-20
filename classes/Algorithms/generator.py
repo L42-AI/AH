@@ -1,14 +1,13 @@
-import classes.Algorithms.mutate as MutateClass
 import classes.Algorithms.hillclimber as HillCLimberClass
 import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
 import classes.representation.room as RoomClass
 import classes.representation.roster as RosterClass
+
 import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import copy
 import time
 import random
 
@@ -274,7 +273,7 @@ class Generator():
                 else:
                     HC5 = HillCLimberClass.HC_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
                     self.Roster = HC5.climb()
-                
+
         finish = time.time()
         final_cost = self.Roster.malus_count
         print('100 iters')

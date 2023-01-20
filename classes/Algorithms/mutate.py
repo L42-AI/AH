@@ -66,6 +66,7 @@ class Mutate():
 
         # When different students found:
         self.__shuffle(course, student1, student2)
+        return
 
     def __shuffle(self, course, s1, s2):
         """ This function shuffles two students classes """
@@ -78,26 +79,59 @@ class Mutate():
                 if timeslot.startswith(class_type):
                     return timeslot
 
+        def __set_attending_group(class_type, course, s):
+            if class_type == 'tutorial':
+                group = s.tut_group[course.name]
+            else:
+                group = s.pract_group[course.name]
+            return group
+
         # take a random class types to change
-        class_type = random.choice(['tutorial', 'practical'])
 
-        # Find timeslot
-        s1_timeslot = find_timeslots(course, s1, class_type)
-        s2_timeslot = find_timeslots(course, s2, class_type)
+        classes = random.shuffle(['tutorial', 'practical'])
 
-        # Skip if equal
-        if s1_timeslot == s2_timeslot:
-            return
+        for class_type in classes:
 
-        # Switch the timeslots
-        s1.timeslots[course.name][s2_timeslot] = s2.timeslots[course.name][s2_timeslot]
-        s2.timeslots[course.name][s1_timeslot] = s1.timeslots[course.name][s1_timeslot]
+            s1_group = __set_attending_group(s1, course, class_type)
+            s2_group = __set_attending_group(s2, course, class_type)
 
-        # Delete the old timeslots
-        s1.timeslots[course.name].pop(s1_timeslot)
-        s2.timeslots[course.name].pop(s2_timeslot)
+            if s1_group == s2_group:
+                continue
 
-    def __set_type(self, course):
+            s2_group = s1_group
+            s1_group = s2_group
+
+    # def __shuffle(self, course, s1, s2):
+    #     """ This function shuffles two students classes """
+
+    #     def find_timeslots(course, s, class_type):
+    #         """ This local function returns the timeslot of the student """
+
+    #         # For each timeslot in the courses
+    #         for timeslot in s.timeslots[course.name]:
+    #             if timeslot.startswith(class_type):
+    #                 return timeslot
+
+    #     # take a random class types to change
+    #     class_type = random.choice(['tutorial', 'practical'])
+
+    #     # Find timeslot
+    #     s1_timeslot = find_timeslots(course, s1, class_type)
+    #     s2_timeslot = find_timeslots(course, s2, class_type)
+
+    #     # Skip if equal
+    #     if s1_timeslot == s2_timeslot:
+    #         return
+
+    #     # Switch the timeslots
+    #     s1.timeslots[course.name][s2_timeslot] = s2.timeslots[course.name][s2_timeslot]
+    #     s2.timeslots[course.name][s1_timeslot] = s1.timeslots[course.name][s1_timeslot]
+
+    #     # Delete the old timeslots
+    #     s1.timeslots[course.name].pop(s1_timeslot)
+    #     s2.timeslots[course.name].pop(s2_timeslot)
+
+    def __set_type(self, course, s):
 
         # take a random class types to change
         class_type = random.choice(['tutorial', 'practical'])
@@ -105,11 +139,13 @@ class Mutate():
         if class_type == 'tutorial':
             group_dict = course.tut_group_dict
             max_std = course.max_std
+            group = s.tut_group[course.name]
         else:
             group_dict = course.pract_group_dict
             max_std = course.max_std_practical
+            group = s.pract_group[course.name]
 
-        return class_type, group_dict, max_std
+        return group, group_dict, max_std
 
     def __find_timeslots(self, course, s, class_type):
         """ This local function returns the timeslot of the student """
@@ -128,23 +164,54 @@ class Mutate():
             course = random.choice(self.course_list)
 
         # Set class type
-        class_type, group_dict, max_std = self.__set_type(course)
+        student_group, group_dict, max_std = self.__set_type(course, s)
 
-        # Find timeslot
-        s_timeslot = self.__find_timeslots(course, s, class_type)
+        for group_num in group_dict:
 
-        for classes in self.Roster.schedule[course.name]:
-            if classes.startswith(class_type):
+            if student_group != group_num and group_dict[group_num] < max_std:
 
-                if self.Roster.schedule[course.name][s_timeslot] != self.Roster.schedule[course.name][classes] and group_dict[int(classes[-1])] < max_std:
+                student_group = group_num
 
-                    s.timeslots[course.name][classes] = self.Roster.schedule[course.name][classes]
-                    s.timeslots[course.name].pop(s_timeslot)
+                group_dict[group_num] += 1
+                group_dict[student_group] -= 1
+                return
 
-                    group_dict[int(classes[-1])] += 1
-                    group_dict[int(s_timeslot[-1])] -= 1
-                    return
+    # def __change_group(self, s):
+    #     """ This function shuffles two students classes """
 
+    #     course = random.choice(self.course_list)
+
+    #     while course.name not in list(s.timeslots.keys()):
+    #         course = random.choice(self.course_list)
+
+    #     # Set class type
+    #     class_type, group, group_dict, max_std = self.__set_type(course, s)
+
+
+    #     print(s.f_name)
+    #     print(group_dict)
+    #     print(group)
+
+    #     # Find timeslot
+    #     s_timeslot = self.__find_timeslots(course, s, class_type)
+
+    #     for classes in self.Roster.schedule[course.name]:
+    #         if classes.startswith(class_type):
+
+    #             if self.Roster.schedule[course.name][s_timeslot] != self.Roster.schedule[course.name][classes] and group_dict[int(classes[-1])] < max_std:
+
+    #                 s.timeslots[course.name][classes] = self.Roster.schedule[course.name][classes]
+    #                 s.timeslots[course.name].pop(s_timeslot)
+
+    #                 group_dict[int(classes[-1])] += 1
+    #                 group_dict[int(s_timeslot[-1])] -= 1
+
+    #                 self.tut_group = {}
+    #                 self.pract_group = {}
+
+    #                 # # Set the course as changed
+    #                 # course.changed = True
+    #                 return
 
     def change_student_group(self):
 
@@ -175,17 +242,17 @@ class Mutate():
         if empty:
             # pick a random course that does have one or more lessons of said type
             random_course_1 = random.choice([c for c in self.course_list if getattr(c, f'{lesson_type}s') > 0])
-            
+
             all_lessons_random_2 = [key for key in self.Roster.schedule['No course'].keys()]
 
             course_two = 'No course'
-        
+
         else:
             # pick random lesson that has at leas one of the lesson type
             random_course_1, random_course_2 = random.sample([c for c in self.course_list if getattr(c, f'{lesson_type}s') > 0], 2)
             all_lessons_random_2 = [key for key in self.Roster.schedule[random_course_2.name].keys() if lesson_type in key]
             course_two = random_course_2.name
-        
+
         # get all the tutorials in the course and get all the empty rooms
         all_lessons_random_1 = [key for key in self.Roster.schedule[random_course_1.name].keys() if lesson_type in key]
 
