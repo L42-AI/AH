@@ -283,15 +283,19 @@ class Mutate():
             student = student_to_switch_new_group
 
     def __create_student_id_dict(self):
+        '''create a dict with students.id as keys so students can be hashed when id is known'''
         self.student_dict = {student.id: student for student in self.student_list}
 
     def __create_course_name_dict(self):
+        '''create a dict with course.name as keys so courses can be hashed when name is known'''
         self.course_dict = {course.name: course for course in self.course_list}
 
     def __find_course_with_name(self, name):
+        '''return course object given its name'''
         return self.course_dict.get(name)
 
     def __find_student_with_id(self, id):
+        '''return student object given its id'''
         return self.student_dict.get(id)
 
     def __worst_day(self, student_to_switch):
@@ -303,10 +307,11 @@ class Mutate():
         # go over the timeslot and find day with most gap hour
         for day in student_to_switch.malus_cause['Classes Gap']:
             if student_to_switch.malus_cause['Classes Gap'][day] > worst_score:
-                
                 worst_day = day
         if worst_day == None:
-            return
+
+            # when worst_day is None, the main method will stop because no classes later on can be found
+            return 
         return worst_day
 
     def __find_classes(self, student_to_switch, worst_day):
@@ -354,3 +359,20 @@ class Mutate():
             if new_group != student_to_switch_group[course.name]:
                 picked = True
         return new_group
+
+class Mutate_double_classes(Mutate):
+    def __worst_day(self, student_to_switch):
+        '''finds worst day in the schedule of a student'''
+
+        worst_score = 0
+        worst_day = None
+
+        # go over the timeslot and find day with most gap hour
+        for day in student_to_switch.malus_cause['Dubble Classes']:
+            if student_to_switch.malus_cause['Dubble Classes'][day] > worst_score:
+                worst_day = day
+        if worst_day == None:
+            
+            # when worst_day is None, the main method will stop because no classes later on can be found
+            return 
+        return worst_day

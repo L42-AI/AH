@@ -32,7 +32,8 @@ class __HillClimber():
                 # make a deep copy, initiate the swapper with the right roster and change that roster
                 self.current_roster = copy.deepcopy(self.best_roster)
 
-                M = MutateClass.Mutate(self.df, self.course_list, self.student_list, self.current_roster)
+                M = self.make_mutate()
+                
                 self.step_method(M)
                 self.current_roster.init_student_timeslots(self.student_list)
                 
@@ -56,6 +57,9 @@ class __HillClimber():
         if self.best_malus_score > self.current_best_roster.malus_count:
             self.best_roster = self.current_best_roster
 
+    def make_mutate(self):
+        M = MutateClass.Mutate(self.df, self.course_list, self.student_list, self.current_roster)
+        return M
             
 class HC_LectureLocate(__HillClimber):
     def step_method(self, M):
@@ -83,10 +87,20 @@ class HC_StudentSwitch(__HillClimber):
     def step_method(self, M):
         M.change_student_group()
 
-class HC_SwapBadTimeslots(__HillClimber):
+class HC_SwapBadTimeslots_GapHour(__HillClimber):
     '''This class takes a random student and finds the day with the most gap hours.
        When found, it will swap one tut or pract with a student from a different group
        that has the most malus points from that group'''
+    def step_method(self, M):
+        M.swap_bad_timeslots()
+
+class HC_SwapBadTimeslots_DoubleClasses(__HillClimber):
+    '''This class takes a random student and finds the day with the most double classes.
+       When found, it will swap one tut or pract with a student from a different group
+       that has the most malus points from that group'''
+    def make_mutate(self):
+        M = MutateClass.Mutate_double_classes(self.df, self.course_list, self.student_list, self.current_roster)
+        return M
     def step_method(self, M):
         M.swap_bad_timeslots()
 

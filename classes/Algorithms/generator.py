@@ -269,9 +269,12 @@ class Generator():
 
                 # if i == 1:
                 print('looking to swap students...')
-                HC2 = HillCLimberClass.HC_SwapBadTimeslots(self.Roster, self.df, self.course_list, self.student_list)
+                HC2 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.Roster, self.df, self.course_list, self.student_list)
                 self.Roster = HC2.climb()
                 
+                print('looking to swap students based on double classes...')
+                HC3 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.Roster, self.df, self.course_list, self.student_list)
+                self.Roster = HC3.climb()
 
                 # if i == 2:
                 # HC3 = HillCLimberClass.HC_StudentSwitch(self.Roster, self.df, self.course_list, self.student_list)

@@ -38,7 +38,7 @@ class Student():
         self.malus_count = 0
         self.malus_cause = {}
         self.malus_cause['Classes Gap'] = {}
-        self.malus_cause['Dubble Classes'] = 0
+        self.malus_cause['Dubble Classes'] = {}
 
     def init_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -223,6 +223,7 @@ class Student():
         for day in days:
      
             self.malus_cause['Classes Gap'][day] = 0
+            self.malus_cause['Dubble Classes'][day] = 0
             # Sort the timeslots in the day:
             days[day].sort(reverse=True)
 
@@ -240,7 +241,7 @@ class Student():
 
                     # malus for double classes
                     if timeslot_list[timeslot_num] in timeslots_double_classes:
-                        self.malus_cause['Dubble Classes'] += 1
+                        self.malus_cause['Dubble Classes'][day] += 1
                         self.malus_count += 1
                     else:
                         timeslots_double_classes.append(timeslot_list[timeslot_num])
