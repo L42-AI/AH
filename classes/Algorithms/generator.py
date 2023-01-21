@@ -266,21 +266,23 @@ class Generator():
                 # HC1 = HillCLimberClass.HC_StudentSwapRandom(self.Roster, self.df, self.course_list, self.student_list)
                 # self.Roster = HC1.climb()
 
+                '''works'''
                 # if i == 1:
                 print('looking to swap students...')
                 HC2 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.Roster, self.df, self.course_list, self.student_list)
                 self.Roster = HC2.climb()
                 
-          
-                print('looking to swap students based on double classes...')
-                HC3 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.Roster, self.df, self.course_list, self.student_list)
-                self.Roster = HC3.climb()
+                '''works'''
+                # print('looking to swap students based on double classes...')
+                # HC3 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.Roster, self.df, self.course_list, self.student_list)
+                # self.Roster = HC3.climb()
 
                 # if i == 2:
                 # HC3 = HillCLimberClass.HC_StudentSwitch(self.Roster, self.df, self.course_list, self.student_list)
                 # self.Roster = HC3.climb()
 
                 # # else:
+                '''works'''
                 print('looking to swap classes...')
                 HC5 = HillCLimberClass.HC_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
                 self.Roster = HC5.climb()
