@@ -1,6 +1,7 @@
 import classes.Algorithms.mutate as MutateClass
-
+import math
 import copy
+import random
 
 class __HillClimber():
     def __init__(self, Roster, df, course_list, student_list):
@@ -48,6 +49,17 @@ class __HillClimber():
 
         return self.best_roster
 
+    def replace_roster(self, T=None):
+        self.current_best_roster = min(self.rosters, key=lambda x: x.malus_count)
+
+        if self.best_malus_score > self.current_best_roster.malus_count:
+            self.best_roster = self.current_best_roster
+
+            
+class HC_LectureLocate(__HillClimber):
+    def step_method(self, M):
+        M.swap_lecture_empty_room()
+
 class HC_LectureSwap(__HillClimber):
     def step_method(self, M):
         M.swap_random_lessons(True)
@@ -63,11 +75,50 @@ class HC_StudentSwap(__HillClimber):
 class HC_StudentSwapRandom(__HillClimber):
     def step_method(self, M):
         M.swap_2_students_random()
+    def get_name(self):
+        print("StS")
 
 class HC_StudentSwitch(__HillClimber):
     def step_method(self, M):
         M.change_student_group()
 
-# class HC_WorstStudentRandomGroup(__HillClimber):
-#     def step_method(self, M):
-#         M.swap_worst_student()
+class HC_WorstStudentRandomGroup(__HillClimber):
+    def step_method(self, M):
+        M.swap_worst_student()
+
+class Simulated_Annealing(__HillClimber):
+
+    def replace_roster(self, T):
+
+            if self.best_malus_score > self.current_malus_points:
+                self.best_roster = self.current_roster
+                self.best_malus_score = self.current_malus_points
+            
+            else: 
+                p = math.exp(- (self.best_malus_score - self.current_malus_points) / T)
+                randint = random.random()
+                if randint <= p:
+                    self.best_roster = self.current_roster
+                    self.best_malus_score = self.current_malus_points
+
+class SA_LectureLocate(Simulated_Annealing):
+    def step_method(self, M):
+        M.swap_lecture_empty_room()
+
+class SA_LectureSwap(Simulated_Annealing):
+    def step_method(self, M):
+        M.swap_2_lectures()
+
+class SA_StudentSwap(Simulated_Annealing):
+    def step_method(self, M):
+        M.swap_worst_student()
+
+class SA_StudentSwapRandom(Simulated_Annealing):
+    def step_method(self, M):
+        M.swap_2_students_random()
+    def get_name(self):
+        print("StS")
+
+class SA_StudentSwitch(Simulated_Annealing):
+    def step_method(self, M):
+        M.change_student_group()
