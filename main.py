@@ -13,7 +13,7 @@ def main_runner():
         ANNEALING = False
 
         # heuristics to try and connect room size to class size 
-        CAPACITY = True
+        CAPACITY = False
 
         G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY)
         G.rearrange_HC()
