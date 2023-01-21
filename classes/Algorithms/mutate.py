@@ -123,47 +123,48 @@ class Mutate():
             switched = True
 
 
-    def __set_type(self, course, s):
-
-        # take a random class types to change
-        class_type = random.choice(['tutorial', 'practical'])
+    def __set_type(self, s, course, class_type):
 
         if class_type == 'tutorial':
             group_dict = course.tut_group_dict
-            max_std = course.max_std
             group = s.tut_group[course.name]
-        else:
+            max_std = course.max_std
+
+        elif class_type == 'practical':
             group_dict = course.pract_group_dict
-            max_std = course.max_std_practical
             group = s.pract_group[course.name]
+            max_std = course.max_std_practical
 
         return group, group_dict, max_std
 
     def __change_group(self, s):
         """ This function shuffles two students classes """
 
-        course = random.choice(self.course_list)
+        # Set boolean to enter while loop
+        course_picked = False
 
-        while course.name not in list(s.timeslots.keys()) or course.tutorials + course.practicals == 0:
-            course = random.choice(self.course_list)
+        # While course is not succesfully picked
+        while course_picked == False:
 
-        chosen = False
-        while chosen == False:
+            # Reset course picked boolean
+            course_picked = False
+
+            # Chose random course
+            course = random.choice(s.courses)
+
+            # Accept if course has tutorials or practicals
+            if course.tutorials + course.practicals > 0:
+                course_picked = True
+
+
+        if course.tutorials == 0:
+            class_type = 'practical'
+        elif course.practicals == 0:
+            class_type = 'tutorial'
+        else:
             class_type = random.choice(['tutorial', 'practical'])
-            if class_type == 'tutorial':
-                if course.tutorials == 0:
-                    continue
-                group_dict = course.tut_group_dict
-                group = s.tut_group[course.name]
-                max_std = course.max_std
-                chosen = True
-            elif class_type == 'practical':
-                if course.practicals == 0:
-                    continue
-                group_dict = course.pract_group_dict
-                group = s.pract_group[course.name]
-                max_std = course.max_std_practical
-                chosen = True
+
+        group, group_dict, max_std = self.__set_type(s, course, class_type)
 
 
         for group_num in group_dict:
