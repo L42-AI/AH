@@ -259,25 +259,35 @@ class Generator():
 
         start = time.time()
         start_cost = self.Roster.malus_count
+
+        # Init HillClimbers
+        HC1 = HillCLimberClass.HC_StudentSwapRandom(self.Roster, self.df, self.course_list, self.student_list)
+        HC2 = HillCLimberClass.HC_WorstStudentRandomGroup(self.Roster, self.df, self.course_list, self.student_list)
+        HC3 = HillCLimberClass.HC_StudentSwitch(self.Roster, self.df, self.course_list, self.student_list)
+        HC4 = HillCLimberClass.HC_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
+
         for i in range(10):
             for _ in range(25):
-                i = random.randint(0,4)
-                if i == 0:
-                    HC1 = HillCLimberClass.HC_StudentSwap(self.Roster, self.df, self.course_list, self.student_list)
+                # i = random.randint(0,4)
+                i = random.choice([1, 2, 3, 4])
+                print(i)
+                if i == 1:
                     self.Roster = HC1.climb()
 
-                elif i == 1:
-                    HC2 = HillCLimberClass.HC_WorstStudentRandomGroup(self.Roster, self.df, self.course_list, self.student_list)
+                elif i == 2:
                     self.Roster = HC2.climb()
 
-                elif i == 2:
-                    HC3 = HillCLimberClass.HC_StudentSwitch(self.Roster, self.df, self.course_list, self.student_list)
+                elif i == 3:
                     self.Roster = HC3.climb()
 
-                else:
-                    HC5 = HillCLimberClass.HC_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
-                    self.Roster = HC5.climb()
-                
+                elif i == 4:
+                    self.Roster = HC4.climb()
+
+                HC1.Roster = self.Roster
+                HC2.Roster = self.Roster
+                HC3.Roster = self.Roster
+                HC4.Roster = self.Roster
+
         finish = time.time()
         final_cost = self.Roster.malus_count
         print('100 iters')

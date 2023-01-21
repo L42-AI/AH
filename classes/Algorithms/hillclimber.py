@@ -60,23 +60,30 @@ class HC_LectureLocate(__HillClimber):
     def step_method(self, M):
         M.swap_lecture_empty_room()
 
+    def get_name(self):
+        print("Lesson Swapped Empty Room")
+
 class HC_LectureSwap(__HillClimber):
     def step_method(self, M):
         M.swap_random_lessons(True)
         M.swap_random_lessons(False)
+
+    def get_name(self):
+        print("Lesson Swapped")
 
 class HC_StudentSwap(__HillClimber):
     def step_method(self, M):
         M.swap_2_students()
 
     def get_name(self):
-        print("students swapped random")
+        print("Students Swapped")
 
 class HC_StudentSwapRandom(__HillClimber):
     def step_method(self, M):
         M.swap_2_students_random()
+
     def get_name(self):
-        print("StS")
+        print("Student Swapped Random")
 
 class HC_StudentSwitch(__HillClimber):
     def step_method(self, M):
@@ -85,6 +92,13 @@ class HC_StudentSwitch(__HillClimber):
 class HC_WorstStudentRandomGroup(__HillClimber):
     def step_method(self, M):
         M.swap_worst_student()
+
+
+
+
+
+
+
 
 class Simulated_Annealing(__HillClimber):
 
