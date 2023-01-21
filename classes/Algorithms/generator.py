@@ -260,9 +260,8 @@ class Generator():
 
         start = time.time()
         start_cost = self.Roster.malus_count
-        for i in range(30):
-            for _ in range(55):
-                i = random.randint(0,4)
+        for i in range(20):
+            for _ in range(25):
                 # if i == 0:
                 # HC1 = HillCLimberClass.HC_StudentSwapRandom(self.Roster, self.df, self.course_list, self.student_list)
                 # self.Roster = HC1.climb()
@@ -272,6 +271,7 @@ class Generator():
                 HC2 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.Roster, self.df, self.course_list, self.student_list)
                 self.Roster = HC2.climb()
                 
+          
                 print('looking to swap students based on double classes...')
                 HC3 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.Roster, self.df, self.course_list, self.student_list)
                 self.Roster = HC3.climb()

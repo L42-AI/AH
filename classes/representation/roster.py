@@ -46,7 +46,8 @@ class Roster():
             self.malus_count += student.malus_count
 
             # Add to complete malus counter
-            for day in student.malus_cause['Classes Gap']:
+            days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+            for day in days:
 
                 self.malus_cause['Classes Gap'] += student.malus_cause['Classes Gap'][day]
             self.malus_cause['Dubble Classes'] += student.malus_cause['Dubble Classes'][day]
