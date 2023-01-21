@@ -37,8 +37,8 @@ class Student():
     def init_malus(self):
         self.malus_count = 0
         self.malus_cause = {}
-        self.malus_cause['Classes Gap'] = 0
-        self.malus_cause['Dubble Classes'] = 0
+        self.malus_cause['Classes Gap'] = {}
+        self.malus_cause['Dubble Classes'] = {}
 
     def init_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -221,7 +221,9 @@ class Student():
 
         # go over the days
         for day in days:
-
+     
+            self.malus_cause['Classes Gap'][day] = 0
+            self.malus_cause['Dubble Classes'][day] = 0
             # Sort the timeslots in the day:
             days[day].sort(reverse=True)
 
@@ -239,7 +241,7 @@ class Student():
 
                     # malus for double classes
                     if timeslot_list[timeslot_num] in timeslots_double_classes:
-                        self.malus_cause['Dubble Classes'] += 1
+                        self.malus_cause['Dubble Classes'][day] += 1
                         self.malus_count += 1
                     else:
                         timeslots_double_classes.append(timeslot_list[timeslot_num])
@@ -250,18 +252,18 @@ class Student():
                         
                         # check if one gap hour
                         if lesson_gaps == 1:
-                            self.malus_cause['Classes Gap'] += 1
+                            self.malus_cause['Classes Gap'][day] += 1
                             self.malus_count += 1
 
                         elif lesson_gaps == 2:
-                            self.malus_cause['Classes Gap'] += 3
+                            self.malus_cause['Classes Gap'][day] += 3
                             self.malus_count += 3
 
                         elif lesson_gaps > 2:
-                            self.malus_cause['Classes Gap'] += 1000
+                            self.malus_cause['Classes Gap'][day] += 1000
                             self.malus_count += 1000
 
-    def compute_malus(self, Roster):
+    def compute_malus(self, schedule):
         """ Run required functions to compute student malus """
-        self.student_timeslots(Roster)
-        self.malus_points()
+        self.student_timeslots(schedule)
+        self.malus_points(schedule)
