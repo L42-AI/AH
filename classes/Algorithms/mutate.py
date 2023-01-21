@@ -143,33 +143,42 @@ class Mutate():
 
         return group, group_dict, max_std
 
-    def __find_timeslots(self, course, s, class_type):
-        """ This local function returns the timeslot of the student """
-
-        # For each timeslot in the courses
-        for timeslot in s.timeslots[course.name]:
-            if timeslot.startswith(class_type):
-                return timeslot
-
     def __change_group(self, s):
         """ This function shuffles two students classes """
 
         course = random.choice(self.course_list)
 
-        while course.name not in list(s.timeslots.keys()):
+        while course.name not in list(s.timeslots.keys()) or course.tutorials + course.practicals == 0:
             course = random.choice(self.course_list)
 
-        # Set class type
-        student_group, group_dict, max_std = self.__set_type(course, s)
+        chosen = False
+        while chosen == False:
+            class_type = random.choice(['tutorial', 'practical'])
+            if class_type == 'tutorial':
+                if course.tutorials == 0:
+                    continue
+                group_dict = course.tut_group_dict
+                group = s.tut_group[course.name]
+                max_std = course.max_std
+                chosen = True
+            elif class_type == 'practical':
+                if course.practicals == 0:
+                    continue
+                group_dict = course.pract_group_dict
+                group = s.pract_group[course.name]
+                max_std = course.max_std_practical
+                chosen = True
+
 
         for group_num in group_dict:
 
-            if student_group != group_num and group_dict[group_num] < max_std:
+            if group != group_num and (group_dict[group_num] + 1) < max_std:
 
-                student_group = group_num
+                group = group_num
 
                 group_dict[group_num] += 1
-                group_dict[student_group] -= 1
+                group_dict[group] -= 1
+                print('swapped')
                 return
 
     # def __change_group(self, s):
