@@ -260,34 +260,33 @@ class Generator():
 
         start = time.time()
         start_cost = self.Roster.malus_count
-        for i in range(20):
+        print(f"\n{self.Roster.malus_cause}\n")
+        for _ in range(20):
             for _ in range(25):
-                # if i == 0:
-                # HC1 = HillCLimberClass.HC_StudentSwapRandom(self.Roster, self.df, self.course_list, self.student_list)
-                # self.Roster = HC1.climb()
+                i = random.randint(0,3)
+                print(f'\n{i}')
+                if i == 0:
+                    print('looking to swap classes...')
+                    HC1 = HillCLimberClass.HC_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC1.climb()
 
-                '''works'''
-                # if i == 1:
-                print('looking to swap students...')
-                HC2 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.Roster, self.df, self.course_list, self.student_list)
-                self.Roster = HC2.climb()
-                
-                '''works'''
-                # print('looking to swap students based on double classes...')
-                # HC3 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.Roster, self.df, self.course_list, self.student_list)
-                # self.Roster = HC3.climb()
+                elif i == 1:
+                    print('looking to swap students randomly...')
+                    HC2 = HillCLimberClass.HC_StudentSwap(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC2.climb()
 
-                # if i == 2:
-                # HC3 = HillCLimberClass.HC_StudentSwitch(self.Roster, self.df, self.course_list, self.student_list)
-                # self.Roster = HC3.climb()
+                elif i == 2:
+                    print('looking to swap students on gap hour malus...')
+                    HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC3.climb()
 
-                # # else:
-                '''works'''
-                print('looking to swap classes...')
-                HC5 = HillCLimberClass.HC_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
-                self.Roster = HC5.climb()
+                elif i == 3:
+                    print('looking to swap students on double classes malus...')
+                    HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.Roster, self.df, self.course_list, self.student_list)
+                    self.Roster = HC4.climb()
 
-        print(self.Roster.schedule)
+
+        print(f'\n{self.Roster.schedule}')
         finish = time.time()
         final_cost = self.Roster.malus_count
         print('100 iters')

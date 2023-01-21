@@ -69,7 +69,7 @@ class HillClimber():
                 self.best_malus_score = self.current_malus_points
 
                 # Print method name
-                self.get_name()
+                print(self.get_name())
 
         # Print new malus
         print(self.best_roster.malus_cause)
@@ -112,6 +112,9 @@ class HC_SwapBadTimeslots_GapHour(HillClimber):
     def step_method(self, M):
         M.swap_bad_timeslots()
 
+    def get_name(self):
+        return 'Student Swapped'
+
 class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
     '''This class takes a random student and finds the day with the most double classes.
        When found, it will swap one tut or pract with a student from a different group
@@ -123,3 +126,6 @@ class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
 
     def step_method(self, M):
         M.swap_bad_timeslots()
+
+    def get_name(self):
+        return 'Student Swapped'
