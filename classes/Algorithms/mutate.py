@@ -249,9 +249,9 @@ class Mutate():
 
         # check the type of class
         if class_to_switch[:8] == 'tutorial':
-            course_rooms, course_group_dict, course_max_std, student_to_switch_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch, tutorial=True,)
+            course_rooms, course_group_dict, course_max_std, student_to_switch_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch, t=True)
         else:
-            course_rooms, course_group_dict, course_max_std, student_to_switch_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch, tutorial=False,)
+            course_rooms, course_group_dict, course_max_std, student_to_switch_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch, t=False)
 
         # cannot switch if there are no or one classes of particular type
         if course_rooms <= 1:
@@ -285,9 +285,9 @@ class Mutate():
 
             # set variables for new student
             if class_to_switch[:8] == 'tutorial':
-                course_rooms, course_group_dict, course_max_std, student_new_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch_new_group, tutorial=True)
+                course_rooms, course_group_dict, course_max_std, student_new_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch_new_group, t=True)
             else:
-                course_rooms, course_group_dict, course_max_std, student_new_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch_new_group, tutorial=False)
+                course_rooms, course_group_dict, course_max_std, student_new_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch_new_group, t=False)
 
             # swap students
             student_new_group[course.name] = student_to_switch_group[course.name]
