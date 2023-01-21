@@ -260,16 +260,16 @@ class Generator():
 
         start = time.time()
         start_cost = self.Roster.malus_count
-        for i in range(10):
-            for _ in range(25):
+        for i in range(30):
+            for _ in range(55):
                 i = random.randint(0,4)
                 # if i == 0:
                 # HC1 = HillCLimberClass.HC_StudentSwapRandom(self.Roster, self.df, self.course_list, self.student_list)
                 # self.Roster = HC1.climb()
 
                 # if i == 1:
-                  
-                HC2 = HillCLimberClass.HC_WorstStudentRandomGroup(self.Roster, self.df, self.course_list, self.student_list)
+                print('looking to swap students...')
+                HC2 = HillCLimberClass.HC_SwapBadTimeslots(self.Roster, self.df, self.course_list, self.student_list)
                 self.Roster = HC2.climb()
                 
 
@@ -278,9 +278,11 @@ class Generator():
                 # self.Roster = HC3.climb()
 
                 # # else:
-            # HC5 = HillCLimberClass.HC_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
-            # self.Roster = HC5.climb()
-                
+                print('looking to swap classes...')
+                HC5 = HillCLimberClass.HC_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
+                self.Roster = HC5.climb()
+
+        print(self.Roster.schedule)
         finish = time.time()
         final_cost = self.Roster.malus_count
         print('100 iters')

@@ -262,7 +262,7 @@ class Student():
                             self.malus_cause['Classes Gap'][day] += 1000
                             self.malus_count += 1000
 
-    def compute_malus(self, Roster):
+    def compute_malus(self, schedule):
         """ Run required functions to compute student malus """
-        self.student_timeslots(Roster)
-        self.malus_points()
+        self.student_timeslots(schedule)
+        self.malus_points(schedule)

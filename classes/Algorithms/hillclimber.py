@@ -37,8 +37,6 @@ class __HillClimber():
                 self.current_roster.init_student_timeslots(self.student_list)
                 
                 # calculate the maluspoints
-                if self.current_roster.student_list != M.student_list:
-                    print("not the same!")
                 self.current_roster.student_list = M.student_list
                 self.current_roster.init_student_timeslots(self.current_roster.student_list)
                 self.current_roster.total_malus(self.student_list)
@@ -85,9 +83,12 @@ class HC_StudentSwitch(__HillClimber):
     def step_method(self, M):
         M.change_student_group()
 
-class HC_WorstStudentRandomGroup(__HillClimber):
+class HC_SwapBadTimeslots(__HillClimber):
+    '''This class takes a random student and finds the day with the most gap hours.
+       When found, it will swap one tut or pract with a student from a different group
+       that has the most malus points from that group'''
     def step_method(self, M):
-        M.swap_bad_student()
+        M.swap_bad_timeslots()
 
 class Simulated_Annealing(__HillClimber):
 
