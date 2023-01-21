@@ -196,9 +196,7 @@ class Mutate():
         # switch the times in the schedule roster
         self.Roster.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
         self.Roster.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
-
-    
-
+        
     def swap_timeslots(self):
         worst_student = self.__find_worst_student()
 
