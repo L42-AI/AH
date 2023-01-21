@@ -130,7 +130,7 @@ class Mutate():
 
     """ Method 1 """
 
-    def swap_2_students_random(self):
+    def swap_2_students(self):
 
         self.__students_to_shuffle()
 
