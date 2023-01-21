@@ -28,7 +28,7 @@ class Mutate():
         for student1 in student_list:
 
             # Find a second student beside the first student
-            for student2 in (s for s in student_list if s != student1):
+            for student2 in [s for s in student_list if s != student1]:
 
                 # For each course
                 for course in student1.courses:
@@ -42,23 +42,33 @@ class Mutate():
     def __students_to_shuffle_random(self):
         """ This function shuffles two random students """
 
-        # Set a value that is not equal to enter while loop
+        # Set arbitrary values to enter while loop
+        course_picked = False
         student1 = 'a'
-        student2 = 'b'
+        student2 = 'a'
 
-        # While students are not equal
-        while student1 != student2:
+        # While students are not equal and course is not picked
+        while student1 == student2 or course_picked == False:
+
+            # Reset course picked boolean
+            course_picked = False
 
             # Randomly select students
             student1 = random.choice(self.student_list)
             student2 = random.choice(self.student_list)
 
-            # Randomly select a course from student1
-            course = random.choice(student1.courses)
+            # Find the courses that both students follow
+            intersecting_courses = list(set(student1.courses) & set(student2.courses))
 
-            # Skip if course not in other student
-            if course not in student2.courses:
+            # Skip if no common courses are found
+            if len(intersecting_courses) == 0:
                 continue
+
+            # Randomly select a course from possible courses
+            course = random.choice(intersecting_courses)
+
+            if course.tutorials + course.practicals > 0:
+                course_picked = True
 
         # When different students found:
         self.__shuffle(course, student1, student2)
@@ -67,65 +77,51 @@ class Mutate():
     def __shuffle(self, course, s1, s2):
         """ This function shuffles two students classes """
 
-        def find_timeslots(course, s, class_type):
-            """ This local function returns the timeslot of the student """
+        switched = False
+        tut_same = False
+        pract_same = False
+        while switched == False:
 
-            # For each timeslot in the courses
-            for timeslot in s.timeslots[course.name]:
-                if timeslot.startswith(class_type):
-                    return timeslot
+            # take a random class types to change
+            if course.tutorials == 0:
+                class_type = 'practical'
 
-        def __set_attending_group(class_type, course, s):
-            if class_type == 'tutorial':
-                group = s.tut_group[course.name]
+                if pract_same == True:
+                    switched = True
+            elif course.practicals == 0:
+                class_type = 'tutorial'
+
+                if tut_same == True:
+                    switched = True
             else:
-                group = s.pract_group[course.name]
-            return group
+                class_type = random.choice(['tutorial', 'practical'])
 
-        # take a random class types to change
+                if tut_same and pract_same == True:
+                    switched = True
 
-        classes = random.shuffle(['tutorial', 'practical'])
+            if class_type == 'tutorial':
+                if s1.tut_group[course.name] == s2.tut_group[course.name]:
+                    tut_same = True
+                    continue
+                else:
+                    s1_group = s1.tut_group[course.name]
+                    s2_group = s2.tut_group[course.name]
 
-        for class_type in classes:
+                    s1.tut_group[course.name] = s2_group
+                    s2.tut_group[course.name] = s1_group
 
-            s1_group = __set_attending_group(s1, course, class_type)
-            s2_group = __set_attending_group(s2, course, class_type)
+            elif class_type == 'practical':
+                if s1.pract_group[course.name] == s2.pract_group[course.name]:
+                    pract_same = True
+                    continue
+                else:
+                    s1_group = s1.pract_group[course.name]
+                    s2_group = s2.pract_group[course.name]
+                    s1.pract_group[course.name] = s2_group
+                    s2.pract_group[course.name] = s1_group
 
-            if s1_group == s2_group:
-                continue
+            switched = True
 
-            s2_group = s1_group
-            s1_group = s2_group
-
-    # def __shuffle(self, course, s1, s2):
-    #     """ This function shuffles two students classes """
-
-    #     def find_timeslots(course, s, class_type):
-    #         """ This local function returns the timeslot of the student """
-
-    #         # For each timeslot in the courses
-    #         for timeslot in s.timeslots[course.name]:
-    #             if timeslot.startswith(class_type):
-    #                 return timeslot
-
-    #     # take a random class types to change
-    #     class_type = random.choice(['tutorial', 'practical'])
-
-    #     # Find timeslot
-    #     s1_timeslot = find_timeslots(course, s1, class_type)
-    #     s2_timeslot = find_timeslots(course, s2, class_type)
-
-    #     # Skip if equal
-    #     if s1_timeslot == s2_timeslot:
-    #         return
-
-    #     # Switch the timeslots
-    #     s1.timeslots[course.name][s2_timeslot] = s2.timeslots[course.name][s2_timeslot]
-    #     s2.timeslots[course.name][s1_timeslot] = s1.timeslots[course.name][s1_timeslot]
-
-    #     # Delete the old timeslots
-    #     s1.timeslots[course.name].pop(s1_timeslot)
-    #     s2.timeslots[course.name].pop(s2_timeslot)
 
     def __set_type(self, course, s):
 
@@ -178,7 +174,6 @@ class Mutate():
 
                 group_dict[group_num] += 1
                 group_dict[group] -= 1
-                print('swapped')
                 return
 
     # def __change_group(self, s):
