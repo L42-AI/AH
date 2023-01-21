@@ -1,4 +1,5 @@
-import classes.Algorithms.hillclimber as HillCLimberClass
+import classes.Algorithms.HC_multiprocessor as HC_multiprocessorClass
+
 import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
 import classes.representation.room as RoomClass
@@ -8,14 +9,12 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import time
-import random
 
 from tqdm import tqdm
 
 class Generator():
     def __init__(self, COURSES, STUDENT_COURSES, ROOMS, visualize=False, annealing=False, capacity=False):
-        
+
         self.ANNEALING = annealing
         self.CAPACITY = capacity
         self.malus, self.Roster, self.df, self.course_list, self.student_list, self.rooms_list = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
@@ -255,45 +254,8 @@ class Generator():
             self.iterations.append(i)
 
     def rearrange_HC(self):
-        T = 0
 
-        start = time.time()
-        start_cost = self.Roster.malus_count
-        print(f"\n{self.Roster.malus_cause}\n")
-        for _ in range(20):
-            for _ in range(25):
-                i = random.randint(0,3)
-                print(f'\n{i}')
-                if i == 0:
-                    print('looking to swap classes...')
-                    HC1 = HillCLimberClass.HC_LectureSwap(self.Roster, self.df, self.course_list, self.student_list)
-                    self.Roster = HC1.climb()
-
-                elif i == 1:
-                    print('looking to swap students randomly...')
-                    HC2 = HillCLimberClass.HC_StudentSwap(self.Roster, self.df, self.course_list, self.student_list)
-                    self.Roster = HC2.climb()
-
-                elif i == 2:
-                    print('looking to swap students on gap hour malus...')
-                    HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.Roster, self.df, self.course_list, self.student_list)
-                    self.Roster = HC3.climb()
-
-                elif i == 3:
-                    print('looking to swap students on double classes malus...')
-                    HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.Roster, self.df, self.course_list, self.student_list)
-                    self.Roster = HC4.climb()
-
-
-        print(f'\n{self.Roster.schedule}')
-        finish = time.time()
-        final_cost = self.Roster.malus_count
-        print('100 iters')
-        print(f'start: {start_cost}')
-        print(f'finish: {final_cost}')
-        print(f'Time taken: {finish - start}')
-
-
-
+        HCMultiprocessor = HC_multiprocessorClass.HCMultiprocessor(self.Roster, self.course_list, self.student_list)
+        HCMultiprocessor.run_hillclimbers()
 
 

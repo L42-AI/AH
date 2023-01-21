@@ -2,14 +2,14 @@ import classes.Algorithms.mutate as MutateClass
 import copy
 import random
 
+
 """ Main HillClimber Class """
 
 class HillClimber():
-    def __init__(self, Roster, df, course_list, student_list):
+    def __init__(self, Roster, course_list, student_list):
         self.roster_list = []
         self.course_list = course_list
         self.student_list = student_list
-        self.df = df
         self.Roster = Roster
 
     """ Inheritable methods """
@@ -21,7 +21,7 @@ class HillClimber():
         pass
 
     def make_mutate(self):
-        M = MutateClass.Mutate(self.df, self.course_list, self.student_list, self.current_roster)
+        M = MutateClass.Mutate(self.course_list, self.student_list, self.current_roster)
         return M
 
     def replace_roster(self, T=None):
@@ -69,10 +69,10 @@ class HillClimber():
                 self.best_malus_score = self.current_malus_points
 
                 # Print method name
-                print(self.get_name())
+                # print(self.get_name())
 
         # Print new malus
-        print(self.best_roster.malus_cause)
+        # print(self.best_roster.malus_cause)
 
         # Return new roster
         return self.best_roster
@@ -121,7 +121,7 @@ class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
        that has the most malus points from that group'''
 
     def make_mutate(self):
-        M = MutateClass.Mutate_double_classes(self.df, self.course_list, self.student_list, self.current_roster)
+        M = MutateClass.Mutate_double_classes(self.course_list, self.student_list, self.current_roster)
         return M
 
     def step_method(self, M):

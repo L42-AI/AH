@@ -1,8 +1,7 @@
 import random
 
 class Mutate():
-    def __init__(self, df, course_list, student_list, Roster):
-        self.df = df
+    def __init__(self, course_list, student_list, Roster):
         self.Roster = Roster
 
         self.course_list = course_list
