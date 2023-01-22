@@ -14,9 +14,13 @@ ANNEALING = False
 # heuristics to try and connect room size to class size
 CAPACITY = False
 
+
+
 def main_runner(ANNEALING, CAPACITY):
-    G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY)
-    G.rearrange_HC()
+    stop = False
+    while stop == False:
+        G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY)
+        G.rearrange_HC(visualize=True)
 
 if __name__ == '__main__':
     if profile:
