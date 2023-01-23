@@ -93,4 +93,6 @@ Moeten we rekening houden met volgorde van lessen(Lecture1, Tutorial1, Lecture2,
 - aantal veranderingen voor een copy verlagen wanneer je verder in de iteraties zit
 - verschillende rates van iteraties proberen
 - lopen door lijsten van heuristiek mogelijkheden en ze opslaan
+- in late iteratie van mp hogere hillclimb iteraties gebruiken
+
 
