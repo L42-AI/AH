@@ -24,8 +24,10 @@ class App(customtkinter.CTk):
         # Parallel option
         self.parallel_frame = customtkinter.CTkFrame(self)
         self.parallel_frame.grid(row=2, column=3, padx=20, pady=20, sticky="nsew")
+        self.parallel_frame.grid_columnconfigure(0, weight=1)
+        self.parallel_frame.grid_rowconfigure(0, weight=1)
 
-        self.checkbox_1 = customtkinter.CTkCheckBox(master=self.parallel_frame, text='Multiprocessing', font=customtkinter.CTkFont(size=15))
+        self.checkbox_1 = customtkinter.CTkCheckBox(master=self.parallel_frame, text='Multiprocessing', font=customtkinter.CTkFont(size=15, weight='bold'))
         self.checkbox_1.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
 
         """ Setup Generate Button """
@@ -38,27 +40,29 @@ class App(customtkinter.CTk):
 
         self.toggle_frame = customtkinter.CTkFrame(self)
         self.toggle_frame.grid(row=0, column=3, rowspan=2, padx=20, pady=20, sticky="nsew")
+        self.toggle_frame.grid_columnconfigure(0, weight=1)
+        self.toggle_frame.grid_rowconfigure((0,1,2,3,4,5,6,7), weight=1)
+
         # self.radio_var = tkinter.IntVar(value=0)
 
-        self.label_algorithms_group = customtkinter.CTkLabel(master=self.toggle_frame, text="Algorithms", font=customtkinter.CTkFont(size=15))
-        self.label_algorithms_group.grid(row=0, column=0, columnspan=1, padx=10, pady=10, sticky="")
+        self.label_algorithms_group = customtkinter.CTkLabel(master=self.toggle_frame, text="Algorithms", font=customtkinter.CTkFont(size=15, weight='bold'))
+        self.label_algorithms_group.grid(row=0, column=0, padx=20, pady=10, sticky="nsew")
 
-        self.switch_1 = customtkinter.CTkSwitch(master=self.toggle_frame)
+        self.switch_1 = customtkinter.CTkSwitch(master=self.toggle_frame, text='Greedy', font=customtkinter.CTkFont(size=13))
         self.switch_1.grid(row=1, column=0, pady=10, padx=20, sticky="n")
-        self.switch_2 = customtkinter.CTkSwitch(master=self.toggle_frame)
+        self.switch_2 = customtkinter.CTkSwitch(master=self.toggle_frame, text='Hill Climber', font=customtkinter.CTkFont(size=13))
         self.switch_2.grid(row=2, column=0, pady=10, padx=20, sticky="n")
-        self.switch_3 = customtkinter.CTkSwitch(master=self.toggle_frame)
+        self.switch_3 = customtkinter.CTkSwitch(master=self.toggle_frame, text='Sim. Annealing', font=customtkinter.CTkFont(size=13))
         self.switch_3.grid(row=3, column=0, pady=10, padx=20, sticky="n")
 
-        self.label_methods_group = customtkinter.CTkLabel(master=self.toggle_frame, text="Methods", font=customtkinter.CTkFont(size=15))
-        self.label_methods_group.grid(row=4, column=0, columnspan=1, padx=10, pady=10, sticky="")
+        self.label_methods_group = customtkinter.CTkLabel(master=self.toggle_frame, text="Methods", font=customtkinter.CTkFont(size=15, weight='bold'))
+        self.label_methods_group.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
 
-        self.switch_4 = customtkinter.CTkSwitch(master=self.toggle_frame, command=lambda: print("switch 1 toggle"))
+        self.switch_4 = customtkinter.CTkSwitch(master=self.toggle_frame, text='Classes Swap', font=customtkinter.CTkFont(size=13))
         self.switch_4.grid(row=5, column=0, pady=10, padx=20, sticky="n")
-        self.switch_5 = customtkinter.CTkSwitch(master=self.toggle_frame)
+        self.switch_5 = customtkinter.CTkSwitch(master=self.toggle_frame, text='Student Swap', font=customtkinter.CTkFont(size=13))
         self.switch_5.grid(row=6, column=0, pady=10, padx=20, sticky="n")
-        self.switch_6 = customtkinter.CTkSwitch(master=self.toggle_frame)
-        self.switch_6.grid(row=7, column=0, pady=10, padx=20, sticky="n")
+
 
         """ Malus Configure Frame """
 
@@ -66,43 +70,43 @@ class App(customtkinter.CTk):
         self.malus_frame.grid(row=0, column=0, rowspan=4, columnspan=2, padx=20, pady=20, sticky="nsew")
         self.malus_frame.grid_columnconfigure((0,1,2,3,4,5), weight=1)
 
-        self.label_malus = customtkinter.CTkLabel(master=self.malus_frame, text="Malus Configuration")
+        self.label_malus = customtkinter.CTkLabel(master=self.malus_frame, text="Malus Configuration", font=customtkinter.CTkFont(size=17, weight='bold'))
         self.label_malus.grid(row=0, column=0, columnspan=6, padx=20, pady=20, sticky="nsew")
 
         self.switch_state = 0
 
-        self.malus_switch = customtkinter.CTkCheckBox(master=self.malus_frame, text="Configure", command=lambda: self.malus_slider_state(self.switch_state))
+        self.malus_switch = customtkinter.CTkCheckBox(master=self.malus_frame, text="Configure", font=customtkinter.CTkFont(size=15, weight='bold'), command=lambda: self.malus_slider_state(self.switch_state))
         self.malus_switch.grid(row=0, column=7, pady=20, padx=20, sticky="nsew")
 
         """ Malus Configure Sliders """
 
-        self.label_slider_1 = customtkinter.CTkLabel(master=self.malus_frame, text="Double classes", state="disabled")
+        self.label_slider_1 = customtkinter.CTkLabel(master=self.malus_frame, text="Double classes", state="disabled", font=customtkinter.CTkFont(size=15))
         self.label_slider_1.grid(row=1, column=0, columnspan=6, padx=10, sticky="nsew")
 
-        self.slider_1 = customtkinter.CTkSlider(self.malus_frame, from_=0, to=10, number_of_steps=10, state="disabled", )
+        self.slider_1 = customtkinter.CTkSlider(self.malus_frame, from_=0, to=10, number_of_steps=10, state="disabled")
         self.slider_1.grid(row=2, column=0, columnspan=6, padx=20, sticky="ew")
 
-        self.slider_1_number = customtkinter.CTkLabel(master=self.malus_frame, text="2", state="disabled")
+        self.slider_1_number = customtkinter.CTkLabel(master=self.malus_frame, text="2", state="disabled", font=customtkinter.CTkFont(size=13))
         self.slider_1_number.grid(row=2, column=7, padx=20, pady=10, sticky="ew")
 
 
-        self.label_slider_2 = customtkinter.CTkLabel(master=self.malus_frame, text="Gap Hours", state="disabled")
+        self.label_slider_2 = customtkinter.CTkLabel(master=self.malus_frame, text="Gap Hours", state="disabled", font=customtkinter.CTkFont(size=15))
         self.label_slider_2.grid(row=3, column=0, columnspan=6, padx=10, sticky="nsew")
 
         self.slider_2 = customtkinter.CTkSlider(self.malus_frame, from_=0, to=10, number_of_steps=10, state="disabled")
         self.slider_2.grid(row=4, column=0, columnspan=6, padx=20, sticky="ew")
 
-        self.slider_2_number = customtkinter.CTkLabel(master=self.malus_frame, text="2", state="disabled")
+        self.slider_2_number = customtkinter.CTkLabel(master=self.malus_frame, text="2", state="disabled", font=customtkinter.CTkFont(size=13))
         self.slider_2_number.grid(row=4, column=7, padx=20, pady=10, sticky="ew")
 
 
-        self.label_slider_3 = customtkinter.CTkLabel(master=self.malus_frame, text="Night Classes", state="disabled")
+        self.label_slider_3 = customtkinter.CTkLabel(master=self.malus_frame, text="Night Classes", state="disabled", font=customtkinter.CTkFont(size=15))
         self.label_slider_3.grid(row=5, column=0, columnspan=6, padx=10, sticky="nsew")
 
         self.slider_3 = customtkinter.CTkSlider(self.malus_frame, from_=0, to=10, number_of_steps=10, state="disabled")
         self.slider_3.grid(row=6, column=0, columnspan=6, padx=20, sticky="ew")
 
-        self.slider_3_number = customtkinter.CTkLabel(master=self.malus_frame, text="2", state="disabled")
+        self.slider_3_number = customtkinter.CTkLabel(master=self.malus_frame, text="2", state="disabled", font=customtkinter.CTkFont(size=13))
         self.slider_3_number.grid(row=6, column=7, padx=20, pady=10, sticky="ew")
 
 
