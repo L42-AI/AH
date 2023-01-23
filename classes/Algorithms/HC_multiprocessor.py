@@ -2,6 +2,7 @@ import classes.Algorithms.hillclimber as HillCLimberClass
 from multiprocessing import Pool
 import random as random
 
+import csv
 import copy
 import matplotlib.pyplot as plt
 
@@ -24,7 +25,7 @@ class HCMultiprocessor():
         print(f'\nInitialization')
         print(self.Roster.malus_cause)
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while iter_counter != 1000 and self.fail_counter < 10:
+        while iter_counter != 5 and self.fail_counter < 10:
 
             # Increase iter counter
             iter_counter += 1
@@ -32,14 +33,13 @@ class HCMultiprocessor():
             # Make four deepcopys for each function to use
             self.rosters = [copy.deepcopy(self.Roster) for _ in range(4)]
 
-            # Fill the pool with all functions and their copied rosters
+            # Fill the pool with all functions and their rosters
             with Pool(4) as p:
-                self.output_rosters = p.map(self.run_HC, [(0, self.rosters[0]), (1, self.rosters[1]), (2, self.rosters[2]), (3, self.rosters[3])])
-
-            # Save data for ML
-            for i in range(4):
-                info = (iter_counter, {f'HC{i + 1}': self.Roster.malus_count - self.output_rosters[i].malus_count})
-                self.save_results(info)
+                self.output_rosters = p.map(self.run_HC, [(0, self.Roster), (1, self.Roster), (2, self.Roster), (3, self.Roster)])
+            # # Save data for ML
+            # for i in range(4):
+            #     info = (iter_counter, {f'HC{i + 1}': self.Roster.malus_count - self.output_rosters[i].malus_count})
+            #     self.save_results(info)
 
             # Save data for plotting
             iterations_list.append(iter_counter)
@@ -48,6 +48,7 @@ class HCMultiprocessor():
             function3.append(self.Roster.malus_count - self.output_rosters[2].malus_count)
             function4.append(self.Roster.malus_count - self.output_rosters[3].malus_count)
 
+            
             # find the lowest malus of the output rosters
             min_malus = min([i.malus_count for i in self.output_rosters])
 
@@ -60,11 +61,8 @@ class HCMultiprocessor():
             # replace the roster if it is better
             self._replace_roster(difference, iter_counter)
 
-
         if visualize:
             self.plot_results(iterations_list, function1, function2, function3, function4)
-
-
 
     def run_HC(self, hc_tuple):
         number, roster = hc_tuple
@@ -117,7 +115,7 @@ class HCMultiprocessor():
         if difference > 0:
 
             # Set the new roster to self.Roster
-            self.Roster = random.choice(self.output_rosters)
+            self.Roster = self.output_rosters[self.best_index]
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {iter_count} =========================\n')
@@ -154,7 +152,7 @@ class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
         elif difference < 0:
             prob = random.random()
             if prob < T:
-                self.Roster = self.output_rosters[self.best_index]
+                self.Roster = random.choice(self.output_rosters)
                 self.fail_counter = 0
 
                 # print output

@@ -31,9 +31,9 @@ def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY):
     
     else:
 
-        while stop == False:
-            G = GeneratorClass.Generator_SA(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY)
-            G.rearrange_HC()
+        G = GeneratorClass.Generator_SA(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY)
+        G.rearrange_HC()
+        G.create_dataframe(G.Roster, G.student_list, visualize=True)
 
 if __name__ == '__main__':
     if profile:
