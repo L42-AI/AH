@@ -24,7 +24,7 @@ class HCMultiprocessor():
         print(f'\nInitialization')
         print(self.Roster.malus_cause)
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while iter_counter != 300 and self.fail_counter < 10:
+        while iter_counter != 1000 and self.fail_counter < 10:
 
             # Increase iter counter
             iter_counter += 1
@@ -117,7 +117,7 @@ class HCMultiprocessor():
         if difference > 0:
 
             # Set the new roster to self.Roster
-            self.Roster = self.output_rosters[self.best_index]
+            self.Roster = random.choice(self.output_rosters)
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {iter_count} =========================\n')
@@ -137,7 +137,7 @@ class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
     
     def _replace_roster(self, difference, iter_count):
         # set the temperature
-        T = (150/(200 + iter_count))
+        T = (150/(200 + iter_count*2))
 
         # If difference is positive
         if difference > 0:
@@ -151,9 +151,8 @@ class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
             print(f'Malus improvement: {difference}')
             print(self.Roster.malus_cause)
 
-        else:
-            prob = random.uniform(0, 1)
-            print(prob)
+        elif difference < 0:
+            prob = random.random()
             if prob < T:
                 self.Roster = self.output_rosters[self.best_index]
                 self.fail_counter = 0
@@ -164,7 +163,6 @@ class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
                 print(self.Roster.malus_cause)
 
             else:
-
                 self.fail_counter += 1
 
                 # print output
