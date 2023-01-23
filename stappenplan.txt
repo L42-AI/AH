@@ -21,13 +21,13 @@
 
 (5) nieuw maken met subgroepjes en kosten
 
+(6) Begin maken aan omroosteren
+      - Studenten wisselen
+      - geheele lessen
 """
 We zijn hier
 """
 
-(6) Begin maken aan omroosteren
-      - Studenten wisselen
-      - geheele lessen
 
 (!) visual schedules maken per:
       - student
@@ -88,3 +88,9 @@ Moeten we rekening houden met volgorde van lessen(Lecture1, Tutorial1, Lecture2,
 - tijdslot van een tut of pract groep binnen een vak (moeten er wel meerdere zijn)
 - tijdslot van een lecture van 2 verschillende vakken
 - tijdslot van een lecture binnen een vak (moeten er wel meerdere zijn) --> doet niks!!
+
+## tweaks ##
+- aantal veranderingen voor een copy verlagen wanneer je verder in de iteraties zit
+- verschillende rates van iteraties proberen
+- lopen door lijsten van heuristiek mogelijkheden en ze opslaan
+
