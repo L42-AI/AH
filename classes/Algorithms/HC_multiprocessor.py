@@ -1,5 +1,6 @@
 import classes.Algorithms.hillclimber as HillCLimberClass
 from multiprocessing import Pool
+import random as random
 
 import copy
 import matplotlib.pyplot as plt
@@ -19,11 +20,11 @@ class HCMultiprocessor():
         function4 = []
 
         iter_counter = 0
-        fail_counter = 0
+        self.fail_counter = 0
         print(f'\nInitialization')
         print(self.Roster.malus_cause)
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while iter_counter != 100 and fail_counter < 5:
+        while iter_counter != 300 and self.fail_counter < 10:
 
             # Increase iter counter
             iter_counter += 1
@@ -33,48 +34,32 @@ class HCMultiprocessor():
 
             # Fill the pool with all functions and their copied rosters
             with Pool(4) as p:
-                output_rosters = p.map(self.run_HC, [(0, self.rosters[0]), (1, self.rosters[1]), (2, self.rosters[2]), (3, self.rosters[3])])
+                self.output_rosters = p.map(self.run_HC, [(0, self.rosters[0]), (1, self.rosters[1]), (2, self.rosters[2]), (3, self.rosters[3])])
 
             # Save data for ML
             for i in range(4):
-                info = (iter_counter, {f'HC{i + 1}': self.Roster.malus_count - output_rosters[i].malus_count})
+                info = (iter_counter, {f'HC{i + 1}': self.Roster.malus_count - self.output_rosters[i].malus_count})
                 self.save_results(info)
 
             # Save data for plotting
             iterations_list.append(iter_counter)
-            function1.append(self.Roster.malus_count - output_rosters[0].malus_count)
-            function2.append(self.Roster.malus_count - output_rosters[1].malus_count)
-            function3.append(self.Roster.malus_count - output_rosters[2].malus_count)
-            function4.append(self.Roster.malus_count - output_rosters[3].malus_count)
+            function1.append(self.Roster.malus_count - self.output_rosters[0].malus_count)
+            function2.append(self.Roster.malus_count - self.output_rosters[1].malus_count)
+            function3.append(self.Roster.malus_count - self.output_rosters[2].malus_count)
+            function4.append(self.Roster.malus_count - self.output_rosters[3].malus_count)
 
             # find the lowest malus of the output rosters
-            min_malus = min([i.malus_count for i in output_rosters])
+            min_malus = min([i.malus_count for i in self.output_rosters])
 
             # Use the lowest malus to find the index of the best roster
-            best_index = [i.malus_count for i in output_rosters].index(min_malus)
+            self.best_index = [i.malus_count for i in self.output_rosters].index(min_malus)
 
             # Compute difference between new roster and current roster
-            difference = self.Roster.malus_count - output_rosters[best_index].malus_count
+            difference = self.Roster.malus_count - self.output_rosters[self.best_index].malus_count
 
-            # If difference is positive
-            if difference > 0:
+            # replace the roster if it is better
+            self._replace_roster(difference, iter_counter)
 
-                # Set the new roster to self.Roster
-                self.Roster = output_rosters[best_index]
-
-                print(f'\n========================= Generation: {iter_counter} =========================\n')
-                print(f'Most effective function: HC{best_index + 1}')
-                print(f'Malus improvement: {difference}')
-                print(self.Roster.malus_cause)
-
-                fail_counter = 0
-            else:
-
-                print(f'\n========================= Generation: {iter_counter} =========================\n')
-                print('FAIL')
-                print(self.Roster.malus_cause)
-
-                fail_counter += 1
 
         if visualize:
             self.plot_results(iterations_list, function1, function2, function3, function4)
@@ -85,14 +70,14 @@ class HCMultiprocessor():
         number, roster = hc_tuple
         if number == 0:
             # print('looking to swap classes...')
-            HC1 = HillCLimberClass.HC_LectureSwap(roster, self.course_list, self.student_list)
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(roster, self.course_list, self.student_list)
             roster = HC1.climb()
             # print(f'HC1: {roster.malus_count}')
             return roster
 
         elif number == 1:
             # print('looking to swap students randomly...')
-            HC2 = HillCLimberClass.HC_StudentSwap(roster, self.course_list, self.student_list)
+            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(roster, self.course_list, self.student_list)
             roster = HC2.climb()
             # print(f'HC2: {roster.malus_count}')
             return roster
@@ -125,3 +110,64 @@ class HCMultiprocessor():
         plt.plot(iterations_list, function4, '-b', label = 'StudentSwapDoubleHours')
         plt.legend()
         plt.show()
+
+    def _replace_roster(self, difference, iter_count):
+
+        # If difference is positive
+        if difference > 0:
+
+            # Set the new roster to self.Roster
+            self.Roster = self.output_rosters[self.best_index]
+            self.fail_counter = 0
+
+            print(f'\n========================= Generation: {iter_count} =========================\n')
+            print(f'Most effective function: HC{self.best_index + 1}')
+            print(f'Malus improvement: {difference}')
+            print(self.Roster.malus_cause)
+
+        else:
+            self.fail_counter += 1
+
+            # print output
+            print(f'\n========================= Generation: {iter_count} =========================\n')
+            print('FAIL')
+            print(self.Roster.malus_cause)
+
+class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
+    
+    def _replace_roster(self, difference, iter_count):
+        # set the temperature
+        T = (150/(200 + iter_count))
+
+        # If difference is positive
+        if difference > 0:
+
+            # Set the new roster to self.Roster
+            self.Roster = self.output_rosters[self.best_index]
+            self.fail_counter = 0
+
+            print(f'\n========================= Generation: {iter_count} =========================\n')
+            print(f'Most effective function: HC{self.best_index + 1}')
+            print(f'Malus improvement: {difference}')
+            print(self.Roster.malus_cause)
+
+        else:
+            prob = random.uniform(0, 1)
+            print(prob)
+            if prob < T:
+                self.Roster = self.output_rosters[self.best_index]
+                self.fail_counter = 0
+
+                # print output
+                print(f'\n========================= Generation: {iter_count} =========================\n')
+                print(f'FAIL GOT ACCEPTED WITH T AT: {T}')
+                print(self.Roster.malus_cause)
+
+            else:
+
+                self.fail_counter += 1
+
+                # print output
+                print(f'\n========================= Generation: {iter_count} =========================\n')
+                print('FAIL')
+                print(self.Roster.malus_cause)

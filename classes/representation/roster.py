@@ -8,6 +8,7 @@ class Roster():
         self.rooms_list = rooms_list
         self.student_list = student_list
         self.course_list = course_list
+        self.course_capacity_malus_sorted = []
 
         self.CAPACITY = capacity
 
@@ -112,6 +113,9 @@ class Roster():
                             continue
                         if class_type != 'lecture' and room.id == 'C0.110' or room.id == 'C0.112':
                             continue
+                if course.lecture_day != None:
+                    if course.lecture_day != day and class_type == 'lecture':
+                        continue
 
                 self.schedule[course.name][f'{class_type} {count}'] = {}
                 clas_number = f"{class_type} {count}"
@@ -165,3 +169,8 @@ class Roster():
                 if occupation > 0:
                     self.malus_cause['Capacity'] += occupation
                     self.malus_count += occupation
+
+                    # store inside the course how many occupation malus it caused
+                    course.capacity_malus += occupation
+                
+        self.course_capacity_malus_sorted = sorted(self.course_list, key=lambda x: x.capacity_malus)

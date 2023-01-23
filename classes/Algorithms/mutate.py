@@ -137,18 +137,17 @@ class Mutate():
 
     def swap_random_lessons(self, empty):
 
+        random_course_1, random_course_2 = self._get_course(empty)
+
         # check if you want to swap with an empty room or not
         if empty:
-            # get one random course and all the empty room time slots
-            random_course_1 = random.choice(self.course_list)
             all_lessons_random_2 = [key for key in self.Roster.schedule['No course'].keys()]
-            course_two = 'No course'
+            random_course_2 = 'No course'
 
         else:
             # get two random courses
-            random_course_1, random_course_2 = random.sample(self.course_list, 2)
             all_lessons_random_2 = list(self.Roster.schedule[random_course_2.name].keys())
-            course_two = random_course_2.name
+            random_course_2 = random_course_2.name
 
         # get all the lessons in that course
         all_lessons_random_1 = list(self.Roster.schedule[random_course_1.name].keys())
@@ -159,13 +158,22 @@ class Mutate():
 
         # define in order to be easier to read and to be able to switch keys and values of the dict
         dict_1 = self.Roster.schedule[random_course_1.name][lesson_1]
-        dict_2 = self.Roster.schedule[course_two][lesson_2]
+        dict_2 = self.Roster.schedule[random_course_2][lesson_2]
 
         # switch the times in the schedule roster
         self.Roster.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
-        self.Roster.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
+        self.Roster.schedule[random_course_2][lesson_2] = dict(zip(dict_2, dict_1.values()))
 
     """ Helpers """
+    
+    def _get_course(self, empty):
+        if empty:
+            random_course_1 = random.choice(self.course_list)
+            random_course_2 = None
+        else:
+            # get two random courses
+            random_course_1, random_course_2 = random.sample(self.course_list, 2)
+        return random_course_1, random_course_2
 
     def __worst_day(self, student_to_switch):
         '''finds worst day in the schedule of a student'''
@@ -327,3 +335,20 @@ class Mutate_double_classes(Mutate):
             # when worst_day is None, the main method will stop because no classes later on can be found
             return None
         return worst_day
+    
+   
+   
+class Mutate_Course_Swap_Capacity(Mutate):
+    def _get_course(self, empty):
+        if empty:
+            random_course_1 = self.Roster.course_capacity_malus_sorted[0]
+            random_course_2 = None
+        else:
+            # get two random courses
+            random_course_1 = self.Roster.course_capacity_malus_sorted[0]
+            picked = False
+            while not picked:
+                random_course_2 = random.choice(self.course_list)
+                if random_course_2.name != random_course_1.name:
+                    picked = True
+        return random_course_1, random_course_2

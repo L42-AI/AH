@@ -41,8 +41,8 @@ class HillClimber():
         # Append the input roster
         self.roster_list.append(self.best_roster)
 
-        # Take 50 steps:
-        for _ in range(50):
+        # Take 30 steps:
+        for _ in range(30):
 
             # Make a deep copy, initiate the swapper with the right roster and change that roster
             self.current_roster = copy.deepcopy(self.best_roster)
@@ -85,7 +85,7 @@ class HillClimber():
 #     def step_method(self, M):
 #         M.swap_lecture_empty_room()
 
-class HC_LectureSwap(HillClimber):
+class HC_TimeSlotSwapRandom(HillClimber):
 
     def step_method(self, M):
 
@@ -95,6 +95,12 @@ class HC_LectureSwap(HillClimber):
 
     def get_name(self):
         return "Lesson Swapped"
+
+class HC_TimeSlotSwapCapacity(HC_TimeSlotSwapRandom):
+    '''swaps the class that has the most capacity malus points'''
+    def make_mutate(self):
+        M = MutateClass.Mutate_Course_Swap_Capacity(self.course_list, self.student_list, self.current_roster)
+        return M
 
 class HC_StudentSwap(HillClimber):
 
@@ -129,3 +135,4 @@ class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
 
     def get_name(self):
         return 'Student Swapped'
+

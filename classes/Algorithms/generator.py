@@ -4,7 +4,7 @@ import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
 import classes.representation.room as RoomClass
 import classes.representation.roster as RosterClass
-
+import classes.Algorithms.genetic as GeneticClass
 import os
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,11 +12,13 @@ import pandas as pd
 
 from tqdm import tqdm
 
-class Generator():
-    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, visualize=False, annealing=False, capacity=False):
+class Generator_HC():
+    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, visualize=False, annealing=False, capacity=False, popular=False, popular_own_day=False):
 
         self.ANNEALING = annealing
         self.CAPACITY = capacity
+        self.POPULAR = popular
+        self.POPULAR_OWN_DAY = popular_own_day
         self.malus, self.Roster, self.df, self.course_list, self.student_list, self.rooms_list = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
 
 
@@ -81,6 +83,16 @@ class Generator():
 
     def schedule_fill(self, Roster, course_list, student_list):
         ''''method schedules a timeslot for every lecture, tutorial or practical that takes place'''
+
+        # first give the most popular courses a place in the schedule
+        if self.POPULAR:
+            course_list = sorted(course_list, key = lambda x: x.enrolled, reverse = True)
+
+        # give the 5 most popular courses their own day to hold their lectures, to prevent gap hours
+        if self.POPULAR_OWN_DAY:
+            days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+            for i in range(5):
+                course_list[i].day = days[i]
 
         for course in course_list:
             # go over the number of lectures, tutorials and practicals needed
@@ -258,4 +270,7 @@ class Generator():
         HCMultiprocessor = HC_multiprocessorClass.HCMultiprocessor(self.Roster, self.course_list, self.student_list)
         HCMultiprocessor.run_hillclimbers()
 
-
+class Generator_SA(Generator_HC):
+    def rearrange_HC(self):
+        HCMultiprocessor = HC_multiprocessorClass.HCMultiprocessor_SimAnnealing(self.Roster, self.course_list, self.student_list)
+        HCMultiprocessor.run_hillclimbers()
