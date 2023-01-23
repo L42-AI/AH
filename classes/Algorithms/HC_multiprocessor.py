@@ -1,6 +1,7 @@
 import classes.Algorithms.hillclimber as HillCLimberClass
 from multiprocessing import Pool
 
+import time
 import copy
 import matplotlib.pyplot as plt
 
@@ -20,6 +21,7 @@ class HCMultiprocessor():
 
         iter_counter = 0
         fail_counter = 0
+
         print(f'\nInitialization')
         print(self.Roster.malus_cause)
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
@@ -28,12 +30,16 @@ class HCMultiprocessor():
             # Increase iter counter
             iter_counter += 1
 
+            start_time = time.time()
+
             # Make four deepcopys for each function to use
             self.rosters = [copy.deepcopy(self.Roster) for _ in range(4)]
 
             # Fill the pool with all functions and their copied rosters
             with Pool(4) as p:
                 output_rosters = p.map(self.run_HC, [(0, self.rosters[0]), (1, self.rosters[1]), (2, self.rosters[2]), (3, self.rosters[3])])
+
+            finish_time = time.time()
 
             # Save data for ML
             for i in range(4):
@@ -65,6 +71,7 @@ class HCMultiprocessor():
                 print(f'\n========================= Generation: {iter_counter} =========================\n')
                 print(f'Most effective function: HC{best_index + 1}')
                 print(f'Malus improvement: {difference}')
+                print(f'Time taken: {finish_time - start_time} Seconds')
                 print(self.Roster.malus_cause)
 
                 fail_counter = 0
@@ -72,9 +79,12 @@ class HCMultiprocessor():
 
                 print(f'\n========================= Generation: {iter_counter} =========================\n')
                 print('FAIL')
+                print(f'Time taken: {finish_time - start_time} Seconds')
                 print(self.Roster.malus_cause)
 
                 fail_counter += 1
+
+        finish_time = time.time()
 
         if visualize:
             self.plot_results(iterations_list, function1, function2, function3, function4)
