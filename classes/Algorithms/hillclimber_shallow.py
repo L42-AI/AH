@@ -45,10 +45,10 @@ class HillClimber():
         for _ in range(50):
 
             # Set current roster
-            self.current_roster = self.best_roster
+            current_roster = self.best_roster
 
             # Make a deep copy, initiate the swapper with the right roster and change that roster
-            copied_schedule = copy.copy(self.current_roster.schedule)
+            copied_schedule = copy.copy(current_roster.schedule)
 
             # Create the mutate class
             M = self.make_mutate(copied_schedule)
@@ -59,26 +59,25 @@ class HillClimber():
             # Create a new variable to store the new schedule
             new_schedule = M.schedule
 
-            print(f'New schedule is coppied schedule: {new_schedule == copied_schedule}')
-            print(f'New schedule is old schedule: {new_schedule == self.best_roster.schedule}')
-
             # Calculate the malus points for the new schedule
-            self.current_roster.schedule = new_schedule
+            current_roster.schedule = new_schedule
 
             # Calculate the maluspoints
-            self.current_roster.init_student_timeslots(self.current_roster.student_list)
-            self.current_roster.total_malus(self.student_list)
+            current_roster.init_student_timeslots(current_roster.student_list)
+            current_roster.total_malus(self.student_list)
 
             # Set malus points
-            self.current_malus_points = self.current_roster.malus_count
+            self.current_malus_points = current_roster.malus_count
 
+            print(current_roster == self.Roster)
+            print()
             # Compare with prior malus points
             if self.current_malus_points < self.best_malus_score:
-                self.best_roster = self.current_roster
+                self.best_roster = current_roster
                 self.best_malus_score = self.current_malus_points
 
                 # Print method name
-                # print(self.get_name())
+                print(self.get_name())
 
         # Print new malus
         # print(self.best_roster.malus_cause)
