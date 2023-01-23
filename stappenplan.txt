@@ -37,6 +37,8 @@ We zijn hier
 
 (!) lectures per lokaal doen:
       - greedy
+      
+ (7) goede export maken (Jacob)
 
 ## HEURISTIEK ##
 - random x10, neem beste, daar random aanpassingen (5 studenten met hoogste cost met willekeurige groep wisselen etc)
