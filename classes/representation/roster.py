@@ -13,7 +13,7 @@ class Roster():
 
     def init_student_timeslots(self, student_list):
         for student in student_list:
-            student.student_timeslots(self.schedule)
+            student.student_timeslots(self)
 
     def __merge(self, dict1, dict2):
         return{**dict1, **dict2}
@@ -40,7 +40,7 @@ class Roster():
         for student in student_list:
 
             # Compute the malus
-            student.malus_points(self.schedule)
+            student.malus_points(self)
 
             # Add to complete malus counter
             self.malus_count += student.malus_count
@@ -59,6 +59,7 @@ class Roster():
         self.schedule[course_name][classes]['day'] = day
         self.schedule[course_name][classes]['timeslot'] = timeslot
         self.schedule[course_name][classes]['room'] = room.id
+        self.schedule[course_name][classes]['students'] = set()
 
         room.availability[day][timeslot] = False
 
@@ -93,7 +94,7 @@ class Roster():
         if course.name not in self.schedule:
             self.schedule[course.name] = {}
 
-        i = 0 
+        i = 0
         succes = False
         while not succes:
             i += 1
@@ -114,8 +115,8 @@ class Roster():
                             continue
 
                 self.schedule[course.name][f'{class_type} {count}'] = {}
-                clas_number = f"{class_type} {count}"
-                self.__place_in_schedule(room, day, timeslot, course.name, clas_number)
+                class_number = f"{class_type} {count}"
+                self.__place_in_schedule(room, day, timeslot, course.name, class_number)
 
                 succes = True
 

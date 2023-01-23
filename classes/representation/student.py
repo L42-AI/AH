@@ -133,9 +133,7 @@ class Student():
                 current_lecture = f"lecture {index + 1}"
 
                 # Add course and class to timeslot info
-                timeslot_dict = current_course[current_lecture]
-
-                self.timeslots[course.name][current_lecture] = timeslot_dict
+                current_course[current_lecture]['students'].add(self.id)
 
     def __tutorial_timeslot(self, course, current_course):
 
@@ -148,9 +146,7 @@ class Student():
                 current_tutorial = f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"
 
                 # Add course and class to timeslot info
-                timeslot_dict = current_course[current_tutorial]
-
-                self.timeslots[course.name][current_tutorial] = timeslot_dict
+                current_course[current_tutorial]['students'].add(self.id)
 
     def __practicum_timeslot(self, course, current_course):
 
@@ -163,13 +159,11 @@ class Student():
                 current_practicum = f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"
 
                 # Add course and class to timeslot info
-                timeslot_dict = current_course[current_practicum]
+                current_course[current_practicum]['students'].add(self.id)
 
-                self.timeslots[course.name][current_practicum] = timeslot_dict
-
-    def student_timeslots(self, schedule):
+    def student_timeslots(self, Roster):
         """
-        This method adds the timeslots for classes per week. 
+        This method adds the timeslots for classes per week.
         The dictionary timeslots is linked to the Roster schedule.
         """
 
@@ -181,7 +175,7 @@ class Student():
             self.timeslots[course.name] = {}
 
             # Set the current course dict
-            current_course = schedule[course.name]
+            current_course = Roster.schedule[course.name]
 
             # Find and save the lecture timeslot
             self.__lecture_timeslot(course, current_course)
@@ -193,37 +187,43 @@ class Student():
             self.__practicum_timeslot(course, current_course)
 
 
-    def __days_in_schedule(self):
+    def __days_in_schedule(self, Roster):
 
         # Create a days dictionary
-        self.days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
+        days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
 
-        # For each timeslot:
-        for timeslot_course in self.timeslots:
-            for timeslot_class in self.timeslots[timeslot_course]:
+        # For each course:
+        for course in Roster.schedule:
 
-                timeslot = self.timeslots[timeslot_course][timeslot_class]
+            # For each class:
+            for classes in Roster.schedule[course]:
 
-                # Add the timeslots into the days dictionary
-                self.days[timeslot['day']].append(timeslot['timeslot'])
-        return self.days
+                # Set the class info
+                class_info = Roster.schedule[course][classes]
 
-    def malus_points(self, schedule):
+                if self.id in class_info['students']:
+
+                    # Add the timeslots into the days dictionary
+                    days[class_info['day']].append(class_info['timeslot'])
+        return days
+
+    def malus_points(self, Roster):
         """ This method calculates the malus points for the student """
         # Reset malus points to avoid summing dubble malus
         self.init_malus()
 
         # update the dictionary (later this should be linked to the roster schedule)'
-        self.student_timeslots(schedule)
+        self.student_timeslots(Roster)
 
         # find how often student has classes per day
-        days = self.__days_in_schedule()
+        days = self.__days_in_schedule(Roster)
 
         # go over the days
         for day in days:
 
             self.malus_cause['Classes Gap'][day] = 0
             self.malus_cause['Dubble Classes'][day] = 0
+
             # Sort the timeslots in the day:
             days[day].sort(reverse=True)
 
