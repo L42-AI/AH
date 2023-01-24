@@ -66,48 +66,47 @@ class App(customtkinter.CTk):
 
         """ Malus Configure Frame """
 
-        self.malus_frame = customtkinter.CTkFrame(self)
-        self.malus_frame.grid(row=0, column=0, rowspan=4, columnspan=2, padx=20, pady=20, sticky="nsew")
-        self.malus_frame.grid_columnconfigure((0,1,2,3,4,5), weight=1)
+        self.malus_config_frame = customtkinter.CTkFrame(self)
+        self.malus_config_frame.grid(row=0, column=0, columnspan=2, padx=20, pady=20, sticky="new")
+        self.malus_config_frame.grid_columnconfigure((0,1,2,3,4,5), weight=1)
 
-        self.label_malus = customtkinter.CTkLabel(master=self.malus_frame, text="Malus Configuration", font=customtkinter.CTkFont(size=17, weight='bold'))
+        self.label_malus = customtkinter.CTkLabel(master=self.malus_config_frame, text="Malus Configuration", font=customtkinter.CTkFont(size=17, weight='bold'))
         self.label_malus.grid(row=0, column=0, columnspan=6, padx=20, pady=20, sticky="nsew")
 
         self.switch_state = 0
 
-        self.malus_switch = customtkinter.CTkCheckBox(master=self.malus_frame, text="Configure", font=customtkinter.CTkFont(size=15, weight='bold'), command=lambda: self.malus_slider_state(self.switch_state))
+        self.malus_switch = customtkinter.CTkCheckBox(master=self.malus_config_frame, text="Configure", font=customtkinter.CTkFont(size=15, weight='bold'), command=lambda: self.malus_slider_state(self.switch_state))
         self.malus_switch.grid(row=0, column=7, pady=20, padx=20, sticky="nsew")
 
         """ Malus Configure Sliders """
 
-        self.label_slider_1 = customtkinter.CTkLabel(master=self.malus_frame, text="Double classes", state="disabled", font=customtkinter.CTkFont(size=15))
-        self.label_slider_1.grid(row=1, column=0, columnspan=6, padx=10, sticky="nsew")
-
-        self.slider_1 = customtkinter.CTkSlider(self.malus_frame, from_=0, to=10, number_of_steps=10, state="disabled")
-        self.slider_1.grid(row=2, column=0, columnspan=6, padx=20, sticky="ew")
-
-        self.slider_1_number = customtkinter.CTkLabel(master=self.malus_frame, text="2", state="disabled", font=customtkinter.CTkFont(size=13))
-        self.slider_1_number.grid(row=2, column=7, padx=20, pady=10, sticky="ew")
+        self.malus_slider_frame = customtkinter.CTkFrame(self)
+        self.malus_slider_frame.grid(row=1, column=0, rowspan=3, columnspan=2, padx=20, pady=20, sticky="sew")
+        self.malus_slider_frame.grid_columnconfigure((0,1,2,3,4,5), weight=1)
 
 
-        self.label_slider_2 = customtkinter.CTkLabel(master=self.malus_frame, text="Gap Hours", state="disabled", font=customtkinter.CTkFont(size=15))
-        self.label_slider_2.grid(row=3, column=0, columnspan=6, padx=10, sticky="nsew")
+        self.label_slider_1 = customtkinter.CTkLabel(master=self.malus_slider_frame, text="Gap Hours", state="disabled", font=customtkinter.CTkFont(size=15, weight='bold'))
+        self.label_slider_1.grid(row=0, column=0, columnspan=6, padx=20, pady=20, sticky="nsew")
 
-        self.slider_2 = customtkinter.CTkSlider(self.malus_frame, from_=0, to=10, number_of_steps=10, state="disabled")
-        self.slider_2.grid(row=4, column=0, columnspan=6, padx=20, sticky="ew")
+        self.slider_1 = customtkinter.CTkSlider(self.malus_slider_frame, from_=0.1, to=3, number_of_steps=15, state="disabled", command=self.update_malus_1)
+        self.slider_1.grid(row=1, column=0, columnspan=6, padx=20, pady=20, sticky="sew")
 
-        self.slider_2_number = customtkinter.CTkLabel(master=self.malus_frame, text="2", state="disabled", font=customtkinter.CTkFont(size=13))
-        self.slider_2_number.grid(row=4, column=7, padx=20, pady=10, sticky="ew")
+        self.label_var_1 = tkinter.StringVar()
+
+        self.slider_1_number = customtkinter.CTkLabel(master=self.malus_slider_frame, textvariable=self.label_var_1, state="disabled", font=customtkinter.CTkFont(size=15, weight='bold'))
+        self.slider_1_number.grid(row=1, column=7, padx=20, pady=20, sticky="ew")
 
 
-        self.label_slider_3 = customtkinter.CTkLabel(master=self.malus_frame, text="Night Classes", state="disabled", font=customtkinter.CTkFont(size=15))
-        self.label_slider_3.grid(row=5, column=0, columnspan=6, padx=10, sticky="nsew")
+        self.label_slider_2 = customtkinter.CTkLabel(master=self.malus_slider_frame, text="Night Classes", state="disabled", font=customtkinter.CTkFont(size=15, weight='bold'))
+        self.label_slider_2.grid(row=2, column=0, columnspan=6, padx=20, pady=20, sticky="nsew")
 
-        self.slider_3 = customtkinter.CTkSlider(self.malus_frame, from_=0, to=10, number_of_steps=10, state="disabled")
-        self.slider_3.grid(row=6, column=0, columnspan=6, padx=20, sticky="ew")
+        self.slider_2 = customtkinter.CTkSlider(self.malus_slider_frame, from_=0.1, to=3, number_of_steps=15, state="disabled", command=self.update_malus_2)
+        self.slider_2.grid(row=3, column=0, columnspan=6, padx=20, pady=20, sticky="sew")
 
-        self.slider_3_number = customtkinter.CTkLabel(master=self.malus_frame, text="2", state="disabled", font=customtkinter.CTkFont(size=13))
-        self.slider_3_number.grid(row=6, column=7, padx=20, pady=10, sticky="ew")
+        self.label_var_2 = tkinter.StringVar()
+
+        self.slider_2_number = customtkinter.CTkLabel(master=self.malus_slider_frame, textvariable=self.label_var_2, state="disabled", font=customtkinter.CTkFont(size=15, weight='bold'))
+        self.slider_2_number.grid(row=3, column=7, padx=20, pady=20, sticky="ew")
 
 
         # # set default values
@@ -139,34 +138,15 @@ class App(customtkinter.CTk):
             # Alternate the state
             self.switch_state = 1
 
-            # Enable all sliders
-            self.label_slider_1.configure(state='normal')
-            self.slider_1.configure(state='normal')
-            self.slider_1_number.configure(state='normal')
+            for child in self.malus_slider_frame.winfo_children():
+                child.configure(state='normal')
 
-            self.label_slider_2.configure(state='normal')
-            self.slider_2.configure(state='normal')
-            self.slider_2_number.configure(state='normal')
-
-            self.label_slider_3.configure(state='normal')
-            self.slider_3.configure(state='normal')
-            self.slider_3_number.configure(state='normal')
         else:
             # Alternate the state
             self.switch_state = 0
 
-            # Disable all sliders
-            self.label_slider_1.configure(state='disabled')
-            self.slider_1.configure(state='disabled')
-            self.slider_1_number.configure(state='disabled')
-
-            self.label_slider_2.configure(state='disabled')
-            self.slider_2.configure(state='disabled')
-            self.slider_2_number.configure(state='disabled')
-
-            self.label_slider_3.configure(state='disabled')
-            self.slider_3.configure(state='disabled')
-            self.slider_3_number.configure(state='disabled')
+            for child in self.malus_slider_frame.winfo_children():
+                child.configure(state='disabled')
 
     def open_input_dialog_event(self):
         dialog = customtkinter.CTkInputDialog(text="Type in a number:", title="CTkInputDialog")
@@ -182,6 +162,12 @@ class App(customtkinter.CTk):
     def sidebar_button_event(self):
         print("sidebar_button click")
 
+    def update_malus_1(self, value):
+        self.label_var_1.set(round(value,1))
+        print('yes')
+
+    def update_malus_2(self, value):
+        self.label_var_2.set(round(value,1))
 
 if __name__ == "__main__":
     app = App()
