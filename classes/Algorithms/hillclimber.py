@@ -1,7 +1,5 @@
 import classes.Algorithms.mutate as MutateClass
-import copy
 import random
-
 
 """ Main HillClimber Class """
 
@@ -20,8 +18,8 @@ class HillClimber():
     def get_name(self):
         pass
 
-    def make_mutate(self):
-        M = MutateClass.Mutate(self.course_list, self.student_list, self.current_roster)
+    def make_mutate(self, schedule):
+        M = MutateClass.Mutate(self.course_list, self.student_list, schedule)
         return M
 
     def replace_roster(self, T=None):
@@ -34,8 +32,6 @@ class HillClimber():
 
     def climb(self):
 
-        performance = {self.get_name():[]}
-
         # Set input roster as best roster and best malus count
         self.best_roster = self.Roster
         self.best_malus_score = self.best_roster.malus_count
@@ -43,44 +39,47 @@ class HillClimber():
         # Append the input roster
         self.roster_list.append(self.best_roster)
 
-        # Take 30 steps:
+        # Take 50 steps:
         for _ in range(50):
 
+            # Set current roster
+            current_roster = self.best_roster
+
             # Make a deep copy, initiate the swapper with the right roster and change that roster
-            self.current_roster = copy.deepcopy(self.best_roster)
+            copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in current_roster.schedule.items()}
 
             # Create the mutate class
-            M = self.make_mutate()
+            M = self.make_mutate(copied_schedule)
 
             # Take a step
             self.step_method(M)
 
-            # Set changed student list to roster student list
-            self.current_roster.student_list = M.student_list
+            # Create a new variable to store the new schedule
+            new_schedule = M.schedule
+
+            # Calculate the malus points for the new schedule
+            current_roster.schedule = new_schedule
 
             # Calculate the maluspoints
-            self.current_roster.init_student_timeslots(self.current_roster.student_list)
-            self.current_roster.total_malus(self.student_list)
+            current_roster.init_student_timeslots(current_roster.student_list)
+            current_roster.total_malus(self.student_list)
 
             # Set malus points
-            self.current_malus_points = self.current_roster.malus_count
-
-            performance[self.get_name()].append(0)
+            self.current_malus_points = current_roster.malus_count
 
             # Compare with prior malus points
-            if self.best_malus_score > self.current_malus_points:
-                performance[self.get_name()].append(self.best_malus_score - self.current_malus_points)
-                self.best_roster = self.current_roster
+            if self.current_malus_points < self.best_malus_score:
+                self.best_roster = current_roster
                 self.best_malus_score = self.current_malus_points
 
                 # Print method name
-                # print(self.get_name())
+                print(self.get_name())
 
         # Print new malus
         # print(self.best_roster.malus_cause)
 
         # Return new roster
-        return self.best_roster, performance
+        return self.best_roster
 
 """ Inherited HillClimber Classes """
 
@@ -103,8 +102,8 @@ class HC_TimeSlotSwapRandom(HillClimber):
 
 class HC_TimeSlotSwapCapacity(HC_TimeSlotSwapRandom):
     '''swaps the class that has the most capacity malus points with a random class'''
-    def make_mutate(self):
-        M = MutateClass.Mutate_Course_Swap_Capacity(self.course_list, self.student_list, self.current_roster)
+    def make_mutate(self, schedule):
+        M = MutateClass.Mutate_Course_Swap_Capacity(self.course_list, self.student_list, schedule)
         return M
 
     def get_name(self):
@@ -134,8 +133,8 @@ class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
        When found, it will swap one tut or pract with a student from a different group
        that has the most malus points from that group'''
 
-    def make_mutate(self):
-        M = MutateClass.Mutate_double_classes(self.course_list, self.student_list, self.current_roster)
+    def make_mutate(self, schedule):
+        M = MutateClass.Mutate_double_classes(self.course_list, self.student_list, schedule)
         return M
 
     def step_method(self, M):
@@ -143,4 +142,3 @@ class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
 
     def get_name(self):
         return 'SwapBadTimeslots_DoubleClasses'
-

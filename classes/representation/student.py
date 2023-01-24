@@ -38,7 +38,9 @@ class Student():
         self.malus_count = 0
         self.malus_cause = {}
         self.malus_cause['Classes Gap'] = {}
-        self.malus_cause['Dubble Classes'] = {}
+        self.malus_cause['Double Classes'] = {}
+        self.malus_cause['Tripple Gap'] = {}
+
 
     def init_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -221,8 +223,9 @@ class Student():
         # go over the days
         for day in days:
 
+            self.malus_cause['Tripple Gap'][day] = 0
             self.malus_cause['Classes Gap'][day] = 0
-            self.malus_cause['Dubble Classes'][day] = 0
+            self.malus_cause['Double Classes'][day] = 0
 
             # Sort the timeslots in the day:
             days[day].sort(reverse=True)
@@ -241,7 +244,7 @@ class Student():
 
                     # malus for double classes
                     if timeslot_list[timeslot_num] in timeslots_double_classes:
-                        self.malus_cause['Dubble Classes'][day] += 1
+                        self.malus_cause['Double Classes'][day] += 1
                         self.malus_count += 1
                     else:
                         timeslots_double_classes.append(timeslot_list[timeslot_num])
@@ -260,8 +263,8 @@ class Student():
                             self.malus_count += 3
 
                         elif lesson_gaps > 2:
-                            self.malus_cause['Classes Gap'][day] += 1000
-                            self.malus_count += 1000
+                            self.malus_cause['Tripple Gap'][day] += 5
+                            self.malus_count += 5
 
     def compute_malus(self, schedule):
         """ Run required functions to compute student malus """

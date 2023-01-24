@@ -13,7 +13,7 @@ class HCMultiprocessor():
         self.course_list = course_list
         self.student_list = student_list
 
-    def run_hillclimbers(self, capacity, popular, popular_own_day):
+    def run_hillclimbers(self):
 
         # Set lists
         self.iterations_list = []
@@ -41,21 +41,21 @@ class HCMultiprocessor():
             with Pool(4) as p:
                 self.output_rosters = p.map(self.run_HC, [(0, self.rosters[0]), (1, self.rosters[1]), (2, self.rosters[2]), (3, self.rosters[3])])
 
+            print(self.output_rosters)
+
             # Save data for plotting
             self.iterations_list.append(self.iter_counter)
 
             # find the lowest malus of the output rosters
-            min_malus = min([i[0].malus_count for i in self.output_rosters])
+            min_malus = min([i.malus_count for i in self.output_rosters])
 
             # Use the lowest malus to find the index of the best roster
-            self.best_index = [i[0].malus_count for i in self.output_rosters].index(min_malus)
+            self.best_index = [i.malus_count for i in self.output_rosters].index(min_malus)
 
             # Compute difference between new roster and current roster
-            difference = self.Roster.malus_count - self.output_rosters[self.best_index][0].malus_count
+            difference = self.Roster.malus_count - self.output_rosters[self.best_index].malus_count
 
             finish_time = time.time()
-
-            self.save_results()
 
             self.iter_duration = finish_time - start_time
             self.duration += self.iter_duration
@@ -65,8 +65,6 @@ class HCMultiprocessor():
 
             # Increase iter counter
             self.iter_counter += 1
-
-        self.export_results(capacity, popular, popular_own_day)
 
     def run_HC(self, hc_tuple):
         number, roster = hc_tuple
@@ -130,7 +128,7 @@ class HCMultiprocessor():
         if difference > 0:
 
             # Set the new roster to self.Roster
-            self.Roster = self.output_rosters[self.best_index][0]
+            self.Roster = self.output_rosters[self.best_index]
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {self.iter_counter} =========================\n')
@@ -160,7 +158,7 @@ class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
         if difference > 0:
 
             # Set the new roster to self.Roster
-            self.Roster = self.output_rosters[self.best_index][0]
+            self.Roster = self.output_rosters[self.best_index]
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {self.iter_counter} =========================\n')
@@ -174,7 +172,7 @@ class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
         elif difference < 0:
             prob = random.random()
             if prob < T:
-                self.Roster = random.choice(self.output_rosters)[0]
+                self.Roster = random.choice(self.output_rosters)
                 self.fail_counter = 0
 
                 # print output

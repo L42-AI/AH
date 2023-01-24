@@ -8,6 +8,9 @@ import pstats
 # Run profiler
 profile = False
 
+# Heuristic to employ Hill climbing algorithm
+CLIMBING = True
+
 # heuristics to allow for more random mutations before score calculation
 ANNEALING = False
 
@@ -20,19 +23,21 @@ POPULAR = False
 # heuristic to place the most popular course lectures on different days
 POPULAR_OWN_DAY = False
 
+VISUALIZE_INIT = True
 
-def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY):
-    if not ANNEALING:
-        for a in [True, False]:
-            for b in [True, False]:
-                for c in [True, False]:
-                    G = GeneratorClass.Generator_HC(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=a, popular=b, popular_own_day=c)
-                    G.rearrange_HC(a, b, c)
-
+def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT):
+    if not CLIMBING:
+        if not VISUALIZE_INIT:
+            G = GeneratorClass.Generator_HC(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
+        else:
+            G = GeneratorClass.Generator_HC(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING, visualize=True)
     else:
-        G = GeneratorClass.Generator_SA(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY)
-        G.rearrange_HC()
-        G.create_dataframe(G.Roster, G.student_list, visualize=True)
+        if not ANNEALING:
+            G = GeneratorClass.Generator_HC(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
+            G.rearrange_HC()
+        else:
+            G = GeneratorClass.Generator_SA(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
+            G.rearrange_HC()
 
 if __name__ == '__main__':
     if profile:
@@ -40,4 +45,8 @@ if __name__ == '__main__':
         p = pstats.Stats('profile.out')
         p.strip_dirs().sort_stats('time').print_stats(100)
     else:
-        main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY)
+        for capacity in [True, False]:
+            for popular in [True, False]:
+                for popular_own_day in [True, False]:
+
+                    main_runner(ANNEALING, capacity, popular, popular_own_day, CLIMBING, VISUALIZE_INIT)

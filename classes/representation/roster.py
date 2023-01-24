@@ -27,7 +27,7 @@ class Roster():
 
         # you can call this somewhere apart so that it doesnt get merged every single iteration of total malus,
         # then set everything to 0
-        student_malus_cause = {'Classes Gap': 0, 'Dubble Classes': 0}
+        student_malus_cause = {'Classes Gap': 0, 'Double Classes': 0, 'Tripple Gap': 0}
         self.malus_cause = self.__merge(self.malus_cause, student_malus_cause)
 
     def total_malus(self, student_list):
@@ -50,8 +50,10 @@ class Roster():
             days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
             for day in days:
 
+                self.malus_cause['Tripple Gap'] += student.malus_cause['Tripple Gap'][day]
                 self.malus_cause['Classes Gap'] += student.malus_cause['Classes Gap'][day]
-            self.malus_cause['Dubble Classes'] += student.malus_cause['Dubble Classes'][day]
+
+            self.malus_cause['Double Classes'] += student.malus_cause['Double Classes'][day]
 
     def __place_in_schedule(self, room, day, timeslot, course_name, classes):
 

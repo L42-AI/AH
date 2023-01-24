@@ -13,12 +13,15 @@ import pandas as pd
 from tqdm import tqdm
 
 class Generator_HC():
-    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, visualize=False, annealing=False, capacity=False, popular=False, popular_own_day=False):
+    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, visualize=False, annealing=False, capacity=False, popular=False, popular_own_day=False, climbing=False):
 
+        # Set heuristics
         self.ANNEALING = annealing
         self.CAPACITY = capacity
         self.POPULAR = popular
         self.POPULAR_OWN_DAY = popular_own_day
+        self.CLIMBING = climbing
+
         self.malus, self.Roster, self.df, self.course_list, self.student_list, self.rooms_list = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
 
 
@@ -210,7 +213,7 @@ class Generator_HC():
     def __run_random(self, COURSES, STUDENT_COURSES, ROOMS):
         self.costs = []
         self.iterations = []
-        for i in tqdm(range(300)):
+        for i in tqdm(range(500)):
 
             self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0])
 
@@ -221,7 +224,10 @@ class Generator_HC():
 
         self.__run_random(COURSES, STUDENT_COURSES, ROOMS)
 
-        fig_name = "startups.png"
+        if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY:
+            fig_name = f"Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}.png"
+        else:
+            fig_name = "Baseline_random.png"
 
         # Current working directory
         current_dir = os.getcwd()
@@ -232,24 +238,17 @@ class Generator_HC():
         # Directory "visualize"
         directory_plots = os.path.join(parent_dir, 'AH/visualize')
 
-        # Fit a polynomial of degree 1 (i.e. a linear regression) to the data
-        coefficients = np.polyfit(self.iterations, self.costs, 1)
+        plt.figure(figsize=(10,4))
+        plt.style.use('seaborn-whitegrid')
 
-        # Create a new set of x values for the regression line
-        x_reg = np.linspace(min(self.iterations), max(self.iterations), 300)
-
-        # Use the coefficients to calculate the y values for the regression line
-        y_reg = np.polyval(coefficients, x_reg)
-
-        plt.title('300 random startups of the algorithm with no restrictions')
-        plt.plot(self.iterations, self.costs)
+        plt.title('Schedule Initialization (N = 500)')
+        plt.hist(self.costs, bins=20, facecolor = '#2ab0ff', edgecolor='#169acf', linewidth=0.5)
 
         # Plot the regression line
-        plt.plot(x_reg, y_reg, 'r')
-        plt.xlabel('run #')
-        plt.ylabel('malus points')
+        plt.ylabel('Iterations')
+        plt.xlabel('Malus')
         plt.savefig(os.path.join(directory_plots, fig_name))
-        plt.show()
+        # plt.show()
 
     def get_schedule(self):
         return self.Roster.schedule
@@ -265,10 +264,10 @@ class Generator_HC():
             self.costs.append()
             self.iterations.append(i)
 
-    def rearrange_HC(self, capacity, popular, popular_own_day):
+    def rearrange_HC(self):
 
         HCMultiprocessor = HC_multiprocessorClass.HCMultiprocessor(self.Roster, self.course_list, self.student_list)
-        HCMultiprocessor.run_hillclimbers(capacity, popular, popular_own_day)
+        HCMultiprocessor.run_hillclimbers()
 
 class Generator_SA(Generator_HC):
     def rearrange_HC(self):
