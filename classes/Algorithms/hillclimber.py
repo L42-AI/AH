@@ -34,6 +34,8 @@ class HillClimber():
 
     def climb(self):
 
+        performance = {self.get_name():[]}
+
         # Set input roster as best roster and best malus count
         self.best_roster = self.Roster
         self.best_malus_score = self.best_roster.malus_count
@@ -42,7 +44,7 @@ class HillClimber():
         self.roster_list.append(self.best_roster)
 
         # Take 30 steps:
-        for _ in range(5):
+        for _ in range(50):
 
             # Make a deep copy, initiate the swapper with the right roster and change that roster
             self.current_roster = copy.deepcopy(self.best_roster)
@@ -63,8 +65,11 @@ class HillClimber():
             # Set malus points
             self.current_malus_points = self.current_roster.malus_count
 
+            performance[self.get_name()].append(0)
+
             # Compare with prior malus points
             if self.best_malus_score > self.current_malus_points:
+                performance[self.get_name()].append(self.best_malus_score - self.current_malus_points)
                 self.best_roster = self.current_roster
                 self.best_malus_score = self.current_malus_points
 
@@ -75,7 +80,7 @@ class HillClimber():
         # print(self.best_roster.malus_cause)
 
         # Return new roster
-        return self.best_roster
+        return self.best_roster, performance
 
 """ Inherited HillClimber Classes """
 
@@ -94,7 +99,7 @@ class HC_TimeSlotSwapRandom(HillClimber):
         M.swap_random_lessons(state)
 
     def get_name(self):
-        return "Lesson Swapped"
+        return "TimeSlotSwapRandom"
 
 class HC_TimeSlotSwapCapacity(HC_TimeSlotSwapRandom):
     '''swaps the class that has the most capacity malus points with a random class'''
@@ -102,13 +107,16 @@ class HC_TimeSlotSwapCapacity(HC_TimeSlotSwapRandom):
         M = MutateClass.Mutate_Course_Swap_Capacity(self.course_list, self.student_list, self.current_roster)
         return M
 
+    def get_name(self):
+        return "TimeSlotSwapCapacity"
+
 class HC_StudentSwap(HillClimber):
 
     def step_method(self, M):
         M.swap_2_students()
 
     def get_name(self):
-        return "Students Swapped"
+        return "StudentSwap"
 
 class HC_SwapBadTimeslots_GapHour(HillClimber):
     '''This class takes a random student and finds the day with the most gap hours.
@@ -119,7 +127,7 @@ class HC_SwapBadTimeslots_GapHour(HillClimber):
         M.swap_bad_timeslots()
 
     def get_name(self):
-        return 'Student Swapped'
+        return 'SwapBadTimeslots_GapHour'
 
 class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
     '''This class takes a random student and finds the day with the most double classes.
@@ -134,5 +142,5 @@ class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
         M.swap_bad_timeslots()
 
     def get_name(self):
-        return 'Student Swapped'
+        return 'SwapBadTimeslots_DoubleClasses'
 

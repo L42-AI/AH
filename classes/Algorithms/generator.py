@@ -265,12 +265,12 @@ class Generator_HC():
             self.costs.append()
             self.iterations.append(i)
 
-    def rearrange_HC(self):
+    def rearrange_HC(self, capacity, popular, popular_own_day):
 
         HCMultiprocessor = HC_multiprocessorClass.HCMultiprocessor(self.Roster, self.course_list, self.student_list)
-        HCMultiprocessor.run_hillclimbers()
+        HCMultiprocessor.run_hillclimbers(capacity, popular, popular_own_day)
 
 class Generator_SA(Generator_HC):
     def rearrange_HC(self):
         HCMultiprocessor = HC_multiprocessorClass.HCMultiprocessor_SimAnnealing(self.Roster, self.course_list, self.student_list)
-        HCMultiprocessor.run_hillclimbers()
+        HCMultiprocessor.run_hillclimbers(self)

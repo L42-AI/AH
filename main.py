@@ -9,28 +9,27 @@ import pstats
 profile = False
 
 # heuristics to allow for more random mutations before score calculation
-ANNEALING = True
+ANNEALING = False
 
 # heuristics to try and connect room size to class size
-CAPACITY = True
+CAPACITY = False
 
 # heuristic to first give the popular classes rooms
-POPULAR = True
+POPULAR = False
 
 # heuristic to place the most popular course lectures on different days
-POPULAR_OWN_DAY = True
+POPULAR_OWN_DAY = False
 
 
 def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY):
-    stop = False
     if not ANNEALING:
+        for a in [True, False]:
+            for b in [True, False]:
+                for c in [True, False]:
+                    G = GeneratorClass.Generator_HC(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=a, popular=b, popular_own_day=c)
+                    G.rearrange_HC(a, b, c)
 
-        while stop == False:
-            G = GeneratorClass.Generator_HC(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY)
-            G.rearrange_HC()
-    
     else:
-
         G = GeneratorClass.Generator_SA(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY)
         G.rearrange_HC()
         G.create_dataframe(G.Roster, G.student_list, visualize=True)
