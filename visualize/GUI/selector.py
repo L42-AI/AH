@@ -10,8 +10,6 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.employee_list = []
-
         # configure window
         self.title("Scheduly")
         self.geometry(f"{1100}x{580}")
@@ -27,19 +25,23 @@ class App(customtkinter.CTk):
 
         # Text
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Schedule Selector", font=customtkinter.CTkFont(size=20, weight="bold"))
-        self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
+        self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 20))
 
         # Buttons
         self.student_button = customtkinter.CTkButton(self.sidebar_frame, text="Student", command=self.show_student_frame)
-        self.student_button.grid(row=1, column=0, padx=20, pady=10)
+        self.student_button.grid(row=1, column=0, padx=20, pady=20)
         self.course_button = customtkinter.CTkButton(self.sidebar_frame, text="Course", command=self.show_course_frame)
-        self.course_button.grid(row=2, column=0, padx=20, pady=10)
+        self.course_button.grid(row=2, column=0, padx=20, pady=20)
         self.room_button = customtkinter.CTkButton(self.sidebar_frame, text="Room", command=self.show_room_frame)
-        self.room_button.grid(row=3, column=0, padx=20, pady=10)
+        self.room_button.grid(row=3, column=0, padx=20, pady=20)
 
         # Export
-        self.run_button= customtkinter.CTkButton(self.sidebar_frame, text="Export", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.export)
-        self.run_button.grid(row=4, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        self.export_button= customtkinter.CTkButton(self.sidebar_frame, text="Export", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.export)
+        self.export_button.grid(row=4, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
+
+        # Export All
+        self.export_all_button= customtkinter.CTkButton(self.sidebar_frame, text="Export All", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.export)
+        self.export_all_button.grid(row=8, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
 
         """ Frames """
