@@ -11,6 +11,7 @@ class Mutate():
         # Makes searching them based on that attribute faster
         self.student_dict = {}
         self.__create_student_id_dict()
+
         self.course_dict = {}
         self.__create_course_name_dict()
 
@@ -38,6 +39,9 @@ class Mutate():
     """ METHODS """
 
     """ Helpers """
+
+    
+
 
     def __find_random_student(self):
         """ This function returns a random student from the students set"""
@@ -126,6 +130,7 @@ class Mutate():
                     s2.pract_group[course.name] = s1_group
 
             switched = True
+
 
     """ Method 1 """
 

@@ -1,14 +1,16 @@
 import classes.Algorithms.mutate as MutateClass
 import random
+import copy
 
 """ Main HillClimber Class """
 
-class HillClimber():
-    def __init__(self, Roster, course_list, student_list):
+class HillClimber:
+    def __init__(self, Roster, course_list, student_list, MC):
         self.roster_list = []
         self.course_list = course_list
         self.student_list = student_list
         self.Roster = Roster
+        self.MC = MC
 
     """ Inheritable methods """
 
@@ -18,14 +20,17 @@ class HillClimber():
     def get_name(self):
         pass
 
+    # Aangezien dit nooit wordt gebruikt, verwijderen en pass neerzetten?
     def make_mutate(self, schedule):
         M = MutateClass.Mutate(self.course_list, self.student_list, schedule)
         return M
 
+
+    # Aangezien dit nooit wordt gebruikt, verwijderen en pass neerzetten?
     def replace_roster(self, T=None):
         self.current_best_roster = min(self.rosters, key=lambda x: x.malus_count)
 
-        if self.best_malus_score > self.current_best_roster.malus_count:
+        if self.best_malus_count > self.current_best_roster.malus_count:
             self.best_roster = self.current_best_roster
 
     """ Main Method """
@@ -34,7 +39,9 @@ class HillClimber():
 
         # Set input roster as best roster and best malus count
         self.best_roster = self.Roster
-        self.best_malus_score = self.best_roster.malus_count
+
+        # Compute malus with MalusCalculator
+        self.best_malus_count = self.MC.compute_total_malus(self.best_roster.schedule)
 
         # Append the input roster
         self.roster_list.append(self.best_roster)
@@ -45,7 +52,7 @@ class HillClimber():
             # Set current roster
             current_roster = self.best_roster
 
-            # Make a deep copy, initiate the swapper with the right roster and change that roster
+            # Make copy of schedule, complex because of dictionary
             copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in current_roster.schedule.items()}
 
             # Create the mutate class
@@ -58,36 +65,21 @@ class HillClimber():
             new_schedule = M.schedule
 
             # Calculate the malus points for the new schedule
-            current_roster.schedule = new_schedule
-
-            # Calculate the maluspoints
-            current_roster.init_student_timeslots(current_roster.student_list)
-            current_roster.total_malus(self.student_list)
-
-            # Set malus points
-            self.current_malus_points = current_roster.malus_count
+            new_malus = self.MC.compute_total_malus(new_schedule)
 
             # Compare with prior malus points
-            if self.current_malus_points < self.best_malus_score:
-                self.best_roster = current_roster
-                self.best_malus_score = self.current_malus_points
+            if new_malus['Total'] < self.best_malus_count['Total']:
+
+                self.best_roster.schedule = new_schedule
+                self.best_malus_count = new_malus
 
                 # Print method name
-                print(self.get_name())
-
-        # Print new malus
-        # print(self.best_roster.malus_cause)
+                # print(self.get_name())
 
         # Return new roster
-        return self.best_roster
+        return self.best_roster, self.best_malus_count
 
 """ Inherited HillClimber Classes """
-
-""" Step method bestaat niet meer, zit in lecture swap? """
-# class HC_LectureLocate(HillClimber):
-
-#     def step_method(self, M):
-#         M.swap_lecture_empty_room()
 
 class HC_TimeSlotSwapRandom(HillClimber):
     '''swaps a random class with another random class'''
@@ -108,14 +100,6 @@ class HC_TimeSlotSwapCapacity(HC_TimeSlotSwapRandom):
 
     def get_name(self):
         return "TimeSlotSwapCapacity"
-
-class HC_StudentSwap(HillClimber):
-
-    def step_method(self, M):
-        M.swap_2_students()
-
-    def get_name(self):
-        return "StudentSwap"
 
 class HC_SwapBadTimeslots_GapHour(HillClimber):
     '''This class takes a random student and finds the day with the most gap hours.
