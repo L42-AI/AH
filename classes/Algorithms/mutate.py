@@ -1,8 +1,8 @@
 import random
 
 class Mutate():
-    def __init__(self, course_list, student_list, Roster):
-        self.Roster = Roster
+    def __init__(self, course_list, student_list, schedule):
+        self.schedule = schedule
 
         self.course_list = course_list
         self.student_list = student_list
@@ -11,6 +11,7 @@ class Mutate():
         # Makes searching them based on that attribute faster
         self.student_dict = {}
         self.__create_student_id_dict()
+
         self.course_dict = {}
         self.__create_course_name_dict()
 
@@ -38,6 +39,9 @@ class Mutate():
     """ METHODS """
 
     """ Helpers """
+
+    
+
 
     def __find_random_student(self):
         """ This function returns a random student from the students set"""
@@ -127,6 +131,7 @@ class Mutate():
 
             switched = True
 
+
     """ Method 1 """
 
     def swap_2_students(self):
@@ -137,43 +142,35 @@ class Mutate():
 
     def swap_random_lessons(self, empty):
 
-        random_course_1, random_course_2 = self._get_course(empty)
-
         # check if you want to swap with an empty room or not
         if empty:
-            all_lessons_random_2 = [key for key in self.Roster.schedule['No course'].keys()]
-            random_course_2 = 'No course'
+            # get one random course and all the empty room time slots
+            random_course_1 = random.choice(self.course_list)
+            all_lessons_random_2 = [key for key in self.schedule['No course'].keys()]
+            course_two = 'No course'
 
         else:
             # get two random courses
-            all_lessons_random_2 = list(self.Roster.schedule[random_course_2.name].keys())
-            random_course_2 = random_course_2.name
+            random_course_1, random_course_2 = random.sample(self.course_list, 2)
+            all_lessons_random_2 = list(self.schedule[random_course_2.name].keys())
+            course_two = random_course_2.name
 
         # get all the lessons in that course
-        all_lessons_random_1 = list(self.Roster.schedule[random_course_1.name].keys())
+        all_lessons_random_1 = list(self.schedule[random_course_1.name].keys())
 
         # choose two random lessons
         lesson_1 = random.choice(all_lessons_random_1)
         lesson_2 = random.choice(all_lessons_random_2)
 
         # define in order to be easier to read and to be able to switch keys and values of the dict
-        dict_1 = self.Roster.schedule[random_course_1.name][lesson_1]
-        dict_2 = self.Roster.schedule[random_course_2][lesson_2]
+        dict_1 = self.schedule[random_course_1.name][lesson_1]
+        dict_2 = self.schedule[course_two][lesson_2]
 
         # switch the times in the schedule roster
-        self.Roster.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
-        self.Roster.schedule[random_course_2][lesson_2] = dict(zip(dict_2, dict_1.values()))
+        self.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
+        self.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
 
     """ Helpers """
-    
-    def _get_course(self, empty):
-        if empty:
-            random_course_1 = random.choice(self.course_list)
-            random_course_2 = None
-        else:
-            # get two random courses
-            random_course_1, random_course_2 = random.sample(self.course_list, 2)
-        return random_course_1, random_course_2
 
     def __worst_day(self, student_to_switch):
         '''finds worst day in the schedule of a student'''
@@ -274,7 +271,7 @@ class Mutate():
             student_to_switch_group[course.name] = new_group
 
             # compute new malus for the student
-            student_to_switch.compute_malus(self.Roster.schedule)
+            student_to_switch.compute_malus(self.schedule)
 
             # find the student object to replace with the same student that has new timeslot
             student = self.__get_student_object(student_to_switch.id)
@@ -301,15 +298,15 @@ class Mutate():
             student_to_switch_group[course.name] = new_group
 
             # make new timeslots for the students
-            student_to_switch_new_group.student_timeslots(self.Roster.schedule)
-            student_to_switch.student_timeslots(self.Roster.schedule)
+            student_to_switch_new_group.student_timeslots(self.schedule)
+            student_to_switch.student_timeslots(self.schedule)
 
             # compute new malus for the student
-            student_to_switch.compute_malus(self.Roster.schedule)
-            student_to_switch_new_group.compute_malus(self.Roster.schedule)
+            student_to_switch.compute_malus(self.schedule)
+            student_to_switch_new_group.compute_malus(self.schedule)
 
             # compute new malus for the student
-            student_to_switch.compute_malus(self.Roster.schedule)
+            student_to_switch.compute_malus(self.schedule)
 
             # find the student object to replace with the same student that has new timeslot
             student = self.__get_student_object(student_to_switch.id)
@@ -331,13 +328,11 @@ class Mutate_double_classes(Mutate):
             if student_to_switch.malus_cause['Dubble Classes'][day] > worst_score:
                 worst_day = day
         if worst_day == None:
-            
+
             # when worst_day is None, the main method will stop because no classes later on can be found
             return None
         return worst_day
-    
-   
-   
+
 class Mutate_Course_Swap_Capacity(Mutate):
     def _get_course(self, empty):
         if empty:
