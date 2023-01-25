@@ -7,13 +7,15 @@ import json
 import copy
 import matplotlib.pyplot as plt
 
-class HCMultiprocessor():
-    def __init__(self, Roster, course_list, student_list):
+class Multiprocessor():
+    def __init__(self, Roster, course_list, student_list, MC):
         self.Roster = Roster
         self.course_list = course_list
         self.student_list = student_list
 
-    def run_hillclimbers(self):
+        self.MC = MC
+
+    def run(self):
 
         # Set lists
         self.iterations_list = []
@@ -23,15 +25,19 @@ class HCMultiprocessor():
         self.iter_counter = 0
         self.fail_counter = 0
 
+        # Set Initial variable
         self.duration = 0
+
+        self.malus = self.MC.compute_total_malus(self.Roster.schedule)
 
         # Print intitial
         print(f'\nInitialization')
-        print(self.Roster.malus_cause, self.Roster.malus_count)
+        print(self.malus)
 
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
         while self.iter_counter != 100:
 
+            # Set start time
             start_time = time.time()
 
             # Make four deepcopys for each function to use
@@ -41,20 +47,19 @@ class HCMultiprocessor():
             with Pool(4) as p:
                 self.output_rosters = p.map(self.run_HC, [(0, self.rosters[0]), (1, self.rosters[1]), (2, self.rosters[2]), (3, self.rosters[3])])
 
-            print(self.output_rosters)
-
             # Save data for plotting
             self.iterations_list.append(self.iter_counter)
 
             # find the lowest malus of the output rosters
-            min_malus = min([i.malus_count for i in self.output_rosters])
+            min_malus = min([i[1]['Total'] for i in self.output_rosters])
 
             # Use the lowest malus to find the index of the best roster
-            self.best_index = [i.malus_count for i in self.output_rosters].index(min_malus)
+            self.best_index = [i[1]['Total'] for i in self.output_rosters].index(min_malus)
 
             # Compute difference between new roster and current roster
-            difference = self.Roster.malus_count - self.output_rosters[self.best_index].malus_count
+            difference = self.malus['Total'] - self.output_rosters[self.best_index][1]['Total']
 
+            # Set finish time
             finish_time = time.time()
 
             self.iter_duration = finish_time - start_time
@@ -70,31 +75,33 @@ class HCMultiprocessor():
         number, roster = hc_tuple
         if number == 0:
             # print('looking to swap classes...')
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(roster, self.course_list, self.student_list)
-            roster = HC1.climb()
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(roster, self.course_list, self.student_list, self.MC)
+            roster, malus = HC1.climb()
             # print(f'HC1: {roster.malus_count}')
-            return roster
+            return roster, malus
 
         elif number == 1:
             # print('looking to swap students randomly...')
-            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(roster, self.course_list, self.student_list)
-            roster = HC2.climb()
+            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(roster, self.course_list, self.student_list, self.MC)
+            roster, malus = HC2.climb()
             # print(f'HC2: {roster.malus_count}')
-            return roster
+            return roster, malus
 
         elif number == 2:
             # print('looking to swap students on gap hour malus...')
-            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(roster, self.course_list, self.student_list)
-            roster = HC3.climb()
+            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(roster, self.course_list, self.student_list, self.MC)
+            roster, malus = HC3.climb()
             # print(f'HC3: {roster.malus_count}')
-            return roster
+            return roster, malus
 
         elif number == 3:
             # print('looking to swap students on double classes malus...')
-            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(roster, self.course_list, self.student_list)
-            roster = HC4.climb()
+            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(roster, self.course_list, self.student_list, self.MC)
+            roster, malus = HC4.climb()
             # print(f'HC4: {roster.malus_count}')
-            return roster
+            return roster, malus
+
+    """ Save and Visualize Data """
 
     def save_results(self):
         if self.iter_counter not in self.info:
@@ -106,13 +113,11 @@ class HCMultiprocessor():
             dict_key, dict_value = tuple(i[1].items())[0]
             self.info[self.iter_counter][dict_key] = dict_value
 
-
     def export_results(self, capacity, popular, popular_own_day):
         # Open a file for writing
         with open(f"data/HC_capacity:{capacity}_popular:{popular}_popular:{popular_own_day}.json", "w") as f:
             # Write the dictionary to the file
             json.dump(self.info, f)
-
 
     def plot_results(self, iterations_list, function1, function2, function3, function4):
         plt.plot(iterations_list, function1, '-r', label = 'SwapClasses')
@@ -122,13 +127,14 @@ class HCMultiprocessor():
         plt.legend()
         plt.show()
 
+
     def __replace_roster(self, difference):
 
         # If difference is positive
         if difference > 0:
 
             # Set the new roster to self.Roster
-            self.Roster = self.output_rosters[self.best_index]
+            self.Roster, self.malus = self.output_rosters[self.best_index]
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {self.iter_counter} =========================\n')
@@ -136,7 +142,7 @@ class HCMultiprocessor():
             print(f'Malus improvement: {difference}')
             print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
             print(f'Duration since init: {round(self.duration, 2)} S.')
-            print(self.Roster.malus_cause, self.Roster.malus_count)
+            print(self.malus)
 
         else:
             self.fail_counter += 1
@@ -146,9 +152,9 @@ class HCMultiprocessor():
             print('FAIL')
             print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
             print(f'Duration since init: {round(self.duration, 2)} S.')
-            print(self.Roster.malus_cause, self.Roster.malus_count)
+            print(self.malus)
 
-class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
+class Multiprocessor_SimAnnealing(Multiprocessor):
 
     def __replace_roster(self, difference):
         # set the temperature
@@ -158,7 +164,7 @@ class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
         if difference > 0:
 
             # Set the new roster to self.Roster
-            self.Roster = self.output_rosters[self.best_index]
+            self.Roster, self.malus = self.output_rosters[self.best_index]
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {self.iter_counter} =========================\n')
@@ -167,12 +173,12 @@ class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
             print(f'Malus improvement: {difference}')
             print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
             print(f'Duration since init: {round(self.duration, 2)} S.')
-            print(self.Roster.malus_cause, self.Roster.malus_count)
+            print(self.malus)
 
         elif difference < 0:
             prob = random.random()
             if prob < T:
-                self.Roster = random.choice(self.output_rosters)
+                self.Roster, self.malus = random.choice(self.output_rosters)
                 self.fail_counter = 0
 
                 # print output
@@ -180,7 +186,7 @@ class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
                 print(f'FAIL GOT ACCEPTED WITH TEMPERATURE AT: {T}')
                 print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
                 print(f'Duration since init: {round(self.duration, 2)} S.')
-                print(self.Roster.malus_cause, self.Roster.malus_count)
+                print(self.malus)
 
             else:
                 self.fail_counter += 1
@@ -190,4 +196,4 @@ class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
                 print('FAIL')
                 print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
                 print(f'Duration since init: {round(self.duration, 2)} S.')
-                print(self.Roster.malus_cause, self.Roster.malus_count)
+                print(self.malus)

@@ -52,8 +52,7 @@ class Roster():
 
                 self.malus_cause['Tripple Gap'] += student.malus_cause['Tripple Gap'][day]
                 self.malus_cause['Classes Gap'] += student.malus_cause['Classes Gap'][day]
-
-            self.malus_cause['Double Classes'] += student.malus_cause['Double Classes'][day]
+                self.malus_cause['Double Classes'] += student.malus_cause['Double Classes'][day]
 
     def __place_in_schedule(self, room, day, timeslot, course_name, classes):
 
@@ -175,5 +174,5 @@ class Roster():
 
                     # store inside the course how many occupation malus it caused
                     course.capacity_malus += occupation
-                
+
         self.course_capacity_malus_sorted = sorted(self.course_list, key=lambda x: x.capacity_malus)

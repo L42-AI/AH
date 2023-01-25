@@ -174,8 +174,6 @@ class Student():
         # For each course:
         for course in self.courses:
 
-            self.timeslots[course.name] = {}
-
             # Set the current course dict
             current_course = Roster.schedule[course.name]
 
@@ -228,7 +226,7 @@ class Student():
             self.malus_cause['Double Classes'][day] = 0
 
             # Sort the timeslots in the day:
-            days[day].sort(reverse=True)
+            days[day] = sorted(days[day], reverse=True)
 
             # Set the dictionary key as list
             timeslot_list = days[day]

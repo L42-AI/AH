@@ -1,10 +1,12 @@
-import classes.Algorithms.HC_multiprocessor as HC_multiprocessorClass
+import classes.Algorithms.Multiprocessor as MultiprocessorClass
+import classes.Algorithms.genetic as GeneticClass
 
 import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
 import classes.representation.room as RoomClass
 import classes.representation.roster as RosterClass
-import classes.Algorithms.genetic as GeneticClass
+import classes.representation.malus_calc as MalusCalculatorClass
+
 import os
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,7 +14,7 @@ import pandas as pd
 
 from tqdm import tqdm
 
-class Generator_HC():
+class Generator:
     def __init__(self, COURSES, STUDENT_COURSES, ROOMS, visualize=False, annealing=False, capacity=False, popular=False, popular_own_day=False, climbing=False):
 
         # Set heuristics
@@ -22,20 +24,21 @@ class Generator_HC():
         self.POPULAR_OWN_DAY = popular_own_day
         self.CLIMBING = climbing
 
-        self.malus, self.Roster, self.df, self.course_list, self.student_list, self.rooms_list = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
-
+        self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
 
         if visualize:
             self.plot_startup(COURSES, STUDENT_COURSES, ROOMS)
 
-    def __count_students(self, df):
+    """ INIT """
+
+    def __count_students(self, dataframe):
         """This function Counts the amount of students enrolled for each course"""
 
         list_courses = ['Vak1', 'Vak2', 'Vak3', 'Vak4', 'Vak5']
         dict_count = {}
 
         # loop over each row of the dataframe and set the count plus 1
-        for _, row in df.iterrows():
+        for _, row in dataframe.iterrows():
             for course in list_courses:
 
                 # make it a string, in order to easily check if it is nan
@@ -83,7 +86,6 @@ class Generator_HC():
 
         return course_list, student_list, rooms_list
 
-
     def schedule_fill(self, Roster, course_list, student_list):
         ''''method schedules a timeslot for every lecture, tutorial or practical that takes place'''
 
@@ -124,7 +126,6 @@ class Generator_HC():
         Roster.fill_empty_slots()
 
         Roster.init_student_timeslots(student_list)
-
 
     def create_dataframe(self, Roster, student_list, visualize=False):
         # Make lists to put into schedule dataframe
@@ -186,29 +187,31 @@ class Generator_HC():
 
         return schedule_df
 
-
     def initialise(self, COURSES, STUDENT_COURSES, ROOMS):
-        
+
         # starts up a random Roster
-        course_list, student_list, rooms_list = self.assign(COURSES, STUDENT_COURSES, ROOMS)
+        course_list, student_list, room_list = self.assign(COURSES, STUDENT_COURSES, ROOMS)
 
-        # create a roster
-        Roster = RosterClass.Roster(rooms_list, student_list, course_list, capacity=self.CAPACITY)
+        # Create Malus Calculator
+        MC = MalusCalculatorClass.MalusCalculator(course_list, student_list, room_list)
 
-        # fill the roster
+        # Create a roster
+        Roster = RosterClass.Roster(room_list, student_list, course_list, capacity=self.CAPACITY)
+
+        # Fill the roster
         self.schedule_fill(Roster, course_list, student_list)
 
-        # Calculate costs of roster
-        Roster.total_malus(student_list)
+        # Compute Malus
+        malus = MC.compute_total_malus(Roster.schedule)
 
-        # Create a dataframe and export to excel for visual representation
-        df = self.create_dataframe(Roster, student_list)
+        return malus, Roster, course_list, student_list, room_list, MC
 
-        # Save as malus points
-        malus_points = Roster.malus_count
+    """ GET """
 
-        return malus_points, Roster, df, course_list, student_list, rooms_list
+    def get_schedule(self):
+        return self.Roster.schedule
 
+    """ METHODS """
 
     def __run_random(self, COURSES, STUDENT_COURSES, ROOMS):
         self.costs = []
@@ -250,26 +253,23 @@ class Generator_HC():
         plt.savefig(os.path.join(directory_plots, fig_name))
         # plt.show()
 
-    def get_schedule(self):
-        return self.Roster.schedule
-
-    def get_malus(self):
-        return self.Roster.malus_count
-
-    def get_malus_cause(self):
-        return self.Roster.all_malus_cause
-
     def run(self, iters = 200):
         for i in tqdm(range(iters)):
             self.costs.append()
             self.iterations.append(i)
 
-    def rearrange_HC(self):
+    def optimize(self):
+        pass
 
-        HCMultiprocessor = HC_multiprocessorClass.HCMultiprocessor(self.Roster, self.course_list, self.student_list)
-        HCMultiprocessor.run_hillclimbers()
 
-class Generator_SA(Generator_HC):
-    def rearrange_HC(self):
-        HCMultiprocessor = HC_multiprocessorClass.HCMultiprocessor_SimAnnealing(self.Roster, self.course_list, self.student_list)
-        HCMultiprocessor.run_hillclimbers(self)
+""" Inherited Classes """
+
+class Generator_HC(Generator):
+    def optimize(self):
+        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC)
+        Multiprocessor.run()
+
+class Generator_SA(Generator):
+    def optimize(self):
+        Multiprocessor = MultiprocessorClass.Multiprocessor_SimAnnealing(self.Roster, self.course_list, self.student_list, self.MC)
+        Multiprocessor.run()
