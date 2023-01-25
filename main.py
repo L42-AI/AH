@@ -20,7 +20,7 @@ def main_runner(ANNEALING, CAPACITY):
     stop = False
     while stop == False:
         G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY)
-        G.rearrange_HC(visualize=True)
+        G.rearrange_HC()
 
 if __name__ == '__main__':
     if profile:
