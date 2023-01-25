@@ -2,6 +2,8 @@ import classes.Algorithms.generator as GeneratorClass
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 
+import classes.as InitClass
+
 import cProfile
 import pstats
 
@@ -40,9 +42,10 @@ def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALI
             G.optimize()
 
 if __name__ == '__main__':
-    if profile:
-        cProfile.run('main_runner(ANNEALING, CAPACITY)', 'profile.out')
-        p = pstats.Stats('profile.out')
-        p.strip_dirs().sort_stats('time').print_stats(100)
-    else:
-        main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
+    # if profile:
+    #     cProfile.run('main_runner(ANNEALING, CAPACITY)', 'profile.out')
+    #     p = pstats.Stats('profile.out')
+    #     p.strip_dirs().sort_stats('time').print_stats(100)
+    # else:
+    #     main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
+
