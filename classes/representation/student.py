@@ -27,7 +27,7 @@ class Student():
 
         # Make list of timeslots
         self.timeslots = {}
-
+        
         # Initiate malus
         self.init_malus()
 
