@@ -1,8 +1,9 @@
 import classes.Algorithms.generator as GeneratorClass
 
-from data.data import COURSES, STUDENT_COURSES, ROOMS
 
-import classes.as InitClass
+import classes.gui.Init as InitClass
+
+from data.data import COURSES, STUDENT_COURSES, ROOMS
 
 import cProfile
 import pstats
@@ -48,4 +49,5 @@ if __name__ == '__main__':
     #     p.strip_dirs().sort_stats('time').print_stats(100)
     # else:
     #     main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
-
+    App = InitClass.App()
+    App.run()
