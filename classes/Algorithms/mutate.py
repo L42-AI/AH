@@ -1,8 +1,7 @@
 import random
 
 class Mutate():
-    def __init__(self, df, course_list, student_list, Roster):
-        self.df = df
+    def __init__(self, course_list, student_list, Roster):
         self.Roster = Roster
 
         self.course_list = course_list
@@ -243,18 +242,18 @@ class Mutate():
         # find classes that day
         class_to_switch, course = self.__find_classes(student_to_switch, worst_day)
 
-        # if there are no good classes to switch, stop
+        # stop if there are no good classes to switch
         if class_to_switch == None:
             return
 
         # check the type of class
-        if class_to_switch[0] == 't':
-            course_rooms, course_group_dict, course_max_std, student_to_switch_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch, t=True,)
+        if class_to_switch[:8] == 'tutorial':
+            course_rooms, course_group_dict, course_max_std, student_to_switch_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch, t=True)
         else:
-            course_rooms, course_group_dict, course_max_std, student_to_switch_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch, t=False,)
+            course_rooms, course_group_dict, course_max_std, student_to_switch_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch, t=False)
 
         # cannot switch if there are no or one classes of particular type
-        if course_rooms < 2:
+        if course_rooms <= 1:
             return
 
         # pick a new group
@@ -272,18 +271,19 @@ class Mutate():
             # find the student object to replace with the same student that has new timeslot
             student = self.__get_student_object(student_to_switch.id)
             student = student_to_switch
-
         else:
 
             #  if full, swap with the worst student in the group
-            if class_to_switch[0] == 't':
+            if class_to_switch[:8] == 'tutorial':
                 students_in_group = [student for student in course.enrolled_students if student.tut_group[course.name] == new_group]
             else:
                 students_in_group = [student for student in course.enrolled_students if student.pract_group[course.name] == new_group]
+
+            # Find student to switch based on the highest malus
             student_to_switch_new_group = max(students_in_group, key=lambda x: x.malus_count)
 
             # set variables for new student
-            if class_to_switch[0] == 't':
+            if class_to_switch[:8] == 'tutorial':
                 course_rooms, course_group_dict, course_max_std, student_new_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch_new_group, t=True)
             else:
                 course_rooms, course_group_dict, course_max_std, student_new_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch_new_group, t=False)

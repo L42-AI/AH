@@ -168,7 +168,7 @@ class Student():
                 self.timeslots[course.name][current_practicum] = timeslot_dict
 
     def student_timeslots(self, schedule):
-        """ 
+        """
         This method adds the timeslots for classes per week. 
         The dictionary timeslots is linked to the Roster schedule.
         """
@@ -221,7 +221,7 @@ class Student():
 
         # go over the days
         for day in days:
-     
+
             self.malus_cause['Classes Gap'][day] = 0
             self.malus_cause['Dubble Classes'][day] = 0
             # Sort the timeslots in the day:
@@ -249,7 +249,7 @@ class Student():
                     # claculate the amount of gaps between lessons
                     if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
                         lesson_gaps = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
-                        
+
                         # check if one gap hour
                         if lesson_gaps == 1:
                             self.malus_cause['Classes Gap'][day] += 1
