@@ -1,0 +1,2649 @@
+[33mcommit c0ee56b1a7d14bda28bc3f3a0b0b4ae0e356dfc1[m[33m ([m[1;36mHEAD -> [m[1;32mJacob[m[33m, [m[1;31morigin/Jacob[m[33m)[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 15:48:22 2023 +0100
+
+    pls work
+
+[33mcommit 6f3720345f65f483ea83786d3c6f9b555ad6e8a6[m
+Merge: 9405283 6d931ab
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 15:48:16 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit 9405283bb28b5239ed97594ce9bd80ca944dc4a6[m
+Merge: 8afe0af 5dcbb15
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 15:27:44 2023 +0100
+
+    Merge branch 'Luka' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit 6d931ab45295ea4df3f5bff306c81ee9469610de[m
+Merge: dc1f407 5dcbb15
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 26 15:27:32 2023 +0100
+
+    Merge branch
+    'Luka' into main
+
+[33mcommit dc1f4076eb7c9edccfe6e9b9acc0a775bf68e601[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 26 15:26:25 2023 +0100
+
+    Delete all
+
+[33mcommit 5dcbb150b9d5240ca6958c7d9a8599164cd65409[m[33m ([m[1;31morigin/Luka[m[33m)[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 26 15:23:59 2023 +0100
+
+    Fix bugs
+
+[33mcommit 8afe0af739900780e6d47c3a6cf384cf354b0ea9[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 15:21:59 2023 +0100
+
+    annealing
+
+[33mcommit 1216be6ce9fcdb13b0d391d458d19aff0329514d[m
+Merge: a1fdb78 97a96e2
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 15:21:47 2023 +0100
+
+    merge werkt neit goed jankon
+
+[33mcommit a1fdb78eb4fbec0c66ccb56f1cfddf7270629b6b[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 14:51:56 2023 +0100
+
+    konjo
+
+[33mcommit 97a96e265fc443e44531d8ca29b91a54d5b658eb[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 26 14:51:26 2023 +0100
+
+    Remove for merge
+
+[33mcommit 0c9155501a485d7eb3bd063eb4e2de2c6a0c9f4b[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 26 14:49:24 2023 +0100
+
+    Delete json
+
+[33mcommit b4d9a862a210f897693a899fc833835f2e77353a[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 14:47:49 2023 +0100
+
+    vet
+
+[33mcommit 2e7f291ccf4c5f703c6e7a9e4da36d1e21d18458[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 26 14:47:33 2023 +0100
+
+    Merge complete
+
+[33mcommit 2668c6ab435de7f5462188e49a382d613b2ae532[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 14:47:26 2023 +0100
+
+    pull
+
+[33mcommit b26494c70ba5a42424674316329d6f6437408e66[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 14:46:57 2023 +0100
+
+    sim ann improvements
+
+[33mcommit b0277e619c286ef175d8e4ede27b6218f7ec5023[m
+Merge: 25acc99 f0facc0
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 26 14:42:42 2023 +0100
+
+    Merge branch 'Jacob' of https://github.com/L42-AI/AH into Luka
+
+[33mcommit f0facc0caa66639e8c2c5c4c25f5d298a2a589a7[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 14:21:32 2023 +0100
+
+    student swap now works with new representation
+
+[33mcommit 25acc9921c8b66d34311fc1b825317a878256866[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 26 14:20:57 2023 +0100
+
+    Replace Roster.schedule with self.schedule
+
+[33mcommit 04b2f462537fff3cdc277cdc545abf6bf1713b3e[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 26 14:20:35 2023 +0100
+
+    Add core assigment function
+
+[33mcommit a4c3a08690e14e8b438b6d8a283c1d647377a494[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 26 14:20:07 2023 +0100
+
+    Start GUI selector
+
+[33mcommit c509998f9a2959270200e3d5301257acf52a4828[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 14:19:54 2023 +0100
+
+    student swap works again with new system
+
+[33mcommit a97fc961c3a068289b0f4fb920f2864fa42bf443[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 13:54:01 2023 +0100
+
+    students get swapped before timeslot gets swapped. See readme 'timeslotswap' for more info
+
+[33mcommit 6de6cd0d3499795ea6a64028c1fe53d0b0e69aab[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 11:20:44 2023 +0100
+
+    room capacity is now placed in schedule
+
+[33mcommit 896beca7945f500a713edaa89c2519bcbee2efd7[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 26 11:07:07 2023 +0100
+
+    new group for switch student can now be found
+
+[33mcommit 0caa1dfd1dfbd87c9c78a09bc74cb7911abbd1a9[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 26 00:12:33 2023 +0100
+
+    Simplify input GUI
+
+[33mcommit 4a40eeb2d0d49e30b5140e46ab53a5076cecc9e7[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 25 23:31:36 2023 +0100
+
+    Change location
+
+[33mcommit d2c8e4d410269334132b727ca7065eb16059365c[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 25 22:49:26 2023 +0100
+
+    Improve GUI
+
+[33mcommit 7cc4235aace8d8860b0d31505fbeb28ccf7ca8a4[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 25 18:08:59 2023 +0100
+
+    TO DO: USE THE COURSE TO FIND NEW GROUP AND SWITCH AND CALCULATE MALUS
+
+[33mcommit 6ca9cb19acb4bd8bae725dcbc86db26205fc4fc2[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 25 15:39:11 2023 +0100
+
+    Further visualization
+
+[33mcommit 8adcd86e7ae562fe2d26ab6e3d2eb4867a734052[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Wed Jan 25 14:59:32 2023 +0100
+
+    capaciteit rooms checken?
+
+[33mcommit 21ee68529423bf4f857f058673efbeb56e058ea6[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 25 13:35:38 2023 +0100
+
+    Merge commit '283167e68f' into main
+
+[33mcommit b86eab9f7ace1799f71b9d6f8395c870c59590a1[m
+Merge: 2f2351a 283167e
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 25 13:35:14 2023 +0100
+
+    Merge commit '283167e68f' into main
+
+[33mcommit a6eedb1bb4435f574d76acae60286633b1b0b291[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 25 13:06:10 2023 +0100
+
+    Luka's updates
+
+[33mcommit 68ee7d96331a4aca2799f2ab249aa8b3bdf42276[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 25 13:04:10 2023 +0100
+
+    more iterations
+
+[33mcommit f234a76bd84ea49eb617955f0770224dc912db52[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 25 01:37:46 2023 +0100
+
+    Change malus calc structure
+
+[33mcommit c947501b568bce8c121f715a739546297f9472bc[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 25 01:37:30 2023 +0100
+
+    Cleanup function names and inheritance
+
+[33mcommit 0ab75ca2872758663ac921ae2bf94f7cc97deccf[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 24 15:33:52 2023 +0100
+
+    Improve Init visualization
+
+[33mcommit 6172a6165cecff0dae44ab7f09a007341f875148[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 24 14:52:06 2023 +0100
+
+    Delete deepcopy
+
+[33mcommit d35e894c019f9cd82901ebab650be1df1f032fce[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 24 13:15:56 2023 +0100
+
+    more iterations
+
+[33mcommit 8f1c7af3e9f40ea54cc3b57f0ba785e809210edd[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 24 12:52:31 2023 +0100
+
+    Add more data
+
+[33mcommit 33e5bdd054475a68ec674509e6b4e445ae99fb49[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 24 11:29:05 2023 +0100
+
+    Data opslaan en verder werken aan deepcopy weghalen
+
+[33mcommit 8207f8c5fe8aee37879b40447bc9e26b94c5aa77[m
+Merge: 7312735 86fc5f2
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 23 23:09:16 2023 +0100
+
+    Merge branch 'Jacob' of https://github.com/L42-AI/AH into Luka
+
+[33mcommit 7312735e524d4babf52e930c440243fa124b7052[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 23 22:59:40 2023 +0100
+
+    Changes to hillclimber shallow
+
+[33mcommit de8dd5d8b95fa2c09734d4a9d953eea67e799964[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 23 21:17:29 2023 +0100
+
+    Improve init visualize GUI
+
+[33mcommit 2c2861388630a6d981cbd6cea5abf2989d7bd978[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 23 20:14:34 2023 +0100
+
+    Create shallow copies
+
+[33mcommit 86fc5f2167a0c84571577fd5006b76de47efb4b8[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Mon Jan 23 19:28:40 2023 +0100
+
+    Sim An works good but slow
+
+[33mcommit 2f2351a2ad4bfcfcfbe49ecae9602537fcaff4fe[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Mon Jan 23 19:28:22 2023 +0100
+
+    export
+
+[33mcommit 8a06fa0564ca0062b3abf22801a2e5261acb26cb[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Mon Jan 23 18:49:50 2023 +0100
+
+    iteratie idee
+
+[33mcommit d02750e227041e1f24ead2e70fc735e6ee0bd2b8[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 23 18:45:03 2023 +0100
+
+    Add student set to Roster.schedule to make hashable
+
+[33mcommit 066ea00dd514590c8c6f6b682eabc7858493b178[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Mon Jan 23 18:08:05 2023 +0100
+
+    tweaks in variables
+
+[33mcommit 5cfe2bba8db437a31918d158ec90e450a57c3eba[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Mon Jan 23 18:07:10 2023 +0100
+
+    update
+    
+    tweaks onderaan toegevoegd
+
+[33mcommit ef52666051844d4128339ce04ce8191fb0590235[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Mon Jan 23 17:36:31 2023 +0100
+
+    simulated annealing
+
+[33mcommit 18442e85ee81ce9f71fee4fe3e37b837bac9f5ea[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 23 17:24:41 2023 +0100
+
+    Start visualization GUI
+
+[33mcommit 283167e68feeda02cb76ace1328cb1c97fee2926[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sun Jan 22 21:32:00 2023 +0100
+
+    Improve HC multiprocessor
+
+[33mcommit f2e223f6a776ca67e5f5bd0165a26186ea49995d[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 23:10:23 2023 +0100
+
+    Multiprocessing
+
+[33mcommit 8f3b73db9a3777c995542b3cecf82eb0fe35e691[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 20:27:57 2023 +0100
+
+    Fix Mutate
+
+[33mcommit 0e06457192a14f09f71718a4dc586ef3a723f49a[m
+Merge: 00fcfed 42b49b0
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 20:25:31 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Luka
+
+[33mcommit 42b49b0f2dcf27b7a429cf44b3d30a2d13f2ec24[m[33m ([m[1;32mmain[m[33m)[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 20:16:10 2023 +0100
+
+    Prettify generator
+
+[33mcommit b919e784d0a9139bcf6275c8000fb3a18cf4f13e[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 20:15:48 2023 +0100
+
+    debug mutate
+
+[33mcommit 954bb466a83ea778737d4760dbd9b114fde1316d[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 19:51:07 2023 +0100
+
+    rename prototype simulated annealing
+
+[33mcommit 54649e6674978f1a41923422198cb8a3c7a137a5[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 19:49:52 2023 +0100
+
+    Split off simulated annealing
+
+[33mcommit 120ad276e0f37a026ea5411259e9be89b62f4061[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 19:47:34 2023 +0100
+
+    Cleanup Hillclimber
+
+[33mcommit 4f5180238a24092b44e7f15a78d09bbe5706fd6f[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 19:30:16 2023 +0100
+
+    Improved mutate class
+
+[33mcommit 00fcfed94d572433e2f347bf21ae49ef543049fb[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 18:58:00 2023 +0100
+
+    Cleanup Mutate class
+
+[33mcommit fd072f2952bc5db3f4366bef9d00f122ff72a3c1[m
+Merge: b78f505 a66c4d5
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 18:27:53 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Luka
+
+[33mcommit b78f5058b6233cf2c7460487af2807f4e1bc369e[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 18:24:22 2023 +0100
+
+    Add to change group method
+
+[33mcommit a66c4d5c443fb0bb29547e245b9022fea839376c[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Sat Jan 21 16:33:08 2023 +0100
+
+    comments
+
+[33mcommit 92d7eddd0205e01c0f4874435260a612bd4a8f9b[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Sat Jan 21 16:28:30 2023 +0100
+
+    small bug fixed
+
+[33mcommit ac046ae47b7f740b4e04fbca4e1b4ff5af4b3938[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Sat Jan 21 16:24:25 2023 +0100
+
+    swapbadtimeslots double classes added. This lowers the double classes
+
+[33mcommit 6098c3db6c20ae86419cd0f8a1809f530f09300a[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Sat Jan 21 16:06:44 2023 +0100
+
+    outcommented delete.py
+
+[33mcommit cfb621373ba2d84c81690dc9e383586831701409[m
+Merge: 34fb1a3 6ab7c7b
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Sat Jan 21 16:01:17 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH
+
+[33mcommit 34fb1a387c19437c10d900c32283151f73568281[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Sat Jan 21 15:59:40 2023 +0100
+
+    deleted whitespace
+
+[33mcommit 3ce4470fe93c42059fbcf199b0195bc8294eb72b[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Sat Jan 21 15:58:53 2023 +0100
+
+    .
+
+[33mcommit c2e88c714ab03dcac145451239dec3b1d000a6b7[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Sat Jan 21 15:25:47 2023 +0100
+
+    student now has maulus per day instead of all malus. Helps with timeslot swapper. Timeslot swapper works. Also made a delete.py where deleted code can be stored
+
+[33mcommit bc54313bcf70b75feb19bec839564c943684e381[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 15:25:23 2023 +0100
+
+    Fixing random student shuffle
+
+[33mcommit ed96a2e600e5b507b87a5d5c02a1bc49a5290fa5[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 15:25:13 2023 +0100
+
+    Fixing random student shuffle
+
+[33mcommit 4181d513f46b2d42c8993cb29be1469ab46f34dc[m
+Merge: 9ad62d6 9dbcc0c
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 11:36:18 2023 +0100
+
+    Merge branch 'Gid' of https://github.com/L42-AI/AH into Luka
+
+[33mcommit 9ad62d6d61eb9a7c5ef8000f285fa5d71148ea70[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 21 11:18:00 2023 +0100
+
+    Chnages to mutate
+
+[33mcommit 90fe8281cdf659eea429509057552220a3fd38e4[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 20 21:35:44 2023 +0100
+
+    more readable student swap method and found student list problem
+
+[33mcommit f5a4117d10dabf3d378c0ff224afa0d1956488fa[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 20 17:14:28 2023 +0100
+
+    student swapper Jacob does not work yet
+
+[33mcommit 6ab7c7bfa4f9db66e2fc2fa8be036640c4dc6ebf[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 16:39:40 2023 +0100
+
+    this works outcommented other heuristics for now
+
+[33mcommit 9dbcc0c4639c0113e70363845d674fae86898819[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 16:37:58 2023 +0100
+
+    set capacity to false (pls dont change this)
+
+[33mcommit 7d2dabf1864f54f10d81e16e6459f486318c477a[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 20 15:42:56 2023 +0100
+
+    worststudentrandomgroup now swaps a bad student to a new pract or tut
+
+[33mcommit 792a841f06e4c8340eccebc703176063ded2fa50[m
+Merge: 23d0882 0d01cdf
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 20 15:34:31 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit c9ca70a7a5d26917c7999803e1152cfffb6c8a30[m
+Merge: 5f832cc 0d01cdf
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 20 15:33:26 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Luka
+
+[33mcommit 23d08825db0e61c5e7cf444d75359f6d0c720d5a[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 20 15:32:09 2023 +0100
+
+    worst student swapper
+
+[33mcommit 52325e949c0e8a01c92de79a8c2b98aab63fa486[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 20 15:31:52 2023 +0100
+
+    student worst swapper
+
+[33mcommit 5f832cc9adcc7eac292ce60cb9d71ef30ecf627d[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 20 15:31:38 2023 +0100
+
+    Begin aan visualize PERSOONLIJK
+
+[33mcommit 70137f6a3559deb6ef2a024974dc665c0b985797[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 20 15:31:10 2023 +0100
+
+    Veranderingen aan mutate
+
+[33mcommit 0d01cdf6b58a2e2f33f9b14dee33fad23309ce45[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 15:28:34 2023 +0100
+
+    fixxed everything hill climber works now
+
+[33mcommit 620d67d0459a9b8baa0949e0a689aede552c200a[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 14:13:54 2023 +0100
+
+    improved count maluspoints, removed bugs
+
+[33mcommit fe6da14ed47ebffb2f1e41115b834fb48ac0364d[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 12:29:08 2023 +0100
+
+    outcomment unnecassary code
+
+[33mcommit a61f4298922db49aab57a85a766fe723a1341ea6[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 11:49:14 2023 +0100
+
+    rearrange with lower randint
+
+[33mcommit 36ac029d29009eb2b255f7db097472125560bddc[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 11:37:53 2023 +0100
+
+    outcommend not used code delete later
+
+[33mcommit 4cee705749ee9cab9889e60715f72855c0c10146[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 11:28:29 2023 +0100
+
+    better mutate.py
+
+[33mcommit 0cb83d29891e8ba3490a835dc049dfdb27487183[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 11:16:46 2023 +0100
+
+    cleaner hillclimber
+
+[33mcommit 57a7d3fe4aeb30df7663741b7faae69ebd658df4[m
+Merge: eb0177a bed3170
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 20 11:14:19 2023 +0100
+
+    Merge branch 'Gid' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit 1d74dc4191b0e374b2b270a739bbec826d516adc[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 11:13:23 2023 +0100
+
+    cleaned
+
+[33mcommit eb0177a19da236586f8fb7d5866a72acafd69a44[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 20 11:12:35 2023 +0100
+
+    SA updated and hc updated with list
+
+[33mcommit bed3170a95b7963363925d49a176f08bc3dea0d5[m[33m ([m[1;31morigin/Gid[m[33m)[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 11:12:07 2023 +0100
+
+    first test for hillclimber lecture swap works
+
+[33mcommit e8f0b67a14a5d9b39e76a4c1b1deed9ce2e1b2ad[m
+Merge: 737cdbc 8aa59fd
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 10:41:54 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit 737cdbcc0ae5ff16967a5ad20f0bf3e7a16ba5c4[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 10:37:13 2023 +0100
+
+    prettier swap random lessons
+
+[33mcommit c801c13694f259a9aed3491ec1c230f34a10a169[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 20 10:26:15 2023 +0100
+
+    swap random lessons
+
+[33mcommit b679f09560ef5b17945659910f7a76e4b46582e4[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 19 22:17:18 2023 +0100
+
+    simulated annealing is op dit moment heel goed in het verspillen van je tijd
+
+[33mcommit afbe88625a9cd6b6a66f7ae8c3793773dc72262e[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 19 22:15:55 2023 +0100
+
+    Sim annealing is op dit moment heel goed in het absoluut verspillen van je tijd
+
+[33mcommit fa387a54c7673764112c9077015e63312246e418[m
+Merge: 5e7391d 8aa59fd
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 19 20:59:56 2023 +0100
+
+[33mcommit 5e7391d053e3d15a2d2452884b88e6128665eb4d[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 19 20:58:31 2023 +0100
+
+    hillibillie does not work yet
+
+[33mcommit 0e69511a42e702c967907eaec24f37b74ae64ea0[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 19 19:53:27 2023 +0100
+
+    all the functions merged into one and working
+
+[33mcommit 9a18f15d94d3d59850d0e6c2179c48355e2325a3[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 19 19:11:00 2023 +0100
+
+    first test_swap is working
+
+[33mcommit 8aa59fd72469225b1342bcb322bc5ae1569d6fb6[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 19 19:09:14 2023 +0100
+
+    Start simulated annealing
+
+[33mcommit bb7b0be0ea9f63a493cb39fd751d8d62b050da88[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 19 19:08:19 2023 +0100
+
+    Improved HC
+
+[33mcommit 9fd75140c0e1a13b90e84b1db5ac684de9b9d8f9[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 19 18:55:03 2023 +0100
+
+    added the other swaps and starting on generalized function
+
+[33mcommit d67bf4580659daec1d087f63149bf61d2650d158[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 19 17:59:01 2023 +0100
+
+    Improved malus count
+
+[33mcommit 9f7055e194f530efb4e83e7189003b4f4a068a66[m
+Merge: 990a0fe e5da89f
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 19 15:56:50 2023 +0100
+
+    Merge branch 'Jacob' of https://github.com/L42-AI/AH into Luka
+
+[33mcommit 990a0fea77b871174d9383843d6415abc1f2676e[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 19 15:52:29 2023 +0100
+
+    Update
+
+[33mcommit e5da89f3795c8fb7c9876d67795c3a4891fb8d9a[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 19 15:51:44 2023 +0100
+
+    mixed hillibillies
+
+[33mcommit d336fc9c581790e7491236d8c89ef721002caa55[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 19 15:01:01 2023 +0100
+
+    student swapper worst student with random group and worst student of that group if its full
+
+[33mcommit d12b9a1d12a5e5785d70713bd91317abef047431[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 19 14:20:23 2023 +0100
+
+    Added switch tut method
+
+[33mcommit a2f497b92700299b3d8b7978f294dd3f00a26b53[m
+Merge: aaacfc2 209d5e4
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 19 12:58:30 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit 209d5e4e112c6fb3beee5f1014c69b4c968c9f36[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 19 12:57:21 2023 +0100
+
+    Create hillclimber
+
+[33mcommit aaacfc2addb4ba431201bafb05a0b56266aaa90e[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 19 12:56:21 2023 +0100
+
+    start with better student swap
+
+[33mcommit 7bc268b5881b8b05f18edad6508c3e850324f0a5[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 19 12:00:07 2023 +0100
+
+    comments in generator added
+
+[33mcommit 410be10a2166088dbd4dd201c187f5be6cc00cf9[m
+Merge: 03dc82d e3e2c3e
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 19 11:56:53 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit 8f5676f7bf816589df4e0bd48de824bb3f49ba43[m
+Merge: 873c6c3 e3e2c3e
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 19 11:54:27 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit e3e2c3edaa4951fcefbfc0c4fd408eee0eb1733f[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 19 11:50:54 2023 +0100
+
+    Start hill climber
+
+[33mcommit 6f87a5f3f98d0ee2cfdd4e99b8f951edd2018566[m
+Merge: 1bb84f2 45b2163
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 19 11:33:02 2023 +0100
+
+    Merge branch 'main' into Luka
+
+[33mcommit 1bb84f2012c2d97005d6e178ee4dae5a0cf97556[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 19 11:30:53 2023 +0100
+
+    Restucture
+
+[33mcommit 03dc82d9bccb6b9bd7d4248a03c8ac45615f3e84[m
+Merge: 023331e 04760e9
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 19 10:44:20 2023 +0100
+
+    Merge branch 'Luka' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit 04760e9336d6f5255aa7d071caca4af45dda1c79[m
+Author: Luka Zaitch <117086277+L42-AI@users.noreply.github.com>
+Date:   Wed Jan 18 21:06:55 2023 +0100
+
+    Update change.py
+
+[33mcommit 873c6c3122df63cc730481500bf9392f79fa44b3[m
+Merge: ce4233f 45b2163
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 17:52:22 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit ce4233f77e31ec8ee78da107d5071d9ba4b47cc3[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 17:51:19 2023 +0100
+
+    added heuristics and their plots but they did very little
+
+[33mcommit 46a94113732abd25af9ab4d09f04756bd59c1447[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 17:50:26 2023 +0100
+
+    some heuristics and generated plots with them, very little effect...
+
+[33mcommit 023331e45259cf3c64378a50b8ab9e95f204b0ce[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 16:48:02 2023 +0100
+
+    back to normal hill climber
+
+[33mcommit 56a97a6999d0d05f2b8aae32cc135d3f5b45f3a0[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 16:44:49 2023 +0100
+
+    Change shuffle to changing timeslots
+
+[33mcommit 45b2163f4bc77dc7313e5a92aa6db649ec0a33af[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 16:03:02 2023 +0100
+
+    Final
+
+[33mcommit b4b31865017c87812a503d201bd1725a80a56c13[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 16:02:45 2023 +0100
+
+    push
+
+[33mcommit 568aebf34bf2d4753251f426f5e67ac424ed33e2[m
+Merge: e4920ff ae954b3
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 15:21:49 2023 +0100
+
+    Merge branch 'Luka' into main
+
+[33mcommit e4920ff466f14a78c804c3f49ce38cb60e00da7d[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 15:20:11 2023 +0100
+
+    in order to test
+
+[33mcommit ae954b3d2d755b4523064bb7e0f41b2cac6ccbb8[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 15:18:58 2023 +0100
+
+    Prettify swap 2 students
+
+[33mcommit 22ed5320e141d95ce992acc8f2605683f11378b7[m
+Merge: b76cd2f 56898f3
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 15:12:19 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit b76cd2f5f35de5e76ed01f0d99203e774f3a079d[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 15:12:10 2023 +0100
+
+    improved hill climber
+
+[33mcommit 56898f375201a389f47d827143647be1f626c50a[m
+Merge: 54975b0 54b6efe
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 15:11:47 2023 +0100
+
+    Merge branch 'Luka' into main
+
+[33mcommit 54b6efe837c771082442c64b9922e69382350c3f[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 15:10:30 2023 +0100
+
+    Changes
+
+[33mcommit 37359fd1ff443b8ba53f2c435d8fdbed3e8813b6[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 15:08:43 2023 +0100
+
+    double code gone
+
+[33mcommit 0d0f01837731a0cd08a2805649f6ebe4c88184a6[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 14:57:44 2023 +0100
+
+    added list of changes we might want to do
+
+[33mcommit 9b4df842807a2eeb6e1f6e75ebba1916d7b2a4f9[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 14:57:35 2023 +0100
+
+    old hillibilly
+
+[33mcommit 51f2f85a4a014ab74d8df47fcc8140c9d87e3172[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 14:57:14 2023 +0100
+
+    optional heuristic
+
+[33mcommit 55b8407e973f673beff5d24ec73ff551483551bb[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 14:53:32 2023 +0100
+
+    improved hillclimber
+
+[33mcommit 43180e59974bd944173df7872178e3443a4fb919[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 14:50:51 2023 +0100
+
+    better hill climber
+
+[33mcommit 54975b0cb8eb470553ec267abb5ef7410880dbdc[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 14:21:46 2023 +0100
+
+    first hill climber
+
+[33mcommit 27d69d1cffac89db6f432c4c2f43917ee84ff2f6[m
+Merge: 2dcb005 5595be3
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 14:17:14 2023 +0100
+
+    Merge branch 'Luka' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit 5595be335951bd7643bd8cf323a9826ceffc7f19[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 14:17:07 2023 +0100
+
+    Switches student fixed
+
+[33mcommit 2dcb005a9c7d4fb41de61db3cc5c9f302302d683[m
+Merge: 849057c 9fd4752
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 13:17:34 2023 +0100
+
+    Merge branch 'Luka' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit 849057c38a0123929de024e7d05a2efaf7f86d4f[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 13:17:14 2023 +0100
+
+    .
+
+[33mcommit 9fd475292d3f280d7ee30ed7d0e16351e12da322[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 13:16:22 2023 +0100
+
+    Fix for malus count
+
+[33mcommit f5d0317630206132bcebe4d103f4529b0a05b496[m
+Merge: 0d360cd 9c07dd9
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 13:04:13 2023 +0100
+
+    Merge branch 'Luka' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit 9c07dd9dfe56ad250084ec25a32363ec774d03d4[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 13:03:15 2023 +0100
+
+    Start student swap
+
+[33mcommit 0d360cd8533a48e0fad3bfdf20485a41b523fb74[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 12:56:03 2023 +0100
+
+    delete print statements luka...
+
+[33mcommit 0b9d922eb1e51767b88589c847b3aa835ea936c0[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 12:15:07 2023 +0100
+
+    small
+
+[33mcommit d01feb449b791bb9ee0212d5fc41056a31b59e07[m
+Merge: 7d5f814 c73a3b5
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 12:10:50 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit 7d5f8140261c9c0661081a0cd376454d9bfd5615[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 12:07:14 2023 +0100
+
+    start hill climber
+
+[33mcommit c73a3b5bdb176e471ac37865fd71d5d021732b77[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 12:03:33 2023 +0100
+
+    Update
+
+[33mcommit 0a6711ffab8e653baee75ab6703e08af277ab9cf[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 11:59:06 2023 +0100
+
+    Update
+
+[33mcommit 00dc569efec2f6a9b076435a51865548f1c8b8c6[m
+Merge: cc89651 69d753e
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 11:58:58 2023 +0100
+
+    Merge branch 'Luka' into main
+
+[33mcommit 69d753e277cb363d89460fa78e2b382190daf070[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 11:57:35 2023 +0100
+
+    Update main
+
+[33mcommit cc896516bccd05b92a49474206ef5bf610178077[m
+Merge: 76e9531 584237a
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 11:50:32 2023 +0100
+
+    Merge branch 'Luka' into main
+
+[33mcommit 584237a73db50c5e46165f251eb9eccd151d5464[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 11:49:06 2023 +0100
+
+    Update
+
+[33mcommit 76e953181d2c6d356241de1601f80f4f9e1814e1[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 18 11:47:43 2023 +0100
+
+    cleaner malus calc students
+
+[33mcommit 53348ba7277732ef2f6afbd68debe2d43fa7af67[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 11:15:46 2023 +0100
+
+    dele swap functions that were in main and put them into the class
+
+[33mcommit cd6420b48911acc064bcfe18d1a0bcce5d4c1693[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 11:14:16 2023 +0100
+
+    swap lecture with empty room
+
+[33mcommit 54825b34cd570591c9eea67132255438396c97f4[m
+Merge: 9a5abe2 a5d157e
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 10:39:34 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit a5d157eefbef092888eadb72b5486b92c74f02e0[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 18 10:39:02 2023 +0100
+
+    Fix errors
+
+[33mcommit 9a5abe2334bbfeda86e70cbbe1badfd5b1c61180[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 18 10:32:56 2023 +0100
+
+    starting lecture swap to available room
+
+[33mcommit 099d6f8fac0832216e3cde38ab0ff9fbd4d7b543[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 17 18:12:39 2023 +0100
+
+    Main reorganization and cleanup
+
+[33mcommit 33f4372fe409033671947b42f2ecd4cce5e82bb3[m
+Merge: 2e84a9c 238d776
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 17 17:50:20 2023 +0100
+
+    Merge branch 'Luka', remote-tracking branch 'origin' into main
+
+[33mcommit 238d7762569560592c302299139bc8003bafc1c0[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 17 17:48:55 2023 +0100
+
+    Improve change class
+
+[33mcommit 2e84a9c05844d4c5c073c5438e7a3f8d53838d3a[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 17 17:30:09 2023 +0100
+
+    extra print
+
+[33mcommit 345591120adc02b95566047d084304cf89b5cd4a[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 17 17:28:45 2023 +0100
+
+    improved swap lecture
+
+[33mcommit a8288889d83c08fb5b935d95ad5c9867dbd522c3[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 17 17:16:52 2023 +0100
+
+    improved swap lectures
+
+[33mcommit 46b741e290b5fffb9f135e5a6d7bdcfc1b2e78ed[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 17 17:11:11 2023 +0100
+
+    improved swap lecture
+
+[33mcommit ca60c672afcfb4554c42636797aa81e2a276ea9b[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 17 17:08:32 2023 +0100
+
+    added swap lectures improved
+
+[33mcommit 4b09a4c7a88ea91885c7b89b35a0e02e20b6fab4[m
+Merge: 439d57e 10e2723
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 17 16:56:20 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit 439d57e5d3af2735f7f1b7c3a0a2130f4e6a71f9[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 17 16:56:10 2023 +0100
+
+    switch lecture  complete and correct
+
+[33mcommit 94b37b3263660e4186bfd278abd430fa360c34f8[m
+Merge: da45aeb 10e2723
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 17 16:36:43 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Luka
+
+[33mcommit da45aebc54c6170a9491c31c5139b125ed1cac0d[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 17 16:29:37 2023 +0100
+
+    Some optimalisations
+
+[33mcommit 10e2723d3c5d38e53c79abe558fc04ff8cdea4b0[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 17 15:27:06 2023 +0100
+
+    more comments
+
+[33mcommit 01fd47059d6042df96f5d02288cac760bcd0545f[m
+Merge: 469d69b 3b466a3
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 17 15:19:53 2023 +0100
+
+    Merge branch 'Jacob'
+
+[33mcommit 3b466a39f144c063b988ea60553c391162d8e522[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 17 15:16:24 2023 +0100
+
+    empty slots now have a place in the schedule
+
+[33mcommit 469d69b2d782fc89edaa5d570f60740f8ed063c2[m
+Merge: a3f8728 97092e9
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 17 15:00:45 2023 +0100
+
+    Merge branch 'Luka' into main
+
+[33mcommit 97092e92d8178cf3632ec4fbd2f29c77ada63672[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 17 15:00:11 2023 +0100
+
+    Update
+
+[33mcommit 8987c61c5c222d234c1d827aebb223733c26d6b9[m
+Merge: e02e66d 956adba
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 17 14:51:49 2023 +0100
+
+    Merge branch 'Gid' of https://github.com/L42-AI/AH into Luka
+
+[33mcommit e02e66d97e3fc9805444292e03d81de357de90f6[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 17 14:48:57 2023 +0100
+
+    Create switch class
+
+[33mcommit 956adba03791c513e53a52bdb6b72a09391ddf35[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 17 13:00:21 2023 +0100
+
+    change course
+
+[33mcommit a3f87286155cd528bd79c9e8ff99ac80948fae3e[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 17 12:08:37 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit 54103204d367c7b52850a95f47b2c7b392bf9f3e[m
+Merge: 0533922 e3eac92
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 17 10:25:01 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit 053392258ae9833a2fa92143f2d55fa15471db9f[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 17 10:24:00 2023 +0100
+
+    .
+
+[33mcommit a4750d230f3d9779079cedc166a9298b70bce249[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 17 01:30:45 2023 +0100
+
+    Start of student switching
+
+[33mcommit 6f242f314b4ffb24b1b0926f915262bdb440639e[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 16 17:54:13 2023 +0100
+
+    Better visualize malus points
+
+[33mcommit e3eac92c9455a310e7a9e7d4fc323f44c0d05feb[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Mon Jan 16 13:32:40 2023 +0100
+
+    removed import re
+
+[33mcommit d61ba064550385780996a1c2c3c9e09d0d881f07[m
+Merge: f8bff41 1a6a65e
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 16 13:32:11 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Luka
+
+[33mcommit f8bff410f1a545e1e0326c34aa6fe6ae6a855971[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 16 13:31:02 2023 +0100
+
+    Finnish find space dict
+
+[33mcommit 1a6a65ecec1b3314b56672598906eadd6d6ba01b[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Mon Jan 16 13:30:17 2023 +0100
+
+    fixed assign and right csv file
+
+[33mcommit b8c3778bcc43fc4c0538bf22d35e81b0bc8c070d[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Mon Jan 16 13:24:18 2023 +0100
+
+    new csv
+
+[33mcommit 9720dd536892b805dcd29e313678b86065c47bfd[m
+Merge: ea1fe9d 4b49e34
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Mon Jan 16 12:30:48 2023 +0100
+
+    Merge branch 'Luka' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit 4b49e343a69819f29dcd9f1bd4907ac041588a44[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 16 12:30:28 2023 +0100
+
+    Test commit
+
+[33mcommit ea1fe9d5be77c451e26a183819e9023c6617790a[m
+Merge: 7b80534 a810e91
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Mon Jan 16 11:46:36 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit a810e91380278e5b0279b47872696a0888565c46[m
+Merge: 1e997a4 fa1490e
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 16 11:42:46 2023 +0100
+
+    Merge branch 'Luka' into main
+
+[33mcommit fa1490ed6e87acb8b83c475a276137d07560e533[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 16 11:42:31 2023 +0100
+
+    Make timeslots dict
+
+[33mcommit 7b80534c3c9ccdf058a61a1eaa138bc62adc6455[m
+Merge: d472373 1e997a4
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Mon Jan 16 11:29:30 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit 82a6ed2280744b5eb91c571fe63d41ac046f8d29[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 16 11:27:54 2023 +0100
+
+    Merge main into Luka
+
+[33mcommit 1e997a4d52001a16a350f51f973efdbe482f3a01[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 16 11:25:45 2023 +0100
+
+    Cleanup
+
+[33mcommit 990fd8e173875ea1d59ab5097e2ec832027dbaa2[m
+Merge: 0f75b33 402e068
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 16 11:24:37 2023 +0100
+
+    Merge branch 'Luka' into main
+
+[33mcommit 402e06805bb45f8bb64d7c6e3aa2030f35633b83[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 16 11:23:30 2023 +0100
+
+    Add excel visualization
+
+[33mcommit 4ccee54f128a751c3b7f53dbb271981b527d11a2[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 14 19:50:54 2023 +0100
+
+    Add to stappenplan
+
+[33mcommit 8f5ec90ffee10a55411811cb5f2f342fc39fa241[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Sat Jan 14 18:55:10 2023 +0100
+
+    Added Dataframe visualisation
+
+[33mcommit d472373f6fe98e74528e2a21776b7580cd2d54f5[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 15:59:01 2023 +0100
+
+    dataframe import fixed
+
+[33mcommit 0f75b336a2bf23b4594cde1eadfbbe5ec783810f[m
+Merge: 872c5cf bcc7122
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 13 15:56:54 2023 +0100
+
+    Merge branch 'Luka' into main
+
+[33mcommit bcc7122d609f5dfb32ac30ba365941ac95423911[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 13 15:56:10 2023 +0100
+
+    Actual Final changes
+
+[33mcommit e89f2de5ee78305e38f19fe03281565eff9c8b5f[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 13 15:47:17 2023 +0100
+
+    Final changes
+
+[33mcommit 8d7718ab3a46f4594b7748307498d7ebdd7d739e[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 13 15:40:37 2023 +0100
+
+    Final changes for the week
+
+[33mcommit 872c5cfa05cea651ac50baa8960f35506aa32088[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 15:27:16 2023 +0100
+
+    minor unnecassary changes
+
+[33mcommit 9fed5132dc4f2f243597f5489ab602e28800fe3d[m
+Merge: c62364a e5bee8f
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 15:24:04 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH
+
+[33mcommit c62364a5bf2b533a6ce99f31683b62cb175b75d4[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 15:18:00 2023 +0100
+
+    main minor change
+
+[33mcommit 5934f2a4fad2d2cc8d7af311ec1f54a789aaa60e[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 15:16:53 2023 +0100
+
+    prettier assign
+
+[33mcommit e5bee8f7e953ba5498631af42bf1dee31cde2600[m
+Merge: 2598d17 70c3272
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 15:02:11 2023 +0100
+
+    Merge branch 'Jacob'
+
+[33mcommit 70c3272038682062c478a7d9b5582025da36cb2e[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 15:01:37 2023 +0100
+
+    malus for double student booking
+
+[33mcommit 2598d17e6ca99359943b0464deee4d8f97aff2da[m
+Merge: 9b48a53 692bd7b
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 14:53:57 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH
+
+[33mcommit 9b48a53c37dd6414ddd85a6d426352ff14d2befb[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 14:53:25 2023 +0100
+
+    maluspoint for confilict
+
+[33mcommit 692bd7b5fdd5692cde4c8f7f9e7a9340cb3dfb89[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 14:42:55 2023 +0100
+
+    correct count and assign
+
+[33mcommit ec066d129f7f9b949cce33a5c04d1cb77381b852[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 14:25:13 2023 +0100
+
+    import re in assign
+
+[33mcommit 5a2a104ef9a1894094d95cba523ab9240ac296c6[m
+Merge: c7f3009 f26b6c2
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 14:20:49 2023 +0100
+
+    Merge branch 'Gid'
+
+[33mcommit f26b6c26d65cbbf279e639856c3b4ca23cab71a8[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 14:18:10 2023 +0100
+
+    count_students and assign so that it is not hard coded
+
+[33mcommit 224193c4c47c850b4a1593f39eab7cb7ca44041e[m
+Merge: 589c114 a0318d7
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 13 14:17:22 2023 +0100
+
+    Merge branch 'main' into Luka
+
+[33mcommit 589c114bb74c1caab235ce6182c75b3302c1f8a1[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 13 14:15:53 2023 +0100
+
+    Small changes to Room file
+
+[33mcommit c7f3009b2da8f26bc1d79d54fdf18033bc24076e[m
+Author: Gid-Git <121433911+Gid-Git@users.noreply.github.com>
+Date:   Fri Jan 13 14:13:49 2023 +0100
+
+    Wouter zeggen
+
+[33mcommit a0318d718a8a36177691ad85012a8b39a67b585c[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 14:02:57 2023 +0100
+
+    cleaner imports
+
+[33mcommit 2e3371230daffc69f8b6bf03c885219c26155a23[m
+Merge: b8a67c9 427f087
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 13:44:09 2023 +0100
+
+    Merge branch 'Jacob'
+
+[33mcommit 427f087b07bdc4f6684a8d822328751a28400750[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 13:42:18 2023 +0100
+
+    plot_startup and better imports
+
+[33mcommit 74899946402d6a9a69a1bdc6680c9ec3f67fde46[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 13:42:08 2023 +0100
+
+    plot_startup & better imports
+
+[33mcommit b8a67c93ce6ed6b8bcf1eed79e8205eeff8e184c[m
+Merge: eda9cde 0d8882a
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 13 13:39:51 2023 +0100
+
+    Merge branch 'Luka' into main
+
+[33mcommit eda9cde7e7567539b1c2f38203879108261320bc[m
+Merge: 3ba9343 03ebaa5
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 13 13:38:49 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into main
+
+[33mcommit 3ba93436ecb5a1db9cd545fd40dd43d03e7afd1f[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 13 13:31:00 2023 +0100
+
+    Small changes to classes
+
+[33mcommit 0d8882a29c69cdd63506db7fbe847791e8fdc5c7[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 13 13:30:08 2023 +0100
+
+    Cleaned student class
+
+[33mcommit 03ebaa5a9a0be58d255c290dcd21c77781451c0e[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 12:27:23 2023 +0100
+
+    change cost to malus in main
+
+[33mcommit 9257b11d741cc1e3f3dc9582a67e959cbbc68228[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 12:26:49 2023 +0100
+
+    change cost to malus in main
+
+[33mcommit 7f83e1a7af12c58b9db843bab4f22f0eaedce96c[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 12:25:53 2023 +0100
+
+    fixed malus bug
+
+[33mcommit ab25b99f4c15fabe9b7cd0e8046f9713ccef51d6[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 12:25:41 2023 +0100
+
+    better roster and main
+
+[33mcommit 096d882cddb367321bf2eb7256f8f9324d6ea9c9[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 12:16:48 2023 +0100
+
+    prettier roster and data
+
+[33mcommit 1cb5c11d05ce8b1b2079737ec5d2144cca3591af[m
+Merge: 68819a2 ddcda5a
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 12:09:59 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit 68819a29f74b78dcbf1dda14077db2db7fd06575[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 12:08:43 2023 +0100
+
+    .
+
+[33mcommit 27687ad326c385e49469066c8a8f3cc89d2da28f[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 12:06:47 2023 +0100
+
+    .
+
+[33mcommit 9f1bb2a0cd217de388d14ff555b5f88dc090fb6e[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 12:04:12 2023 +0100
+
+    .
+
+[33mcommit ddcda5a694a2d69b86cc19906cc2306dcfd0602b[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 11:45:36 2023 +0100
+
+    prettier roster
+
+[33mcommit 6ca43b6ac4ae67246358d1a7489d785cee0e79a8[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 11:27:34 2023 +0100
+
+    prettier code main
+
+[33mcommit b6eff28f635372df60fc7752b8080d188c4f17e4[m
+Merge: 2ffc9a7 de8f251
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 11:25:24 2023 +0100
+
+    Merge branch 'Gid'
+
+[33mcommit de8f25189590014aafcbfe99a148c7c315d592dd[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 11:23:38 2023 +0100
+
+    main fixed and  room prittier
+
+[33mcommit 2ffc9a72494cf6d580f397bd0d61b27096b7b256[m
+Author: Gid-Git <121433911+Gid-Git@users.noreply.github.com>
+Date:   Fri Jan 13 10:53:55 2023 +0100
+
+    extra tips for sneller program
+
+[33mcommit 27e0eab988af6dc9d00e56b318188c3367fe5299[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Fri Jan 13 10:49:53 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit 9a3725e42e062f417e2a4413faa7f42fef85abdf[m
+Author: Gid-Git <121433911+Gid-Git@users.noreply.github.com>
+Date:   Fri Jan 13 10:43:14 2023 +0100
+
+    Presentatie idee
+
+[33mcommit 085322d587ce59fd355f64c1e93083b3b8163a7f[m
+Merge: 8277a83 7a920cd
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 10:38:32 2023 +0100
+
+    Merge branch 'Jacob' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit 8277a83873420be77e5eadeddf28ff6afafb562e[m
+Merge: 2f2d933 3aa0ea9
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 10:38:29 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit 3aa0ea95656c2af819f4be407afdce11b382130f[m
+Merge: e51e9ba 8af4fbf
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 13 10:37:28 2023 +0100
+
+    Merge branch 'main' into Luka
+
+[33mcommit 7a920cdc97f6abbc5e469098da1e2e709981b440[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Fri Jan 13 10:33:29 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit e51e9bab8707c9eb5a3810bc49988b01f9609d21[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Fri Jan 13 10:31:15 2023 +0100
+
+    Add baseline class
+
+[33mcommit 2f2d9337ec7f7099fc97787cb171b520b9299618[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 10:29:24 2023 +0100
+
+    whitespace
+
+[33mcommit 9633ee43454c8ba8752ad59493b2493cd8c8ad29[m
+Merge: d7feae4 8af4fbf
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 10:26:13 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit d7feae4bf4f12ed709747789bbc883c69a6d3979[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 10:25:32 2023 +0100
+
+    small
+
+[33mcommit 8af4fbff58a81079a4621aefa8015761e453cb71[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Fri Jan 13 10:23:55 2023 +0100
+
+    improved ranom initialize
+
+[33mcommit 0e5a29ed44213cbb7e38f324c15b94a3d07ba28c[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 10:12:02 2023 +0100
+
+    test
+
+[33mcommit c615017d8a9b1b409599cb46032aff6c1a09e4fd[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 10:09:37 2023 +0100
+
+    same day removed
+
+[33mcommit 02919fd7a6aa4c09a56df69b8b6cdb8c3739e909[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Fri Jan 13 10:00:06 2023 +0100
+
+    100 random states
+
+[33mcommit 0ca09c3a24a9abe5dbf7e9a9da5483c3c4ed1884[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 22:13:11 2023 +0100
+
+    .
+
+[33mcommit 6047906a2b557706790f576e3b738d0be569a560[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 22:10:31 2023 +0100
+
+    luka fixed the cost bug!
+
+[33mcommit 7cd0a74e33dbbe3ef5a8c0509c702f9a44d476fd[m
+Merge: 1ebfcd8 78e26ce
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Thu Jan 12 21:47:44 2023 +0100
+
+    Merge branch 'main' into Luka
+
+[33mcommit 333f66adc0f06e5d40b0e8a79639ca6b5acfd82d[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 19:31:12 2023 +0100
+
+    Cost almost done, only keyword error bug in final steps
+
+[33mcommit 78e26cee5f5a6e7ca64aef29a52535809d7981da[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 18:20:46 2023 +0100
+
+    csv back to original and fixed 'zoeken sturen' bug
+
+[33mcommit 586a3e8466f8b154ebdb631b8d162df5c541e340[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 17:48:07 2023 +0100
+
+    not quite correct assign and count_students
+
+[33mcommit 35f5c7e866ef5c3e4b75d7cc24d29b129435185b[m
+Merge: 245f6a7 a3b71ab
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 17:32:20 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit 245f6a704b71e2546a1f6e7a23aa21abba9a6945[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 17:31:45 2023 +0100
+
+    correct student count
+
+[33mcommit a3b71abc8d8b6ad9f62be1bfb4aa40a84eecad1b[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 17:30:31 2023 +0100
+
+    expected is now enrolled
+
+[33mcommit d7da33ec11ca8d56966462e542581a77b5420b9c[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 17:28:37 2023 +0100
+
+    delete old file
+
+[33mcommit 5a99b2c3baac27fc3f39f9879fa077b8e445cb2c[m
+Merge: 6e0eb46 27d0a4f
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 17:26:32 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit 6e0eb4696cbfa9806515cc229412c6bf0d5499e4[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 17:26:24 2023 +0100
+
+    delete old file
+
+[33mcommit 0e70a57a38541711121ef44d3b00ea9bb8293dc6[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 17:24:52 2023 +0100
+
+    count_students is now a function
+
+[33mcommit 27d0a4fda0cf7314749c8a0f770e8c2b6601dd8b[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 17:17:31 2023 +0100
+
+    no biggie
+
+[33mcommit ba1548a68eb52cd99e940a89d525ea2548d88631[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 17:06:48 2023 +0100
+
+    small bug
+
+[33mcommit d92b33a0c3977469993612e06bf6447fd311c42a[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 17:06:40 2023 +0100
+
+    count_students en begin visualization
+
+[33mcommit 58d6ccf661c65bdb11214b365067ed23075cf645[m
+Merge: 41d1e95 982f1c9
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 16:41:26 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH
+
+[33mcommit 41d1e95ce83c47c86163b068ba8359eb040fc2c9[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 16:39:36 2023 +0100
+
+    info renamed as input
+
+[33mcommit 0a2f6da8e390eeb69d1f88babee1240e3d8b77c8[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 16:33:51 2023 +0100
+
+    splitted code up into seperate files like quinten did
+
+[33mcommit 982f1c9063beb1690de911338f0514ea0e5a649f[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Thu Jan 12 15:50:41 2023 +0100
+
+    Create requirements.txt
+
+[33mcommit 5d291795a2d279d9414e14ea70c441205ea7ce5f[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 14:54:02 2023 +0100
+
+    cost function beginning
+
+[33mcommit cffaad24d83682bab2e8be25b6e2c32ba9d11d31[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Thu Jan 12 14:44:56 2023 +0100
+
+    max 3 lessen per dag (2.2)
+
+[33mcommit 45551013bda6717f55305b98f93dcb6e2da6ca2a[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Thu Jan 12 13:28:53 2023 +0100
+
+    structuur puntje
+
+[33mcommit 61537820eebc527f84d2bc34b37b3833a7fc2fa5[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 13:08:37 2023 +0100
+
+    Better randomized initialize
+
+[33mcommit a3d1616fdd8d7ff91b9895147fa7c3ddbcdb7dad[m
+Merge: 6317f33 aaa68f7
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 12:15:27 2023 +0100
+
+    Merge branch 'Gid'
+
+[33mcommit aaa68f768d41add9483dff98153efe3dd6585a9f[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 12:13:17 2023 +0100
+
+    Added random initialize
+
+[33mcommit 6317f3373364d95a8d5092de7352032690005b99[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 12:12:32 2023 +0100
+
+    syntax
+
+[33mcommit 4990d8dd3314c02a6b3322ac1613ce4f77e2131a[m
+Merge: 4b59998 a2a0991
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 12:07:56 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH
+
+[33mcommit 4b599989f2dfc6439433b98283faa4a4a0083504[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 12:07:41 2023 +0100
+
+    capacity check
+
+[33mcommit a2a0991b1bc2a9f3e1d9749bc1ea76e6b039bf36[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Thu Jan 12 12:05:13 2023 +0100
+
+    capacity
+
+[33mcommit c07ac13172080d36ce209ce2f4b7c8fa910407ec[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Thu Jan 12 11:51:21 2023 +0100
+
+    *arg mogelijke verbetering
+
+[33mcommit ea4d4f41701cc7c5474eacc7193de40dea8a84f0[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Thu Jan 12 11:49:44 2023 +0100
+
+    syntax
+
+[33mcommit 7f9e12bfe63b01662dd119149dcc742ecc50b576[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 11:48:15 2023 +0100
+
+    cleaned the main up, some comments and cleaner output
+
+[33mcommit c3d4dfaee855ecddde38b40bc72e949162ecfee2[m
+Merge: d1af005 344b550
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 11:41:56 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH
+
+[33mcommit d1af0058630b6f8030ac3a1af586dfd9a4f5301b[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 11:41:52 2023 +0100
+
+    student group assignment check
+
+[33mcommit 344b550d147e935f6a9f93cc1ef4eedb3874ceba[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Thu Jan 12 11:36:23 2023 +0100
+
+    small syntax
+
+[33mcommit db46180d61f7273208db22152587489e2369887d[m
+Merge: 3a1b8fc 49dc8ce
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 11:35:22 2023 +0100
+
+    Merge branch 'Jacob'
+
+[33mcommit 49dc8ce4c6827894ac4f98a6f5295e14991eb5a3[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 11:33:04 2023 +0100
+
+    deleted print statements
+
+[33mcommit e58f21411dbd28a7cd0d9949aa00940f5b0341be[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 11:30:25 2023 +0100
+
+    changed csv data so there are enough groups
+
+[33mcommit 81af744f8bd8508080009825bd26edca04673c9e[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 11:30:12 2023 +0100
+
+    test empty again
+
+[33mcommit 3a1b8fcdb3838f2039e0e585acfd74affbf4bd27[m
+Merge: 4c1ed95 6303cce
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 11:02:42 2023 +0100
+
+    Merge branch 'Gid'
+
+[33mcommit 6303cce495f9b10e767603c8ccfc56a810a18f5b[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 11:01:25 2023 +0100
+
+    changed timeslots and added biggest room timeslots
+
+[33mcommit 4c1ed9577c9220a61ca86e7eab96c4be79cb5f16[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Thu Jan 12 10:57:44 2023 +0100
+
+    data fout in bio enrolments?
+
+[33mcommit 990f626ca7be14315e79842294623ebd4a602c94[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 10:50:51 2023 +0100
+
+    better timeslots as int now
+
+[33mcommit 964b7d0f52b16eb4cbc3665d72ed263b09069348[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 10:44:58 2023 +0100
+
+    Better schedule library
+
+[33mcommit 1f57861481c2231d383468ca3ef7be402ff0abf4[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Thu Jan 12 10:42:46 2023 +0100
+
+    group pick almost works (error student 538)
+
+[33mcommit edbdb5c409f054305c9f5142c61c07f6384deccf[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 10:33:46 2023 +0100
+
+    Classes en main verandert zodat de library duidelijker is
+
+[33mcommit 2a225ef54904c96a9e46b4833081b9f7eb17f5f1[m
+Merge: ef482bd 83c0aa7
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 10:13:29 2023 +0100
+
+    Merge branch 'Jacob' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit ef482bda2fe05f69b4ab40f7a7f0e0d385b7d1a4[m
+Merge: 5cd3d95 450b927
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Thu Jan 12 10:02:28 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Gid
+
+[33mcommit 450b9278642e924e1289986f347c91178892adb4[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Thu Jan 12 09:36:22 2023 +0100
+
+    student.course veranderen naar lijst met object ipv strings met vaknamen
+
+[33mcommit 1ebfcd8272ab6c117a170ad2a74907c6f2cce099[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 11 17:16:05 2023 +0100
+
+    working dataframe file
+
+[33mcommit ae422baddf427bf489bb87f5f02173c8e1b294f7[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 11 16:49:29 2023 +0100
+
+    Imporved Dataframe.py
+
+[33mcommit 6c6578f3fb7f08292ddf04f18d48167ff431b128[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Wed Jan 11 16:39:35 2023 +0100
+
+    Make initial file for dataframe output
+
+[33mcommit 83c0aa78afecf52a5ef9045e5f8f8a29f948362c[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 11 16:35:25 2023 +0100
+
+    students pick a group, first draft with errors
+
+[33mcommit d66696d2538c0e2fbfc372b7581ea51eab925037[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Wed Jan 11 16:29:41 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit a91145313ea2fb8f75fe6c113c0413c43ab92590[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Wed Jan 11 16:16:55 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit 39e5daa5cf6b32fe1e51b30f5d342e11dc32e4a6[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Wed Jan 11 16:16:23 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit fc7a6ecf17b1dd86bf59d1f1169108ec7e427be8[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Wed Jan 11 15:49:37 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit 48fa5f1df02d5aa3a1581f18c4cedc07a33db0aa[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 11 15:17:31 2023 +0100
+
+    fixed a small bug in rooms_calc
+
+[33mcommit a608a787fb6963ebdecbfec3de66726833f87bb0[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Wed Jan 11 15:05:08 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit 4a6b688f62e4b4433a0dde8df8940f0331ccfb48[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Wed Jan 11 15:04:26 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit 94194a6da026f10b1fb1a6475a56da83521a15ee[m
+Merge: 4adec57 d159c7a
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 11 14:52:23 2023 +0100
+
+    fill_schedule verbeterd en tutorial groepen toegevoegd
+
+[33mcommit 17e922e221c17b3d14d369682173bce8e69345f7[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Wed Jan 11 14:09:58 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit 5cd3d959579443b83a6be6cf03dff361220111ae[m
+Merge: 926c017 5e8be37
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 11 13:07:46 2023 +0100
+
+    Merge remote-tracking branch 'origin' into Gid
+
+[33mcommit 5e8be374f907543f4180657cc6a754cde6f75228[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Wed Jan 11 13:01:13 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit 4adec5765aaeafdd707f213cb56ec6c61369e545[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 11 12:58:09 2023 +0100
+
+    small stuff
+
+[33mcommit fb89fad6730c199a6daeaf833c2763d78d5870ba[m
+Merge: 525482d 6e3bc09
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 11 11:52:45 2023 +0100
+
+    Merge branch 'main' into Jacob
+
+[33mcommit 525482d8020158c8bf4d54ae5adc3fd1cd676863[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Wed Jan 11 11:52:29 2023 +0100
+
+    small stuff
+
+[33mcommit 926c0177ec352ec0359debd697fa5c1af724800f[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 11 10:53:22 2023 +0100
+
+    change back to the right shit
+
+[33mcommit 97d70b8129c6afbc1fba8be9cb34b9793a2dce60[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Wed Jan 11 10:45:12 2023 +0100
+
+    Rectify Fill_schedule in Roster
+
+[33mcommit d159c7abbe1944aa2b7514b302cda21319c74cb1[m
+Merge: dcb9fa1 b673310
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 10 18:16:08 2023 +0100
+
+    Merge branch 'Luka' into main
+
+[33mcommit b67331072f34fa976059c8d261d2b744538e4005[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 10 18:13:29 2023 +0100
+
+    Cleaning and restructuring of schedule generator
+
+[33mcommit dcb9fa1d2c851ee701f128bc55da21f0277fed88[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 16:13:35 2023 +0100
+
+    update stappenplan
+
+[33mcommit d0cdb743050394bb2a74fc2b25d17a4a487511cb[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 10 16:09:34 2023 +0100
+
+    print verwijderd
+
+[33mcommit 6e3bc0999cceb98a91958640887da1c3a5586f48[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 10 16:09:03 2023 +0100
+
+    print verwijderd
+
+[33mcommit b42f25d3fb00e037ad24fdb291b508f63b99d403[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 10 15:58:28 2023 +0100
+
+    clean main
+
+[33mcommit fd2933093196eb1fc9a8c4e642f8e42c0a87ea84[m
+Merge: 7cbe6cb 586d498
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 10 15:58:04 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH
+
+[33mcommit 7cbe6cba977ac46c3ae19fc6fb341962539997fb[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 10 15:57:23 2023 +0100
+
+    Scheduling error fixed, it now schedules only once per event
+
+[33mcommit 586d498423c810610b3f9c68c8a7841005b23074[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 10 15:43:57 2023 +0100
+
+    test verwijderen
+
+[33mcommit e824504445a50d661fc2f3ebb9e10fdc6a3b046f[m
+Merge: 938fe66 e82c837
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 10 15:42:45 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH into Luka
+
+[33mcommit 03a7f26ebc450daa49aedab1d0bdaa0fdc3ecc92[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 15:42:16 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit 0a91d1613c052b88e05490a7279e9e3b30ebb13b[m
+Merge: a39d820 7982e7d
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 10 15:40:09 2023 +0100
+
+    Merge branch 'Gid'
+
+[33mcommit 7982e7dcbd779b87e1c3f3c2f7a35f2d5bd32524[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 10 15:39:06 2023 +0100
+
+    Test 2
+
+[33mcommit a39d8208b515953ed10031c5934aa62d1024b2c1[m
+Merge: e82c837 760ba4a
+Author: Gid-Git <121433911+Gid-Git@users.noreply.github.com>
+Date:   Tue Jan 10 15:37:45 2023 +0100
+
+    Merge pull request #4 from L42-AI/Gid
+    
+    test merge
+
+[33mcommit 760ba4a62b86345c03329ecdbd8376fe0d382e1f[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 10 15:36:01 2023 +0100
+
+    test merge
+
+[33mcommit e82c8373be0a982888072a031b6769d352dbd890[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 15:32:45 2023 +0100
+
+    wrapper
+
+[33mcommit b68de5b9c8072d1e5001f635ab50c2b4657f20b6[m
+Merge: bf1417e 0c0d274
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 10 15:22:10 2023 +0100
+
+    Merge branch 'main' into Jacob
+
+[33mcommit 0c0d274b70af5be7be2f1815012a1737832ffcc2[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 15:20:48 2023 +0100
+
+    Create .gitignore
+
+[33mcommit bf1417e2312e794848fa38ba83e5cb59f1df010c[m
+Merge: 598194e 5811c43
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 10 15:14:59 2023 +0100
+
+    cleaned up classes, again
+
+[33mcommit 5811c43e30faf396467a8b0ca42cc350f2d9cbb3[m
+Merge: 2ad4945 b269b7b
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 10 15:11:06 2023 +0100
+
+    cleaned up classes
+
+[33mcommit 2ad4945fb736cce011dec22f31c02eed332776be[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 10 15:08:39 2023 +0100
+
+    cleaned classes up
+
+[33mcommit b269b7b757e86737b4485cb522defb19a01fc6f4[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 15:06:20 2023 +0100
+
+    cleaned classes up
+
+[33mcommit 30f91ab075318f8af7dc46eb5027a761da6cf475[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 15:03:08 2023 +0100
+
+    improved fill_schedule
+
+[33mcommit f57862a0da8013065c5b76b74be8045c2e343f91[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 14:59:21 2023 +0100
+
+    improved fill_schedule
+
+[33mcommit 938fe66e98fb813f73ade45e5e6847ffa8b96655[m
+Merge: 1dbfdc2 23819d0
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 10 12:45:19 2023 +0100
+
+    Suttle changes
+
+[33mcommit 37c9cb4a6cc11d563075f36ba664c1b98974f706[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 12:44:47 2023 +0100
+
+    Update classes.py
+
+[33mcommit bd1136deaf82b3c239d109e8ea8594543b438ba8[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 12:44:09 2023 +0100
+
+    Update main.py
+
+[33mcommit 23819d0e092f21bffb9d87ddb612842339c778c9[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 12:35:23 2023 +0100
+
+    roster got a fill_schedule
+
+[33mcommit fc8c356e791d692ce89c80e9f4228c39708c4cde[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 12:34:28 2023 +0100
+
+    main calls schedule_fill
+
+[33mcommit 598194edb61447940699c676eb5ab2b570a19b5a[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 10 12:28:42 2023 +0100
+
+    fill_schedule added
+
+[33mcommit a5a5457dde01447ff612be2277d14f30b1b6762d[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 10 12:27:02 2023 +0100
+
+    fill_schedule added
+
+[33mcommit 4d102ad2f40c3735aa95cc4d1264f267049618b5[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 12:10:36 2023 +0100
+
+    luka's updates
+
+[33mcommit a2c08a65f4e2b709ced98b6475ca1310238c851b[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 12:09:16 2023 +0100
+
+    Update assign.py
+    
+    luka's update
+
+[33mcommit 1dbfdc2450477915113fc193894d44b8c1bb6fc1[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 10 12:01:57 2023 +0100
+
+    Resolve bug in class room
+
+[33mcommit 7880626f44383f43cae9ac55fe333afea52c2e7d[m
+Merge: bbaff4c a4f9bc3
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 10 11:55:38 2023 +0100
+
+    Merge remote-tracking branch 'origin' into Luka
+
+[33mcommit bbaff4c75f15472dc33f1fe1f14604a6cf124679[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 10 11:55:13 2023 +0100
+
+    added room class
+
+[33mcommit a4f9bc36f59968804e47d97bd3b611a3e75a3a12[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 11:48:02 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit 427ea814ee185ee14bd9d668334a85efe9bfe1f3[m
+Merge: 196eddb d448d64
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 10 11:41:23 2023 +0100
+
+    Merge https://github.com/L42-AI/AH into Luka
+
+[33mcommit 196eddba703db8cc19dbb78d2d553f00769259b7[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Tue Jan 10 11:38:30 2023 +0100
+
+    Delete main
+
+[33mcommit d448d643bea643da60cb78b325f0726db236390c[m
+Merge: ba37d94 9d82603
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 10 11:19:10 2023 +0100
+
+    Merge branch 'main' of https://github.com/L42-AI/AH
+
+[33mcommit ba37d94b556b05168c44edb50efd359fae7f70b3[m
+Author: Gid-Git <gidon.quint@ziggo.nl>
+Date:   Tue Jan 10 11:18:11 2023 +0100
+
+    Delete all the files we do not need anymore
+
+[33mcommit 9d82603fd9c578108775e7129ccb0a2d8faf0851[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 11:13:00 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit 3de89b50808d97e83020ba9f011c8f8d46a5b866[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 11:12:49 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit be66ba3ac513b0f0706fcc22a4a11b929ee7e199[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 11:12:21 2023 +0100
+
+    Update stappenplan.txt
+
+[33mcommit 6d275ced9065c7180ee464411e446aebc3536187[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 11:06:09 2023 +0100
+
+    Add files via upload
+
+[33mcommit 80ebac5c87b58f36ad5f2d0389ca1bb826c9f052[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 10 10:55:39 2023 +0100
+
+    nieuwe main met assignn als losse file
+
+[33mcommit 7a948ce01a22bbb5cd6dbe392d00b022d26ff527[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 10 10:53:57 2023 +0100
+
+    nieuwe main met assign als losse file
+
+[33mcommit fa6d103f6fc110ecc94015146ecae2f43b6a27de[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Tue Jan 10 10:52:33 2023 +0100
+
+    nieuwe main met assign als losse file
+
+[33mcommit fa0e43999db45e8475926a8bab6913b0edcc04ed[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Tue Jan 10 10:49:00 2023 +0100
+
+    Create stappenplan.txt
+
+[33mcommit 3665b460a6adfcb053fb079de10952802d047b50[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 9 17:11:34 2023 +0100
+
+    Herstructurering van courses
+
+[33mcommit 811e14fa7d76eabf7372eb808947951f9cad9e12[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 9 16:39:54 2023 +0100
+
+    improved version
+
+[33mcommit b395840d672ad15238329a869aadca66183411a2[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 9 16:25:03 2023 +0100
+
+    Verwijder meerdere tutorials
+
+[33mcommit 699bfbee8dc54de9985ed973072e33229a514478[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 9 16:22:16 2023 +0100
+
+    Git guide
+
+[33mcommit e3d5cf10a6ef9dfba80c07eea6ec946672482093[m
+Merge: a1dc672 18949f9
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Mon Jan 9 15:53:07 2023 +0100
+
+    nieuwe main
+
+[33mcommit 6b5eeb3efbf4a82a9aed3d03156be671cf13352b[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 9 15:53:04 2023 +0100
+
+    git_guide
+
+[33mcommit a1dc672c8eee81172ffa59e5d71ea13b8bf4b006[m
+Merge: 21cc6b0 aec66ff
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Mon Jan 9 15:48:39 2023 +0100
+
+    Merge branch 'Jacob' of https://github.com/L42-AI/AH into Jacob
+
+[33mcommit 21cc6b0978b4f06c0d476bd7a60dee5efb6225e4[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Mon Jan 9 15:45:41 2023 +0100
+
+    nieuwe main
+
+[33mcommit 68eb46c1aede7cd94e895d57bb7df24083d49433[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Mon Jan 9 15:43:37 2023 +0100
+
+    nieuwe main
+
+[33mcommit 18949f9b13808760a6abd624cc9121eff47b2bb2[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Mon Jan 9 15:42:58 2023 +0100
+
+    nieuwe main
+
+[33mcommit 3ad2ad0f6fc5f4142e398e832bbd8bb05d69b08d[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Mon Jan 9 15:40:50 2023 +0100
+
+    nieuwe classes
+
+[33mcommit 830c37201cfd06e8aeaa8d04206b700c055461c3[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Mon Jan 9 15:37:40 2023 +0100
+
+    nieuwe classes
+
+[33mcommit a835813866905994c07aaefe3e9f189b2a198e99[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Mon Jan 9 15:37:17 2023 +0100
+
+    nieuwe main
+
+[33mcommit aec66ff640b727737a69842e18387b9ec3ebc286[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Mon Jan 9 15:10:33 2023 +0100
+
+    dit is een test
+
+[33mcommit bb7b16fa19e4b7ae3bb5a95b8fad35616e2d8f88[m
+Author: Luka Zaitch <117086277+L42-AI@users.noreply.github.com>
+Date:   Mon Jan 9 15:00:33 2023 +0100
+
+    Update git_guide.txt
+
+[33mcommit 01bf4d59a00b8373f94d759fbc179e46d0e71e31[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Mon Jan 9 14:59:26 2023 +0100
+
+    Delete schedule.py
+
+[33mcommit a55a8e44955c652e6d2fcc43774a2510365520a7[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Mon Jan 9 14:58:43 2023 +0100
+
+    Add files via upload
+
+[33mcommit 209e9003192ff2526bbdcf07f8d8a246a3f98091[m
+Author: Luka Zaitch <117086277+L42-AI@users.noreply.github.com>
+Date:   Mon Jan 9 14:58:36 2023 +0100
+
+    Add files via upload
+
+[33mcommit 128fc365869cedaf4cb928f8f99d11e7773eb5cb[m
+Merge: b039cf2 56fe976
+Author: Luka Zaitch <117086277+L42-AI@users.noreply.github.com>
+Date:   Mon Jan 9 14:14:54 2023 +0100
+
+    Merge pull request #2 from L42-AI/Luka
+    
+    Luka
+
+[33mcommit 56fe9761459f2269a5496a3a3a59b9d60bc2ec5d[m
+Author: Luka Zaitch <lzaitch@gmail.com>
+Date:   Mon Jan 9 14:07:28 2023 +0100
+
+    test changes
+
+[33mcommit b039cf2afaf6d5a3dffde21858db51b6b41bc5b9[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Mon Jan 9 13:55:52 2023 +0100
+
+    Create schedule.py
+
+[33mcommit cbdb884ed1c54ba8e17198587e265f667298f50a[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Mon Jan 9 13:52:33 2023 +0100
+
+    Add files via upload
+
+[33mcommit f7b8c01802ce3f2b6655c942b945d6f1648474ca[m
+Author: Luka Zaitch <117086277+L42-AI@users.noreply.github.com>
+Date:   Mon Jan 9 13:37:45 2023 +0100
+
+    Add files via upload
+
+[33mcommit bda660f7ef6b01ed8e25cdadf04a9c4fee498496[m
+Author: Luka Zaitch <117086277+L42-AI@users.noreply.github.com>
+Date:   Mon Jan 9 13:36:59 2023 +0100
+
+    Add files via upload
+
+[33mcommit ceb1c84d45020734dea99cf62a2627653909ec5d[m
+Merge: c9e5c28 f0ef524
+Author: Luka Zaitch <117086277+L42-AI@users.noreply.github.com>
+Date:   Mon Jan 9 13:31:45 2023 +0100
+
+    Merge pull request #1 from L42-AI/Luka
+    
+    Add files via upload
+
+[33mcommit f0ef524b03a1a06fde22b6fcb7ecfc73cbe71163[m
+Author: Luka Zaitch <117086277+L42-AI@users.noreply.github.com>
+Date:   Mon Jan 9 13:11:31 2023 +0100
+
+    Add files via upload
+
+[33mcommit c9e5c28d82481aebd23f1e172fbb55e5d40f0696[m
+Author: Jacob Groot <jacobgroot79@gmail.com>
+Date:   Mon Jan 9 12:12:24 2023 +0100
+
+    classes
+
+[33mcommit f4cb1bdba4b80df76a243c2e7e09768180b793c6[m
+Author: Luka Zaitch <117086277+L42-AI@users.noreply.github.com>
+Date:   Mon Jan 9 11:46:49 2023 +0100
+
+    Add files via upload
+
+[33mcommit d0ddeb6121f2c273f3e450e10706086a663124ac[m
+Author: Gid-Git <121433911+Gid-Git@users.noreply.github.com>
+Date:   Mon Jan 9 11:40:07 2023 +0100
+
+    Chatgpt start with classes
+
+[33mcommit 9b96ddce4cbcb4ef0432fa04befdd350e4905ab0[m
+Author: Luka Zaitch <117086277+L42-AI@users.noreply.github.com>
+Date:   Mon Jan 9 11:27:26 2023 +0100
+
+    Add files via upload
+
+[33mcommit 3be0b605cdfa4bf71fb2799592b92fdbbb14714c[m
+Author: Luka Zaitch <117086277+L42-AI@users.noreply.github.com>
+Date:   Mon Jan 9 11:24:42 2023 +0100
+
+    Add files via upload
+
+[33mcommit eedd76995d5822e6cb483c8d0228cce4c29e7d10[m
+Author: Luka Zaitch <117086277+L42-AI@users.noreply.github.com>
+Date:   Mon Jan 9 11:23:35 2023 +0100
+
+    Add files via upload
+
+[33mcommit 4e73a0a89253ca0999d2897c5492825fcd0121e1[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Mon Jan 9 11:23:17 2023 +0100
+
+    Delete git.py
+
+[33mcommit 4d2c8fbe5c531c067670f3ad3d229820a715eb7c[m
+Author: Jacob Groot <70103333+jacobgroot@users.noreply.github.com>
+Date:   Mon Jan 9 11:22:39 2023 +0100
+
+    Add files via upload
+
+[33mcommit f66323acf6d6e46369352e4e134ef3383377a609[m
+Author: Luka Zaitch <117086277+L42-AI@users.noreply.github.com>
+Date:   Mon Jan 9 10:48:24 2023 +0100
+
+    Initial commit
