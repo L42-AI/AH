@@ -73,7 +73,7 @@ class HillClimber:
 
         # only accept annealing if the rise in malus is not too large
         difference = self.malus['Total'] - new_malus['Total']
-        prob = math.exp(-difference / T)
+        prob = random.random()
         
         # Compare with prior malus points
         if new_malus['Total'] <= self.malus['Total']:
@@ -82,7 +82,7 @@ class HillClimber:
             self.malus = new_malus
 
        
-        elif prob < T:
+        elif prob < math.exp(-difference / T):
             print(f'worsening of {difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
