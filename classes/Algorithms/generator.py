@@ -3,6 +3,7 @@ import classes.algorithms.genetic as GeneticClass
 
 import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
+import classes.representation.room as RoomClass
 import classes.representation.roster as RosterClass
 import classes.representation.malus_calc as MalusCalculatorClass
 
@@ -58,7 +59,6 @@ class Generator:
 
         course_list = []
         student_list = []
-        student_id_list = []
         rooms_list = []
 
         # count the students that have enrolled for each course
@@ -75,9 +75,6 @@ class Generator:
             # fill in the list with student objects
             student_list.append(StudentClass.Student(student, course_list))
 
-            # fill in the list with student ID's
-            student_id_list.append(student['Stud.Nr.'])
-
         for _, room in ROOMS.iterrows():
 
             # fill in the list with room objects
@@ -86,7 +83,7 @@ class Generator:
         for course in course_list:
             course.enroll_students(student_list)
 
-        return course_list, student_list, rooms_list, student_id_list
+        return course_list, student_list, rooms_list
 
     def schedule_fill(self, Roster, course_list, student_list):
         ''''method schedules a timeslot for every lecture, tutorial or practical that takes place'''
@@ -193,13 +190,13 @@ class Generator:
 
 
         # starts up a random Roster
-        course_list, student_list, room_list, student_id_list = self.assign(COURSES, STUDENT_COURSES, ROOMS)
+        course_list, student_list, room_list = self.assign(COURSES, STUDENT_COURSES, ROOMS)
 
         # Create Malus Calculator
         MC = MalusCalculatorClass.MalusCalculator(course_list, student_list, room_list)
 
         # Create a roster
-        Roster = RosterClass.Roster(room_list, student_list, course_list, student_id_list, capacity=self.CAPACITY)
+        Roster = RosterClass.Roster(room_list, student_list, course_list, capacity=self.CAPACITY)
 
         # Fill the roster
         self.schedule_fill(Roster, course_list, student_list)
@@ -258,8 +255,6 @@ class Generator:
     def optimize(self):
         pass
 
-        HCMultiprocessor = MultiprocessorClass.HCMultiprocessor(self.Roster, self.course_list, self.student_list)
-        return HCMultiprocessor.run_hillclimbers()
 
 """ Inherited Classes """
 
