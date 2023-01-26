@@ -74,7 +74,7 @@ class HillClimber:
                 self.best_malus_count = new_malus
 
                 # Print method name
-                print(self.get_name())
+                # print(self.get_name())
 
         # Return new roster
         return self.best_roster, self.best_malus_count
