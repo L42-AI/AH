@@ -53,18 +53,10 @@ class Mutate():
             _course = random.choice(list(self.schedule.keys()))
 
         _class = random.choice(list(self.schedule[_course].keys()))
-        # print(f'the course is: {_class, _course}')
-        # print(self.schedule)
-        # print()
-        # print(self.schedule[_course][_class])
-        # print()
-        # print(_class, _course)
-        
+
         _students = list(self.schedule[_course][_class]['students'])
         student_id = random.choice(_students)
 
-        # # get the object and return it
-        # student = self.__get_student_object(student_id)
         return student_id
 
     def __students_to_shuffle(self):
@@ -244,14 +236,8 @@ class Mutate():
                             scores_per_day_gap[day] += 5
 
         # gets the day with most gap or double hours
-        worst_day, gap = self.__get_day_gap_or_double(scores_per_day_double, scores_per_day_gap)
+        worst_day = self.__get_day_gap_or_double(scores_per_day_double, scores_per_day_gap)
 
-        # if it is zero, zet worst_day to None
-        if gap:
-            worst_day = self.__return_none(scores_per_day_gap, worst_day)
-        else: 
-            worst_day = self.__return_none(scores_per_day_double, worst_day)
-        
         return worst_day
 
     def __fill_timeslots_student(self, id):
@@ -275,10 +261,9 @@ class Mutate():
 
     def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
-        gap = True
-        return max(scores_per_day_gap, key=lambda x: scores_per_day_gap.get(x)), gap
+        return max(scores_per_day_gap, key=lambda x: scores_per_day_gap.get(x))
 
-    def __return_none(self, scores_per_day_gap, worst_day):
+    def __return_none(self,scores_per_day_double, scores_per_day_gap, worst_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
         if scores_per_day_gap[worst_day] == 0:
             worst_day = None
@@ -487,20 +472,14 @@ class Mutate():
 
 
 class Mutate_double_classes(Mutate):
-    def __worst_day(self, student_to_switch):
-        '''finds worst day in the schedule of a student'''
+    def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap):
+        '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
+        return max(scores_per_day_double, key=lambda x: scores_per_day_double.get(x))
 
-        worst_score = 0
-        worst_day = None
-
-        # go over the timeslot and find day with most gap hour
-        for day in student_to_switch.malus_cause['Dubble Classes']:
-            if student_to_switch.malus_cause['Dubble Classes'][day] > worst_score:
-                worst_day = day
-        if worst_day == None:
-
-            # when worst_day is None, the main method will stop because no classes later on can be found
-            return None
+    def __return_none(self,scores_per_day_double, scores_per_day_gap, worst_day):
+        '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
+        if scores_per_day_double[worst_day] == 0:
+            worst_day = None
         return worst_day
 
 class Mutate_Course_Swap_Capacity(Mutate):
