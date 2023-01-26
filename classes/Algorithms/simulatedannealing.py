@@ -1,4 +1,4 @@
-import classes.Algorithms.hillclimber as HillClimberClass
+import classes.algorithms.hillclimber as HillClimberClass
 import random
 import math
 

@@ -1,4 +1,4 @@
-import classes.Algorithms.mutate as MutateClass
+import classes.algorithms.mutate as MutateClass
 import random
 import copy
 

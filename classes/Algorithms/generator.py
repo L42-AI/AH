@@ -1,5 +1,5 @@
-import classes.Algorithms.Multiprocessor as MultiprocessorClass
-import classes.Algorithms.genetic as GeneticClass
+import classes.algorithms.multiprocessor as MultiprocessorClass
+import classes.algorithms.genetic as GeneticClass
 
 import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
