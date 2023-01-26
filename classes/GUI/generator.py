@@ -23,4 +23,6 @@ class App(customtkinter.CTk):
         ax.set_title('The Title for your chart')
 
 
+
+
 # https://datatofish.com/matplotlib-charts-tkinter-gui/
