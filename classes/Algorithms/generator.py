@@ -262,8 +262,3 @@ class Generator_HC(Generator):
     def optimize(self):
             Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC)
             Multiprocessor.run()
-
-class Generator_SA(Generator):
-    def optimize(self):
-            Multiprocessor = MultiprocessorClass.Multiprocessor_SimAnnealing(self.Roster, self.course_list, self.student_list, self.MC)
-            Multiprocessor.run()
