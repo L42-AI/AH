@@ -6,7 +6,6 @@ import time
 import json
 import copy
 import matplotlib.pyplot as plt
-import math
 
 class Multiprocessor():
     def __init__(self, Roster, course_list, student_list, MC, annealing=False):
@@ -59,16 +58,14 @@ class Multiprocessor():
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
-        initial_temp = 1
-        constants = 0.04
+
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while self.iter_counter != self.ITERS and self.fail_counter < 20:
+        while self.iter_counter != self.ITERS:
 
             if self.ANNEALING:
-                t = initial_temp * math.exp(-constants * self.iter_counter)
+                t = 0.25 - self.iter_counter / self.ITERS * 4
             else:
                 t = 0
-
 
             start_time = time.time()
 

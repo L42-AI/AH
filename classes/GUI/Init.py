@@ -90,6 +90,7 @@ class App(customtkinter.CTk):
             popular_own_day = True
         run = self.generate_button
         if run:
+            self.destroy()
             G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
             capacity, popular, popular_own_day, annealing=annealing)
 
