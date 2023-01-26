@@ -1,5 +1,4 @@
-import classes.algorithms.generator as GeneratorClass
-import classes.GUI.Init as InitClass
+import classes.Algorithms.generator as GeneratorClass
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 
@@ -9,43 +8,32 @@ import pstats
 # Run profiler
 profile = False
 
-# Heuristic to employ Hill climbing algorithm
-CLIMBING = True
-
 # heuristics to allow for more random mutations before score calculation
 ANNEALING = False
 
 # heuristics to try and connect room size to class size
 CAPACITY = True
 
+<<<<<<< HEAD
 # heuristic to first give the popular classes rooms
 POPULAR = True
 
 # heuristic to place the most popular course lectures on different days
 POPULAR_OWN_DAY = True
+=======
 
-VISUALIZE_INIT = True
+>>>>>>> 87c0c378b6d20d092dec819fd304d57f4fe767c2
 
-def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT):
-    if not CLIMBING:
-        if not VISUALIZE_INIT:
-            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
-        else:
-            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING, visualize=True)
-    else:
-        if not ANNEALING:
-            G = GeneratorClass.Generator_HC(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
-            G.optimize()
-        else:
-            G = GeneratorClass.Generator_SA(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
-            G.optimize()
+def main_runner(ANNEALING, CAPACITY):
+    stop = False
+    while stop == False:
+        G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY)
+        G.rearrange_HC()
 
 if __name__ == '__main__':
-    # if profile:
-    #     cProfile.run('main_runner(ANNEALING, CAPACITY)', 'profile.out')
-    #     p = pstats.Stats('profile.out')
-    #     p.strip_dirs().sort_stats('time').print_stats(100)
-    # else:
-    #     main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
-    App = InitClass.App()
-    App.run()
+    if profile:
+        cProfile.run('main_runner(ANNEALING, CAPACITY)', 'profile.out')
+        p = pstats.Stats('profile.out')
+        p.strip_dirs().sort_stats('time').print_stats(100)
+    else:
+        main_runner(ANNEALING, CAPACITY)

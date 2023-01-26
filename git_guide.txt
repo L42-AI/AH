@@ -1,0 +1,13 @@
+Steps to take
+
+git checkout Luka
+
+
+'''
+**UPLOADEN**
+git add [file]
+git commit -m ["message"]
+git push origin [branch]
+'''
+
+git pull https://github.com/L42-AI/AH.git

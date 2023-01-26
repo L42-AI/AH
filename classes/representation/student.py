@@ -27,7 +27,7 @@ class Student():
 
         # Make list of timeslots
         self.timeslots = {}
-        
+
         # Initiate malus
         self.init_malus()
 
@@ -38,9 +38,7 @@ class Student():
         self.malus_count = 0
         self.malus_cause = {}
         self.malus_cause['Classes Gap'] = {}
-        self.malus_cause['Double Classes'] = {}
-        self.malus_cause['Tripple Gap'] = {}
-
+        self.malus_cause['Dubble Classes'] = {}
 
     def init_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -135,7 +133,9 @@ class Student():
                 current_lecture = f"lecture {index + 1}"
 
                 # Add course and class to timeslot info
-                current_course[current_lecture]['students'].add(self.id)
+                timeslot_dict = current_course[current_lecture]
+
+                self.timeslots[course.name][current_lecture] = timeslot_dict
 
     def __tutorial_timeslot(self, course, current_course):
 
@@ -148,7 +148,9 @@ class Student():
                 current_tutorial = f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"
 
                 # Add course and class to timeslot info
-                current_course[current_tutorial]['students'].add(self.id)
+                timeslot_dict = current_course[current_tutorial]
+
+                self.timeslots[course.name][current_tutorial] = timeslot_dict
 
     def __practicum_timeslot(self, course, current_course):
 
@@ -161,11 +163,13 @@ class Student():
                 current_practicum = f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"
 
                 # Add course and class to timeslot info
-                current_course[current_practicum]['students'].add(self.id)
+                timeslot_dict = current_course[current_practicum]
 
-    def student_timeslots(self, Roster):
+                self.timeslots[course.name][current_practicum] = timeslot_dict
+
+    def student_timeslots(self, schedule):
         """
-        This method adds the timeslots for classes per week.
+        This method adds the timeslots for classes per week. 
         The dictionary timeslots is linked to the Roster schedule.
         """
 
@@ -174,8 +178,10 @@ class Student():
         # For each course:
         for course in self.courses:
 
+            self.timeslots[course.name] = {}
+
             # Set the current course dict
-            current_course = Roster.schedule[course.name]
+            current_course = schedule[course.name]
 
             # Find and save the lecture timeslot
             self.__lecture_timeslot(course, current_course)
@@ -187,46 +193,39 @@ class Student():
             self.__practicum_timeslot(course, current_course)
 
 
-    def __days_in_schedule(self, Roster):
+    def __days_in_schedule(self):
 
         # Create a days dictionary
-        days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
+        self.days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
 
-        # For each course:
-        for course in Roster.schedule:
+        # For each timeslot:
+        for timeslot_course in self.timeslots:
+            for timeslot_class in self.timeslots[timeslot_course]:
 
-            # For each class:
-            for classes in Roster.schedule[course]:
+                timeslot = self.timeslots[timeslot_course][timeslot_class]
 
-                # Set the class info
-                class_info = Roster.schedule[course][classes]
+                # Add the timeslots into the days dictionary
+                self.days[timeslot['day']].append(timeslot['timeslot'])
+        return self.days
 
-                if self.id in class_info['students']:
-
-                    # Add the timeslots into the days dictionary
-                    days[class_info['day']].append(class_info['timeslot'])
-        return days
-
-    def malus_points(self, Roster):
+    def malus_points(self, schedule):
         """ This method calculates the malus points for the student """
         # Reset malus points to avoid summing dubble malus
         self.init_malus()
 
         # update the dictionary (later this should be linked to the roster schedule)'
-        self.student_timeslots(Roster)
+        self.student_timeslots(schedule)
 
         # find how often student has classes per day
-        days = self.__days_in_schedule(Roster)
+        days = self.__days_in_schedule()
 
         # go over the days
         for day in days:
 
-            self.malus_cause['Tripple Gap'][day] = 0
             self.malus_cause['Classes Gap'][day] = 0
-            self.malus_cause['Double Classes'][day] = 0
-
+            self.malus_cause['Dubble Classes'][day] = 0
             # Sort the timeslots in the day:
-            days[day] = sorted(days[day], reverse=True)
+            days[day].sort(reverse=True)
 
             # Set the dictionary key as list
             timeslot_list = days[day]
@@ -242,7 +241,7 @@ class Student():
 
                     # malus for double classes
                     if timeslot_list[timeslot_num] in timeslots_double_classes:
-                        self.malus_cause['Double Classes'][day] += 1
+                        self.malus_cause['Dubble Classes'][day] += 1
                         self.malus_count += 1
                     else:
                         timeslots_double_classes.append(timeslot_list[timeslot_num])
@@ -261,8 +260,8 @@ class Student():
                             self.malus_count += 3
 
                         elif lesson_gaps > 2:
-                            self.malus_cause['Tripple Gap'][day] += 5
-                            self.malus_count += 5
+                            self.malus_cause['Classes Gap'][day] += 1000
+                            self.malus_count += 1000
 
     def compute_malus(self, schedule):
         """ Run required functions to compute student malus """
