@@ -162,7 +162,7 @@ class Multiprocessor():
         if difference > 0:
 
             # Set the new roster to self.Roster
-            self.Roster, self.malus = self.output_schedules[self.best_index]
+            self.schedule, self.malus = self.output_schedules[self.best_index]
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {self.iter_counter} =========================\n')
@@ -192,7 +192,7 @@ class Multiprocessor_SimAnnealing(Multiprocessor):
         if difference > 0:
 
             # Set the new roster to self.Roster
-            self.Roster, self.malus = self.output_schedules[self.best_index]
+            self.schedule, self.malus = self.output_schedules[self.best_index]
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {self.iter_counter} =========================\n')
@@ -206,7 +206,7 @@ class Multiprocessor_SimAnnealing(Multiprocessor):
         elif difference < 0:
             prob = random.random()
             if prob < T:
-                self.Roster, self.malus = random.choice(self.output_schedules)
+                self.schedule, self.malus = random.choice(self.output_schedules)
                 self.fail_counter = 0
 
                 # print output
