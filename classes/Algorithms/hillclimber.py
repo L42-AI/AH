@@ -35,7 +35,7 @@ class HillClimber:
 
     """ Main Method """
 
-    def climb(self, T=None):
+    def climb(self, T=0):
 
         # Set input roster as best roster and best malus count
         self.best_schedule = self.schedule
@@ -66,46 +66,20 @@ class HillClimber:
 
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
-
-            # Compare with prior malus points
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+            
             self.__accept_schedule(new_malus, new_schedule, T)
-=======
-=======
->>>>>>> 0c9155501a485d7eb3bd063eb4e2de2c6a0c9f4b
-=======
->>>>>>> 97a96e265fc443e44531d8ca29b91a54d5b658eb
-            if new_malus['Total'] < self.best_malus['Total']:
-
-                self.best_schedule = new_schedule
-                self.best_malus = new_malus
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 2e7f291ccf4c5f703c6e7a9e4da36d1e21d18458
-=======
->>>>>>> 0c9155501a485d7eb3bd063eb4e2de2c6a0c9f4b
-=======
->>>>>>> 97a96e265fc443e44531d8ca29b91a54d5b658eb
-
-                # Print method name
-                # print(self.get_name())
 
         # Return new roster
         return self.best_schedule, self.best_malus
-<<<<<<< HEAD
-<<<<<<< HEAD
-
+    
     def __accept_schedule(self, new_malus, new_schedule, T):
+                
         prob = random.random()
-        if prob < T or new_malus['Total'] < self.best_malus_count['Total']:
-            self.best_roster.schedule = new_schedule
-            self.best_malus_count = new_malus
-=======
->>>>>>> 0c9155501a485d7eb3bd063eb4e2de2c6a0c9f4b
-=======
->>>>>>> 97a96e265fc443e44531d8ca29b91a54d5b658eb
+        # Compare with prior malus points
+        if new_malus['Total'] < self.best_malus['Total'] or prob < T:
+
+            self.best_schedule = new_schedule
+            self.best_malus = new_malus
 
 """ Inherited HillClimber Classes """
 
@@ -154,11 +128,3 @@ class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
 
     def get_name(self):
         return 'SwapBadTimeslots_DoubleClasses'
-
-class SA_TimeSlotSwapRandom(HC_TimeSlotSwapRandom):
-    def __accept_schedule(self, new_malus, new_schedule, T):
-        prob = random.random()
-        if prob < T or new_malus['Total'] < self.best_malus_count['Total']:
-            self.best_roster.schedule = new_schedule
-            self.best_malus_count = new_malus
-

@@ -15,12 +15,13 @@ import pandas as pd
 from tqdm import tqdm
 
 class Generator:
-    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, visualize=False):
+    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, ANNEALING=False, visualize=False):
 
         # Set heuristics
         self.CAPACITY = capacity
         self.POPULAR = popular
         self.POPULAR_OWN_DAY = popular_own_day
+        self.annealing = ANNEALING
 
         # Save initialization
         self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
@@ -260,10 +261,6 @@ class Generator:
 
 class Generator_HC(Generator):
     def optimize(self):
-            Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC)
+            Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, annealing=self.annealing)
             Multiprocessor.run()
 
-class Generator_SA(Generator):
-    def optimize(self):
-            Multiprocessor = MultiprocessorClass.Multiprocessor_SimAnnealing(self.Roster, self.course_list, self.student_list, self.MC)
-            Multiprocessor.run()

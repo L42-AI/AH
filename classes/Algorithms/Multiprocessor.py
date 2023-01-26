@@ -8,10 +8,12 @@ import copy
 import matplotlib.pyplot as plt
 
 class Multiprocessor():
-    def __init__(self, Roster, course_list, student_list, MC):
+    def __init__(self, Roster, course_list, student_list, MC, annealing=False):
         self.Roster = Roster
         self.course_list = course_list
         self.student_list = student_list
+        self.ANNEALING = annealing
+        self.ITERS = 300
 
         self.MC = MC
 
@@ -58,7 +60,15 @@ class Multiprocessor():
         print(self.malus)
 
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while self.iter_counter != 100:
+        while self.iter_counter != self.ITERS:
+
+            if self.ANNEALING:
+                # create a linear temp scheme
+                T = 0.5 - self.iter_counter / self.ITERS * 2
+            else:
+
+                # if annealing is of, never use worse schedule
+                T = 0
 
             # Set start time
             start_time = time.time()
@@ -70,10 +80,10 @@ class Multiprocessor():
 
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
-                self.output_schedules = p.map(self.run_HC, [(0, self.schedules[0]),
-                                                            (1, self.schedules[1]),
-                                                            (2, self.schedules[2]),
-                                                            (3, self.schedules[3])])
+                self.output_schedules = p.map(self.run_HC, [(0, self.schedules[0], T),
+                                                            (1, self.schedules[1], T),
+                                                            (2, self.schedules[2], T),
+                                                            (3, self.schedules[3], T)])
 
             # Save data for plotting
             self.iterations_list.append(self.iter_counter)
@@ -100,32 +110,32 @@ class Multiprocessor():
             self.iter_counter += 1
 
     def run_HC(self, hc_tuple):
-        activation, schedule = hc_tuple
+        activation, schedule, t = hc_tuple
         if activation == 0:
             # print('looking to swap classes...')
             HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC)
-            schedule, malus = HC1.climb()
+            schedule, malus = HC1.climb(T=t)
             # print(f'HC1: {roster.malus_count}')
             return schedule, malus
 
         elif activation == 1:
             # print('looking to swap students randomly...')
             HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC)
-            schedule, malus = HC2.climb()
+            schedule, malus = HC2.climb(T=t)
             # print(f'HC2: {roster.malus_count}')
             return schedule, malus
 
         elif activation == 2:
             # print('looking to swap students on gap hour malus...')
             HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC)
-            schedule, malus = HC3.climb()
+            schedule, malus = HC3.climb(T=t)
             # print(f'HC3: {roster.malus_count}')
             return schedule, malus
 
         elif activation == 3:
             # print('looking to swap students on double classes malus...')
             HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC)
-            schedule, malus = HC4.climb()
+            schedule, malus = HC4.climb(T=t)
             # print(f'HC4: {roster.malus_count}')
             return schedule, malus
 

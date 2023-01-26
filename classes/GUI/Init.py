@@ -41,10 +41,13 @@ class App(customtkinter.CTk):
         # self.sim_annealing_switch.grid(row=3, column=0, pady=10, padx=20, sticky="n")
 
         self.label_optimization = customtkinter.CTkLabel(master=self.toggle_frame, text="Optimize", font=customtkinter.CTkFont(size=15, weight='bold'))
-        self.label_optimization.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
+        self.label_optimization.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
 
         self.optimize_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Hill Climbing', font=customtkinter.CTkFont(size=15))
-        self.optimize_switch.grid(row=5, column=0, pady=10, padx=20, sticky="n")
+        self.optimize_switch.grid(row=3, column=0, pady=10, padx=20, sticky="nsew")
+        self.annealing_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Annealing', font=customtkinter.CTkFont(size=15))
+        self.annealing_switch.grid(row=4, column=0, pady=10, padx=20, sticky="nsew")
+        
         # self.student_swap_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Student Swap', font=customtkinter.CTkFont(size=13))
         # self.student_swap_switch.grid(row=6, column=0, pady=10, padx=20, sticky="n")
 
@@ -82,13 +85,15 @@ class App(customtkinter.CTk):
         # Collect state of all widgets
         greedy = self.greedy_switch.get()
         optimize = self.optimize_switch.get()
-
+        annealing = self.annealing_switch.get()
+      
         # Set arguments true based on input of widget state
         if greedy:
             capacity = True
             popular = True
             popular_own_day = True
 
+        
         # Select Generator based on input of widget state
         if not optimize:
             G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
@@ -96,7 +101,7 @@ class App(customtkinter.CTk):
 
         else:
             G = GeneratorClass.Generator_HC(COURSES, STUDENT_COURSES, ROOMS,\
-                capacity, popular, popular_own_day)
+                capacity, popular, popular_own_day, ANNEALING=annealing)
 
         # Run optimizing
         G.optimize()
