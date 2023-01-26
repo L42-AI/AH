@@ -8,12 +8,13 @@ class Roster():
         self.rooms_list = rooms_list
         self.student_list = student_list
         self.course_list = course_list
+        self.course_capacity_malus_sorted = []
 
         self.CAPACITY = capacity
 
     def init_student_timeslots(self, student_list):
         for student in student_list:
-            student.student_timeslots(self.schedule)
+            student.student_timeslots(self)
 
     def __merge(self, dict1, dict2):
         return{**dict1, **dict2}
@@ -26,7 +27,7 @@ class Roster():
 
         # you can call this somewhere apart so that it doesnt get merged every single iteration of total malus,
         # then set everything to 0
-        student_malus_cause = {'Classes Gap': 0, 'Dubble Classes': 0}
+        student_malus_cause = {'Classes Gap': 0, 'Double Classes': 0, 'Tripple Gap': 0}
         self.malus_cause = self.__merge(self.malus_cause, student_malus_cause)
 
     def total_malus(self, student_list):
@@ -40,7 +41,7 @@ class Roster():
         for student in student_list:
 
             # Compute the malus
-            student.malus_points(self.schedule)
+            student.malus_points(self)
 
             # Add to complete malus counter
             self.malus_count += student.malus_count
@@ -49,8 +50,9 @@ class Roster():
             days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
             for day in days:
 
+                self.malus_cause['Tripple Gap'] += student.malus_cause['Tripple Gap'][day]
                 self.malus_cause['Classes Gap'] += student.malus_cause['Classes Gap'][day]
-            self.malus_cause['Dubble Classes'] += student.malus_cause['Dubble Classes'][day]
+                self.malus_cause['Double Classes'] += student.malus_cause['Double Classes'][day]
 
     def __place_in_schedule(self, room, day, timeslot, course_name, classes):
 
@@ -59,6 +61,7 @@ class Roster():
         self.schedule[course_name][classes]['day'] = day
         self.schedule[course_name][classes]['timeslot'] = timeslot
         self.schedule[course_name][classes]['room'] = room.id
+        self.schedule[course_name][classes]['students'] = set()
 
         room.availability[day][timeslot] = False
 
@@ -93,7 +96,7 @@ class Roster():
         if course.name not in self.schedule:
             self.schedule[course.name] = {}
 
-        i = 0 
+        i = 0
         succes = False
         while not succes:
             i += 1
@@ -112,10 +115,13 @@ class Roster():
                             continue
                         if class_type != 'lecture' and room.id == 'C0.110' or room.id == 'C0.112':
                             continue
+                if course.lecture_day != None:
+                    if course.lecture_day != day and class_type == 'lecture':
+                        continue
 
                 self.schedule[course.name][f'{class_type} {count}'] = {}
-                clas_number = f"{class_type} {count}"
-                self.__place_in_schedule(room, day, timeslot, course.name, clas_number)
+                class_number = f"{class_type} {count}"
+                self.__place_in_schedule(room, day, timeslot, course.name, class_number)
 
                 succes = True
 
@@ -165,3 +171,8 @@ class Roster():
                 if occupation > 0:
                     self.malus_cause['Capacity'] += occupation
                     self.malus_count += occupation
+
+                    # store inside the course how many occupation malus it caused
+                    course.capacity_malus += occupation
+
+        self.course_capacity_malus_sorted = sorted(self.course_list, key=lambda x: x.capacity_malus)
