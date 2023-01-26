@@ -70,10 +70,10 @@ class Multiprocessor():
 
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
-                self.output_schedules = p.map(self.run_HC, [(core_assignment_list[0], self.schedules[0]),
-                                                            (core_assignment_list[1], self.schedules[1]),
-                                                            (core_assignment_list[2], self.schedules[2]),
-                                                            (core_assignment_list[3], self.schedules[3])])
+                self.output_schedules = p.map(self.run_HC, [(0, self.schedules[0]),
+                                                            (1, self.schedules[1]),
+                                                            (2, self.schedules[2]),
+                                                            (3, self.schedules[3])])
 
             # Save data for plotting
             self.iterations_list.append(self.iter_counter)

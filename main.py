@@ -1,7 +1,5 @@
 import classes.Algorithms.generator as GeneratorClass
-
-
-import classes.gui.Init as InitClass
+import classes.GUI.Init as InitClass
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 
