@@ -189,8 +189,7 @@ class Mutate():
 
         # For each week
         for day in student_days:
-            print('Days:')
-            print(student_days)
+
             # Sort timeslots in each day
             timeslot_list = sorted(student_days[day], reverse=True)
 
@@ -333,15 +332,56 @@ class Mutate():
             return
 
         # pick a group that student will switch out of
+        tutorial = None
         picked = False
         while not picked:
 
             # the class that student will be switched inside of and the group student belonged in
             class_to_switch = random.choice(list(classes_worst_day.keys()))
             group = classes_worst_day[class_to_switch]
-            if group[0] == 't' or group[0] == 'p':
+            if group[0] == 't':
+                tutorial = True 
+                picked = True
+            elif group[0] == 'p':
+                tutorial = False
                 picked = True
 
+        # switch student
+        if tutorial:
+
+            # pick a random tutorial group from that course
+            group_found = False
+            i = 0
+            while not group_found:
+
+                # pick a random group and check if it is of correct type
+                new_group = random.choice(list(self.schedule[class_to_switch].keys()))
+                if str(new_group)[0] == 't' and new_group != group:
+                    print(new_group, group)
+                    group_found = True
+                
+                # if there is no other group, stop
+                i += 1
+                if i == 20:
+                    return
+            raise
+
+
+        elif not tutorial:
+
+            # pick a random tutorial group from that course
+            group_found = False
+            i = 0
+            while not group_found:
+
+                # pick a random group and check if it is of correct type
+                new_group = random.choice(list(self.schedule[class_to_switch].keys()))
+                if str(new_group)[0] == 'p' and new_group != group:
+                    group_found = True
+
+                # if there is no other group, stop
+                if i == 20:
+                    return
             raise
         
         
