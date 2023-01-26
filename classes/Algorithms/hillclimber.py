@@ -70,24 +70,31 @@ class HillClimber:
             # Compare with prior malus points
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             self.__accept_schedule(new_malus, new_schedule, T)
 =======
 =======
 >>>>>>> 0c9155501a485d7eb3bd063eb4e2de2c6a0c9f4b
+=======
+>>>>>>> 97a96e265fc443e44531d8ca29b91a54d5b658eb
             if new_malus['Total'] < self.best_malus['Total']:
 
                 self.best_schedule = new_schedule
                 self.best_malus = new_malus
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 2e7f291ccf4c5f703c6e7a9e4da36d1e21d18458
 =======
 >>>>>>> 0c9155501a485d7eb3bd063eb4e2de2c6a0c9f4b
+=======
+>>>>>>> 97a96e265fc443e44531d8ca29b91a54d5b658eb
 
                 # Print method name
                 # print(self.get_name())
 
         # Return new roster
         return self.best_schedule, self.best_malus
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     def __accept_schedule(self, new_malus, new_schedule, T):
@@ -97,6 +104,8 @@ class HillClimber:
             self.best_malus_count = new_malus
 =======
 >>>>>>> 0c9155501a485d7eb3bd063eb4e2de2c6a0c9f4b
+=======
+>>>>>>> 97a96e265fc443e44531d8ca29b91a54d5b658eb
 
 """ Inherited HillClimber Classes """
 
