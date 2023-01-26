@@ -2,7 +2,7 @@ import tkinter
 import tkinter.messagebox
 import customtkinter
 
-import classes.Algorithms.generator as GeneratorClass
+import classes.algorithms.generator as GeneratorClass
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 
