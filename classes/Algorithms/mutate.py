@@ -357,16 +357,13 @@ class Mutate():
                 # pick a random group and check if it is of correct type
                 new_group = random.choice(list(self.schedule[class_to_switch].keys()))
                 if str(new_group)[0] == 't' and new_group != group:
-                    print(new_group, group)
                     group_found = True
                 
                 # if there is no other group, stop
                 i += 1
                 if i == 20:
                     return
-            raise
-
-
+        
         elif not tutorial:
 
             # pick a random tutorial group from that course
@@ -382,9 +379,12 @@ class Mutate():
                 # if there is no other group, stop
                 if i == 20:
                     return
-            raise
+
+        # check if there is room in the new group
         
-        
+
+        raise
+
 
         # # check the type of class
         # if group[:8] == 'tutorial':
