@@ -35,7 +35,7 @@ class HillClimber:
 
     """ Main Method """
 
-    def climb(self):
+    def climb(self, T):
 
         # Compute malus with MalusCalculator
         self.malus = self.MC.compute_total_malus(self.schedule)
@@ -61,17 +61,30 @@ class HillClimber:
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
 
-            # Compare with prior malus points
-            if new_malus['Total'] < self.malus['Total']:
-
-                self.schedule = new_schedule
-                self.malus = new_malus
-
-                # Print method name
-                # print(self.get_name())
+            self.__accept_schedule(new_malus, new_schedule, T)
 
         # Return new roster
         return self.schedule, self.malus
+
+    def __accept_schedule(self, new_malus, new_schedule, T):
+
+        prob = random.random()
+
+        # only accept annealing if the rise in malus is not too large
+        difference = self.malus['Total'] - new_malus['Total']
+        five_percent = self.malus['Total'] * 0.05
+        
+        # Compare with prior malus points
+        if new_malus['Total'] <= self.malus['Total']:
+
+            self.schedule = new_schedule
+            self.malus = new_malus
+
+       
+        elif prob < T and difference < five_percent:
+            print(f'worsening of {difference} got accepted at T: {T}')
+            self.schedule = new_schedule
+            self.malus = new_malus
 
 """ Inherited HillClimber Classes """
 
