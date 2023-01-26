@@ -6,7 +6,7 @@ import copy
 
 class HillClimber:
     def __init__(self, schedule, course_list, student_list, MC):
-        self.roster_list = []
+        self.schedule_list = []
         self.course_list = course_list
         self.student_list = student_list
         self.schedule = schedule
@@ -41,19 +41,16 @@ class HillClimber:
         self.best_schedule = self.schedule
 
         # Compute malus with MalusCalculator
-        self.best_malus = self.MC.compute_total_malus(self.schedule)
+        self.malus = self.MC.compute_total_malus(self.schedule)
 
         # Append the input roster
-        self.roster_list.append(self.best_schedule)
+        self.schedule_list.append(self.schedule)
 
         # Take 50 steps:
         for _ in range(50):
 
-            # Set current roster
-            current_schedule = self.best_schedule
-
             # Make copy of schedule, complex because of dictionary
-            copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in current_schedule.items()}
+            copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
 
             # Create the mutate class
             M = self.make_mutate(copied_schedule)
