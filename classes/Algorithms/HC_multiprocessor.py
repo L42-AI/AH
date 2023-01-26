@@ -67,14 +67,7 @@ class HCMultiprocessor():
 
         if visualize:
             self.plot_results(iterations_list, function1, function2, function3, function4)
-
-<<<<<<< HEAD
-        return function1, function2, function3, function4
-
-
-
-=======
->>>>>>> a6eedb1bb4435f574d76acae60286633b1b0b291
+            
     def run_HC(self, hc_tuple):
         number, roster = hc_tuple
         if number == 0:
