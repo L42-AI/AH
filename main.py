@@ -13,7 +13,7 @@ profile = False
 CLIMBING = True
 
 # heuristics to allow for more random mutations before score calculation
-ANNEALING = True
+ANNEALING = False
 
 # heuristics to try and connect room size to class size
 CAPACITY = False

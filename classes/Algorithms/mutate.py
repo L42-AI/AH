@@ -45,15 +45,17 @@ class Mutate():
 
     def __find_worst_student(self, gap=True):
         """ This function returns a random student picked from the schedule key called students
-            it uses the id it gets from a random course and random class to find the student object 
+            it uses the id it gets from a random course and random class to find the student object
             with the helper function self.__get_student_object"""
 
         if gap:
-           
-            student_id = max(self.student_malus_id.items(), key=lambda x: x[1]['Classes Gap'])[0]
+            top_five_gap_students = sorted(self.student_malus_id.items(), key=lambda x: x[1]['Classes Gap'], reverse=True)[:5]
+            top_five_gap_students = [x[0] for x in top_five_gap_students]
         else:
-            student_id =  max(self.student_malus_id.items(), key=lambda x: x[1]['Double Classes'])[0]
-        return student_id
+            top_five_gap_students = sorted(self.student_malus_id.items(), key=lambda x: x[1]['Classes Gap'], reverse=True)[:5]
+            top_five_gap_students = [x[0] for x in top_five_gap_students]
+
+        return top_five_gap_students
 
     def __students_to_shuffle(self):
         """ This function shuffles two random students """
@@ -177,7 +179,7 @@ class Mutate():
         # first swap students, because when we swap, we want to get the students back to their course
         students1 = self.schedule[random_course_1.name][lesson_1]['students']
         students2 = self.schedule[name_2][lesson_2]['students']
-        
+
         self.schedule[random_course_1.name][lesson_1]['students'] = students2
         self.schedule[name_2][lesson_2]['students'] = students1
 
@@ -316,10 +318,13 @@ class Mutate():
     def swap_bad_timeslots(self):
         '''picks a random student from the student list, finds the day that causes the most gap hours
            and swithces one class from that student.'''
-
         GAP = self.__gap()
-        # pick a student to switch
+
+        # pick 5 worst students to switch
         student_to_switch_id = self.__find_worst_student(gap=GAP)
+
+        # pick a random one, readme for explenation
+        student_to_switch_id = random.choice(student_to_switch_id)
 
         # find its worst day
         worst_day = self.__worst_day(student_to_switch_id)
@@ -351,12 +356,11 @@ class Mutate():
             class_to_switch = random.choice(list(classes_worst_day.keys()))
             group = classes_worst_day[class_to_switch]
             if group[:8] == 'tutorial':
-                tutorial = True 
+                tutorial = True
                 picked = True
             elif group[:9] == 'practical':
                 tutorial = False
                 picked = True
-
         # switch student
         if tutorial:
 
@@ -397,6 +401,8 @@ class Mutate():
 
             new_group['students'].add(student_to_switch_id)
             self.schedule[class_to_switch][group]['students'].remove(student_to_switch_id)
+            new_group['students'].add(student_to_switch_id)
+
             return
         else:
             # pick a random student to switch with
