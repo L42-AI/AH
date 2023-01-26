@@ -1,5 +1,5 @@
-import classes.Algorithms.Multiprocessor as MultiprocessorClass
-import classes.Algorithms.genetic as GeneticClass
+import classes.algorithms.multiprocessor as multiprocessorClass
+import classes.algorithms.genetic as GeneticClass
 
 import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
@@ -81,7 +81,7 @@ class Generator:
         for _, room in ROOMS.iterrows():
 
             # fill in the list with room objects
-            rooms_list.append(RoomClass.Room(room))
+            rooms_list.append(roomclass.room(room))
 
         for course in course_list:
             course.enroll_students(student_list)
