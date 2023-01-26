@@ -61,7 +61,7 @@ if __name__ == '__main__':
     else:
 
         # run the experiment 30 times
-        for i in range(2):
+        for i in range(30):
             lists = main_runner(COURSES, STUDENT_COURSES, ROOMS)
 
             for lst, list_to_append in zip(lists, lists_to_append):
@@ -80,5 +80,4 @@ if __name__ == '__main__':
 
         df.to_csv('data/Normal Hillclimber.csv')
 
-        print(df)
 
