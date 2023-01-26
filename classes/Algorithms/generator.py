@@ -1,9 +1,11 @@
-import classes.Algorithms.HC_multiprocessor as HC_multiprocessorClass
+import classes.algorithms.multiprocessor as MultiprocessorClass
+import classes.algorithms.genetic as GeneticClass
 
 import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
 import classes.representation.room as RoomClass
 import classes.representation.roster as RosterClass
+import classes.representation.malus_calc as MalusCalculatorClass
 
 import os
 import matplotlib.pyplot as plt
@@ -12,25 +14,30 @@ import pandas as pd
 
 from tqdm import tqdm
 
-class Generator():
-    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, visualize=False, annealing=False, capacity=False):
+class Generator:
+    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, visualize=False):
 
-        self.ANNEALING = annealing
+        # Set heuristics
         self.CAPACITY = capacity
-        self.malus, self.Roster, self.df, self.course_list, self.student_list, self.rooms_list = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
+        self.POPULAR = popular
+        self.POPULAR_OWN_DAY = popular_own_day
 
+        # Save initialization
+        self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
 
         if visualize:
             self.plot_startup(COURSES, STUDENT_COURSES, ROOMS)
 
-    def __count_students(self, df):
+    """ INIT """
+
+    def __count_students(self, dataframe):
         """This function Counts the amount of students enrolled for each course"""
 
         list_courses = ['Vak1', 'Vak2', 'Vak3', 'Vak4', 'Vak5']
         dict_count = {}
 
         # loop over each row of the dataframe and set the count plus 1
-        for _, row in df.iterrows():
+        for _, row in dataframe.iterrows():
             for course in list_courses:
 
                 # make it a string, in order to easily check if it is nan
@@ -78,9 +85,18 @@ class Generator():
 
         return course_list, student_list, rooms_list
 
-
     def schedule_fill(self, Roster, course_list, student_list):
         ''''method schedules a timeslot for every lecture, tutorial or practical that takes place'''
+
+        # first give the most popular courses a place in the schedule
+        if self.POPULAR:
+            course_list = sorted(course_list, key = lambda x: x.enrolled, reverse = True)
+
+        # give the 5 most popular courses their own day to hold their lectures, to prevent gap hours
+        if self.POPULAR_OWN_DAY:
+            days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+            for i in range(5):
+                course_list[i].day = days[i]
 
         for course in course_list:
             # go over the number of lectures, tutorials and practicals needed
@@ -109,7 +125,6 @@ class Generator():
         Roster.fill_empty_slots()
 
         Roster.init_student_timeslots(student_list)
-
 
     def create_dataframe(self, Roster, student_list, visualize=False):
         # Make lists to put into schedule dataframe
@@ -171,34 +186,37 @@ class Generator():
 
         return schedule_df
 
-
     def initialise(self, COURSES, STUDENT_COURSES, ROOMS):
-        
+
+
         # starts up a random Roster
-        course_list, student_list, rooms_list = self.assign(COURSES, STUDENT_COURSES, ROOMS)
+        course_list, student_list, room_list = self.assign(COURSES, STUDENT_COURSES, ROOMS)
 
-        # create a roster
-        Roster = RosterClass.Roster(rooms_list, student_list, course_list, capacity=self.CAPACITY)
+        # Create Malus Calculator
+        MC = MalusCalculatorClass.MalusCalculator(course_list, student_list, room_list)
 
-        # fill the roster
+        # Create a roster
+        Roster = RosterClass.Roster(room_list, student_list, course_list, capacity=self.CAPACITY)
+
+        # Fill the roster
         self.schedule_fill(Roster, course_list, student_list)
 
-        # Calculate costs of roster
-        Roster.total_malus(student_list)
+        # Compute Malus
+        malus = MC.compute_total_malus(Roster.schedule)
 
-        # Create a dataframe and export to excel for visual representation
-        df = self.create_dataframe(Roster, student_list)
+        return malus, Roster, course_list, student_list, room_list, MC
 
-        # Save as malus points
-        malus_points = Roster.malus_count
+    """ GET """
 
-        return malus_points, Roster, df, course_list, student_list, rooms_list
+    def get_schedule(self):
+        return self.Roster.schedule
 
+    """ METHODS """
 
     def __run_random(self, COURSES, STUDENT_COURSES, ROOMS):
         self.costs = []
         self.iterations = []
-        for i in tqdm(range(300)):
+        for i in tqdm(range(100)):
 
             self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0])
 
@@ -209,7 +227,10 @@ class Generator():
 
         self.__run_random(COURSES, STUDENT_COURSES, ROOMS)
 
-        fig_name = "startups.png"
+        if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY:
+            fig_name = f"Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}.png"
+        else:
+            fig_name = "Baseline_random.png"
 
         # Current working directory
         current_dir = os.getcwd()
@@ -220,42 +241,29 @@ class Generator():
         # Directory "visualize"
         directory_plots = os.path.join(parent_dir, 'AH/visualize')
 
-        # Fit a polynomial of degree 1 (i.e. a linear regression) to the data
-        coefficients = np.polyfit(self.iterations, self.costs, 1)
+        plt.figure(figsize=(10,4))
+        plt.style.use('seaborn-whitegrid')
 
-        # Create a new set of x values for the regression line
-        x_reg = np.linspace(min(self.iterations), max(self.iterations), 300)
-
-        # Use the coefficients to calculate the y values for the regression line
-        y_reg = np.polyval(coefficients, x_reg)
-
-        plt.title('300 random startups of the algorithm with no restrictions')
-        plt.plot(self.iterations, self.costs)
+        plt.title('Schedule Initialization (N = 500)')
+        plt.hist(self.costs, bins=20, facecolor = '#2ab0ff', edgecolor='#169acf', linewidth=0.5)
 
         # Plot the regression line
-        plt.plot(x_reg, y_reg, 'r')
-        plt.xlabel('run #')
-        plt.ylabel('malus points')
+        plt.ylabel('Iterations')
+        plt.xlabel('Malus')
         plt.savefig(os.path.join(directory_plots, fig_name))
-        plt.show()
 
-    def get_schedule(self):
-        return self.Roster.schedule
-
-    def get_malus(self):
-        return self.Roster.malus_count
-
-    def get_malus_cause(self):
-        return self.Roster.all_malus_cause
-
-    def run(self, iters = 200):
-        for i in tqdm(range(iters)):
-            self.costs.append()
-            self.iterations.append(i)
-
-    def rearrange_HC(self):
-
-        HCMultiprocessor = HC_multiprocessorClass.HCMultiprocessor(self.Roster, self.course_list, self.student_list)
-        HCMultiprocessor.run_hillclimbers()
+    def optimize(self):
+        pass
 
 
+""" Inherited Classes """
+
+class Generator_HC(Generator):
+    def optimize(self):
+            Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC)
+            Multiprocessor.run()
+
+class Generator_SA(Generator):
+    def optimize(self):
+            Multiprocessor = MultiprocessorClass.Multiprocessor_SimAnnealing(self.Roster, self.course_list, self.student_list, self.MC)
+            Multiprocessor.run()
