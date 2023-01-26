@@ -64,33 +64,34 @@ class HCMultiprocessor():
         if visualize:
             self.plot_results(iterations_list, function1, function2, function3, function4)
 
-    def run_HC(self, hc_tuple):
+    def run_HC(self, hc_tuple, t=None):
+
         number, roster = hc_tuple
         if number == 0:
             # print('looking to swap classes...')
             HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(roster, self.course_list, self.student_list)
-            roster = HC1.climb()
+            roster = HC1.climb(T=t)
             # print(f'HC1: {roster.malus_count}')
             return roster
 
         elif number == 1:
             # print('looking to swap students randomly...')
             HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(roster, self.course_list, self.student_list)
-            roster = HC2.climb()
+            roster = HC2.climb(T=t)
             # print(f'HC2: {roster.malus_count}')
             return roster
 
         elif number == 2:
             # print('looking to swap students on gap hour malus...')
             HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(roster, self.course_list, self.student_list)
-            roster = HC3.climb()
+            roster = HC3.climb(T=t)
             # print(f'HC3: {roster.malus_count}')
             return roster
 
         elif number == 3:
             # print('looking to swap students on double classes malus...')
             HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(roster, self.course_list, self.student_list)
-            roster = HC4.climb()
+            roster = HC4.climb(T=t)
             # print(f'HC4: {roster.malus_count}')
             return roster
 
@@ -131,39 +132,39 @@ class HCMultiprocessor():
             print('FAIL')
             print(self.Roster.malus_cause)
 
-class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
+# class HCMultiprocessor_SimAnnealing(HCMultiprocessor):
     
-    def _replace_roster(self, difference, iter_count):
-        # set the temperature
-        T = (150/(200 + iter_count*2))
+#     def _replace_roster(self, difference, iter_count):
+#         # set the temperature
+#         T = (150/(200 + iter_count*2))
 
-        # If difference is positive
-        if difference > 0:
+#         # If difference is positive
+#         if difference > 0:
 
-            # Set the new roster to self.Roster
-            self.Roster = self.output_rosters[self.best_index]
-            self.fail_counter = 0
+#             # Set the new roster to self.Roster
+#             self.Roster = self.output_rosters[self.best_index]
+#             self.fail_counter = 0
 
-            print(f'\n========================= Generation: {iter_count} =========================\n')
-            print(f'Most effective function: HC{self.best_index + 1}')
-            print(f'Malus improvement: {difference}')
-            print(self.Roster.malus_cause)
+#             print(f'\n========================= Generation: {iter_count} =========================\n')
+#             print(f'Most effective function: HC{self.best_index + 1}')
+#             print(f'Malus improvement: {difference}')
+#             print(self.Roster.malus_cause)
 
-        elif difference < 0:
-            prob = random.random()
-            if prob < T:
-                self.Roster = random.choice(self.output_rosters)
-                self.fail_counter = 0
+#         elif difference < 0:
+#             prob = random.random()
+#             if prob < T:
+#                 self.Roster = random.choice(self.output_rosters)
+#                 self.fail_counter = 0
 
-                # print output
-                print(f'\n========================= Generation: {iter_count} =========================\n')
-                print(f'FAIL GOT ACCEPTED WITH T AT: {T}')
-                print(self.Roster.malus_cause)
+#                 # print output
+#                 print(f'\n========================= Generation: {iter_count} =========================\n')
+#                 print(f'FAIL GOT ACCEPTED WITH T AT: {T}')
+#                 print(self.Roster.malus_cause)
 
-            else:
-                self.fail_counter += 1
+#             else:
+#                 self.fail_counter += 1
 
-                # print output
-                print(f'\n========================= Generation: {iter_count} =========================\n')
-                print('FAIL')
-                print(self.Roster.malus_cause)
+#                 # print output
+#                 print(f'\n========================= Generation: {iter_count} =========================\n')
+#                 print('FAIL')
+#                 print(self.Roster.malus_cause)
