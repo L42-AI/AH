@@ -3,16 +3,12 @@
 import random
 
 class Roster():
-    def __init__(self, rooms_list, student_list, course_list, student_id_list, capacity=False):
+    def __init__(self, rooms_list, student_list, course_list, capacity=False):
         self.schedule = {}
         self.rooms_list = rooms_list
         self.student_list = student_list
-        self.student_id_list = student_id_list
         self.course_list = course_list
         self.course_capacity_malus_sorted = []
-
-        print(student_id_list)
-        raise
 
         self.CAPACITY = capacity
 

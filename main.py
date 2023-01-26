@@ -2,12 +2,9 @@ import classes.algorithms.generator as GeneratorClass
 import classes.GUI.Init as InitClass
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+
 import cProfile
 import pstats
-from data.store_data import store_improvements
 
 # Run profiler
 profile = False

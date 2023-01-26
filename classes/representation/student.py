@@ -260,7 +260,6 @@ class Student():
                             self.malus_cause['Classes Gap'][day] += 3
                             self.malus_count += 3
 
-                        # dont forget to put back to 1000
                         elif lesson_gaps > 2:
                             self.malus_cause['Tripple Gap'][day] += 5
                             self.malus_count += 5
