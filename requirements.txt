@@ -1,4 +1,0 @@
-hier alle imports in zetten
-
-
-pip install openpyxl
