@@ -8,7 +8,7 @@ class MalusCalculator:
         self.course_list = course_list
         self.student_list = student_list
         self.room_list = room_list
-
+        self.student_id_malus = {}
         # Init dictionaries for hashable refernce
         self.init_student_dict()
         self.init_course_dict()
@@ -125,7 +125,7 @@ class MalusCalculator:
 
         # For each student
         for student_id in timeslots:
-
+            self.student_id_malus[student_id] = {'Classes Gap': 0, 'Double Classes': 0}
             # For each week
             for day in timeslots[student_id]:
 
@@ -144,6 +144,7 @@ class MalusCalculator:
                         # malus for double classes
                         if timeslot_list[timeslot_num] in timeslots_double_classes:
                             self.malus['Double Classes'] += 1
+                            self.student_id_malus[student_id]['Double Classes'] += 1
                             self.malus['Total'] += 1
                         else:
                             timeslots_double_classes.append(timeslot_list[timeslot_num])
@@ -155,16 +156,20 @@ class MalusCalculator:
                             # check if one gap hour
                             if lesson_gaps == 1:
                                 self.malus['Classes Gap'] += 1
+                                self.student_id_malus[student_id]['Classes Gap'] += 1
                                 self.malus['Total'] += 1
 
                             elif lesson_gaps == 2:
                                 self.malus['Classes Gap'] += 3
+                                self.student_id_malus[student_id]['Classes Gap'] += 3
                                 self.malus['Total'] += 3
 
                             elif lesson_gaps > 2:
                                 self.malus['Triple Gap'] += 5
+                                self.student_id_malus[student_id]['Classes Gap'] += 5
                                 self.malus['Total'] += 5
-
+        return self.student_id_malus
+        
     def compute_total_malus(self, schedule) -> dict:
         self.init_malus()
         self.compute_schedule_malus(schedule)

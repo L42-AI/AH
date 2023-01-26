@@ -21,8 +21,8 @@ class HillClimber:
         pass
 
     # Aangezien dit nooit wordt gebruikt, verwijderen en pass neerzetten?
-    def make_mutate(self, schedule):
-        M = MutateClass.Mutate(self.course_list, self.student_list, schedule)
+    def make_mutate(self, schedule, student_malus_id):
+        M = MutateClass.Mutate(self.course_list, self.student_list, schedule, student_malus_id)
         return M
 
 
@@ -49,8 +49,10 @@ class HillClimber:
             # Make copy of schedule, complex because of dictionary
             copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
 
+            # create a dict with malus per students
+            student_id_malus = self.MC.compute_student_malus(copied_schedule)
             # Create the mutate class
-            M = self.make_mutate(copied_schedule)
+            M = self.make_mutate(copied_schedule, student_id_malus)
 
             # Take a step
             self.step_method(M)
@@ -101,8 +103,8 @@ class HC_TimeSlotSwapRandom(HillClimber):
 
 class HC_TimeSlotSwapCapacity(HC_TimeSlotSwapRandom):
     '''swaps the class that has the most capacity malus points with a random class'''
-    def make_mutate(self, schedule):
-        M = MutateClass.Mutate_Course_Swap_Capacity(self.course_list, self.student_list, schedule)
+    def make_mutate(self, schedule, student_malus_id):
+        M = MutateClass.Mutate_Course_Swap_Capacity(self.course_list, self.student_list, schedule, student_malus_id)
         return M
 
     def get_name(self):
@@ -124,8 +126,8 @@ class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
        When found, it will swap one tut or pract with a student from a different group
        that has the most malus points from that group'''
 
-    def make_mutate(self, schedule):
-        M = MutateClass.Mutate_double_classes(self.course_list, self.student_list, schedule)
+    def make_mutate(self, schedule, student_malus_id):
+        M = MutateClass.Mutate_double_classes(self.course_list, self.student_list, schedule, student_malus_id)
         return M
 
     def step_method(self, M):

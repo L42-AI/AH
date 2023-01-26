@@ -76,10 +76,10 @@ class Multiprocessor():
 
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
-                self.output_schedules = p.map(self.run_HC, [(0, self.schedules[0], t),
-                                                            (1, self.schedules[1], t),
-                                                            (2, self.schedules[2], t),
-                                                            (3, self.schedules[3], t)])
+                self.output_schedules = p.map(self.run_HC, [(0, self.schedules[0], t, self.iter_counter),
+                                                            (1, self.schedules[1], t, self.iter_counter),
+                                                            (2, self.schedules[2], t, self.iter_counter),
+                                                            (3, self.schedules[3], t, self.iter_counter)])
 
             # Save data for plotting
             self.iterations_list.append(self.iter_counter)
@@ -106,7 +106,16 @@ class Multiprocessor():
             self.iter_counter += 1
 
     def run_HC(self, hc_tuple):
-        activation, schedule, T = hc_tuple
+        activation, schedule, T, iterations = hc_tuple
+        # if iterations > 150:
+        #     p = random.random()
+        #     if p < .35:
+        #         p2 = random.random()
+        #         if p2 < .5:
+        #             activation = 3
+        #         else:
+        #             activation = 4
+
         if activation == 0:
             # print('looking to swap classes...')
             HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC)

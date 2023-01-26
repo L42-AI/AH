@@ -1,11 +1,11 @@
 import random
 
 class Mutate():
-    def __init__(self, course_list, student_list, schedule):
+    def __init__(self, course_list, student_list, schedule, student_malus_id):
         self.schedule = schedule
-
         self.course_list = course_list
         self.student_list = student_list
+        self.student_malus_id = student_malus_id
 
         # Dict with student and course objects with one attribute as value
         # Makes searching them based on that attribute faster
@@ -43,23 +43,16 @@ class Mutate():
     
 
 
-    def __find_random_student(self):
+    def __find_worst_student(self, gap=True):
         """ This function returns a random student picked from the schedule key called students
             it uses the id it gets from a random course and random class to find the student object 
             with the helper function self.__get_student_object"""
 
-        # get random course, moment and id
-        _course = random.choice(list(self.schedule.keys()))
-
-        # do not accept the schedule filler 
-        while _course == 'No course':
-            _course = random.choice(list(self.schedule.keys()))
-
-        _class = random.choice(list(self.schedule[_course].keys()))
-
-        _students = list(self.schedule[_course][_class]['students'])
-        student_id = random.choice(_students)
-
+        if gap:
+           
+            student_id = max(self.student_malus_id.items(), key=lambda x: x[1]['Classes Gap'])[0]
+        else:
+            student_id =  max(self.student_malus_id.items(), key=lambda x: x[1]['Double Classes'])[0]
         return student_id
 
     def __students_to_shuffle(self):
@@ -77,8 +70,8 @@ class Mutate():
             course_picked = False
 
             # Randomly select students
-            student1 = self.__find_random_student()
-            student2 = self.__find_random_student()
+            student1 = self.__find_worst_student()
+            student2 = self.__find_worst_student()
 
             # Find the courses that both students follow
             intersecting_courses = list(set(student1.courses) & set(student2.courses))
@@ -324,8 +317,9 @@ class Mutate():
         '''picks a random student from the student list, finds the day that causes the most gap hours
            and swithces one class from that student.'''
 
+        GAP = self.__gap()
         # pick a student to switch
-        student_to_switch_id = self.__find_random_student()
+        student_to_switch_id = self.__find_worst_student(gap=GAP)
 
         # find its worst day
         worst_day = self.__worst_day(student_to_switch_id)
@@ -413,7 +407,8 @@ class Mutate():
             self.schedule[class_to_switch][group]['students'].add(student_to_old_group)
             return
 
-
+    def __gap(self):
+        return True
 
 
 
@@ -483,6 +478,9 @@ class Mutate():
 
 
 class Mutate_double_classes(Mutate):
+    def __gap(self):
+        return False
+
     def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
         return max(scores_per_day_double, key=lambda x: scores_per_day_double.get(x))
