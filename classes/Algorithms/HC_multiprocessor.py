@@ -25,11 +25,8 @@ class HCMultiprocessor():
         print(f'\nInitialization')
         print(self.Roster.malus_cause)
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-<<<<<<< HEAD
-        while iter_counter <= 2:
-=======
+
         while iter_counter != 300 and self.fail_counter < 10:
->>>>>>> a6eedb1bb4435f574d76acae60286633b1b0b291
 
             # Increase iter counter
             iter_counter += 1
@@ -67,7 +64,7 @@ class HCMultiprocessor():
 
         if visualize:
             self.plot_results(iterations_list, function1, function2, function3, function4)
-            
+
     def run_HC(self, hc_tuple):
         number, roster = hc_tuple
         if number == 0:
