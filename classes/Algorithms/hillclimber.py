@@ -35,7 +35,7 @@ class HillClimber:
 
     """ Main Method """
 
-    def climb(self):
+    def climb(self, T=None):
 
         # Set input roster as best roster and best malus count
         self.best_roster = self.Roster
@@ -68,16 +68,19 @@ class HillClimber:
             new_malus = self.MC.compute_total_malus(new_schedule)
 
             # Compare with prior malus points
-            if new_malus['Total'] < self.best_malus_count['Total']:
-
-                self.best_roster.schedule = new_schedule
-                self.best_malus_count = new_malus
+            self.__accept_schedule(new_malus, new_schedule, T)
 
                 # Print method name
                 # print(self.get_name())
 
         # Return new roster
         return self.best_roster, self.best_malus_count
+
+    def __accept_schedule(self, new_malus, new_schedule, T):
+        prob = random.random()
+        if prob < T or new_malus['Total'] < self.best_malus_count['Total']:
+            self.best_roster.schedule = new_schedule
+            self.best_malus_count = new_malus
 
 """ Inherited HillClimber Classes """
 
@@ -126,3 +129,11 @@ class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
 
     def get_name(self):
         return 'SwapBadTimeslots_DoubleClasses'
+
+class SA_TimeSlotSwapRandom(HC_TimeSlotSwapRandom):
+    def __accept_schedule(self, new_malus, new_schedule, T):
+        prob = random.random()
+        if prob < T or new_malus['Total'] < self.best_malus_count['Total']:
+            self.best_roster.schedule = new_schedule
+            self.best_malus_count = new_malus
+
