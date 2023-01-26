@@ -1,7 +1,7 @@
 import classes.algorithms.hillclimber as HillCLimberClass
 from multiprocessing import Pool
 import random as random
-
+import pandas as pd
 import time
 import json
 import copy
@@ -39,7 +39,12 @@ class Multiprocessor():
     def run(self):
 
         # Set lists
-        self.iterations_list = []
+        self.malus_points_total = []
+        self.malus_swap_course_random = []
+        self.malus_swap_course_capacity = []
+        self.malus_swap_student_gaphour = []
+        self.malus_swap_student_doublehour = []
+
         self.info = {}
 
         # Set counters
@@ -58,7 +63,7 @@ class Multiprocessor():
         print(self.malus)
 
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while self.iter_counter != 100:
+        while self.fail_counter <= 20:
 
             # Set start time
             start_time = time.time()
@@ -75,20 +80,36 @@ class Multiprocessor():
                                                             (2, self.schedules[2]),
                                                             (3, self.schedules[3])])
 
-            # Save data for plotting
-            self.iterations_list.append(self.iter_counter)
-
             # find the lowest malus of the output rosters
             min_malus = min([i[1]['Total'] for i in self.output_schedules])
 
             # Use the lowest malus to find the index of the best roster
             self.best_index = [i[1]['Total'] for i in self.output_schedules].index(min_malus)
 
+            total_malus = self.malus['Total']
+            best_total_malus = self.output_schedules[self.best_index][1]['Total']
+
             # Compute difference between new roster and current roster
-            difference = self.malus['Total'] - self.output_schedules[self.best_index][1]['Total']
+            difference = total_malus - best_total_malus
 
             # Set finish time
             finish_time = time.time()
+
+            # Save iterations, total maluspoints and each of the 4 algorithms the amount of points they drop in malus
+            # in order to plot later
+            self.malus_points_total.append(total_malus)
+
+            lists = [self.malus_swap_course_random, self.malus_swap_course_capacity, self.malus_swap_student_gaphour, self.malus_swap_student_doublehour]
+
+            # append for each heuristiek the difference of points they created
+            for i, malus in enumerate(self.output_schedules):
+
+                # check if we already had this one then dont calculate difference again
+                if i == self.best_index:
+                    lists[i].append(difference)
+                
+                else:
+                    lists[i].append(total_malus - malus[1]['Total'])
 
             self.iter_duration = finish_time - start_time
             self.duration += self.iter_duration
@@ -98,6 +119,8 @@ class Multiprocessor():
 
             # Increase iter counter
             self.iter_counter += 1
+
+        return self.malus_points_total, self.malus_swap_course_random, self.malus_swap_course_capacity, self.malus_swap_student_gaphour, self.malus_swap_student_doublehour
 
     def run_HC(self, hc_tuple):
         activation, schedule = hc_tuple
@@ -181,47 +204,3 @@ class Multiprocessor():
             print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
             print(f'Duration since init: {round(self.duration, 2)} S.')
             print(self.malus)
-
-class Multiprocessor_SimAnnealing(Multiprocessor):
-
-    def __replace_roster(self, difference):
-        # set the temperature
-        T = (150/(200 + self.iter_counter*2))
-
-        # If difference is positive
-        if difference > 0:
-
-            # Set the new roster to self.Roster
-            self.schedule, self.malus = self.output_schedules[self.best_index]
-            self.fail_counter = 0
-
-            print(f'\n========================= Generation: {self.iter_counter} =========================\n')
-            print(f'Temperature at generation: {T}')
-            print(f'Most effective function: SA{self.best_index + 1}')
-            print(f'Malus improvement: {difference}')
-            print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
-            print(f'Duration since init: {round(self.duration, 2)} S.')
-            print(self.malus)
-
-        elif difference < 0:
-            prob = random.random()
-            if prob < T:
-                self.schedule, self.malus = random.choice(self.output_schedules)
-                self.fail_counter = 0
-
-                # print output
-                print(f'\n========================= Generation: {self.iter_counter} =========================\n')
-                print(f'FAIL GOT ACCEPTED WITH TEMPERATURE AT: {T}')
-                print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
-                print(f'Duration since init: {round(self.duration, 2)} S.')
-                print(self.malus)
-
-            else:
-                self.fail_counter += 1
-
-                # print output
-                print(f'\n========================= Generation: {self.iter_counter} =========================\n')
-                print('FAIL')
-                print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
-                print(f'Duration since init: {round(self.duration, 2)} S.')
-                print(self.malus)
