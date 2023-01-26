@@ -25,7 +25,7 @@ class HCMultiprocessor():
         print(f'\nInitialization')
         print(self.Roster.malus_cause)
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while iter_counter != 300 and self.fail_counter < 10:
+        while iter_counter != 1 and self.fail_counter < 10:
 
             # Increase iter counter
             iter_counter += 1

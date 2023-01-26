@@ -47,7 +47,7 @@ class HillClimber:
         self.roster_list.append(self.best_roster)
 
         # Take 30 steps:
-        for _ in range(1):
+        for _ in range(50):
 
             # Set current roster
             current_roster = self.best_roster
@@ -74,7 +74,7 @@ class HillClimber:
                 self.best_malus_count = new_malus
 
                 # Print method name
-                # print(self.get_name())
+                print(self.get_name())
 
         # Return new roster
         return self.best_roster, self.best_malus_count

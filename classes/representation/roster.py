@@ -54,13 +54,15 @@ class Roster():
                 self.malus_cause['Classes Gap'] += student.malus_cause['Classes Gap'][day]
                 self.malus_cause['Double Classes'] += student.malus_cause['Double Classes'][day]
 
-    def __place_in_schedule(self, room, day, timeslot, course_name, classes):
+    def __place_in_schedule(self, room, day, timeslot, course_name, classes, max_std):
 
         # only need class if it is an actual lesson
         self.schedule[course_name][classes] = {}
         self.schedule[course_name][classes]['day'] = day
         self.schedule[course_name][classes]['timeslot'] = timeslot
         self.schedule[course_name][classes]['room'] = room.id
+        self.schedule[course_name][classes]['capacity'] = room.capacity
+        self.schedule[course_name][classes]['max students'] = max_std
         self.schedule[course_name][classes]['students'] = set()
 
         room.availability[day][timeslot] = False
@@ -81,12 +83,12 @@ class Roster():
                         classes = f"No classes {i}"
 
                         # schedule the room as empty
-                        self.__place_in_schedule(room, day, timeslot, "No course", classes)
+                        self.__place_in_schedule(room, day, timeslot, "No course", classes, 1000)
                         i += 1
                 if room.id == 'C0.110':
                     if room.availability[day][17]:
                         classes = f"No classes {i}"
-                        self.__place_in_schedule(room, day, 17, "No course", classes)
+                        self.__place_in_schedule(room, day, 17, "No course", classes, 1000)
                         i += 1
 
     def fill_schedule_random(self, course, class_type, count, attending):
@@ -121,7 +123,13 @@ class Roster():
 
                 self.schedule[course.name][f'{class_type} {count}'] = {}
                 class_number = f"{class_type} {count}"
-                self.__place_in_schedule(room, day, timeslot, course.name, class_number)
+                if class_number[0] == 't':
+                    self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std)
+                if class_number[0] == 'p':
+                    self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_practical)
+                else:
+                    self.__place_in_schedule(room, day, timeslot, course.name, class_number, 1000)
+                    
 
                 succes = True
 
