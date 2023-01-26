@@ -188,6 +188,7 @@ class Generator:
 
     def initialise(self, COURSES, STUDENT_COURSES, ROOMS):
 
+
         # starts up a random Roster
         course_list, student_list, room_list = self.assign(COURSES, STUDENT_COURSES, ROOMS)
 
