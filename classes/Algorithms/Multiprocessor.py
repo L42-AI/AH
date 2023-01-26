@@ -58,14 +58,16 @@ class Multiprocessor():
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
-
+        initial_temp = 1
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while self.iter_counter != self.ITERS:
+        while self.iter_counter != self.ITERS and self.fail_counter < 20:
 
             if self.ANNEALING:
-                t = 0.25 - self.iter_counter / self.ITERS * 4
+                t = initial_temp * e^(-k * iter_counter)
             else:
                 t = 0
+            if self.fail_counter > 10:
+                t += 0.15
 
             start_time = time.time()
 
