@@ -3,12 +3,16 @@
 import random
 
 class Roster():
-    def __init__(self, rooms_list, student_list, course_list, capacity=False):
+    def __init__(self, rooms_list, student_list, course_list, student_id_list, capacity=False):
         self.schedule = {}
         self.rooms_list = rooms_list
         self.student_list = student_list
+        self.student_id_list = student_id_list
         self.course_list = course_list
         self.course_capacity_malus_sorted = []
+
+        print(student_id_list)
+        raise
 
         self.CAPACITY = capacity
 
@@ -54,6 +58,9 @@ class Roster():
                 self.malus_cause['Classes Gap'] += student.malus_cause['Classes Gap'][day]
                 self.malus_cause['Double Classes'] += student.malus_cause['Double Classes'][day]
 
+    def fill_student_id_list(self):
+        pass
+
     def __place_in_schedule(self, room, day, timeslot, course_name, classes):
 
         # only need class if it is an actual lesson
@@ -61,6 +68,7 @@ class Roster():
         self.schedule[course_name][classes]['day'] = day
         self.schedule[course_name][classes]['timeslot'] = timeslot
         self.schedule[course_name][classes]['room'] = room.id
+        self.schedule[course_name][classes]['capacity'] = room.capacity
         self.schedule[course_name][classes]['students'] = set()
 
         room.availability[day][timeslot] = False

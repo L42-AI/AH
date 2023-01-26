@@ -46,11 +46,7 @@ class HillClimber:
         # Append the input roster
         self.roster_list.append(self.best_roster)
 
-<<<<<<< HEAD
         # Take 30 steps:
-=======
-        # Take 50 steps:
->>>>>>> f234a76bd84ea49eb617955f0770224dc912db52
         for _ in range(50):
 
             # Set current roster
