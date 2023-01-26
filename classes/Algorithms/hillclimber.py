@@ -67,16 +67,16 @@ class HillClimber:
             self.__accept_schedule(new_malus, new_schedule, T)
 
         # Return new roster
-        return self.best_schedule, self.best_malus
+        return self.schedule, self.malus
     
     def __accept_schedule(self, new_malus, new_schedule, T):
                 
         prob = random.random()
         # Compare with prior malus points
-        if new_malus['Total'] < self.best_malus['Total'] or prob < T:
+        if new_malus['Total'] < self.malus['Total'] or prob < T:
 
-            self.best_schedule = new_schedule
-            self.best_malus = new_malus
+            self.schedule = new_schedule
+            self.malus = new_malus
 
 """ Inherited HillClimber Classes """
 

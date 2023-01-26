@@ -66,7 +66,6 @@ class Multiprocessor():
                 # create a linear temp scheme
                 T = 0.5 - self.iter_counter / self.ITERS * 2
             else:
-
                 # if annealing is of, never use worse schedule
                 T = 0
 
@@ -172,7 +171,7 @@ class Multiprocessor():
         if difference > 0:
 
             # Set the new roster to self.Roster
-            self.schedule, self.malus = self.output_schedules[self.best_index]
+            self.Roster, self.malus = self.output_schedules[self.best_index]
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {self.iter_counter} =========================\n')
@@ -202,7 +201,7 @@ class Multiprocessor_SimAnnealing(Multiprocessor):
         if difference > 0:
 
             # Set the new roster to self.Roster
-            self.schedule, self.malus = self.output_schedules[self.best_index]
+            self.Roster, self.malus = self.output_schedules[self.best_index]
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {self.iter_counter} =========================\n')
@@ -216,7 +215,7 @@ class Multiprocessor_SimAnnealing(Multiprocessor):
         elif difference < 0:
             prob = random.random()
             if prob < T:
-                self.schedule, self.malus = random.choice(self.output_schedules)
+                self.Roster, self.malus = random.choice(self.output_schedules)
                 self.fail_counter = 0
 
                 # print output
