@@ -1,6 +1,7 @@
 import classes.algorithms.mutate as MutateClass
 import random
 import copy
+import math
 
 """ Main HillClimber Class """
 
@@ -68,11 +69,11 @@ class HillClimber:
 
     def __accept_schedule(self, new_malus, new_schedule, T):
 
-        prob = random.random()
+        
 
         # only accept annealing if the rise in malus is not too large
         difference = self.malus['Total'] - new_malus['Total']
-        five_percent = self.malus['Total'] * 0.05
+        prob = math.exp(-difference / T)
         
         # Compare with prior malus points
         if new_malus['Total'] <= self.malus['Total']:
@@ -81,7 +82,7 @@ class HillClimber:
             self.malus = new_malus
 
        
-        elif prob < T and difference < five_percent:
+        elif prob < T:
             print(f'worsening of {difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
