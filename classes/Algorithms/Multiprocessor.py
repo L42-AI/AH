@@ -1,4 +1,4 @@
-import classes.Algorithms.hillclimber as HillCLimberClass
+import classes.algorithms.hillclimber as HillCLimberClass
 from multiprocessing import Pool
 import random as random
 
