@@ -15,15 +15,14 @@ import pandas as pd
 from tqdm import tqdm
 
 class Generator:
-    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, visualize=False, annealing=False, capacity=False, popular=False, popular_own_day=False, climbing=False):
+    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, visualize=False):
 
         # Set heuristics
-        self.ANNEALING = annealing
         self.CAPACITY = capacity
         self.POPULAR = popular
         self.POPULAR_OWN_DAY = popular_own_day
-        self.CLIMBING = climbing
 
+        # Save initialization
         self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
 
         if visualize:
@@ -193,6 +192,7 @@ class Generator:
 
     def initialise(self, COURSES, STUDENT_COURSES, ROOMS):
 
+
         # starts up a random Roster
         course_list, student_list, room_list, student_id_list = self.assign(COURSES, STUDENT_COURSES, ROOMS)
 
@@ -220,7 +220,7 @@ class Generator:
     def __run_random(self, COURSES, STUDENT_COURSES, ROOMS):
         self.costs = []
         self.iterations = []
-        for i in tqdm(range(500)):
+        for i in tqdm(range(100)):
 
             self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0])
 
@@ -255,12 +255,6 @@ class Generator:
         plt.ylabel('Iterations')
         plt.xlabel('Malus')
         plt.savefig(os.path.join(directory_plots, fig_name))
-        # plt.show()
-
-    def run(self, iters = 200):
-        for i in tqdm(range(iters)):
-            self.costs.append()
-            self.iterations.append(i)
 
     def optimize(self):
         pass
@@ -272,10 +266,10 @@ class Generator:
 
 class Generator_HC(Generator):
     def optimize(self):
-        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC)
-        Multiprocessor.run()
+            Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC)
+            Multiprocessor.run()
 
 class Generator_SA(Generator):
     def optimize(self):
-        Multiprocessor = MultiprocessorClass.Multiprocessor_SimAnnealing(self.Roster, self.course_list, self.student_list, self.MC)
-        Multiprocessor.run()
+            Multiprocessor = MultiprocessorClass.Multiprocessor_SimAnnealing(self.Roster, self.course_list, self.student_list, self.MC)
+            Multiprocessor.run()
