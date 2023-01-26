@@ -1,4 +1,4 @@
-import classes.Algorithms.generator as GeneratorClass
+import classes.algorithms.generator as GeneratorClass
 import classes.GUI.Init as InitClass
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS

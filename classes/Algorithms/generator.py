@@ -1,5 +1,5 @@
-import classes.Algorithms.Multiprocessor as MultiprocessorClass
-import classes.Algorithms.genetic as GeneticClass
+import classes.algorithms.multiprocessor as MultiprocessorClass
+import classes.algorithms.genetic as GeneticClass
 
 import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
@@ -15,12 +15,13 @@ import pandas as pd
 from tqdm import tqdm
 
 class Generator:
-    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, visualize=False):
+    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, visualize=False, annealing=False):
 
         # Set heuristics
         self.CAPACITY = capacity
         self.POPULAR = popular
         self.POPULAR_OWN_DAY = popular_own_day
+        self.ANNEALING = annealing
 
         # Save initialization
         self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
@@ -253,17 +254,7 @@ class Generator:
         plt.savefig(os.path.join(directory_plots, fig_name))
 
     def optimize(self):
-        pass
-
-
-""" Inherited Classes """
-
-class Generator_HC(Generator):
-    def optimize(self):
-            Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC)
+            Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, annealing=self.ANNEALING)
             Multiprocessor.run()
 
-class Generator_SA(Generator):
-    def optimize(self):
-            Multiprocessor = MultiprocessorClass.Multiprocessor_SimAnnealing(self.Roster, self.course_list, self.student_list, self.MC)
-            Multiprocessor.run()
+
