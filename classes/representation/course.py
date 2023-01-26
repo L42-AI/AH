@@ -16,7 +16,6 @@ class Course():
         self.lectures = data['#Hoorcolleges']
         self.enrolled = enrolled
         self.enrolled_students = set()
-        self.lecture_day= None
 
         # Set the attributes about the tutorials
         self.tutorials = data['#Werkcolleges']
@@ -31,7 +30,6 @@ class Course():
         # initiate the libararies
         self.tut_group_dict = {}
         self.pract_group_dict = {}
-        self.capacity_malus = 0
 
         # Run initializing function 
         self.rooms_needed()
