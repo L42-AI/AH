@@ -1,4 +1,5 @@
 import classes.Algorithms.generator as GeneratorClass
+import classes.GUI.Init as InitClass
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 
@@ -12,7 +13,7 @@ profile = False
 CLIMBING = True
 
 # heuristics to allow for more random mutations before score calculation
-ANNEALING = True
+ANNEALING = False
 
 # heuristics to try and connect room size to class size
 CAPACITY = True
@@ -40,9 +41,11 @@ def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALI
             G.optimize()
 
 if __name__ == '__main__':
-    if profile:
-        cProfile.run('main_runner(ANNEALING, CAPACITY)', 'profile.out')
-        p = pstats.Stats('profile.out')
-        p.strip_dirs().sort_stats('time').print_stats(100)
-    else:
-        main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
+    # if profile:
+    #     cProfile.run('main_runner(ANNEALING, CAPACITY)', 'profile.out')
+    #     p = pstats.Stats('profile.out')
+    #     p.strip_dirs().sort_stats('time').print_stats(100)
+    # else:
+    #     main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
+    App = InitClass.App()
+    App.run()

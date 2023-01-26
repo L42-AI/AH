@@ -5,11 +5,11 @@ import copy
 """ Main HillClimber Class """
 
 class HillClimber:
-    def __init__(self, Roster, course_list, student_list, MC):
+    def __init__(self, schedule, course_list, student_list, MC):
         self.roster_list = []
         self.course_list = course_list
         self.student_list = student_list
-        self.Roster = Roster
+        self.schedule = schedule
         self.MC = MC
 
     """ Inheritable methods """
@@ -30,30 +30,30 @@ class HillClimber:
     def replace_roster(self, T=None):
         self.current_best_roster = min(self.rosters, key=lambda x: x.malus_count)
 
-        if self.best_malus_count > self.current_best_roster.malus_count:
-            self.best_roster = self.current_best_roster
+        if self.best_malus > self.current_best_roster.malus_count:
+            self.best_schedule = self.current_best_roster
 
     """ Main Method """
 
     def climb(self, T=None):
 
         # Set input roster as best roster and best malus count
-        self.best_roster = self.Roster
+        self.best_schedule = self.schedule
 
         # Compute malus with MalusCalculator
-        self.best_malus_count = self.MC.compute_total_malus(self.best_roster.schedule)
+        self.best_malus = self.MC.compute_total_malus(self.schedule)
 
         # Append the input roster
-        self.roster_list.append(self.best_roster)
+        self.roster_list.append(self.best_schedule)
 
-        # Take 30 steps:
+        # Take 50 steps:
         for _ in range(50):
 
             # Set current roster
-            current_roster = self.best_roster
+            current_schedule = self.best_schedule
 
             # Make copy of schedule, complex because of dictionary
-            copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in current_roster.schedule.items()}
+            copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in current_schedule.items()}
 
             # Create the mutate class
             M = self.make_mutate(copied_schedule)
@@ -68,13 +68,20 @@ class HillClimber:
             new_malus = self.MC.compute_total_malus(new_schedule)
 
             # Compare with prior malus points
+<<<<<<< HEAD
             self.__accept_schedule(new_malus, new_schedule, T)
+=======
+            if new_malus['Total'] < self.best_malus['Total']:
+
+                self.best_schedule = new_schedule
+                self.best_malus = new_malus
+>>>>>>> 2e7f291ccf4c5f703c6e7a9e4da36d1e21d18458
 
                 # Print method name
                 # print(self.get_name())
 
         # Return new roster
-        return self.best_roster, self.best_malus_count
+        return self.best_schedule, self.best_malus
 
     def __accept_schedule(self, new_malus, new_schedule, T):
         prob = random.random()
