@@ -96,5 +96,4 @@ Moeten we rekening houden met volgorde van lessen(Lecture1, Tutorial1, Lecture2,
 - verschillende rates van iteraties proberen
 - lopen door lijsten van heuristiek mogelijkheden en ze opslaan
 - in late iteratie van mp hogere hillclimb iteraties gebruiken
-
-
+- lokalen swappen capaciteit niet (bijna) het zelfde
