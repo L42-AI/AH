@@ -259,9 +259,10 @@ class Student():
                             self.malus_cause['Classes Gap'][day] += 3
                             self.malus_count += 3
 
+                        # dont forget to put back to 1000
                         elif lesson_gaps > 2:
-                            self.malus_cause['Classes Gap'][day] += 1000
-                            self.malus_count += 1000
+                            self.malus_cause['Classes Gap'][day] += 3
+                            self.malus_count += 3
 
     def compute_malus(self, schedule):
         """ Run required functions to compute student malus """

@@ -42,7 +42,7 @@ class HillClimber():
         self.roster_list.append(self.best_roster)
 
         # Take 50 steps:
-        for _ in range(50):
+        for _ in range(10):
 
             # Make a deep copy, initiate the swapper with the right roster and change that roster
             self.current_roster = copy.deepcopy(self.best_roster)

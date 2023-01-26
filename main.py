@@ -1,7 +1,9 @@
 import classes.Algorithms.generator as GeneratorClass
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS
-
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 import cProfile
 import pstats
 
@@ -17,10 +19,18 @@ CAPACITY = False
 
 
 def main_runner(ANNEALING, CAPACITY):
-    stop = False
-    while stop == False:
-        G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY)
-        G.rearrange_HC()
+    # stop = False
+    # while stop == False:
+    G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY)
+    swap_lecture, swap_student, swap_gaphour, swap_doublehours = G.rearrange_HC()
+    
+    df = pd.DataFrame(list(zip(swap_lecture, swap_student, swap_gaphour, swap_doublehours)),
+                        columns = ['Swap Lecture', 'Swap Student', 'Swap Gaphour', 'Swap Doubleclasses'])
+
+    print(df)
+
+    df.to_csv('generation-improvements.csv', index=False)
+
 
 if __name__ == '__main__':
     if profile:

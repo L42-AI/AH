@@ -256,6 +256,6 @@ class Generator():
     def rearrange_HC(self):
 
         HCMultiprocessor = HC_multiprocessorClass.HCMultiprocessor(self.Roster, self.course_list, self.student_list)
-        HCMultiprocessor.run_hillclimbers()
+        return HCMultiprocessor.run_hillclimbers()
 
 
