@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import cProfile
 import pstats
+from data.store_data import store_improvements
 
 # Run profiler
 profile = False
@@ -24,12 +25,7 @@ def main_runner(ANNEALING, CAPACITY):
     G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY)
     swap_lecture, swap_student, swap_gaphour, swap_doublehours = G.rearrange_HC()
     
-    df = pd.DataFrame(list(zip(swap_lecture, swap_student, swap_gaphour, swap_doublehours)),
-                        columns = ['Swap Lecture', 'Swap Student', 'Swap Gaphour', 'Swap Doubleclasses'])
-
-    print(df)
-
-    df.to_csv('generation-improvements.csv', index=False)
+    store_improvements(swap_lecture, swap_student, swap_gaphour, swap_doublehours)
 
 
 if __name__ == '__main__':
