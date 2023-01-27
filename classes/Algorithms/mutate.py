@@ -184,8 +184,16 @@ class Mutate():
         # first swap students, because when we swap, we want to get the students back to their course
         students1 = self.schedule[random_course_1.name][lesson_1]['students']
         students2 = self.schedule[name_2][lesson_2]['students']
+
         self.schedule[random_course_1.name][lesson_1]['students'] = students2
         self.schedule[name_2][lesson_2]['students'] = students1
+
+        # same for max students
+        max1 = self.schedule[random_course_1.name][lesson_1]['max students']
+        max2 = self.schedule[name_2][lesson_2]['max students']
+        self.schedule[random_course_1.name][lesson_1]['max students'] = max2
+        self.schedule[name_2][lesson_2]['max students'] = max1
+
 
         # define in order to be easier to read and to be able to switch keys and values of the dict
         dict_1 = self.schedule[random_course_1.name][lesson_1]
