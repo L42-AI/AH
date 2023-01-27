@@ -75,8 +75,9 @@ class Multiprocessor():
             self.schedules = [copy.copy(self.schedule) for _ in range(4)]
 
             if self.malus['Capacity'] < 10:
-                core_assignment_list = [3,3,3,3]
-
+                core_assignment_list = [0,1,2,3]
+                
+            self.malus = self.MC.compute_total_malus(self.schedule)
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
                 self.output_schedules = p.map(self.run_HC, [(core_assignment_list[0], self.schedule, t, self.malus['Total']),
