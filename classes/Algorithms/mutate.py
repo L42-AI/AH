@@ -347,22 +347,66 @@ class Mutate():
         if not groups:
             return
 
-        # pick a group that student will switch out of
-        tutorial = None
-        picked = False
-        while not picked:
+        # pick a group and check if it is tut or pract
+        tutorial, group, class_to_switch = self.__pick_group(classes_worst_day)
 
-            # the class that student will be switched inside of and the group student belonged in
-            class_to_switch = random.choice(list(classes_worst_day.keys()))
-            group = classes_worst_day[class_to_switch]
-            if group[:8] == 'tutorial':
-                tutorial = True
-                picked = True
-            elif group[:9] == 'practical':
-                tutorial = False
-                picked = True
-        # switch student
+        # pick a group for the student to go to
+        new_group = self.__pick_new_group(tutorial, class_to_switch, group)
+        
+        if new_group == None:
+            return
+
+        # check if there is room in the new group
+        if self.__check_for_room(class_to_switch, new_group):
+            # place the student in a new group
+            # print(f'new in schedule: {self.schedule[class_to_switch][new_group]}')
+            # print(f'old in schedule: {self.schedule[class_to_switch][group]}')
+            self.__place_student(student_to_switch_id, new_group, class_to_switch, group)
+            # print('\n\n')
+            # print(f'new in schedule: {self.schedule[class_to_switch][new_group]}')
+            # print(f'old in schedule: {self.schedule[class_to_switch][group]}')
+        else:
+            # print(f'new in schedule: {self.schedule[class_to_switch][new_group]}')
+            # print(f'old in schedule: {self.schedule[class_to_switch][group]}')
+            # pick a random student to switch with
+            student_to_old_group = random.choice(list(self.schedule[class_to_switch][new_group]['students']))
+            self.__place_student(student_to_switch_id, new_group, class_to_switch, group)
+            self.__place_student(student_to_old_group, group, class_to_switch, new_group)
+            # print('\n\n')
+            # print(f'new in schedule: {self.schedule[class_to_switch][new_group]}')
+            # print(f'old in schedule: {self.schedule[class_to_switch][group]}')
+            # new_group['students'].add(student_to_switch_id)
+            # new_group['students'].remove(student_to_old_group)
+            # self.schedule[class_to_switch][group]['students'].remove(student_to_switch_id)
+            # self.schedule[class_to_switch][group]['students'].add(student_to_old_group)
+            return
+
+    def __gap(self):
+        return True
+
+    def __pick_group(self, classes_worst_day):
+
+            # pick a group that student will switch out of
+            tutorial = None
+            picked = False
+            while not picked:
+
+                # the class that student will be switched inside of and the group student belonged in
+                class_to_switch = random.choice(list(classes_worst_day.keys()))
+                group = classes_worst_day[class_to_switch]
+                if group[:8] == 'tutorial':
+                    tutorial = True
+                    picked = True
+                elif group[:9] == 'practical':
+                    tutorial = False
+                    picked = True
+            return tutorial, group, class_to_switch
+
+    def __pick_new_group(self, tutorial, class_to_switch, group):
         if tutorial:
+            group_type = 't'
+        else:
+            group_type = 'p'
 
             # pick a random tutorial group from that course
             group_found = False
@@ -371,52 +415,24 @@ class Mutate():
 
                 # pick a random group and check if it is of correct type
                 new_group = random.choice(list(self.schedule[class_to_switch].keys()))
-                if str(new_group)[0] == 't' and new_group != group:
+                if str(new_group)[0] == group_type and new_group != group:
                     group_found = True
-                
+
                 # if there is no other group, stop
                 i += 1
                 if i == 20:
-                    return
-        
-        elif not tutorial:
+                    return None
+            return new_group
 
-            # pick a random tutorial group from that cours
-            group_found = False
-            i = 0
-            while not group_found:
-
-                # pick a random group and check if it is of correct type
-                new_group = random.choice(list(self.schedule[class_to_switch].keys()))
-                if str(new_group)[0] == 'p' and new_group != group:
-                    group_found = True
-
-                # if there is no other group, stop
-                if i == 20:
-                    return
-
-        # check if there is room in the new group
+    def __check_for_room(self, class_to_switch, new_group):
         new_group = self.schedule[class_to_switch][new_group]
         if len(new_group['students']) < new_group['max students']:
+            return True
+        return False
 
-            new_group['students'].add(student_to_switch_id)
-            self.schedule[class_to_switch][group]['students'].remove(student_to_switch_id)
-            new_group['students'].add(student_to_switch_id)
-
-            return
-        else:
-            # pick a random student to switch with
-            student_to_old_group = random.choice(list(new_group['students']))
-            new_group['students'].add(student_to_switch_id)
-            new_group['students'].remove(student_to_old_group)
-            self.schedule[class_to_switch][group]['students'].remove(student_to_switch_id)
-            self.schedule[class_to_switch][group]['students'].add(student_to_old_group)
-            return
-
-    def __gap(self):
-        return True
-
-
+    def __place_student(self, student_to_switch_id, new_group, class_to_switch, group):
+                self.schedule[class_to_switch][new_group]['students'].add(student_to_switch_id)
+                self.schedule[class_to_switch][group]['students'].remove(student_to_switch_id)
 
         # # check the type of class
         # if group[:8] == 'tutorial':
