@@ -57,7 +57,7 @@ class HillClimber:
             # Create the mutate class
             M = self.make_mutate(copied_schedule)
 
-            print(self.malus)
+            # print(self.malus)
 
             # Take a step
             self.step_method(M)
