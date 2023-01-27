@@ -58,40 +58,45 @@ class Multiprocessor():
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
-
+        
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
         while self.iter_counter != self.ITERS:
 
             if self.ANNEALING:
+                print(self.ANNEALING)
                 t = 0.25 - self.iter_counter / self.ITERS * 4
             else:
                 t = 0
 
             start_time = time.time()
-
-            # Make four deepcopys for each function to use
+            
+            # Make four copies for each function to use
             self.schedules = [copy.copy(self.schedule) for _ in range(4)]
-
-            core_assignment_list = self.core_assignment(self.malus)
-
+            m = [1, 1, 1, 1]
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
-                self.output_schedules = p.map(self.run_HC, [(0, self.schedules[0], t, self.iter_counter),
-                                                            (1, self.schedules[1], t, self.iter_counter),
-                                                            (2, self.schedules[2], t, self.iter_counter),
-                                                            (3, self.schedules[3], t, self.iter_counter)])
+                self.output_schedules = p.map(self.run_HC, [(m[0], self.schedules[0], t, self.iter_counter),
+                                                            (m[1], self.schedules[1], t, self.iter_counter),
+                                                            (m[2], self.schedules[2], t, self.iter_counter),
+                                                            (m[3], self.schedules[3], t, self.iter_counter)])
 
             # Save data for plotting
             self.iterations_list.append(self.iter_counter)
 
             # find the lowest malus of the output rosters
             min_malus = min([i[1]['Total'] for i in self.output_schedules])
+            # for i in self.output_schedules:
+                # print(i[1]['Total'])
 
             # Use the lowest malus to find the index of the best roster
             self.best_index = [i[1]['Total'] for i in self.output_schedules].index(min_malus)
 
             # Compute difference between new roster and current roster
             difference = self.malus['Total'] - self.output_schedules[self.best_index][1]['Total']
+            for i in self.output_schedules:
+
+                print(i[1]['Total'])
+            # print(self.output_schedules[self.best_index][1]['Total'])
 
             # Set finish time
             finish_time = time.time()
@@ -104,6 +109,7 @@ class Multiprocessor():
 
             # Increase iter counter
             self.iter_counter += 1
+            
 
     def run_HC(self, hc_tuple):
         activation, schedule, T, iterations = hc_tuple
@@ -115,7 +121,7 @@ class Multiprocessor():
         #             activation = 3
         #         else:
         #             activation = 4
-
+        self.MC.malus = self.malus
         if activation == 0:
             # print('looking to swap classes...')
             HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC)
@@ -197,46 +203,46 @@ class Multiprocessor():
             print(f'Duration since init: {round(self.duration, 2)} S.')
             print(self.malus)
 
-class Multiprocessor_SimAnnealing(Multiprocessor):
+# class Multiprocessor_SimAnnealing(Multiprocessor):
 
-    def __replace_roster(self, difference):
-        # set the temperature
-        T = (150/(200 + self.iter_counter*2))
+#     def __replace_roster(self, difference):
+#         # set the temperature
+#         T = (150/(200 + self.iter_counter*2))
 
-        # If difference is positive
-        if difference > 0:
+#         # If difference is positive
+#         if difference > 0:
 
-            # Set the new roster to self.Roster
-            self.schedule, self.malus = self.output_schedules[self.best_index]
-            self.fail_counter = 0
+#             # Set the new roster to self.Roster
+#             self.schedule, self.malus = self.output_schedules[self.best_index]
+#             self.fail_counter = 0
 
-            print(f'\n========================= Generation: {self.iter_counter} =========================\n')
-            print(f'Temperature at generation: {T}')
-            print(f'Most effective function: SA{self.best_index + 1}')
-            print(f'Malus improvement: {difference}')
-            print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
-            print(f'Duration since init: {round(self.duration, 2)} S.')
-            print(self.malus)
+#             print(f'\n========================= Generation: {self.iter_counter} =========================\n')
+#             print(f'Temperature at generation: {T}')
+#             print(f'Most effective function: SA{self.best_index + 1}')
+#             print(f'Malus improvement: {difference}')
+#             print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
+#             print(f'Duration since init: {round(self.duration, 2)} S.')
+#             print(self.malus)
 
-        elif difference < 0:
-            prob = random.random()
-            if prob < T:
-                self.schedule, self.malus = random.choice(self.output_schedules)
-                self.fail_counter = 0
+#         elif difference < 0:
+#             prob = random.random()
+#             if prob < T:
+#                 self.schedule, self.malus = random.choice(self.output_schedules)
+#                 self.fail_counter = 0
 
-                # print output
-                print(f'\n========================= Generation: {self.iter_counter} =========================\n')
-                print(f'FAIL GOT ACCEPTED WITH TEMPERATURE AT: {T}')
-                print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
-                print(f'Duration since init: {round(self.duration, 2)} S.')
-                print(self.malus)
+#                 # print output
+#                 print(f'\n========================= Generation: {self.iter_counter} =========================\n')
+#                 print(f'FAIL GOT ACCEPTED WITH TEMPERATURE AT: {T}')
+#                 print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
+#                 print(f'Duration since init: {round(self.duration, 2)} S.')
+#                 print(self.malus)
 
-            else:
-                self.fail_counter += 1
+#             else:
+#                 self.fail_counter += 1
 
-                # print output
-                print(f'\n========================= Generation: {self.iter_counter} =========================\n')
-                print('FAIL')
-                print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
-                print(f'Duration since init: {round(self.duration, 2)} S.')
-                print(self.malus)
+#                 # print output
+#                 print(f'\n========================= Generation: {self.iter_counter} =========================\n')
+#                 print('FAIL')
+#                 print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
+#                 print(f'Duration since init: {round(self.duration, 2)} S.')
+#                 print(self.malus)

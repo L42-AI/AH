@@ -82,7 +82,7 @@ class App(customtkinter.CTk):
         # Collect state of all widgets
         greedy = self.greedy_switch.get()
         annealing = self.annealing_switch.get()
-
+        annealing = False
         # Set arguments true based on input of widget state
         if greedy:
             capacity = True

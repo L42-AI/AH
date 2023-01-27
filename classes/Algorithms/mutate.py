@@ -352,33 +352,21 @@ class Mutate():
 
         # pick a group for the student to go to
         new_group = self.__pick_new_group(tutorial, class_to_switch, group)
-        
+
         if new_group == None:
             return
 
         # check if there is room in the new group
         if self.__check_for_room(class_to_switch, new_group):
-            # place the student in a new group
-            # print(f'new in schedule: {self.schedule[class_to_switch][new_group]}')
-            # print(f'old in schedule: {self.schedule[class_to_switch][group]}')
+
             self.__place_student(student_to_switch_id, new_group, class_to_switch, group)
-            # print('\n\n')
-            # print(f'new in schedule: {self.schedule[class_to_switch][new_group]}')
-            # print(f'old in schedule: {self.schedule[class_to_switch][group]}')
+  
         else:
-            # print(f'new in schedule: {self.schedule[class_to_switch][new_group]}')
-            # print(f'old in schedule: {self.schedule[class_to_switch][group]}')
-            # pick a random student to switch with
+
             student_to_old_group = random.choice(list(self.schedule[class_to_switch][new_group]['students']))
             self.__place_student(student_to_switch_id, new_group, class_to_switch, group)
             self.__place_student(student_to_old_group, group, class_to_switch, new_group)
-            # print('\n\n')
-            # print(f'new in schedule: {self.schedule[class_to_switch][new_group]}')
-            # print(f'old in schedule: {self.schedule[class_to_switch][group]}')
-            # new_group['students'].add(student_to_switch_id)
-            # new_group['students'].remove(student_to_old_group)
-            # self.schedule[class_to_switch][group]['students'].remove(student_to_switch_id)
-            # self.schedule[class_to_switch][group]['students'].add(student_to_old_group)
+           
             return
 
     def __gap(self):
