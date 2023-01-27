@@ -71,6 +71,11 @@ class Multiprocessor():
 
             start_time = time.time()
 
+            if self.ANNEALING:
+                t = 0.25 - self.iter_counter / self.ITERS * 4
+            else:
+                t = 0
+
             # Make four deepcopys for each function to use
             self.schedules = [copy.copy(self.schedule) for _ in range(4)]
 

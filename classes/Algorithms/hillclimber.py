@@ -53,7 +53,7 @@ class HillClimber:
 
             # Make copy of schedule, complex because of dictionary
             copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
-            print(self.malus['Total'])
+            # print(self.malus['Total'])
             # Create the mutate class
             M = self.make_mutate(copied_schedule)
 
@@ -81,12 +81,12 @@ class HillClimber:
 
         # Compare with prior malus points
         if new_malus['Total'] < self.malus['Total']:
-            print(self.get_name(), self.malus['Total'], new_malus['Total'])
+            # print(self.get_name(), self.malus['Total'], new_malus['Total'])
             self.schedule = new_schedule
             self.malus = new_malus
 
         elif prob < T and difference < five_percent:
-            print(f'worsening of {difference} got accepted at T: {T}')
+            # print(f'worsening of {difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
 
