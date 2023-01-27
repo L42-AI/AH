@@ -10,15 +10,24 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
+        self.schedule = {}
+
         # configure window
         self.title("Scheduly")
-        self.geometry(f"{1100}x{580}")
+        self.geometry(f"{1340}x{790}")
 
-        # configure grid layout (4x4)
+        # Configure grid layout
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure((0, 1, 2), weight=1)
 
-        """ Sidebar """
+        # Run initializing methods
+        self.create_sidebar()
+        self.create_frames()
+
+
+    """ Init """
+    def create_sidebar(self):
+
         # Frame
         self.sidebar_frame = customtkinter.CTkFrame(self, width=140, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
@@ -43,25 +52,34 @@ class App(customtkinter.CTk):
         self.export_all_button= customtkinter.CTkButton(self.sidebar_frame, text="Export All", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.export)
         self.export_all_button.grid(row=8, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
+    def create_frames(self):
 
-        """ Frames """
-
+        # Create student frame
         self.student_frame = customtkinter.CTkFrame(self, width=200, corner_radius=10)
         self.student_frame.grid(row=0, column=1, rowspan=4, padx=20, pady=20, sticky="nsew")
         self.student_frame.grid_columnconfigure(0, weight=1)
         self.student_frame.grid_rowconfigure((1,2,3,4,5,6), weight=1)
 
+        self.frame_student_content()
+
+
+        # Create course frame
         self.course_frame = customtkinter.CTkFrame(self, width=200, height=200, corner_radius=10)
         self.course_frame.grid(row=0, column=1, rowspan=4, padx=20, pady=20, sticky="nsew")
         self.course_frame.grid_columnconfigure(0, weight=1)
         self.course_frame.grid_rowconfigure((1,2,3,4,5,6), weight=1)
 
+        self.frame_course_content()
+
+        # Create room frame
         self.room_frame = customtkinter.CTkFrame(self, width=200, height=200, corner_radius=10)
         self.room_frame.grid(row=0, column=1, rowspan=4, padx=20, pady=20, sticky="nsew")
         self.room_frame.grid_columnconfigure(0, weight=1)
         self.room_frame.grid_rowconfigure((1,2,3,4,5,6), weight=1)
 
-        """ Frame 1 Content """
+        self.frame_room_content()
+
+    def frame_student_content(self):
 
         # Search Frame
         self.student_search_frame = customtkinter.CTkFrame(self.student_frame, corner_radius=10)
@@ -82,9 +100,10 @@ class App(customtkinter.CTk):
         # Student Roster
         self.student_schedule = customtkinter.CTkFrame(self.student_frame, corner_radius=10)
         self.student_schedule.grid(row=1, column=0, rowspan=6, padx=20, pady=20, sticky="nsew")
+        self.student_schedule.grid_columnconfigure((0,1,2,3,4), weight=1)
+        self.student_schedule.grid_rowconfigure((0,1,2,3,4), weight=1)
 
-
-        """ Frame 2 Content """
+    def frame_course_content(self):
 
         # Search Frame
         self.course_search_frame = customtkinter.CTkFrame(self.course_frame, corner_radius=10)
@@ -105,8 +124,10 @@ class App(customtkinter.CTk):
         # Course Roster
         self.course_schedule = customtkinter.CTkFrame(self.course_frame, corner_radius=10)
         self.course_schedule.grid(row=1, column=0, rowspan=6, padx=20, pady=20, sticky="nsew")
+        self.course_schedule.grid_columnconfigure((0,1,2,3,4), weight=1)
+        self.course_schedule.grid_rowconfigure((0,1,2,3,4), weight=1)
 
-        """ Frame 3 Content """
+    def frame_room_content(self):
 
         # Search Frame
         self.room_search_frame = customtkinter.CTkFrame(self.room_frame, corner_radius=10)
@@ -127,15 +148,38 @@ class App(customtkinter.CTk):
         # Room Roster
         self.room_schedule = customtkinter.CTkFrame(self.room_frame, corner_radius=10)
         self.room_schedule.grid(row=1, column=0, rowspan=6, padx=20, pady=20, sticky="nsew")
+        self.room_schedule.grid_columnconfigure((0,1,2,3,4), weight=1)
+        self.room_schedule.grid_rowconfigure((0,1,2,3,4), weight=1)
+
+    """ Methods """
 
     def show_student_frame(self):
         self.student_frame.tkraise()
 
+        # Destroy any prior schedule
+        for widget in self.student_schedule.winfo_children():
+            widget.destroy()
+
+        self.student_option.set('Student')
+
     def show_course_frame(self):
         self.course_frame.tkraise()
 
+        # Destroy any prior schedule
+        for widget in self.course_schedule.winfo_children():
+            widget.destroy()
+
+        self.course_option.set('Course')
+
     def show_room_frame(self):
         self.room_frame.tkraise()
+
+        # Destroy any prior schedule
+        for widget in self.room_schedule.winfo_children():
+            widget.destroy()
+
+        self.room_option.set('Room')
+
 
     def student_button_click(self):
 
@@ -163,7 +207,7 @@ class App(customtkinter.CTk):
         while room == None:
             room = self.room_option.get()
 
-        frame = self.student_schedule
+        frame = self.room_schedule
 
         self.create_grid(frame)
 
@@ -173,28 +217,29 @@ class App(customtkinter.CTk):
         timeslot_to_num = {9:0, 11:1, 13:2, 15:3, 17:4}
 
         for i, day in enumerate(days):
-            customtkinter.CTkLabel(self, text=day).grid(master=frame, row=0, column=i+1)
+            self.day_label = customtkinter.CTkLabel(master=frame, text=day, font=customtkinter.CTkFont(size=15, weight="bold"))
+            self.day_label.grid(row=0, column=i+1, padx=5, pady=10, sticky='nsew')
 
         for i, timeslot in enumerate(timeslots):
-            customtkinter.CTkLabel(self, text=timeslot).grid(master=frame, row=i+1, column=0)
+            self.time_label = customtkinter.CTkLabel(master=frame, text=timeslot, font=customtkinter.CTkFont(size=15, weight="bold"))
+            self.time_label.grid(row=i+1, column=0, padx=10, pady=5, sticky='nsew')
 
-        for subject, subject_info in self.student_schedule.items():
+        for subject, subject_info in self.schedule.items():
+
             for class_type, class_info in subject_info.items():
+
                 day = class_info['day']
                 timeslot = class_info['timeslot']
                 room = class_info['room']
+
                 col = timeslot_to_num[timeslot]
                 row = days.index(day) + 1
-                customtkinter.CTkLabel(self, text=f"{subject} - {class_type} - {room}").grid(row=row, column=col+1)
 
-
+                self._class = customtkinter.CTkLabel(master=frame, text=f"{subject}\n{class_type}\n{room}")
+                self._class.grid(row=row, column=col+1, sticky='nsew')
 
     def export(self):
         pass
-
-
-
-
 
 if __name__ == "__main__":
     app = App()

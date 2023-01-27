@@ -12,7 +12,7 @@ class Multiprocessor():
         self.Roster = Roster
         self.course_list = course_list
         self.student_list = student_list
-        self.ITERS = 300
+        self.ITERS = 1000
         self.ANNEALING = annealing
 
         self.MC = MC
@@ -55,6 +55,8 @@ class Multiprocessor():
 
         self.malus = self.MC.compute_total_malus(self.schedule)
 
+        core_assignment_list = [3,3,3,3]
+
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
@@ -72,13 +74,16 @@ class Multiprocessor():
             
             # Make four copies for each function to use
             self.schedules = [copy.copy(self.schedule) for _ in range(4)]
-            m = [1, 1, 1, 1]
+
+            if self.malus['Capacity'] < 10:
+                core_assignment_list = [3,3,3,3]
+
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
-                self.output_schedules = p.map(self.run_HC, [(m[0], self.schedules[0], t, self.iter_counter),
-                                                            (m[1], self.schedules[1], t, self.iter_counter),
-                                                            (m[2], self.schedules[2], t, self.iter_counter),
-                                                            (m[3], self.schedules[3], t, self.iter_counter)])
+                self.output_schedules = p.map(self.run_HC, [(core_assignment_list[0], self.schedules[0], t),
+                                                            (core_assignment_list[1], self.schedules[1], t),
+                                                            (core_assignment_list[2], self.schedules[2], t),
+                                                            (core_assignment_list[3], self.schedules[3], t)])
 
             # Save data for plotting
             self.iterations_list.append(self.iter_counter)

@@ -12,6 +12,8 @@ class HillClimber:
         self.schedule = schedule
         self.MC = MC
 
+        self.multiplyer = 0.1
+
     """ Inheritable methods """
 
     def step_method(self, M):
@@ -20,13 +22,10 @@ class HillClimber:
     def get_name(self):
         pass
 
-    # Aangezien dit nooit wordt gebruikt, verwijderen en pass neerzetten?
-    def make_mutate(self, schedule, student_malus_id):
-        M = MutateClass.Mutate(self.course_list, self.student_list, schedule, student_malus_id)
+    def make_mutate(self, schedule):
+        M = MutateClass.Mutate(self.course_list, self.student_list, schedule)
         return M
 
-
-    # Aangezien dit nooit wordt gebruikt, verwijderen en pass neerzetten?
     def replace_roster(self, T=None):
         self.current_best_roster = min(self.rosters, key=lambda x: x.malus_count)
 
@@ -44,7 +43,8 @@ class HillClimber:
         self.schedule_list.append(self.schedule)
 
         # Take 50 steps:
-        for _ in range(50):
+        # while (self.malus['Total'] - start_malus['Total']) / start_malus['Total'] < 0.2:
+        for _ in range(int(self.malus['Total'] * self.multiplyer)):
 
             # Make copy of schedule, complex because of dictionary
             copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
