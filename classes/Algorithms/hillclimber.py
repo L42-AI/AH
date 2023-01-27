@@ -52,7 +52,7 @@ class HillClimber:
             # self.malus = self.MC.compute_total_malus(self.schedule)
 
             # Make copy of schedule, complex because of dictionary
-            copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
+            copied_schedule = copy.deepcopy(self.schedule)
             # print(self.malus['Total'])
             # Create the mutate class
             M = self.make_mutate(copied_schedule)

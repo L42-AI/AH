@@ -59,11 +59,11 @@ class Mutate():
 
         _students = list(self.schedule[_course][_class]['students'])
 
-        if len(_students) == 0:
-            print(_course)
-            print(_class)
-            print(_students)
-            print(self.schedule)
+        # if len(_students) == 0:
+        #     print(_course)
+        #     print(_class)
+        #     print(_students)
+        #     print(self.schedule)
 
         student_id = random.choice(_students)
 
