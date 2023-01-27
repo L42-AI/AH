@@ -80,8 +80,8 @@ class HillClimber:
         five_percent = self.malus['Total'] * 0.05
 
         # Compare with prior malus points
-        if new_malus['Total'] <= self.malus['Total']:
-            # print(self.get_name(), self.malus['Total'], new_malus['Total'])
+        if new_malus['Total'] < self.malus['Total']:
+    
             self.schedule = new_schedule
             self.malus = new_malus
 
