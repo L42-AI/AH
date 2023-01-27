@@ -12,7 +12,7 @@ class HillClimber:
         self.schedule = schedule
         self.MC = MC
 
-        self.multiplyer = 0.1
+        self.multiplyer = 1
 
     """ Inheritable methods """
 
@@ -52,6 +52,8 @@ class HillClimber:
             # Create the mutate class
             M = self.make_mutate(copied_schedule)
 
+            print(self.malus)
+
             # Take a step
             self.step_method(M)
 
@@ -60,6 +62,8 @@ class HillClimber:
 
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
+
+            print(new_malus)
 
             self.__accept_schedule(new_malus, new_schedule, T)
 
@@ -76,7 +80,7 @@ class HillClimber:
 
         # Compare with prior malus points
         if new_malus['Total'] < self.malus['Total']:
-            print(self.get_name(), self.malus['Total'], new_malus['Total'])
+            # print(self.get_name(), self.malus['Total'], new_malus['Total'])
             self.schedule = new_schedule
             self.malus = new_malus
 
