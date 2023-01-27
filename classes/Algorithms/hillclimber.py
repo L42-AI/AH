@@ -32,6 +32,10 @@ class HillClimber:
         if self.best_malus > self.current_best_roster.malus_count:
             self.best_schedule = self.current_best_roster
 
+    def get_score(self):
+        return self.MC.compute_total_malus(self.schedule)['Total']
+        
+
     """ Main Method """
 
     def climb(self, T):
@@ -45,10 +49,11 @@ class HillClimber:
         # Take 50 steps:
         # while (self.malus['Total'] - start_malus['Total']) / start_malus['Total'] < 0.2:
         for _ in range(int(self.malus['Total'] * self.multiplyer)):
+            # self.malus = self.MC.compute_total_malus(self.schedule)
 
             # Make copy of schedule, complex because of dictionary
             copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
-
+            print(self.malus['Total'])
             # Create the mutate class
             M = self.make_mutate(copied_schedule)
 
@@ -62,9 +67,13 @@ class HillClimber:
 
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
+<<<<<<< HEAD
 
             print(new_malus)
 
+=======
+            # print(new_schedule == self.schedule)
+>>>>>>> eb16615387cc4f6b90e69e178a9f4e909a398ed4
             self.__accept_schedule(new_malus, new_schedule, T)
 
         # Return new roster

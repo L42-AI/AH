@@ -58,8 +58,12 @@ class Mutate():
         _class = random.choice(list(self.schedule[_course].keys()))
 
         _students = list(self.schedule[_course][_class]['students'])
-        student_id = random.choice(_students)
-
+        try:
+            student_id = random.choice(_students)
+        except:
+            print(_class, _students, self.schedule[_course][_class])
+            print(self.schedule)
+            raise
         return student_id
 
     def __students_to_shuffle(self):
@@ -181,27 +185,46 @@ class Mutate():
         else:
             name_2 = random_course_2.name
 
+        roomslot1 = self.schedule[random_course_1.name][lesson_1]
+        roomslot2 = self.schedule[name_2][lesson_2]
+
         # first swap students, because when we swap, we want to get the students back to their course
-        students1 = self.schedule[random_course_1.name][lesson_1]['students']
-        students2 = self.schedule[name_2][lesson_2]['students']
+        keys = ['day', 'timeslot', 'capacity', 'room']
+        room1_data = {key: roomslot1[key] for key in keys}
+        room2_data = {key: roomslot2[key] for key in keys}
+
+        roomslot1.update(room2_data)
+        roomslot2.update(room1_data)
+
+        # timeslot1 = self.schedule[random_course_1.name][lesson_1]['timeslot']
+        # timeslot2 = self.schedule[name_2][lesson_2]['timeslot']
+
+        # room1 = self.schedule[random_course_1.name][lesson_1]['room']
+        # room2 = self.schedule[name_2][lesson_2]['room']
+
+        # capacity1 = self.schedule[random_course_1.name][lesson_1]['capacity']
+        # capacity2 = self.schedule[name_2][lesson_2]['capacity']
+
+        # self.schedule[random_course_1.name][lesson_1]['day'] = day2
+        # self.schedule[random_course_1.name][lesson_1]['day'] = day1
         
-        self.schedule[random_course_1.name][lesson_1]['students'] = students2
-        self.schedule[name_2][lesson_2]['students'] = students1
+        # self.schedule[random_course_1.name][lesson_1]['students'] = students2
+        # self.schedule[name_2][lesson_2]['students'] = students1
 
-        # same for max students
-        max1 = self.schedule[random_course_1.name][lesson_1]['max students']
-        max2 = self.schedule[name_2][lesson_2]['max students']
-        self.schedule[random_course_1.name][lesson_1]['max students'] = max2
-        self.schedule[name_2][lesson_2]['max students'] = max1
+        # # same for max students
+        # max1 = self.schedule[random_course_1.name][lesson_1]['max students']
+        # max2 = self.schedule[name_2][lesson_2]['max students']
+        # self.schedule[random_course_1.name][lesson_1]['max students'] = max2
+        # self.schedule[name_2][lesson_2]['max students'] = max1
 
 
-        # define in order to be easier to read and to be able to switch keys and values of the dict
-        dict_1 = self.schedule[random_course_1.name][lesson_1]
-        dict_2 = self.schedule[course_two][lesson_2]
+        # # define in order to be easier to read and to be able to switch keys and values of the dict
+        # dict_1 = self.schedule[random_course_1.name][lesson_1]
+        # dict_2 = self.schedule[course_two][lesson_2]
 
-        # switch the times in the schedule roster
-        self.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
-        self.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
+        # # switch the times in the schedule roster
+        # self.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
+        # self.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
 
     """ Helpers """
 
