@@ -8,10 +8,12 @@ import copy
 import matplotlib.pyplot as plt
 
 class Multiprocessor():
-    def __init__(self, Roster, course_list, student_list, MC):
+    def __init__(self, Roster, course_list, student_list, MC, annealing=False):
         self.Roster = Roster
         self.course_list = course_list
         self.student_list = student_list
+        self.ITERS = 1000
+        self.ANNEALING = annealing
 
         self.MC = MC
 
@@ -58,6 +60,8 @@ class Multiprocessor():
 
         self.malus = self.MC.compute_total_malus(self.schedule)
 
+        core_assignment_list = [0,1,2,3]
+
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
@@ -65,13 +69,13 @@ class Multiprocessor():
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
         while self.fail_counter <= 30:
 
-            # Set start time
             start_time = time.time()
 
             # Make four deepcopys for each function to use
             self.schedules = [copy.copy(self.schedule) for _ in range(4)]
 
-            core_assignment_list = self.core_assignment(self.malus)
+            if self.malus['Capacity'] < 10:
+                core_assignment_list = [3,3,3,3]
 
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
@@ -123,32 +127,43 @@ class Multiprocessor():
         return self.malus_points_total, self.malus_swap_course_random, self.malus_swap_course_capacity, self.malus_swap_student_gaphour, self.malus_swap_student_doublehour
 
     def run_HC(self, hc_tuple):
-        activation, schedule = hc_tuple
+        activation, schedule, T, real_score = hc_tuple
         if activation == 0:
             # print('looking to swap classes...')
             HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC)
-            schedule, malus = HC1.climb()
+            # if real_score != HC1.get_score():
+            #     print("WTF", real_score, HC1.get_score())
+            #     raise
+            schedule, malus = HC1.climb(T)
+        
             # print(f'HC1: {roster.malus_count}')
             return schedule, malus
 
         elif activation == 1:
             # print('looking to swap students randomly...')
             HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC)
-            schedule, malus = HC2.climb()
+            # if real_score != HC1.get_score():
+            #     print("WTF", real_score, HC1.get_score())
+            #     raise
+            
+            schedule, malus = HC2.climb(T)
             # print(f'HC2: {roster.malus_count}')
             return schedule, malus
 
         elif activation == 2:
             # print('looking to swap students on gap hour malus...')
             HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC)
-            schedule, malus = HC3.climb()
+            if real_score != HC3.get_score():
+                print("WTF", real_score, HC3.get_score())
+                raise
+            schedule, malus = HC3.climb(T)
             # print(f'HC3: {roster.malus_count}')
             return schedule, malus
 
         elif activation == 3:
             # print('looking to swap students on double classes malus...')
             HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC)
-            schedule, malus = HC4.climb()
+            schedule, malus = HC4.climb(T)
             # print(f'HC4: {roster.malus_count}')
             return schedule, malus
 
@@ -186,6 +201,7 @@ class Multiprocessor():
 
             # Set the new roster to self.Roster
             self.schedule, self.malus = self.output_schedules[self.best_index]
+            print(self.best_index)
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {self.iter_counter} =========================\n')

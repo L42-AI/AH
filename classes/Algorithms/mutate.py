@@ -188,26 +188,46 @@ class Mutate():
         else:
             name_2 = random_course_2.name
 
+        roomslot1 = self.schedule[random_course_1.name][lesson_1]
+        roomslot2 = self.schedule[name_2][lesson_2]
+
         # first swap students, because when we swap, we want to get the students back to their course
-        students1 = self.schedule[random_course_1.name][lesson_1]['students']
-        students2 = self.schedule[name_2][lesson_2]['students']
+        keys = ['day', 'timeslot', 'capacity', 'room']
+        room1_data = {key: roomslot1[key] for key in keys}
+        room2_data = {key: roomslot2[key] for key in keys}
 
-        self.schedule[random_course_1.name][lesson_1]['students'] = students2
-        self.schedule[name_2][lesson_2]['students'] = students1
+        roomslot1.update(room2_data)
+        roomslot2.update(room1_data)
 
-        # same for max students
-        max1 = self.schedule[random_course_1.name][lesson_1]['max students']
-        max2 = self.schedule[name_2][lesson_2]['max students']
-        self.schedule[random_course_1.name][lesson_1]['max students'] = max2
-        self.schedule[name_2][lesson_2]['max students'] = max1
+        # timeslot1 = self.schedule[random_course_1.name][lesson_1]['timeslot']
+        # timeslot2 = self.schedule[name_2][lesson_2]['timeslot']
 
-        # define in order to be easier to read and to be able to switch keys and values of the dict
-        dict_1 = self.schedule[random_course_1.name][lesson_1]
-        dict_2 = self.schedule[course_two][lesson_2]
+        # room1 = self.schedule[random_course_1.name][lesson_1]['room']
+        # room2 = self.schedule[name_2][lesson_2]['room']
 
-        # switch the times in the schedule roster
-        self.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
-        self.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
+        # capacity1 = self.schedule[random_course_1.name][lesson_1]['capacity']
+        # capacity2 = self.schedule[name_2][lesson_2]['capacity']
+
+        # self.schedule[random_course_1.name][lesson_1]['day'] = day2
+        # self.schedule[random_course_1.name][lesson_1]['day'] = day1
+        
+        # self.schedule[random_course_1.name][lesson_1]['students'] = students2
+        # self.schedule[name_2][lesson_2]['students'] = students1
+
+        # # same for max students
+        # max1 = self.schedule[random_course_1.name][lesson_1]['max students']
+        # max2 = self.schedule[name_2][lesson_2]['max students']
+        # self.schedule[random_course_1.name][lesson_1]['max students'] = max2
+        # self.schedule[name_2][lesson_2]['max students'] = max1
+
+
+        # # define in order to be easier to read and to be able to switch keys and values of the dict
+        # dict_1 = self.schedule[random_course_1.name][lesson_1]
+        # dict_2 = self.schedule[course_two][lesson_2]
+
+        # # switch the times in the schedule roster
+        # self.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
+        # self.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
 
     """ Helpers """
 
@@ -327,6 +347,8 @@ class Mutate():
         '''picks a random student from the student list, finds the day that causes the most gap hours
            and swithces one class from that student.'''
 
+        GAP = self.__gap()
+
         # pick a student to switch
         student_to_switch_id = self.__find_random_student()
 
@@ -418,6 +440,11 @@ class Mutate():
             self.schedule[class_to_switch][group]['students'].add(student_to_old_group)
             return
 
+
+
+    def __gap(self):
+        return False
+
         # # check the type of class
         # if group[:8] == 'tutorial':
         #     course_rooms, course_group_dict, course_max_std, student_to_switch_group = self.__tut_or_pract_for_bad_timeslot(course, student_to_switch, t=True)
@@ -483,7 +510,10 @@ class Mutate():
         #     student = student_to_switch_new_group
 
 
-class   Mutate_double_classes(Mutate):
+class Mutate_double_classes(Mutate):
+    def __gap(self):
+        return False
+
     def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
         return max(scores_per_day_double, key=lambda x: scores_per_day_double.get(x))
