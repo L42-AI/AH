@@ -49,10 +49,8 @@ class HillClimber:
             # Make copy of schedule, complex because of dictionary
             copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
 
-            # create a dict with malus per students
-            student_id_malus = self.MC.compute_student_malus(copied_schedule)
             # Create the mutate class
-            M = self.make_mutate(copied_schedule, student_id_malus)
+            M = self.make_mutate(copied_schedule)
 
             # Take a step
             self.step_method(M)
@@ -61,36 +59,31 @@ class HillClimber:
             new_schedule = M.schedule
 
             # Calculate the malus points for the new schedule
-            # total = self.malus['Total']
-            # print(f'part 1: {total}\n')
             new_malus = self.MC.compute_total_malus(new_schedule)
-            # total = self.malus['Total']
-            # print(f'part 2: {total}\n')
-            # print(new_malus['Total'], self.malus['Total'])
-            self.schedule, self.malus = self.__accept_schedule(new_malus, new_schedule, T)
-        
+
+            self.__accept_schedule(new_malus, new_schedule, T)
+
         # Return new roster
         return self.schedule, self.malus
 
     def __accept_schedule(self, new_malus, new_schedule, T):
 
         prob = random.random()
-        
+
         # only accept annealing if the rise in malus is not too large
         difference = self.malus['Total'] - new_malus['Total']
         five_percent = self.malus['Total'] * 0.05
-        T = 0
+
         # Compare with prior malus points
         if new_malus['Total'] < self.malus['Total']:
+            print(self.get_name(), self.malus['Total'], new_malus['Total'])
             self.schedule = new_schedule
             self.malus = new_malus
 
-        
         elif prob < T and difference < five_percent:
             print(f'worsening of {difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
-        return self.schedule, self.malus
 
 """ Inherited HillClimber Classes """
 
@@ -103,16 +96,16 @@ class HC_TimeSlotSwapRandom(HillClimber):
         M.swap_random_lessons(state)
 
     def get_name(self):
-         print("TimeSlotSwapRandom")
+        return "TimeSlotSwapRandom"
 
 class HC_TimeSlotSwapCapacity(HC_TimeSlotSwapRandom):
     '''swaps the class that has the most capacity malus points with a random class'''
-    def make_mutate(self, schedule, student_malus_id):
-        M = MutateClass.Mutate_Course_Swap_Capacity(self.course_list, self.student_list, schedule, student_malus_id)
+    def make_mutate(self, schedule):
+        M = MutateClass.Mutate_Course_Swap_Capacity(self.course_list, self.student_list, schedule)
         return M
 
     def get_name(self):
-         print("TimeSlotSwapCapacity")
+        return "TimeSlotSwapCapacity"
 
 class HC_SwapBadTimeslots_GapHour(HillClimber):
     '''This class takes a random student and finds the day with the most gap hours.
@@ -123,19 +116,19 @@ class HC_SwapBadTimeslots_GapHour(HillClimber):
         M.swap_bad_timeslots()
 
     def get_name(self):
-         print('SwapBadTimeslots_GapHour')
+        return 'SwapBadTimeslots_GapHour'
 
 class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
     '''This class takes a random student and finds the day with the most double classes.
        When found, it will swap one tut or pract with a student from a different group
        that has the most malus points from that group'''
 
-    def make_mutate(self, schedule, student_malus_id):
-        M = MutateClass.Mutate_double_classes(self.course_list, self.student_list, schedule, student_malus_id)
+    def make_mutate(self, schedule):
+        M = MutateClass.Mutate_double_classes(self.course_list, self.student_list, schedule)
         return M
 
     def step_method(self, M):
         M.swap_bad_timeslots()
 
     def get_name(self):
-        print('SwapBadTimeslots_DoubleClasses')
+        return 'SwapBadTimeslots_DoubleClasses'
