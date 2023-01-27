@@ -324,6 +324,8 @@ class Mutate():
         '''picks a random student from the student list, finds the day that causes the most gap hours
            and swithces one class from that student.'''
 
+        GAP = self.__gap()
+
         # pick a student to switch
         student_to_switch_id = self.__find_random_student()
 
@@ -415,7 +417,8 @@ class Mutate():
 
 
 
-
+    def __gap(self):
+        return False
 
         # # check the type of class
         # if group[:8] == 'tutorial':
@@ -483,6 +486,9 @@ class Mutate():
 
 
 class Mutate_double_classes(Mutate):
+    def __gap(self):
+        return False
+
     def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
         return max(scores_per_day_double, key=lambda x: scores_per_day_double.get(x))

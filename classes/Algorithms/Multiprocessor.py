@@ -55,7 +55,7 @@ class Multiprocessor():
 
         self.malus = self.MC.compute_total_malus(self.schedule)
 
-        core_assignment_list = [0,0,1,1]
+        core_assignment_list = [3,3,3,3]
 
         # Print intitial
         print(f'\nInitialization')
