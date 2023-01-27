@@ -43,30 +43,27 @@ class Mutate():
     
 
 
-    def __find_random_student(self):
+    def __find_random_student(self) -> int:
         """ This function returns a random student picked from the schedule key called students
             it uses the id it gets from a random course and random class to find the student object 
             with the helper function self.__get_student_object"""
 
-        # get random course, moment and id (I changed this but not time now to test)
-        _course = random.choice([course for course in self.schedule.keys() if course != 'No course'])
+        # get random course, moment and id
+        _course = random.choice(list(self.schedule.keys()))
 
-        # # do not accept the schedule filler 
-        # while _course == 'No course':
-        #     _course = random.choice(list(self.schedule.keys()))
+        # do not accept the schedule filler
+        while _course == 'No course':
+            _course = random.choice(list(self.schedule.keys()))
 
         _class = random.choice(list(self.schedule[_course].keys()))
 
         _students = list(self.schedule[_course][_class]['students'])
-
-        if len(_students) == 0:
-            print(_course)
-            print(_class)
-            print(_students)
+        try:
+            student_id = random.choice(_students)
+        except:
+            print(_class, _students, self.schedule[_course][_class])
             print(self.schedule)
-
-        student_id = random.choice(_students)
-
+            raise
         return student_id
 
     def __students_to_shuffle(self):
@@ -231,7 +228,7 @@ class Mutate():
 
     """ Helpers """
 
-    def __worst_day(self, id):
+    def __worst_day(self, id) -> str:
         '''finds worst day in the schedule of a student'''
 
         worst_day = None
@@ -277,7 +274,7 @@ class Mutate():
 
         return worst_day
 
-    def __fill_timeslots_student(self, id):
+    def __fill_timeslots_student(self, id) -> dict:
         student_days = {'Monday': [], 'Tuesday': [], 'Wednesday': [], 'Thursday': [], 'Friday': []}
         student_classes = {'Monday': {}, 'Tuesday': {}, 'Wednesday': {}, 'Thursday': {}, 'Friday': {}}
         # go over the schedule and find what timeslots this student has
@@ -289,11 +286,14 @@ class Mutate():
 
                     # append the timeslot to the day that class is being held
                     student_days[day].append(timeslot)
-                    student_classes[day][_course] = _class   
+                    student_classes[day][_course] = _class
+        
         
         return student_days, student_classes
 
-    def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap):
+
+
+    def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap) -> str:
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
         return max(scores_per_day_gap, key=lambda x: scores_per_day_gap.get(x))
 
@@ -381,7 +381,6 @@ class Mutate():
             # the class that student will be switched inside of and the group student belonged in
             class_to_switch = random.choice(list(classes_worst_day.keys()))
             group = classes_worst_day[class_to_switch]
-
             if group[:8] == 'tutorial':
                 tutorial = True 
                 picked = True
@@ -398,8 +397,8 @@ class Mutate():
             while not group_found:
 
                 # pick a random group and check if it is of correct type
-                random_group = random.choice(list(self.schedule[class_to_switch].keys()))
-                if str(random_group)[0] == 't' and random_group != group:
+                new_group = random.choice(list(self.schedule[class_to_switch].keys()))
+                if str(new_group)[0] == 't' and new_group != group:
                     group_found = True
                 
                 # if there is no other group, stop
@@ -415,9 +414,8 @@ class Mutate():
             while not group_found:
 
                 # pick a random group and check if it is of correct type
-                random_group = random.choice(list(self.schedule[class_to_switch].keys()))
-
-                if str(random_group)[0] == 'p' and random_group != group:
+                new_group = random.choice(list(self.schedule[class_to_switch].keys()))
+                if str(new_group)[0] == 'p' and new_group != group:
                     group_found = True
 
                 # if there is no other group, stop
@@ -425,7 +423,7 @@ class Mutate():
                     return
 
         # check if there is room in the new group
-        new_group = self.schedule[class_to_switch][random_group]
+        new_group = self.schedule[class_to_switch][new_group]
         if len(new_group['students']) < new_group['max students']:
 
             new_group['students'].add(student_to_switch_id)
@@ -439,8 +437,6 @@ class Mutate():
             self.schedule[class_to_switch][group]['students'].remove(student_to_switch_id)
             self.schedule[class_to_switch][group]['students'].add(student_to_old_group)
             return
-
-
 
     def __gap(self):
         return False
