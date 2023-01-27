@@ -86,7 +86,7 @@ class HillClimber:
             self.malus = new_malus
 
         elif prob < T and difference < five_percent:
-            print(f'worsening of {difference} got accepted at T: {T}')
+            # print(f'worsening of {difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
 

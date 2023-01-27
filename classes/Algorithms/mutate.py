@@ -48,22 +48,25 @@ class Mutate():
             it uses the id it gets from a random course and random class to find the student object 
             with the helper function self.__get_student_object"""
 
-        # get random course, moment and id
-        _course = random.choice(list(self.schedule.keys()))
+        # get random course, moment and id (I changed this but not time now to test)
+        _course = random.choice([course for course in self.schedule.keys() if course != 'No course'])
 
-        # do not accept the schedule filler 
-        while _course == 'No course':
-            _course = random.choice(list(self.schedule.keys()))
+        # # do not accept the schedule filler 
+        # while _course == 'No course':
+        #     _course = random.choice(list(self.schedule.keys()))
 
         _class = random.choice(list(self.schedule[_course].keys()))
 
         _students = list(self.schedule[_course][_class]['students'])
-        try:
-            student_id = random.choice(_students)
-        except:
-            print(_class, _students, self.schedule[_course][_class])
+
+        if len(_students) == 0:
+            print(_course)
+            print(_class)
+            print(_students)
             print(self.schedule)
-            raise
+
+        student_id = random.choice(_students)
+
         return student_id
 
     def __students_to_shuffle(self):
@@ -286,12 +289,9 @@ class Mutate():
 
                     # append the timeslot to the day that class is being held
                     student_days[day].append(timeslot)
-                    student_classes[day][_course] = _class
-        
+                    student_classes[day][_course] = _class   
         
         return student_days, student_classes
-
-
 
     def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
@@ -381,6 +381,7 @@ class Mutate():
             # the class that student will be switched inside of and the group student belonged in
             class_to_switch = random.choice(list(classes_worst_day.keys()))
             group = classes_worst_day[class_to_switch]
+
             if group[:8] == 'tutorial':
                 tutorial = True 
                 picked = True
@@ -397,8 +398,8 @@ class Mutate():
             while not group_found:
 
                 # pick a random group and check if it is of correct type
-                new_group = random.choice(list(self.schedule[class_to_switch].keys()))
-                if str(new_group)[0] == 't' and new_group != group:
+                random_group = random.choice(list(self.schedule[class_to_switch].keys()))
+                if str(random_group)[0] == 't' and random_group != group:
                     group_found = True
                 
                 # if there is no other group, stop
@@ -414,8 +415,9 @@ class Mutate():
             while not group_found:
 
                 # pick a random group and check if it is of correct type
-                new_group = random.choice(list(self.schedule[class_to_switch].keys()))
-                if str(new_group)[0] == 'p' and new_group != group:
+                random_group = random.choice(list(self.schedule[class_to_switch].keys()))
+
+                if str(random_group)[0] == 'p' and random_group != group:
                     group_found = True
 
                 # if there is no other group, stop
@@ -423,7 +425,7 @@ class Mutate():
                     return
 
         # check if there is room in the new group
-        new_group = self.schedule[class_to_switch][new_group]
+        new_group = self.schedule[class_to_switch][random_group]
         if len(new_group['students']) < new_group['max students']:
 
             new_group['students'].add(student_to_switch_id)
