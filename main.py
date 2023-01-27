@@ -33,7 +33,7 @@ def main_runner(COURSES, STUDENT_COURSES, ROOMS):
     popular = True
     popular_own_day = True
         
-    G = GeneratorClass.Generator_HC(COURSES, STUDENT_COURSES, ROOMS,\
+    G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
         capacity, popular, popular_own_day)
 
     # Run optimizing
