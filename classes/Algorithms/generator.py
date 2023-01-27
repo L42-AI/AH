@@ -25,7 +25,8 @@ class Generator:
 
         # Save initialization
         self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
-
+    
+        
         if visualize:
             self.plot_startup(COURSES, STUDENT_COURSES, ROOMS)
 
