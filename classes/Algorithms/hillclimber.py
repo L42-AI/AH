@@ -12,7 +12,7 @@ class HillClimber:
         self.schedule = schedule
         self.MC = MC
 
-        self.multiplyer = 0.1
+        self.multiplyer = 1
 
     """ Inheritable methods """
 
@@ -56,6 +56,8 @@ class HillClimber:
             # print(self.malus['Total'])
             # Create the mutate class
             M = self.make_mutate(copied_schedule)
+
+            print(self.malus)
 
             # Take a step
             self.step_method(M)
