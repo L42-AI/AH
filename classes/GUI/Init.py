@@ -3,6 +3,7 @@ import tkinter.messagebox
 import customtkinter
 
 import classes.algorithms.generator as GeneratorClass
+import classes.GUI.generator as GeneratorApp
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 
@@ -65,6 +66,22 @@ class App(customtkinter.CTk):
 
     def generate(self):
 
+        # Extract state_data from GUI
+        settings = self.__set_data()
+
+        # Destroy window
+        self.destroy()
+
+        # Run algorithm with settings
+        self.__run_algorithm(settings)
+
+
+    def __setup_app() -> None:
+        G_App = GeneratorApp.App()
+
+        
+    def __set_data(self) -> tuple:
+
         # Set all arguments to False
         capacity = False
         popular = False
@@ -77,8 +94,7 @@ class App(customtkinter.CTk):
         try:
             annealing = self.annealing_switch.get()
         except:
-            pass
-
+            annealing = False
 
         # Set arguments true based on input of widget state
         if greedy:
@@ -86,13 +102,21 @@ class App(customtkinter.CTk):
             popular = True
             popular_own_day = True
 
+        settings = (capacity, popular, popular_own_day, hill_climbing, annealing)
+
+        return settings
+
+    def __run_algorithm(self, settings) -> None:
+
+        capacity, popular, popular_own_day, hill_climbing, annealing = settings
+
         if not hill_climbing:
-            self.destroy()
+
             G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
                 capacity, popular, popular_own_day, annealing=annealing, visualize=True)
         else:
-            self.destroy()
             G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
                 capacity, popular, popular_own_day, annealing=annealing)
 
         G.optimize()
+

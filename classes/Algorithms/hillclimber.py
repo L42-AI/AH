@@ -1,7 +1,6 @@
 import classes.algorithms.mutate as MutateClass
 import random
 import copy
-
 """ Main HillClimber Class """
 
 class HillClimber:
@@ -12,7 +11,7 @@ class HillClimber:
         self.schedule = schedule
         self.MC = MC
 
-        self.multiplyer = 0.1
+        self.multiplyer = 5
 
     """ Inheritable methods """
 
@@ -52,8 +51,10 @@ class HillClimber:
             # self.malus = self.MC.compute_total_malus(self.schedule)
 
             # Make copy of schedule, complex because of dictionary
+            # copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
             copied_schedule = copy.deepcopy(self.schedule)
-            # {k: {k2: {k3: [student for student in v3] for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
+            # before_malus = self.MC.compute_total_malus(copied_schedule)
+
             # Create the mutate class
             M = self.make_mutate(copied_schedule)
 
@@ -65,7 +66,9 @@ class HillClimber:
 
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
-            # print(new_schedule == self.schedule)
+
+            # print(f"Difference everystep: {self.malus['Total']}, {before_malus['Total']}, {new_malus['Total']}")
+
             self.__accept_schedule(new_malus, new_schedule, T)
 
         # Return new roster
@@ -81,7 +84,7 @@ class HillClimber:
 
         # Compare with prior malus points
         if new_malus['Total'] < self.malus['Total']:
-    
+            # print(self.get_name())
             self.schedule = new_schedule
             self.malus = new_malus
 
