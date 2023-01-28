@@ -84,7 +84,7 @@ class HillClimber:
 
         # Compare with prior malus points
         if new_malus['Total'] < self.malus['Total']:
-            # print(self.get_name())
+            print(self.get_name())
             self.schedule = new_schedule
             self.malus = new_malus
 

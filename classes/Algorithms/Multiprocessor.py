@@ -2,6 +2,7 @@ import classes.algorithms.hillclimber as HillCLimberClass
 from multiprocessing import Pool
 import random as random
 
+import sys
 import time
 import json
 import copy
@@ -61,15 +62,26 @@ class Multiprocessor():
         print(f'\nInitialization')
         print(self.malus)
 
+        finished = False
+
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while self.iter_counter != self.ITERS:
+        for _ in range(100):
+        # while not finished:
+
+            # print(finished)
+
+            start_time = time.time()
 
             if self.ANNEALING:
                 t = 0.25 - self.iter_counter / self.ITERS * 4
             else:
                 t = 0
 
-            start_time = time.time()
+            print(1)
+            # received = sys.stdin.readline().strip()
+            # finished = received == 'True'
+            print(2)
+
 
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
@@ -104,6 +116,10 @@ class Multiprocessor():
 
             # Increase iter counter
             self.iter_counter += 1
+
+            # if finished:
+            #     sys.stdout.write(str(finished))
+            #     sys.stdout.flush()
 
 
     def __replace_roster(self, difference):
