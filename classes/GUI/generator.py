@@ -44,7 +44,7 @@ class App(customtkinter.CTk):
         self.ani = animation.FuncAnimation(self.figure, self.animate, frames=10 + 1, repeat=False)
         self.chart_type.draw()
 
-    def animate(self, i):
+    def animate(self, cost1, cost2, cost3, cost4, i):
         self.ax.clear()
         self.ax.plot(HC1_itr[:self.i], HC1_val[:self.i], c=self.colours[0], label='HillClimber 1')
         self.ax.plot(HC2_itr[:self.i], HC2_val[:self.i], c=self.colours[1], label='HillClimber 2')
