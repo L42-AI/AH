@@ -14,6 +14,7 @@ class Mutate():
 
         self.course_dict = {}
         self.__create_course_name_dict()
+        self.double = {'l': {'v': 0, 'student': []}, 't': {'v': 0, 'student': []}, 'p': {'v': 0, 'student': []}}
 
     """ INIT """
 
@@ -276,14 +277,16 @@ class Mutate():
         worst_day = None
         student_days, student_classes = self.__fill_timeslots_student_test_for_double(id)
 
-        scores_per_day = {day[0]:(0, 0) for day in student_days}
+        scores_per_day = {day:(0, {'value': 0, 'l': 0, 't': 0, 'p':0}) for day in student_days}
+
         
         # For each week
         for day in student_days:
             day_dict = {'value': 0, 'l': 0, 't': 0, 'p':0}
-            print(student_days[day][0][0])
+            
             # Sort timeslots in each day
-            timeslot_list = sorted(student_days[day][0][0], reverse=True)
+            only_time = [x[0] for x in student_days[day]]
+            timeslot_list = sorted(only_time, reverse=True)
 
             # Only compute if list includes more than 1 timeslot
             if len(timeslot_list) > 1:
@@ -293,17 +296,22 @@ class Mutate():
                     day_dict['value'] += 1
 
                     if timeslot_list[timeslot_num] == timeslot_list[timeslot_num + 1]:
-                        
+
                         scores_per_day[day] = (scores_per_day[day][0], day_dict)
                         if student_days[day][timeslot_num][1][0] == 'l':
                             day_dict['l'] += 1
+                            self.double['l']['v'] += 1
+                            self.double['l']['student'].append(id)
                             scores_per_day[day] = (scores_per_day[day][0], scores_per_day[day][1]['l'] + 1)
                         if student_days[day][timeslot_num][1][0] == 't':
                             day_dict['t'] += 1
+                            self.double['t']['v'] += 1
+                            self.double['t']['student'].append(id)
                         if student_days[day][timeslot_num][1][0] == 'p':
                             day_dict['p'] += 1
-                        scores_per_day[day] = (scores_per_day[day][0], day_dict)
-                        
+                            self.double['p']['v'] += 1
+                            self.double['p']['student'].append(id)
+
                     # claculate the amount of gaps between lessons
                     if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
                         lesson_gaps = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
@@ -319,7 +327,7 @@ class Mutate():
 
                         elif lesson_gaps > 2:
                             scores_per_day[day] = (scores_per_day[day][0] + 5, scores_per_day[day][1])
-
+                    scores_per_day[day] = (scores_per_day[day][0], day_dict)
         # gets the day with most gap or double hours
         worst_day = self.__get_day_gap_or_double_test_for_double(scores_per_day)
         print(scores_per_day[worst_day])
@@ -367,7 +375,17 @@ class Mutate():
 
     def __get_day_gap_or_double_test_for_double(self, scores_per_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
-        return max(scores_per_day, key=lambda x: x[0]['value'])
+        # print(scores_per_day)
+        best_score = 0
+        worst_day = None
+        for key in scores_per_day:
+  
+            score = scores_per_day[key][0]
+            if score >= best_score:
+                best_score = score
+                worst_day = key
+            
+        return worst_day
 
     def __return_none(self,scores_per_day_double, scores_per_day_gap, worst_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
@@ -588,6 +606,19 @@ class Mutate_double_classes(Mutate):
     def __get_day_gap_or_double(self, scores_per_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
         return max(scores_per_day, key=lambda x: x[1])
+
+    def __get_day_gap_or_double_test_for_double(self, scores_per_day):
+        '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
+        # print(scores_per_day)
+        best_score = 0
+        for key in scores_per_day:
+            print(f'key: {key}')
+            score = scores_per_day[key][1]['value']
+            if score >= best_score:
+                best_score = score
+                worst_day = key
+            
+        return key
 
     def __return_none(self,scores_per_day_double, scores_per_day_gap, worst_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''

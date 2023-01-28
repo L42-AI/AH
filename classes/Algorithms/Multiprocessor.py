@@ -141,9 +141,6 @@ class Multiprocessor():
         elif activation == 2:
             # print('looking to swap students on gap hour malus...')
             HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC)
-            if real_score != HC3.get_score():
-                print("WTF", real_score, HC3.get_score())
-                raise
             schedule, malus = HC3.climb(T)
             # print(f'HC3: {roster.malus_count}')
             return schedule, malus, HC3.get_name()

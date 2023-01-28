@@ -65,6 +65,7 @@ class HillClimber:
 
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
+            print(M.double)
             
             # let the hillclimber make 3 changes before a new score is calculated
             self.__accept_schedule(new_malus, new_schedule, T)
