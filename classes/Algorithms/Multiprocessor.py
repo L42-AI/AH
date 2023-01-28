@@ -120,7 +120,7 @@ class Multiprocessor():
             schedule, malus = HC1.climb(T)
         
             # print(f'HC1: {roster.malus_count}')
-            return schedule, malus
+            return schedule, malus, HC1.get_name()
 
         elif activation == 1:
             # print('looking to swap students randomly...')
@@ -131,7 +131,7 @@ class Multiprocessor():
             
             schedule, malus = HC2.climb(T)
             # print(f'HC2: {roster.malus_count}')
-            return schedule, malus
+            return schedule, malus, HC2.get_name()
 
         elif activation == 2:
             # print('looking to swap students on gap hour malus...')
@@ -141,14 +141,14 @@ class Multiprocessor():
                 raise
             schedule, malus = HC3.climb(T)
             # print(f'HC3: {roster.malus_count}')
-            return schedule, malus
+            return schedule, malus, HC3.get_name()
 
         elif activation == 3:
             # print('looking to swap students on double classes malus...')
             HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC)
             schedule, malus = HC4.climb(T)
             # print(f'HC4: {roster.malus_count}')
-            return schedule, malus
+            return schedule, malus, HC4.get_name()
 
     """ Save and Visualize Data """
 
@@ -183,12 +183,12 @@ class Multiprocessor():
         if difference > 0:
 
             # Set the new roster to self.Roster
-            self.schedule, self.malus = self.output_schedules[self.best_index]
+            self.schedule, self.malus, name = self.output_schedules[self.best_index]
             print(self.best_index)
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {self.iter_counter} =========================\n')
-            print(f'Most effective function: HC{self.best_index + 1}')
+            print(f'Most effective function: HC{name}')
             print(f'Malus improvement: {difference}')
             print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
             print(f'Duration since init: {round(self.duration, 2)} S.')
@@ -214,7 +214,7 @@ class Multiprocessor_SimAnnealing(Multiprocessor):
         if difference > 0:
 
             # Set the new roster to self.Roster
-            self.schedule, self.malus = self.output_schedules[self.best_index]
+            self.schedule, self.malus, _ = self.output_schedules[self.best_index]
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {self.iter_counter} =========================\n')
