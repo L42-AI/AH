@@ -48,9 +48,11 @@ class HillClimber:
 
             # Make copy of schedule, complex because of dictionary
             copied_schedule = copy.deepcopy(self.schedule)
-
+            # print(self.malus['Total'])
             # Create the mutate class
             M = self.make_mutate(copied_schedule)
+
+            # print(self.malus)
 
             # Take a step
             self.step_method(M)
@@ -60,7 +62,7 @@ class HillClimber:
 
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
-
+            # print(new_schedule == self.schedule)
             self.__accept_schedule(new_malus, new_schedule, T)
 
         # Return new roster
