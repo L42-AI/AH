@@ -40,9 +40,6 @@ class Mutate():
 
     """ Helpers """
 
-    
-
-
     def __find_random_student(self):
         """ This function returns a random student picked from the schedule key called students
             it uses the id it gets from a random course and random class to find the student object 
@@ -232,11 +229,10 @@ class Mutate():
         '''finds worst day in the schedule of a student'''
 
         worst_day = None
-        scores_per_day_gap = {'Monday': 0, 'Tuesday': 0, 'Wednesday': 0, 'Thursday': 0, 'Friday': 0}
-        scores_per_day_double = {'Monday': 0, 'Tuesday': 0, 'Wednesday': 0, 'Thursday': 0, 'Friday': 0}
-
         student_days, student_classes = self.__fill_timeslots_student(id)
 
+        scores_per_day = {day:(0, 0) for day in student_days}
+        
         # For each week
         for day in student_days:
 
@@ -251,7 +247,7 @@ class Mutate():
 
 
                     if timeslot_list[timeslot_num] == timeslot_list[timeslot_num + 1]:
-                        scores_per_day_double[day] += 1
+                        scores_per_day[day] = (scores_per_day[day][0], scores_per_day[day][1] + 1)
 
                     # claculate the amount of gaps between lessons
                     if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
@@ -261,16 +257,16 @@ class Mutate():
 
                         # check if one gap hour
                         if lesson_gaps == 1:
-                            scores_per_day_gap[day] += 1
+                            scores_per_day[day] = (scores_per_day[day][0] + 1, scores_per_day[day][1])
 
                         elif lesson_gaps == 2:
-                            scores_per_day_gap[day] += 3
+                            scores_per_day[day] = (scores_per_day[day][0] + 3, scores_per_day[day][1])
 
                         elif lesson_gaps > 2:
-                            scores_per_day_gap[day] += 5
+                            scores_per_day[day] = (scores_per_day[day][0] + 5, scores_per_day[day][1])
 
         # gets the day with most gap or double hours
-        worst_day = self.__get_day_gap_or_double(scores_per_day_double, scores_per_day_gap)
+        worst_day = self.__get_day_gap_or_double(scores_per_day)
 
         return worst_day
 
@@ -293,9 +289,9 @@ class Mutate():
 
 
 
-    def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap):
+    def __get_day_gap_or_double(self, scores_per_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
-        return max(scores_per_day_gap, key=lambda x: scores_per_day_gap.get(x))
+        return max(scores_per_day, key=lambda x: x[0])
 
     def __return_none(self,scores_per_day_double, scores_per_day_gap, worst_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
@@ -512,9 +508,9 @@ class Mutate_double_classes(Mutate):
     def __gap(self):
         return False
 
-    def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap):
+    def __get_day_gap_or_double(self, scores_per_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
-        return max(scores_per_day_double, key=lambda x: scores_per_day_double.get(x))
+        return max(scores_per_day, key=lambda x: x[1])
 
     def __return_none(self,scores_per_day_double, scores_per_day_gap, worst_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
