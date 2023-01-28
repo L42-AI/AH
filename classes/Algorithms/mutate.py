@@ -40,6 +40,9 @@ class Mutate():
 
     """ Helpers """
 
+    
+
+
     def __find_random_student(self):
         """ This function returns a random student picked from the schedule key called students
             it uses the id it gets from a random course and random class to find the student object 
@@ -55,8 +58,12 @@ class Mutate():
         _class = random.choice(list(self.schedule[_course].keys()))
 
         _students = list(self.schedule[_course][_class]['students'])
-        student_id = random.choice(_students)
-
+        try:
+            student_id = random.choice(_students)
+        except:
+            print(_class, _students, self.schedule[_course][_class])
+            print(self.schedule)
+            raise
         return student_id
 
     def __students_to_shuffle(self):
@@ -178,27 +185,46 @@ class Mutate():
         else:
             name_2 = random_course_2.name
 
+        roomslot1 = self.schedule[random_course_1.name][lesson_1]
+        roomslot2 = self.schedule[name_2][lesson_2]
+
         # first swap students, because when we swap, we want to get the students back to their course
-        students1 = self.schedule[random_course_1.name][lesson_1]['students']
-        students2 = self.schedule[name_2][lesson_2]['students']
+        keys = ['day', 'timeslot', 'capacity', 'room']
+        room1_data = {key: roomslot1[key] for key in keys}
+        room2_data = {key: roomslot2[key] for key in keys}
+
+        roomslot1.update(room2_data)
+        roomslot2.update(room1_data)
+
+        # timeslot1 = self.schedule[random_course_1.name][lesson_1]['timeslot']
+        # timeslot2 = self.schedule[name_2][lesson_2]['timeslot']
+
+        # room1 = self.schedule[random_course_1.name][lesson_1]['room']
+        # room2 = self.schedule[name_2][lesson_2]['room']
+
+        # capacity1 = self.schedule[random_course_1.name][lesson_1]['capacity']
+        # capacity2 = self.schedule[name_2][lesson_2]['capacity']
+
+        # self.schedule[random_course_1.name][lesson_1]['day'] = day2
+        # self.schedule[random_course_1.name][lesson_1]['day'] = day1
         
-        self.schedule[random_course_1.name][lesson_1]['students'] = students2
-        self.schedule[name_2][lesson_2]['students'] = students1
+        # self.schedule[random_course_1.name][lesson_1]['students'] = students2
+        # self.schedule[name_2][lesson_2]['students'] = students1
 
-        # same for max students
-        max1 = self.schedule[random_course_1.name][lesson_1]['max students']
-        max2 = self.schedule[name_2][lesson_2]['max students']
-        self.schedule[random_course_1.name][lesson_1]['max students'] = max2
-        self.schedule[name_2][lesson_2]['max students'] = max1
+        # # same for max students
+        # max1 = self.schedule[random_course_1.name][lesson_1]['max students']
+        # max2 = self.schedule[name_2][lesson_2]['max students']
+        # self.schedule[random_course_1.name][lesson_1]['max students'] = max2
+        # self.schedule[name_2][lesson_2]['max students'] = max1
 
 
-        # define in order to be easier to read and to be able to switch keys and values of the dict
-        dict_1 = self.schedule[random_course_1.name][lesson_1]
-        dict_2 = self.schedule[course_two][lesson_2]
+        # # define in order to be easier to read and to be able to switch keys and values of the dict
+        # dict_1 = self.schedule[random_course_1.name][lesson_1]
+        # dict_2 = self.schedule[course_two][lesson_2]
 
-        # switch the times in the schedule roster
-        self.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
-        self.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
+        # # switch the times in the schedule roster
+        # self.schedule[random_course_1.name][lesson_1] = dict(zip(dict_1, dict_2.values()))
+        # self.schedule[course_two][lesson_2] = dict(zip(dict_2, dict_1.values()))
 
     """ Helpers """
 
@@ -206,12 +232,10 @@ class Mutate():
         '''finds worst day in the schedule of a student'''
 
         worst_day = None
+        scores_per_day_gap = {'Monday': 0, 'Tuesday': 0, 'Wednesday': 0, 'Thursday': 0, 'Friday': 0}
+        scores_per_day_double = {'Monday': 0, 'Tuesday': 0, 'Wednesday': 0, 'Thursday': 0, 'Friday': 0}
 
         student_days, student_classes = self.__fill_timeslots_student(id)
-
-        # first value will be gap hours, second double hours
-        scores_per_day = {day: (0, 0) for day in student_days}
-
 
         # For each week
         for day in student_days:
@@ -227,7 +251,7 @@ class Mutate():
 
 
                     if timeslot_list[timeslot_num] == timeslot_list[timeslot_num + 1]:
-                        scores_per_day[day] = (scores_per_day[day][0], scores_per_day[day][1] + 1)
+                        scores_per_day_double[day] += 1
 
                     # claculate the amount of gaps between lessons
                     if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
@@ -237,18 +261,16 @@ class Mutate():
 
                         # check if one gap hour
                         if lesson_gaps == 1:
-                            scores_per_day[day] = (scores_per_day[day][0] + 1, scores_per_day[day][1])
+                            scores_per_day_gap[day] += 1
 
                         elif lesson_gaps == 2:
-                            scores_per_day[day] = (scores_per_day[day][0] + 3, scores_per_day[day][1])
+                            scores_per_day_gap[day] += 3
 
                         elif lesson_gaps > 2:
-                            scores_per_day[day] = (scores_per_day[day][0] + 5, scores_per_day[day][1])
+                            scores_per_day_gap[day] += 5
 
         # gets the day with most gap or double hours
-        worst_day = self.__get_day_gap_or_double(scores_per_day)
-
-        worst_day = self.__return_none(scores_per_day, worst_day)
+        worst_day = self.__get_day_gap_or_double(scores_per_day_double, scores_per_day_gap)
 
         return worst_day
 
@@ -271,26 +293,64 @@ class Mutate():
 
 
 
-    def __get_day_gap_or_double(self, scores_per_day):
+    def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
-        return max(scores_per_day, key=lambda x: x[0])
+        return max(scores_per_day_gap, key=lambda x: scores_per_day_gap.get(x))
 
-    def __return_none(self,scores_per_day, worst_day):
+    def __return_none(self,scores_per_day_double, scores_per_day_gap, worst_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
-        if scores_per_day[worst_day][0] == 0:
+        if scores_per_day_gap[worst_day] == 0:
             worst_day = None
         return worst_day
 
+    def __find_classes(self, student_to_switch, worst_day):
+        '''picks the class that a student has on his/hers day with most malus points'''
+
+        courses_per_day = {'Monday': [], 'Tuesday': [], 'Wednesday': [], 'Thursday': [], 'Friday': []}
+
+        # go over the schedule and find what timeslots this student has
+        for _course in self.schedule:
+            for _class in self.schedule[_course]:
+                if student_to_switch in self.schedule[_course][_class]['students']:
+                    day = self.schedule[_course][_class]['day']
+
+                    # append the timeslot to the day that class is being held
+                    courses_per_day[day].append(_course)
+                    courses_per_day[day].append(self.schedule[_course].keys())
+        
+        return courses_per_day
+
+    def __tut_or_pract_for_bad_timeslot(self, course, student, t=True):
+        '''returns variable names for tutorial groups or practical groups'''
+
+        if t:
+            return course.tutorial_rooms, course.tut_group_dict, course.max_std, student.tut_group
+        else:
+            return course.practical_rooms, course.pract_group_dict, course.max_std_practical, student.pract_group
+
+    def __pick_group(self, course, course_group_dict, student_to_switch_group):
+        '''picks a group where a student who needs to swap tutorial or practical groups can go to'''
+
+        picked = False
+        while not picked:
+
+            # pick a group to switch to
+            groups = list(course_group_dict.keys())
+            new_group = random.choice(groups)
+            if new_group != student_to_switch_group[course.name]:
+                picked = True
+        return new_group
+
     """ Method 3 """
+
     def swap_bad_timeslots(self):
         '''picks a random student from the student list, finds the day that causes the most gap hours
            and swithces one class from that student.'''
-     
-        # pick 5 worst students to switch
-        student_to_switch_id = self.__find_random_student()
 
-        # pick a random one, readme for explenation
-        # student_to_switch_id = random.choice(student_to_switch_id)
+        GAP = self.__gap()
+
+        # pick a student to switch
+        student_to_switch_id = self.__find_random_student()
 
         # find its worst day
         worst_day = self.__worst_day(student_to_switch_id)
@@ -313,66 +373,23 @@ class Mutate():
         if not groups:
             return
 
-        # pick a group and check if it is tut or pract
-        tutorial, group, class_to_switch = self.__pick_group(classes_worst_day)
+        # pick a group that student will switch out of
+        tutorial = None
+        picked = False
+        while not picked:
 
-        # pick a group for the student to go to
-        new_group = self.__pick_new_group(tutorial, class_to_switch, group)
-        
-        if new_group == None:
-            return
+            # the class that student will be switched inside of and the group student belonged in
+            class_to_switch = random.choice(list(classes_worst_day.keys()))
+            group = classes_worst_day[class_to_switch]
+            if group[:8] == 'tutorial':
+                tutorial = True 
+                picked = True
+            elif group[:9] == 'practical':
+                tutorial = False
+                picked = True
 
-        # check if there is room in the new group
-        if self.__check_for_room(class_to_switch, new_group):
-            # place the student in a new group
-            # print(f'new in schedule: {self.schedule[class_to_switch][new_group]}')
-            # print(f'old in schedule: {self.schedule[class_to_switch][group]}')
-            self.__place_student(student_to_switch_id, new_group, class_to_switch, group)
-            # print('\n\n')
-            # print(f'new in schedule: {self.schedule[class_to_switch][new_group]}')
-            # print(f'old in schedule: {self.schedule[class_to_switch][group]}')
-        else:
-            # print(f'new in schedule: {self.schedule[class_to_switch][new_group]}')
-            # print(f'old in schedule: {self.schedule[class_to_switch][group]}')
-            # pick a random student to switch with
-            student_to_old_group = random.choice(list(self.schedule[class_to_switch][new_group]['students']))
-            self.__place_student(student_to_switch_id, new_group, class_to_switch, group)
-            self.__place_student(student_to_old_group, group, class_to_switch, new_group)
-            # print('\n\n')
-            # print(f'new in schedule: {self.schedule[class_to_switch][new_group]}')
-            # print(f'old in schedule: {self.schedule[class_to_switch][group]}')
-            # new_group['students'].add(student_to_switch_id)
-            # new_group['students'].remove(student_to_old_group)
-            # self.schedule[class_to_switch][group]['students'].remove(student_to_switch_id)
-            # self.schedule[class_to_switch][group]['students'].add(student_to_old_group)
-            return
-
-    def __gap(self):
-        return True
-
-    def __pick_group(self, classes_worst_day):
-
-            # pick a group that student will switch out of
-            tutorial = None
-            picked = False
-            while not picked:
-
-                # the class that student will be switched inside of and the group student belonged in
-                class_to_switch = random.choice(list(classes_worst_day.keys()))
-                group = classes_worst_day[class_to_switch]
-                if group[:8] == 'tutorial':
-                    tutorial = True
-                    picked = True
-                elif group[:9] == 'practical':
-                    tutorial = False
-                    picked = True
-            return tutorial, group, class_to_switch
-
-    def __pick_new_group(self, tutorial, class_to_switch, group):
+        # switch student
         if tutorial:
-            group_type = 't'
-        else:
-            group_type = 'p'
 
             # pick a random tutorial group from that course
             group_found = False
@@ -381,122 +398,50 @@ class Mutate():
 
                 # pick a random group and check if it is of correct type
                 new_group = random.choice(list(self.schedule[class_to_switch].keys()))
-                if str(new_group)[0] == group_type and new_group != group:
+                if str(new_group)[0] == 't' and new_group != group:
                     group_found = True
-
+                
                 # if there is no other group, stop
                 i += 1
                 if i == 20:
-                    return None
-            return new_group
+                    return
+        
+        elif not tutorial:
 
-    def __check_for_room(self, class_to_switch, new_group):
+            # pick a random tutorial group from that cours
+            group_found = False
+            i = 0
+            while not group_found:
+
+                # pick a random group and check if it is of correct type
+                new_group = random.choice(list(self.schedule[class_to_switch].keys()))
+                if str(new_group)[0] == 'p' and new_group != group:
+                    group_found = True
+
+                # if there is no other group, stop
+                if i == 20:
+                    return
+
+        # check if there is room in the new group
         new_group = self.schedule[class_to_switch][new_group]
         if len(new_group['students']) < new_group['max students']:
-            return True
+
+            new_group['students'].add(student_to_switch_id)
+            self.schedule[class_to_switch][group]['students'].remove(student_to_switch_id)
+            return
+        else:
+            # pick a random student to switch with
+            student_to_old_group = random.choice(list(new_group['students']))
+            new_group['students'].add(student_to_switch_id)
+            new_group['students'].remove(student_to_old_group)
+            self.schedule[class_to_switch][group]['students'].remove(student_to_switch_id)
+            self.schedule[class_to_switch][group]['students'].add(student_to_old_group)
+            return
+
+
+
+    def __gap(self):
         return False
-
-    def __place_student(self, student_to_switch_id, new_group, class_to_switch, group):
-                self.schedule[class_to_switch][new_group]['students'].add(student_to_switch_id)
-                self.schedule[class_to_switch][group]['students'].remove(student_to_switch_id)
-                
-
-    # def swap_bad_timeslots(self):
-    #     '''picks a random student from the student list, finds the day that causes the most gap hours
-    #        and swithces one class from that student.'''
-
-    #     GAP = self.__gap()
-
-    #     # pick a student to switch
-    #     student_to_switch_id = self.__find_random_student()
-
-    #     # find its worst day
-    #     worst_day = self.__worst_day(student_to_switch_id)
-
-    #     # if worst_day had no bad scores, it is none and loop should stop
-    #     if worst_day == None:
-    #         return
-
-    #     # find student schedule
-    #     _, student_classes = self.__fill_timeslots_student(student_to_switch_id)
-
-    #     # find a class on its worst day:
-    #     classes_worst_day = student_classes[worst_day]
-
-    #     if not self.__not_lecture(classes_worst_day):
-    #         return
-        
-    #     # pick a group
-    #     old_group, new_group, class_to_switch = self.__pick_group(classes_worst_day)
-
-    #     if old_group == None:
-    #         return       
-        
-    #     # check if there is room in the new group
-    #     new_group = self.schedule[class_to_switch][new_group]
-    #     if len(new_group['students']) < new_group['max students']:
-    #         self.__switch_students(new_group, student_to_switch_id, old_group, class_to_switch)
-    #         return
-   
-    #     else:
-    #         # pick a random student to switch with
-    #         student_to_old_group = random.choice(list(new_group['students']))
-    #         self.__switch_students(new_group, student_to_switch_id, old_group, class_to_switch)
-    #         self.__switch_students(old_group, student_to_old_group, new_group, class_to_switch)
-    #         return
-
-    # def __not_lecture(self, classes_worst_day):
-    #     # check if there are non lectures, if there are only lectures, student cannot swap away
-    #     groups = False
-    #     for _class in classes_worst_day:
-    #         if str(classes_worst_day[_class])[:8] == 'tutorial' or str(classes_worst_day[_class])[:9] == 'practical':
-    #             return True
-    #     return False
-
-    # def __pick_group(self, classes_worst_day):
-    #         # pick a group that student will switch out of
-    #         tutorial = None
-    #         picked = False
-    #         while not picked:
-
-    #             # the class that student will be switched inside of and the group student belonged in
-    #             class_to_switch = random.choice(list(classes_worst_day.keys()))
-    #             group = classes_worst_day[class_to_switch]
-    #             if group[:8] == 'tutorial':
-    #                 tutorial = True 
-    #                 picked = True
-    #             elif group[:9] == 'practical':
-    #                 tutorial = False
-    #                 picked = True
-
-    #         # switch student
-    #         if tutorial:
-    #             type_ = 'tutorial'
-    #         else:
-    #             type_ = 'practical'
-
-    #         # pick a random tutorial group from that course
-    #         group_found = False
-    #         for i in range(20):
-
-    #             # pick a random group and check if it is of correct type
-    #             new_group = random.choice(list(self.schedule[class_to_switch].keys()))
-    #             if str(new_group) == type_ and new_group != group:
-    #                 group_found = True
-    #                 break
-
-    #         if not group_found:
-    #             return None, None, None
-    #         else:
-    #             return group, new_group, class_to_switch
-    
-    # def __switch_students(self, new_group, student_to_switch_id, group, class_to_switch):
-            
-    #             new_group['students'].add(student_to_switch_id)
-    #             self.schedule[class_to_switch][group]['students'].remove(student_to_switch_id)
-
-    # def __gap(self):
-    #     return False
 
         # # check the type of class
         # if group[:8] == 'tutorial':
@@ -567,13 +512,13 @@ class Mutate_double_classes(Mutate):
     def __gap(self):
         return False
 
-    def __get_day_gap_or_double(self, scores_per_day):
+    def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
-        return max(scores_per_day, key=lambda x: x[1])
+        return max(scores_per_day_double, key=lambda x: scores_per_day_double.get(x))
 
-    def __return_none(self,scores_per_day):
+    def __return_none(self,scores_per_day_double, scores_per_day_gap, worst_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
-        if scores_per_day[worst_day][1] == 0:
+        if scores_per_day_double[worst_day] == 0:
             worst_day = None
         return worst_day
 

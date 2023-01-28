@@ -7,8 +7,6 @@ import classes.representation.room as RoomClass
 import classes.representation.roster as RosterClass
 import classes.representation.malus_calc as MalusCalculatorClass
 
-import classes.GUI.generator_GUI as GeneratorApp
-
 import os
 import matplotlib.pyplot as plt
 import numpy as np
@@ -27,8 +25,7 @@ class Generator:
 
         # Save initialization
         self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
-        print(self.Roster.schedule)
-        raise
+    
         
         if visualize:
             self.plot_startup(COURSES, STUDENT_COURSES, ROOMS)
@@ -258,5 +255,7 @@ class Generator:
         plt.savefig(os.path.join(directory_plots, fig_name))
 
     def optimize(self):
-        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, annealing=self.ANNEALING)
-        Multiprocessor.run()
+            Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, annealing=self.ANNEALING)
+            Multiprocessor.run()
+
+

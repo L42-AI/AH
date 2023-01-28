@@ -2,13 +2,7 @@ import tkinter
 import tkinter.messagebox
 import customtkinter
 
-import os
-import json
-
-import subprocess
-
 import classes.algorithms.generator as GeneratorClass
-import classes.GUI.generator_GUI as GeneratorApp
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 
@@ -18,7 +12,7 @@ customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "gre
 
 
 class App(customtkinter.CTk):
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__()
 
         # configure window
@@ -54,10 +48,10 @@ class App(customtkinter.CTk):
         self.generate_button = customtkinter.CTkButton(master=self, text="Generate", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.generate)
         self.generate_button.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
 
-    def run(self) -> None:
+    def run(self):
         self.mainloop()
 
-    def hillclimber_switch_click(self) -> None:
+    def hillclimber_switch_click(self):
 
         state = self.hill_climbing_switch.get()
 
@@ -67,26 +61,11 @@ class App(customtkinter.CTk):
         else:
             self.annealing_switch.destroy()
 
-    def generate(self) -> None:
-
-        # Extract state_data from GUI
-        algorithm_settings = self.__set_data()
-
-        # Destroy window
-        self.destroy()
-
-        self.__export_settings(algorithm_settings)
-        print('Run')
-        algorithm_process = self.__run_algorithm()
-        print(os.getcwd())
-        self.__setup_generator_app(algorithm_process)
 
 
-
-    def __set_data(self) -> dict:
+    def generate(self):
 
         # Set all arguments to False
-        visualize = False
         capacity = False
         popular = False
         popular_own_day = False
@@ -98,7 +77,8 @@ class App(customtkinter.CTk):
         try:
             annealing = self.annealing_switch.get()
         except:
-            annealing = False
+            pass
+
 
         # Set arguments true based on input of widget state
         if greedy:
@@ -106,22 +86,13 @@ class App(customtkinter.CTk):
             popular = True
             popular_own_day = True
 
-        settings = {"capacity": capacity, "popular": popular,
-                    "popular_own_day": popular_own_day,
-                    "hill_climbing": hill_climbing,
-                    "annealing": annealing, "visualize": visualize}
+        if not hill_climbing:
+            self.destroy()
+            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
+                capacity, popular, popular_own_day, annealing=annealing, visualize=True)
+        else:
+            self.destroy()
+            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
+                capacity, popular, popular_own_day, annealing=annealing)
 
-        return settings
-
-    def __run_algorithm(self) -> object:
-
-        algorithm_process = subprocess.Popen(['python', 'run_algorithm.py'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        return algorithm_process
-
-    def __export_settings(self, algorithm_settings) -> None:
-        with open('data/settings.json', 'w') as f:
-            json.dump(algorithm_settings, f)
-
-    def __setup_generator_app(self, algorithm_process) -> None:
-        G_App = GeneratorApp.App(algorithm_process)
-        G_App.run()
+        G.optimize()
