@@ -115,7 +115,8 @@ class App(customtkinter.CTk):
 
     def __run_algorithm(self) -> object:
 
-        algorithm_process = subprocess.Popen(['python', 'run_algorithm.py'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        subprocess.Popen(['python3', 'run_algorithm.py'])
+        algorithm_process = subprocess.Popen(['python3', 'run_algorithm.py'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         return algorithm_process
 
     def __export_settings(self, algorithm_settings) -> None:
