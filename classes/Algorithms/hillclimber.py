@@ -39,6 +39,7 @@ class HillClimber:
     """ Main Method """
 
     def climb(self, T):
+        self.double = {'l': set(), 't': set(), 'p': set()}
 
         # Compute malus with MalusCalculator
         self.malus = self.MC.compute_total_malus(self.schedule)
@@ -71,7 +72,7 @@ class HillClimber:
             
             # let the hillclimber make 3 changes before a new score is calculated
             self.__accept_schedule(new_malus, new_schedule, T, double_hc, M)
-        print(self.get_name(), self.double)
+        # print(self.get_name(), self.double)
         # Return new roster
         return self.schedule, self.malus
 
@@ -103,7 +104,7 @@ class HillClimber:
             double_hc['l']['student'].append(M.double['l']['student'])
             double_hc['t']['student'].append(M.double['t']['student'])
             double_hc['p']['student'].append(M.double['p']['student'])
-            self.double = {'l': set(), 't': set(), 'p': set()}
+            
             for key in double_hc:
                 # print(key)
                 # print(self.double[key])

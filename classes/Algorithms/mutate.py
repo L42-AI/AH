@@ -443,7 +443,7 @@ class Mutate():
         
 
         # find its worst day
-        worst_day = self.__worst_day_test_for_double(student_to_switch_id)
+        worst_day = self.__worst_day(student_to_switch_id)
 
         # if worst_day had no bad scores, it is none and loop should stop
         if worst_day == None:

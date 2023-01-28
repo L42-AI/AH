@@ -15,13 +15,14 @@ import pandas as pd
 from tqdm import tqdm
 
 class Generator:
-    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, visualize=False, annealing=False):
+    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, visualize=False, annealing=False, difficult_students=False):
 
         # Set heuristics
         self.CAPACITY = capacity
         self.POPULAR = popular
         self.POPULAR_OWN_DAY = popular_own_day
         self.ANNEALING = annealing
+        self.DIFFICULT_STUDENTS = difficult_students
 
         # Save initialization
         self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
@@ -84,6 +85,7 @@ class Generator:
 
         for course in course_list:
             course.enroll_students(student_list)
+            course.flag_hard_student(student_list)
 
         return course_list, student_list, rooms_list
 
@@ -99,6 +101,9 @@ class Generator:
             days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
             for i in range(5):
                 course_list[i].day = days[i]
+        
+        if self.DIFFICULT_STUDENTS:
+            course_list = sorted(course_list, key=lambda x: x.prioritise)
 
         for course in course_list:
             # go over the number of lectures, tutorials and practicals needed
@@ -233,6 +238,8 @@ class Generator:
             fig_name = f"Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}.png"
         else:
             fig_name = "Baseline_random.png"
+
+        print(self.costs)
 
         # Current working directory
         current_dir = os.getcwd()

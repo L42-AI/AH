@@ -37,6 +37,8 @@ class Course():
         self.rooms_needed()
         self.group_dict()
         
+        # heuristic to prioritise course if it has students that have complex schedule
+        self.prioritise = False
 
     def __str__(self):
         return f"{self.name}"
@@ -46,6 +48,12 @@ class Course():
             for course in student.courses:
                 if course.name == self.name:
                     self.enrolled_students.add(student)
+
+    def flag_hard_student(self, student_list):
+        for student in student_list:
+            if student in self.enrolled_students and len(student.courses) > 4:
+                self.prioritise = True
+
 
     def rooms_needed(self):
 
