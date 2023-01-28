@@ -45,6 +45,7 @@ class HillClimber:
 
         # Append the input roster
         self.schedule_list.append(self.schedule)
+        double_hc = {'l': {'v': 0, 'student': []}, 't': {'v': 0, 'student': []}, 'p': {'v': 0, 'student': []}}
 
         # let the hillclimber take some steps
         for _ in range(int(self.malus['Total'] * self.multiplyer)):
@@ -65,15 +66,16 @@ class HillClimber:
 
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
-            print(M.double)
+
+            
             
             # let the hillclimber make 3 changes before a new score is calculated
-            self.__accept_schedule(new_malus, new_schedule, T)
-
+            self.__accept_schedule(new_malus, new_schedule, T, double_hc, M)
+        print(self.get_name(), self.double)
         # Return new roster
         return self.schedule, self.malus
 
-    def __accept_schedule(self, new_malus, new_schedule, T):
+    def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M):
         '''Takes in the new malus (dict) and schedule (dict) and compares it to the current version
            If it is better, it will update the self.schedule and malus'''
 
@@ -95,7 +97,22 @@ class HillClimber:
             # print(self.get_name(), self.malus['Total'], new_malus['Total'])
             self.schedule = new_schedule
             self.malus = new_malus
-
+            double_hc['l']['v'] += M.double['l']['v']
+            double_hc['t']['v'] += M.double['t']['v']
+            double_hc['p']['v'] += M.double['p']['v']
+            double_hc['l']['student'].append(M.double['l']['student'])
+            double_hc['t']['student'].append(M.double['t']['student'])
+            double_hc['p']['student'].append(M.double['p']['student'])
+            self.double = {'l': set(), 't': set(), 'p': set()}
+            for key in double_hc:
+                # print(key)
+                # print(self.double[key])
+                if double_hc[key]['student']:
+                    for student in double_hc[key]['student']:
+                        if student:
+                            for id in student:
+                                if id not in self.double[key]:
+                                    self.double[key].add(id)
         elif prob < T:
             print(f'worsening of {difference} got accepted at T: {T}')
             self.schedule = new_schedule

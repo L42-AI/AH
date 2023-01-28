@@ -330,7 +330,6 @@ class Mutate():
                     scores_per_day[day] = (scores_per_day[day][0], day_dict)
         # gets the day with most gap or double hours
         worst_day = self.__get_day_gap_or_double_test_for_double(scores_per_day)
-        print(scores_per_day[worst_day])
 
         return worst_day
 
