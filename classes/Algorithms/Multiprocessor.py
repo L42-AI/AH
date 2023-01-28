@@ -60,12 +60,17 @@ class Multiprocessor():
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
-
+        if self.ANNEALING:
+            t = 1
+        else:
+            t = 0
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
         while self.iter_counter != self.ITERS:
 
             if self.ANNEALING:
-                t = 0.25 - self.iter_counter / self.ITERS * 4
+                t = self.__get_temperature(t)
+                if t < 0.01:
+                    t = 0.05
             else:
                 t = 0
 
@@ -149,6 +154,11 @@ class Multiprocessor():
             schedule, malus = HC4.climb(T)
             # print(f'HC4: {roster.malus_count}')
             return schedule, malus, HC4.get_name()
+
+    def __get_temperature(self, t, alpha=0.995):
+        """Exponential decay temperature schedule"""
+        return t*alpha
+
 
     """ Save and Visualize Data """
 
