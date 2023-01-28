@@ -210,10 +210,12 @@ class Mutate():
 
         worst_day = None
 
+        student_days, student_classes = self.__fill_timeslots_student(id)
+        
         # first value will be gap hours, second double hours
         scores_per_day = {day: (0, 0) for day in student_days}
        
-        student_days, student_classes = self.__fill_timeslots_student(id)
+        
 
         # For each week
         for day in student_days:

@@ -74,7 +74,7 @@ class Multiprocessor():
             self.schedules = [copy.copy(self.schedule) for _ in range(4)]
 
             if self.malus['Capacity'] < 10:
-                core_assignment_list = [3,3,3,3]
+                core_assignment_list = [2, 2,3,3]
 
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
