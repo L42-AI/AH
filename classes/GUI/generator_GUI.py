@@ -85,18 +85,18 @@ class App(customtkinter.CTk):
 
         self.destroy
 
-        finish = True
+        # finish = True
 
-        # Wait for the child process to finish
-        while finish:
-            # Send the flag to the child process
-            self.process.stdin.write(str(finish).encode())
-            self.process.stdin.flush()
+        # # Wait for the child process to finish
+        # while finish:
+        #     # Send the flag to the child process
+        #     self.process.stdin.write(str(finish).encode())
+        #     self.process.stdin.flush()
 
-            # Read the output from the child process
-            output = self.process.stdout.readline().decode()
-            if output == 'False\n':
-                finish = False
+        #     # Read the output from the child process
+        #     output = self.process.stdout.readline().decode()
+        #     if output == 'False\n':
+        #         finish = False
 
         self.__setup_selector_app()
 

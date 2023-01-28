@@ -129,65 +129,65 @@ class Generator:
 
         Roster.init_student_timeslots(student_list)
 
-    def create_dataframe(self, Roster, student_list, visualize=False):
-        # Make lists to put into schedule dataframe
-        df_list_student_object = []
-        df_list_student_malus = []
-        df_list_students = []
-        df_list_courses = []
-        df_list_type = []
-        df_list_rooms = []
-        df_list_day = []
-        df_list_time = []
+    # def create_dataframe(self, Roster, student_list, visualize=False):
+    #     # Make lists to put into schedule dataframe
+    #     df_list_student_object = []
+    #     df_list_student_malus = []
+    #     df_list_students = []
+    #     df_list_courses = []
+    #     df_list_type = []
+    #     df_list_rooms = []
+    #     df_list_day = []
+    #     df_list_time = []
 
-        # For each student:
-        for student in student_list:
+    #     # For each student:
+    #     for student in student_list:
 
-            # For each course:
-            for course_timeslot in student.timeslots:
+    #         # For each course:
+    #         for course_timeslot in student.timeslots:
 
-                # For each class:
-                for class_timeslot in student.timeslots[course_timeslot]:
+    #             # For each class:
+    #             for class_timeslot in student.timeslots[course_timeslot]:
 
-                    # Set timeslot
-                    timeslot = student.timeslots[course_timeslot][class_timeslot]
+    #                 # Set timeslot
+    #                 timeslot = student.timeslots[course_timeslot][class_timeslot]
 
-                    # Add all relevant information ito lists
-                    df_list_student_object.append(student)
-                    df_list_student_malus.append(student.malus_count)
-                    df_list_students.append(f'{student.f_name} {student.l_name}')
-                    df_list_courses.append(course_timeslot)
-                    df_list_type.append(class_timeslot)
-                    df_list_rooms.append(timeslot['room'])
-                    df_list_day.append(timeslot['day'])
-                    df_list_time.append(timeslot['timeslot'])
+    #                 # Add all relevant information ito lists
+    #                 df_list_student_object.append(student)
+    #                 df_list_student_malus.append(student.malus_count)
+    #                 df_list_students.append(f'{student.f_name} {student.l_name}')
+    #                 df_list_courses.append(course_timeslot)
+    #                 df_list_type.append(class_timeslot)
+    #                 df_list_rooms.append(timeslot['room'])
+    #                 df_list_day.append(timeslot['day'])
+    #                 df_list_time.append(timeslot['timeslot'])
 
 
-        # Create schedule
-        schedule_df = pd.DataFrame({'Student Object': df_list_student_object,
-                                    'Student Name': df_list_students,
-                                    'Course': df_list_courses,
-                                    'Activity': df_list_type,
-                                    'Room': df_list_rooms,
-                                    'Day': df_list_day,
-                                    'Time': df_list_time,
-                                    'Student Malus': df_list_student_malus,
-                                    'Total Malus': Roster.malus_count})
+    #     # Create schedule
+    #     schedule_df = pd.DataFrame({'Student Object': df_list_student_object,
+    #                                 'Student Name': df_list_students,
+    #                                 'Course': df_list_courses,
+    #                                 'Activity': df_list_type,
+    #                                 'Room': df_list_rooms,
+    #                                 'Day': df_list_day,
+    #                                 'Time': df_list_time,
+    #                                 'Student Malus': df_list_student_malus,
+    #                                 'Total Malus': Roster.malus_count})
 
-        if visualize:
-            # Current working directory
-            current_dir = os.getcwd()
+    #     if visualize:
+    #         # Current working directory
+    #         current_dir = os.getcwd()
 
-            # Parent directory
-            parent_dir = os.path.dirname(current_dir)
+    #         # Parent directory
+    #         parent_dir = os.path.dirname(current_dir)
 
-            # Directory "visualize"
-            visualize_directory = os.path.join(parent_dir, 'AH/visualize')
+    #         # Directory "visualize"
+    #         visualize_directory = os.path.join(parent_dir, 'AH/visualize')
 
-            # Export to excel file
-            schedule_df.to_excel(f"{visualize_directory}/schedule.xlsx", index=False)
+    #         # Export to excel file
+    #         schedule_df.to_excel(f"{visualize_directory}/schedule.xlsx", index=False)
 
-        return schedule_df
+    #     return schedule_df
 
     def initialise(self, COURSES, STUDENT_COURSES, ROOMS):
 
@@ -225,35 +225,35 @@ class Generator:
 
             self.iterations.append(i)
 
-    def plot_startup(self, COURSES, STUDENT_COURSES, ROOMS):
-        '''plots 300 random startups to get an idea of what a random score would be'''
+    # def plot_startup(self, COURSES, STUDENT_COURSES, ROOMS):
+    #     '''plots 300 random startups to get an idea of what a random score would be'''
 
-        self.__run_random(COURSES, STUDENT_COURSES, ROOMS)
+    #     self.__run_random(COURSES, STUDENT_COURSES, ROOMS)
 
-        if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY:
-            fig_name = f"Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}.png"
-        else:
-            fig_name = "Baseline_random.png"
+    #     if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY:
+    #         fig_name = f'Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}.png'
+    #     else:
+    #         fig_name = "Baseline_random.png"
 
-        # Current working directory
-        current_dir = os.getcwd()
+    #     # Current working directory
+    #     current_dir = os.getcwd()
 
-        # Parent directory
-        parent_dir = os.path.dirname(current_dir)
+    #     # Parent directory
+    #     parent_dir = os.path.dirname(current_dir)
 
-        # Directory "visualize"
-        directory_plots = os.path.join(parent_dir, 'AH/visualize')
+    #     # Directory "visualize"
+    #     directory_plots = os.path.join(parent_dir, 'AH/visualize')
 
-        plt.figure(figsize=(10,4))
-        plt.style.use('seaborn-whitegrid')
+    #     plt.figure(figsize=(10,4))
+    #     plt.style.use('seaborn-whitegrid')
 
-        plt.title('Schedule Initialization (N = 500)')
-        plt.hist(self.costs, bins=20, facecolor = '#2ab0ff', edgecolor='#169acf', linewidth=0.5)
+    #     plt.title('Schedule Initialization (N = 500)')
+    #     plt.hist(self.costs, bins=20, facecolor = '#2ab0ff', edgecolor='#169acf', linewidth=0.5)
 
-        # Plot the regression line
-        plt.ylabel('Iterations')
-        plt.xlabel('Malus')
-        plt.savefig(os.path.join(directory_plots, fig_name))
+    #     # Plot the regression line
+    #     plt.ylabel('Iterations')
+    #     plt.xlabel('Malus')
+    #     plt.savefig(os.path.join(directory_plots, fig_name))
 
     def optimize(self):
         Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, annealing=self.ANNEALING)

@@ -78,7 +78,7 @@ class App(customtkinter.CTk):
         self.__export_settings(algorithm_settings)
         print('Run')
         algorithm_process = self.__run_algorithm()
-        print(os.getcwd())
+        print('Execute')
         self.__setup_generator_app(algorithm_process)
 
 

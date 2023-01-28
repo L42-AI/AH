@@ -1,5 +1,3 @@
-import classes.algorithms.generator as GeneratorClass
-
 import classes.GUI.init_GUI as InitApp
 
 
