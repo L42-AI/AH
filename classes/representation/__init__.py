@@ -1,1 +1,0 @@
-__all__ = ['course', 'malus_calc', 'room', 'roster', 'student']
