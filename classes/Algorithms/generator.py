@@ -225,7 +225,7 @@ class Generator:
         self.iterations = []
         for i in tqdm(range(100)):
 
-            self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0])
+            self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0]['Total'])
 
             self.iterations.append(i)
 
@@ -234,12 +234,12 @@ class Generator:
 
         self.__run_random(COURSES, STUDENT_COURSES, ROOMS)
 
-        if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY:
-            fig_name = f"Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}.png"
+        
+        if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY or self.DIFFICULT_STUDENTS:
+            fig_name = f"Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}_Difficult_students:{self.DIFFICULT_STUDENTS}.png"
+            print(fig_name)
         else:
             fig_name = "Baseline_random.png"
-
-        print(self.costs)
 
         # Current working directory
         current_dir = os.getcwd()
@@ -249,7 +249,7 @@ class Generator:
 
         # Directory "visualize"
         directory_plots = os.path.join(parent_dir, 'AH/visualize')
-
+        
         plt.figure(figsize=(10,4))
         plt.style.use('seaborn-whitegrid')
 
@@ -260,6 +260,7 @@ class Generator:
         plt.ylabel('Iterations')
         plt.xlabel('Malus')
         plt.savefig(os.path.join(directory_plots, fig_name))
+
 
     def optimize(self):
             Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, annealing=self.ANNEALING)

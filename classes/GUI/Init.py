@@ -105,25 +105,26 @@ class App(customtkinter.CTk):
         hill_climbing = self.hill_climbing_switch.get()
 
 
-
         try:
             annealing = self.annealing_switch.get()
+        except:
+            pass
+        try:
             capacity = self.capacity_switch.get()
             popular = self.popular_switch.get()
             popular_own_day = self.popular_own_day_switch.get()
             difficult_students = self.difficult_students_switch.get()
+            
         except:
             pass
 
         if not hill_climbing:
             self.destroy()
-            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
-                capacity, popular, popular_own_day, visualize=True)
+            print(capacity, popular, popular_own_day, difficult_students)
+            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, visualize=True, difficult_students=difficult_students)
         else:
             self.destroy()
-            print()
-            print(annealing == False)
-            print()
+            print(capacity, popular, popular_own_day, difficult_students)
             G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, annealing=annealing, difficult_students=difficult_students)
 
         G.optimize()
