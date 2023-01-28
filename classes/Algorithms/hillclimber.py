@@ -1,6 +1,7 @@
 import classes.algorithms.mutate as MutateClass
 import random
 import copy
+
 """ Main HillClimber Class """
 
 class HillClimber:
@@ -11,7 +12,7 @@ class HillClimber:
         self.schedule = schedule
         self.MC = MC
 
-        self.multiplyer = 5
+        self.multiplyer = 0.1
 
     """ Inheritable methods """
 
@@ -31,10 +32,6 @@ class HillClimber:
         if self.best_malus > self.current_best_roster.malus_count:
             self.best_schedule = self.current_best_roster
 
-    def get_score(self):
-        return self.MC.compute_total_malus(self.schedule)['Total']
-        
-
     """ Main Method """
 
     def climb(self, T):
@@ -48,12 +45,9 @@ class HillClimber:
         # Take 50 steps:
         # while (self.malus['Total'] - start_malus['Total']) / start_malus['Total'] < 0.2:
         for _ in range(int(self.malus['Total'] * self.multiplyer)):
-            # self.malus = self.MC.compute_total_malus(self.schedule)
 
             # Make copy of schedule, complex because of dictionary
-            # copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
-            copied_schedule = copy.deepcopy(self.schedule)
-            # before_malus = self.MC.compute_total_malus(copied_schedule)
+            copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
 
             # Create the mutate class
             M = self.make_mutate(copied_schedule)
@@ -66,8 +60,6 @@ class HillClimber:
 
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
-
-            # print(f"Difference everystep: {self.malus['Total']}, {before_malus['Total']}, {new_malus['Total']}")
 
             self.__accept_schedule(new_malus, new_schedule, T)
 
@@ -84,12 +76,12 @@ class HillClimber:
 
         # Compare with prior malus points
         if new_malus['Total'] < self.malus['Total']:
-            # print(self.get_name())
+            # print(self.get_name(), self.malus['Total'], new_malus['Total'])
             self.schedule = new_schedule
             self.malus = new_malus
 
         elif prob < T and difference < five_percent:
-            # print(f'worsening of {difference} got accepted at T: {T}')
+            print(f'worsening of {difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
 

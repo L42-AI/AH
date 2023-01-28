@@ -55,8 +55,7 @@ class Roster():
                 self.malus_cause['Double Classes'] += student.malus_cause['Double Classes'][day]
 
     def __place_in_schedule(self, room, day, timeslot, course_name, classes, max_std):
-        # if classes[0] != 'l' and course_name != 'No course':
-            # print(max_std)
+
         # only need class if it is an actual lesson
         self.schedule[course_name][classes] = {}
         self.schedule[course_name][classes]['day'] = day
@@ -124,13 +123,10 @@ class Roster():
 
                 self.schedule[course.name][f'{class_type} {count}'] = {}
                 class_number = f"{class_type} {count}"
-                
                 if class_number[0] == 't':
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std)
-                    # print(f'tut: {course.max_std}')
-                elif class_number[0] == 'p':
+                if class_number[0] == 'p':
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_practical)
-                    # print(f'pract: {course.max_std_practical}')
                 else:
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, 1000)
                     
