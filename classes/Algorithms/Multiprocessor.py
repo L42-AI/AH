@@ -2,6 +2,7 @@ import classes.algorithms.hillclimber as HillCLimberClass
 from multiprocessing import Pool
 import random as random
 
+import sys
 import time
 import json
 import copy
@@ -60,15 +61,26 @@ class Multiprocessor():
         print(f'\nInitialization')
         print(self.malus)
 
+        finished = False
+
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while self.iter_counter != self.ITERS:
+        for _ in range(100):
+        # while not finished:
+
+            # print(finished)
+
+            start_time = time.time()
 
             if self.ANNEALING:
                 t = 0.25 - self.iter_counter / self.ITERS * 4
             else:
                 t = 0
 
-            start_time = time.time()
+            print(1)
+            # received = sys.stdin.readline().strip()
+            # finished = received == 'True'
+            print(2)
+
 
             # Make four deepcopys for each function to use
             self.schedules = [copy.copy(self.schedule) for _ in range(4)]
@@ -106,6 +118,40 @@ class Multiprocessor():
 
             # Increase iter counter
             self.iter_counter += 1
+
+            # if finished:
+            #     sys.stdout.write(str(finished))
+            #     sys.stdout.flush()
+
+
+    def __replace_roster(self, difference):
+
+        # If difference is positive
+        if difference > 0:
+
+            # Set the new roster to self.Roster
+            self.schedule, self.malus = self.output_schedules[self.best_index]
+
+            self.fail_counter = 0
+
+            print(f'\n========================= Generation: {self.iter_counter} =========================\n')
+            print(f'Most effective function: HC{self.best_index + 1}')
+            print(f'Malus improvement: {difference}')
+            print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
+            print(f'Duration since init: {round(self.duration, 2)} S.')
+            print(self.malus)
+
+        else:
+            self.fail_counter += 1
+
+            # print output
+            print(f'\n========================= Generation: {self.iter_counter} =========================\n')
+            print('FAIL')
+            print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
+            print(f'Duration since init: {round(self.duration, 2)} S.')
+            print(self.malus)
+
+    """ Hill Climbers """
 
     def run_HC(self, hc_tuple):
         activation, schedule, T = hc_tuple

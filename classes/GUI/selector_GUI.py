@@ -5,12 +5,13 @@ import customtkinter
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
+from data.schedule import schedule
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.schedule = {}
+        self.represent_schedule(schedule)
 
         # configure window
         self.title("Scheduly")
@@ -89,7 +90,7 @@ class App(customtkinter.CTk):
 
         # Student option
         self.student_option = customtkinter.CTkOptionMenu(self.student_search_frame,
-                                                values=["Amalia Kro", "Jonas Bollewijk"])
+                                                values=["Amalia Kro", "Jonas Bollewijk", "Bert Jan Gever"])
         self.student_option.grid(row=0, column=0, columnspan=7, padx=20, pady=20, sticky="ew")
         self.student_option.set('Student')
 
@@ -237,6 +238,12 @@ class App(customtkinter.CTk):
 
                 self._class = customtkinter.CTkLabel(master=frame, text=f"{subject}\n{class_type}\n{room}")
                 self._class.grid(row=row, column=col+1, sticky='nsew')
+
+    def represent_schedule(self, schedule):
+        print(schedule)
+
+    def run(self) -> None:
+        self.mainloop()
 
     def export(self):
         pass
