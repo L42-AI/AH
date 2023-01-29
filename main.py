@@ -31,14 +31,46 @@ application = False
 
 DIFICULT_STUDENTS = False
 
-def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT):
+def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT, multiplier=0.1):
 
-    G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, difficult_students=DIFICULT_STUDENTS)
+    G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, difficult_students=DIFICULT_STUDENTS, multiplier=multiplier)
 
     return G.optimize()
 
 
 if __name__ == '__main__':
+    # list_total_malus = []
+    # list_class_random = []
+    # list_class_capacity = []
+    # list_student_gaphour = []
+    # list_student_doublehour = []
+
+    # lists_to_append = [list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour]
+
+    # # run the experiment 30 times
+    # for i in range(2):
+    #     lists = main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
+
+    #     for lst, list_to_append in zip(lists, lists_to_append):
+    #         for word in lst:
+    #             list_to_append.append(word)
+
+    # data = {
+    #     'Total Malus': list_total_malus,
+    #     'Swap Class Random': list_class_random, 
+    #     'Swap Class Capacity': list_class_capacity,
+    #     'Swap Student Gaphour': list_student_gaphour,
+    #     'Swap Student Doublehour': list_student_doublehour
+    #     }
+
+    # df = pd.DataFrame(data)
+
+    # print(df)
+
+    # df.to_csv('data/Normal Hillclimber.csv')
+
+    # list_multipliers = [0.1, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+    list_multipliers = [0.1, 1]
     list_total_malus = []
     list_class_random = []
     list_class_capacity = []
@@ -47,13 +79,13 @@ if __name__ == '__main__':
 
     lists_to_append = [list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour]
 
-    # run the experiment 30 times
-    for i in range(2):
-        lists = main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
+    for multiplier in list_multipliers:
+
+        lists = main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT, multiplier)
 
         for lst, list_to_append in zip(lists, lists_to_append):
-            for value in lst:
-                list_to_append.append(value)
+            for word in lst:
+                list_to_append.append(word)
 
     data = {
         'Total Malus': list_total_malus,
@@ -65,8 +97,7 @@ if __name__ == '__main__':
 
     df = pd.DataFrame(data)
 
+    df.to_csv('data/Different Multipliers.csv')
+
+
     print(df)
-
-    df.to_csv('data/Normal Hillclimber.csv')
-
-

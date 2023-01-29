@@ -11,12 +11,13 @@ import copy
 import matplotlib.pyplot as plt
 
 class Multiprocessor():
-    def __init__(self, Roster, course_list, student_list, MC, annealing=False):
+    def __init__(self, Roster, course_list, student_list, MC, annealing=False, multiplier=0.1):
         self.Roster = Roster
         self.course_list = course_list
         self.student_list = student_list
         self.ITERS = 1000
         self.ANNEALING = annealing
+        self.multiplier = multiplier
 
         self.MC = MC
 
@@ -150,7 +151,7 @@ class Multiprocessor():
         activation, schedule, T, real_score = hc_tuple
         if activation == 0:
             # print('looking to swap classes...')
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC)
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC, self.multiplier)
 
             schedule, malus = HC1.climb(T)
         
@@ -159,7 +160,7 @@ class Multiprocessor():
 
         elif activation == 1:
             # print('looking to swap students randomly...')
-            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC)
+            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC, self.multiplier)
 
             
             schedule, malus = HC2.climb(T)
@@ -168,14 +169,14 @@ class Multiprocessor():
 
         elif activation == 2:
             # print('looking to swap students on gap hour malus...')
-            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC)
+            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC, self.multiplier)
             schedule, malus = HC3.climb(T)
             # print(f'HC3: {roster.malus_count}')
             return schedule, malus, HC3.get_name()
 
         elif activation == 3:
             # print('looking to swap students on double classes malus...')
-            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC)
+            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC, self.multiplier)
             schedule, malus = HC4.climb(T)
             # print(f'HC4: {roster.malus_count}')
             return schedule, malus, HC4.get_name()

@@ -6,13 +6,13 @@ import numpy as np
 """ Main HillClimber Class """
 
 class HillClimber:
-    def __init__(self, schedule, course_list, student_list, MC):
+    def __init__(self, schedule, course_list, student_list, MC, multiplier=0.1):
         self.schedule_list = []
         self.course_list = course_list
         self.student_list = student_list
         self.schedule = schedule
         self.MC = MC
-        self.multiplyer = 0.1
+        self.multiplier = multiplier
 
     """ Inheritable methods """
 
@@ -49,7 +49,7 @@ class HillClimber:
         double_hc = {'l': {'v': 0, 'student': []}, 't': {'v': 0, 'student': []}, 'p': {'v': 0, 'student': []}}
 
         # let the hillclimber take some steps
-        for _ in range(int(self.malus['Total'] * self.multiplyer)):
+        for _ in range(int(self.malus['Total'] * self.multiplier)):
             # self.malus = self.MC.compute_total_malus(self.schedule)
 
             # Make copy of schedule, complex because of dictionary
