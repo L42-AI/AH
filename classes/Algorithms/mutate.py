@@ -229,7 +229,9 @@ class Mutate():
         return worst_day
     
     def __worst_day_test_for_double(self, id):
-        '''finds worst day in the schedule of a student'''
+        '''finds worst day in the schedule of a student but keeps track
+           of double hours and what caused them, method will mostly be used 
+           in testing'''
 
         worst_day = None
         student_days, student_classes = self.__fill_timeslots_student_test_for_double(id)
@@ -289,6 +291,8 @@ class Mutate():
         return worst_day
 
     def __fill_timeslots_student(self, id) -> dict:
+        '''fills the timeslot of a student based on the complete schedule 
+           days keeps track of the timeslot, classes of the info of that specific class'''
         student_days = {'Monday': [], 'Tuesday': [], 'Wednesday': [], 'Thursday': [], 'Friday': []}
         student_classes = {'Monday': {}, 'Tuesday': {}, 'Wednesday': {}, 'Thursday': {}, 'Friday': {}}
         # go over the schedule and find what timeslots this student has
@@ -305,6 +309,10 @@ class Mutate():
         return student_days, student_classes
 
     def __fill_timeslots_student_test_for_double(self, id):
+        '''fills the timeslot of a student based on the complete schedule
+           days keeps track of the timeslot, classes of the info of that specific class
+           also keeps track of double hours by appending a tuple to student_days instead of just timeslot'''
+        
         student_days = {'Monday': [], 'Tuesday': [], 'Wednesday': [], 'Thursday': [], 'Friday': []}
         student_classes = {'Monday': {}, 'Tuesday': {}, 'Wednesday': {}, 'Thursday': {}, 'Friday': {}}
 
@@ -348,6 +356,9 @@ class Mutate():
         return worst_day
 
 class Mutate_double_classes(Mutate):
+    '''mutate class that is the same as normal but makes changes to 
+       the schedule based on the malus points caused by double hours instead
+       of the gap hour points'''
 
     def get_day_gap_or_double(self, scores_per_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
@@ -373,6 +384,10 @@ class Mutate_double_classes(Mutate):
         return worst_day
 
 class Mutate_Course_Swap_Capacity(Mutate):
+    '''same as the normal mutate, but instead of switching
+       lectures or tutorials randomly, it checks what lecture or tutorial
+       causes the most capacity trouble'''
+       
     def get_two_courses(self, empty):
         # check if you want to swap with an empty room or not
         self.course_list.sort(key=lambda x: x.capacity_malus, reverse=True)
