@@ -49,7 +49,7 @@ if __name__ == '__main__':
     lists_to_append = [list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour]
 
     # run the experiment 30 times
-    for i in range(1):
+    for i in range(30):
         lists = main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
 
         for lst, list_to_append in zip(lists, lists_to_append):
@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     print(df)
 
-    df.to_csv('data/Normal Hillclimber geen multiplier2.csv')
+    df.to_csv('data/Normal Hillclimber geen multiplier 30 keer.csv')
 
     # list_multipliers = [0.1, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
     # list_total_malus = []
