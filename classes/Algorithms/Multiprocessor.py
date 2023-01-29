@@ -24,7 +24,7 @@ class Multiprocessor():
 
         student_malus_proportion = (malus['Double Classes'] + malus['Classes Gap'] + malus['Triple Gap']) / malus['Total']
 
-        schedule_malus_proportion = (malus['Night'] + malus['Capacity']) / malus['Total']
+        schedule_malus_proportion = 1 - (malus['Night'] + malus['Capacity']) / malus['Total']
 
         while len(core_assignment_list) < 4:
             prob = random.random()
@@ -56,8 +56,6 @@ class Multiprocessor():
 
         self.malus = self.MC.compute_total_malus(self.schedule)
 
-        core_assignment_list = [0,0,1,1]
-
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
@@ -67,13 +65,13 @@ class Multiprocessor():
             t = 0
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
         while self.iter_counter != self.ITERS:
-
+            core_assignment_list = self.core_assignment(self.malus)
             if self.ANNEALING:
                 if t > .5:
                     t = self.__get_temperature(t)
                 elif t <= 0.5:
                     t = self.__get_temperature(t, alpha=0.65)
-                    
+
                 if t < 0.01:
                     t = 0.05
             else:
@@ -84,8 +82,6 @@ class Multiprocessor():
             # Make four deepcopys for each function to use
             self.schedules = [copy.copy(self.schedule) for _ in range(4)]
 
-            if self.malus['Capacity'] < 10:
-                core_assignment_list = [0,1,2,3]
                 
             self.malus = self.MC.compute_total_malus(self.schedule)
             # Fill the pool with all functions and their rosters
