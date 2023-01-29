@@ -156,5 +156,7 @@ class App(customtkinter.CTk):
 
         G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
             capacity, popular, popular_own_day, difficult_students, annealing, visualize)
-        G.optimize()
+
+        if visualize == False:
+            G.optimize()
 

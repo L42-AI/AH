@@ -155,7 +155,7 @@ class Generator:
         self.iterations = []
         for i in tqdm(range(100)):
 
-            self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0])
+            self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0]['Total'])
 
             self.iterations.append(i)
 
@@ -182,7 +182,7 @@ class Generator:
         plt.style.use('seaborn-whitegrid')
 
         plt.title('Schedule Initialization (N = 500)')
-        plt.hist(self.costs, bins=20, facecolor = '#2ab0ff', edgecolor='#169acf', linewidth=0.5)
+        plt.hist(self.costs, bins=20, facecolor='#2ab0ff', edgecolor='#169acf', linewidth=0.5)
 
         # Plot the regression line
         plt.ylabel('Iterations')

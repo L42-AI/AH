@@ -11,7 +11,7 @@ HC3_y_values = data['HC3 values']
 HC4_x_values = data['HC4 iterations']
 HC4_y_values = data['HC4 values']
 
-fig = plt.figure(figsize=(15, 7))
+fig = plt.figure(figsize=(14, 7))
 
 ax1 = plt.subplot2grid((4,8), (0,0), colspan=2, rowspan=2)
 ax2 = plt.subplot2grid((4,8), (0,2), colspan=2, rowspan=2)
