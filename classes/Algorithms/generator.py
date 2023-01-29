@@ -191,7 +191,7 @@ class Generator:
             parent_dir = os.path.dirname(current_dir)
 
             # Directory "visualize"
-            visualize_directory = os.path.join(parent_dir, 'AH/visualize')
+            visualize_directory = os.path.join(parent_dir, 'AH\\_visualize')
 
             # Export to excel file
             schedule_df.to_excel(f"{visualize_directory}/schedule.xlsx", index=False)
@@ -253,9 +253,9 @@ class Generator:
         # Parent directory
         parent_dir = os.path.dirname(current_dir)
 
-        # Directory "visualize"
-        directory_plots = os.path.join(parent_dir, 'AH\\visualize')
-        
+        # destination
+        directory_plots = os.path.join(parent_dir, 'AH', 'visualize')
+
         plt.figure(figsize=(10,4))
         plt.style.use('seaborn-whitegrid')
 
