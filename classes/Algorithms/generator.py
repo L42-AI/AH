@@ -270,6 +270,6 @@ class Generator:
 
     def optimize(self):
             Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, annealing=self.ANNEALING)
-            Multiprocessor.run()
+            return Multiprocessor.run()
 
 

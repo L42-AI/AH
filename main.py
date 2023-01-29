@@ -30,18 +30,20 @@ VISUALIZE_INIT = True
 application = False
 
 def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT):
-    if not CLIMBING:
-        if not VISUALIZE_INIT:
-            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
-        else:
-            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING, visualize=True)
-    else:
-        if not ANNEALING:
-            G = GeneratorClass.Generator_HC(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
-            G.optimize()
-        else:
-            G = GeneratorClass.Generator_SA(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
-            G.optimize()
+    # if not CLIMBING:
+    #     if not VISUALIZE_INIT:
+    G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
+    #     else:
+    #         G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING, visualize=True)
+    # else:
+    #     if not ANNEALING:
+    #         G = GeneratorClass.Generator_HC(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
+    #         G.optimize()
+    #     else:
+    #         G = GeneratorClass.Generator_SA(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
+    #         G.optimize()
+
+    result
 
 if __name__ == '__main__':
     list_total_malus = []
@@ -51,7 +53,6 @@ if __name__ == '__main__':
     list_student_doublehour = []
 
     lists_to_append = [list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour]
-
 
     if application:
         App = InitClass.App()
