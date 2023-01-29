@@ -17,7 +17,7 @@ import pandas as pd
 from tqdm import tqdm
 
 class Generator:
-    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, visualize=False, annealing=False):
+    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, difficult_students, annealing, visualize):
 
         # Set heuristics
         self.CAPACITY = capacity
