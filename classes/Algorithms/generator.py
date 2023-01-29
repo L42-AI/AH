@@ -7,8 +7,6 @@ import classes.representation.room as RoomClass
 import classes.representation.roster as RosterClass
 import classes.representation.malus_calc as MalusCalculatorClass
 
-import classes.GUI.generator_GUI as GeneratorApp
-
 import os
 import matplotlib.pyplot as plt
 import numpy as np
@@ -24,6 +22,7 @@ class Generator:
         self.POPULAR = popular
         self.POPULAR_OWN_DAY = popular_own_day
         self.ANNEALING = annealing
+        self.DIFFICULT_STUDENTS = difficult_students
 
         # Save initialization
         self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
@@ -85,11 +84,15 @@ class Generator:
 
         for course in course_list:
             course.enroll_students(student_list)
+            course.flag_hard_student(student_list)
 
         return course_list, student_list, rooms_list
 
     def schedule_fill(self, Roster, course_list, student_list):
         ''''method schedules a timeslot for every lecture, tutorial or practical that takes place'''
+
+
+        days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
         # first give the most popular courses a place in the schedule
         if self.POPULAR:
@@ -97,7 +100,12 @@ class Generator:
 
         # give the 5 most popular courses their own day to hold their lectures, to prevent gap hours
         if self.POPULAR_OWN_DAY:
-            days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+
+            for i in range(5):
+                course_list[i].day = days[i]
+        
+        if self.DIFFICULT_STUDENTS:
+            course_list = sorted(course_list, key=lambda x: x.prioritise)
             for i in range(5):
                 course_list[i].day = days[i]
 
@@ -207,6 +215,7 @@ class Generator:
         # Compute Malus
         malus = MC.compute_total_malus(Roster.schedule)
 
+
         return malus, Roster, course_list, student_list, room_list, MC
 
     """ GET """
@@ -221,19 +230,21 @@ class Generator:
         self.iterations = []
         for i in tqdm(range(100)):
 
-            self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0])
+            self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0]['Total'])
 
             self.iterations.append(i)
 
     # def plot_startup(self, COURSES, STUDENT_COURSES, ROOMS):
     #     '''plots 300 random startups to get an idea of what a random score would be'''
 
-    #     self.__run_random(COURSES, STUDENT_COURSES, ROOMS)
+        self.__run_random(COURSES, STUDENT_COURSES, ROOMS)
 
-    #     if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY:
-    #         fig_name = f'Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}.png'
-    #     else:
-    #         fig_name = "Baseline_random.png"
+        
+        if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY or self.DIFFICULT_STUDENTS:
+            fig_name = f"Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}_Difficult_students:{self.DIFFICULT_STUDENTS}.png"
+            print(fig_name)
+        else:
+            fig_name = "Baseline_random.png"
 
     #     # Current working directory
     #     current_dir = os.getcwd()
@@ -241,6 +252,11 @@ class Generator:
     #     # Parent directory
     #     parent_dir = os.path.dirname(current_dir)
 
+        # Directory "visualize"
+        directory_plots = os.path.join(parent_dir, 'AH\\visualize')
+        
+        plt.figure(figsize=(10,4))
+        plt.style.use('seaborn-whitegrid')
     #     # Directory "visualize"
     #     directory_plots = os.path.join(parent_dir, 'AH/visualize')
 
@@ -255,6 +271,10 @@ class Generator:
     #     plt.xlabel('Malus')
     #     plt.savefig(os.path.join(directory_plots, fig_name))
 
+
+
     def optimize(self):
-        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, annealing=self.ANNEALING)
-        Multiprocessor.run()
+            Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, annealing=self.ANNEALING)
+            Multiprocessor.run()
+
+
