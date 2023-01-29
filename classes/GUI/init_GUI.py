@@ -26,7 +26,7 @@ class App(customtkinter.CTk):
         self.toggle_frame = customtkinter.CTkFrame(self)
         self.toggle_frame.grid(row=0, column=0, rowspan=2, padx=20, pady=20, sticky="nsew")
         self.toggle_frame.grid_columnconfigure(0, weight=1)
-        self.toggle_frame.grid_rowconfigure((0,1,2,3,4,5,6), weight=1)
+        self.toggle_frame.grid_rowconfigure((0,1,2,3,4,5,6,7,8), weight=1)
 
         self.label_initialization = customtkinter.CTkLabel(master=self.toggle_frame, text="Initialize", font=customtkinter.CTkFont(size=15, weight='bold'))
         self.label_initialization.grid(row=0, column=0, padx=20, pady=10, sticky="nsew")
@@ -35,10 +35,10 @@ class App(customtkinter.CTk):
         self.greedy_switch.grid(row=1, column=0, pady=10, padx=20, sticky="n")
 
         self.label_optimization = customtkinter.CTkLabel(master=self.toggle_frame, text="Optimize", font=customtkinter.CTkFont(size=15, weight='bold'))
-        self.label_optimization.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
+        self.label_optimization.grid(row=6, column=0, padx=20, pady=10, sticky="nsew")
 
         self.hill_climbing_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Hill Climbing', font=customtkinter.CTkFont(size=15), command=self.hillclimber_switch_click)
-        self.hill_climbing_switch.grid(row=5, column=0, pady=10, padx=20, sticky="nsew")
+        self.hill_climbing_switch.grid(row=7, column=0, pady=10, padx=20, sticky="nsew")
 
         """ Setup Generate Button """
 
@@ -55,7 +55,7 @@ class App(customtkinter.CTk):
 
         if state_hc == 1:
             self.annealing_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Sim. Annealing', font=customtkinter.CTkFont(size=15))
-            self.annealing_switch.grid(row=9, column=0, padx=20, pady=10, sticky="nsew")
+            self.annealing_switch.grid(row=8, column=0, padx=20, pady=10, sticky="nsew")
         else:
             self.annealing_switch.destroy()
 
@@ -67,31 +67,35 @@ class App(customtkinter.CTk):
             self.capacity_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Capacity', font=customtkinter.CTkFont(size=15))
             self.capacity_switch.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
 
-            self.popular_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Popular first', font=customtkinter.CTkFont(size=15), command=self.turn_of_difficult_P)
+            self.popular_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Popular first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_P)
             self.popular_switch.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
 
-            self.popular_own_day_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Largest first', font=customtkinter.CTkFont(size=15), command=self.turn_of_difficult_POD)
+            self.popular_own_day_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Largest first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_POD)
             self.popular_own_day_switch.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
 
-            self.difficult_students_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Busy Students', font=customtkinter.CTkFont(size=15), command=self.turn_of_popular)
+            self.difficult_students_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Busy Students', font=customtkinter.CTkFont(size=15), command=self.turn_off_popular)
             self.difficult_students_switch.grid(row=5, column=0, padx=20, pady=10, sticky="nsew")
+
+            self.geometry(f"{250}x{525}")
         else:
             self.capacity_switch.destroy()
             self.popular_switch.destroy()
             self.popular_own_day_switch.destroy()
             self.difficult_students_switch.destroy()
 
-    def turn_of_difficult_POD(self) -> None:
+            self.geometry(f"{250}x{350}")
+
+    def turn_off_difficult_POD(self) -> None:
         state_popular_own_day = self.popular_own_day_switch.get()
         if state_popular_own_day == 1:
             self.difficult_students_switch.deselect()
 
-    def turn_of_difficult_P(self) -> None:
+    def turn_off_difficult_P(self) -> None:
         state_popular = self.popular_switch.get()
         if state_popular == 1:
             self.difficult_students_switch.deselect()
 
-    def turn_of_popular(self) -> None:
+    def turn_off_popular(self) -> None:
         state_difficult = self.difficult_students_switch.get()
         if state_difficult == 1:
             self.popular_own_day_switch.deselect()

@@ -13,7 +13,7 @@ class Multiprocessor():
         self.Roster = Roster
         self.course_list = course_list
         self.student_list = student_list
-        self.ITERS = 1000
+        self.ITERS = 10
         self.ANNEALING = annealing
 
         self.MC = MC
