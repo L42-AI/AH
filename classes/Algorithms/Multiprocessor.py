@@ -3,6 +3,8 @@ from multiprocessing import Pool
 import random as random
 
 
+
+
 import time
 import json
 import copy
@@ -117,8 +119,6 @@ class Multiprocessor():
 
             # Increase iter counter
             self.iter_counter += 1
-
-            return 
 
     def run_HC(self, hc_tuple):
         activation, schedule, T, real_score = hc_tuple
