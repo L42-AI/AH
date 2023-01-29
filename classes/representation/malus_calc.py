@@ -94,7 +94,8 @@ class MalusCalculator:
                 if occupation > 0:
                     self.malus['Capacity'] += occupation
                     self.malus['Total'] += occupation
-
+                    course_obj.capacity_malus += occupation
+                    
     def __days_in_schedule(self, schedule) -> dict:
 
         # Create empty dict
