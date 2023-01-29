@@ -8,7 +8,6 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import matplotlib.animation as animation
 
-import classes.GUI.selector_GUI as SelectorApp
 
 class App(customtkinter.CTk):
     def __init__(self, process):
@@ -81,27 +80,5 @@ class App(customtkinter.CTk):
     def run(self):
         self.mainloop()
 
-    def finish(self):
 
-        self.destroy
-
-        # finish = True
-
-        # # Wait for the child process to finish
-        # while finish:
-        #     # Send the flag to the child process
-        #     self.process.stdin.write(str(finish).encode())
-        #     self.process.stdin.flush()
-
-        #     # Read the output from the child process
-        #     output = self.process.stdout.readline().decode()
-        #     if output == 'False\n':
-        #         finish = False
-
-        self.__setup_selector_app()
-
-
-    def __setup_selector_app(self) -> None:
-        S_App = SelectorApp.App()
-        S_App.run()
 

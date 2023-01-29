@@ -511,6 +511,7 @@ class Mutate_double_classes(Mutate):
         return False
 
     def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap):
+        print('WORKING')
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
         return max(scores_per_day_double, key=lambda x: scores_per_day_double.get(x))
 

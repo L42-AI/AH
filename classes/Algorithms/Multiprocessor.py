@@ -2,7 +2,8 @@ import classes.algorithms.hillclimber as HillCLimberClass
 from multiprocessing import Pool
 import random as random
 
-import sys
+import classes.GUI.selector_GUI as SelectorApp
+
 import time
 import json
 import copy
@@ -56,19 +57,14 @@ class Multiprocessor():
 
         self.malus = self.MC.compute_total_malus(self.schedule)
 
-        core_assignment_list = [0,0,1,1]
+        core_assignment_list = [2,2,3,3]
 
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
 
-        finished = False
-
-        # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        for _ in range(100):
-        # while not finished:
-
-            # print(finished)
+        # while self.malus['Double Classes'] != 0 or self.malus['Capacity'] != 0:
+        while self.iter_counter != 0:
 
             start_time = time.time()
 
@@ -76,12 +72,6 @@ class Multiprocessor():
                 t = 0.25 - self.iter_counter / self.ITERS * 4
             else:
                 t = 0
-
-            print(1)
-            # received = sys.stdin.readline().strip()
-            # finished = received == 'True'
-            print(2)
-
 
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
@@ -117,10 +107,11 @@ class Multiprocessor():
             # Increase iter counter
             self.iter_counter += 1
 
-            # if finished:
-            #     sys.stdout.write(str(finished))
-            #     sys.stdout.flush()
+        self.finish()
 
+    def finish(self):
+        app = SelectorApp.App(self.student_list, self.schedule)
+        app.mainloop()
 
     def __replace_roster(self, difference):
 

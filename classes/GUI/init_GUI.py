@@ -1,14 +1,6 @@
-import tkinter
-import tkinter.messagebox
 import customtkinter
 
-import os
-import json
-
-import subprocess
-
 import classes.algorithms.generator as GeneratorClass
-import classes.GUI.generator_GUI as GeneratorApp
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 
@@ -70,20 +62,14 @@ class App(customtkinter.CTk):
     def generate(self) -> None:
 
         # Extract state_data from GUI
-        algorithm_settings = self.__set_data()
+        settings =  self.__set_data()
 
         # Destroy window
         self.destroy()
 
-        self.__export_settings(algorithm_settings)
-        print('Run')
-        algorithm_process = self.__run_algorithm()
-        print('Execute')
-        self.__setup_generator_app(algorithm_process)
+        self.__run_algorithm(settings)
 
-
-
-    def __set_data(self) -> dict:
+    def __set_data(self) -> tuple:
 
         # Set all arguments to False
         visualize = False
@@ -106,23 +92,18 @@ class App(customtkinter.CTk):
             popular = True
             popular_own_day = True
 
-        settings = {"capacity": capacity, "popular": popular,
-                    "popular_own_day": popular_own_day,
-                    "hill_climbing": hill_climbing,
-                    "annealing": annealing, "visualize": visualize}
+        settings = capacity, popular, popular_own_day, hill_climbing, annealing, visualize
 
         return settings
 
-    def __run_algorithm(self) -> object:
+    def __run_algorithm(self, settings) -> None:
 
-        subprocess.Popen(['python3', 'run_algorithm.py'])
-        algorithm_process = subprocess.Popen(['python3', 'run_algorithm.py'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        return algorithm_process
+        capacity, popular, popular_own_day, hill_climbing, annealing, visualize = settings
 
-    def __export_settings(self, algorithm_settings) -> None:
-        with open('data/settings.json', 'w') as f:
-            json.dump(algorithm_settings, f)
+        if not hill_climbing:
+            visualize=True
 
-    def __setup_generator_app(self, algorithm_process) -> None:
-        G_App = GeneratorApp.App(algorithm_process)
-        G_App.run()
+        G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
+            capacity, popular, popular_own_day, visualize, annealing=annealing)
+        G.optimize()
+

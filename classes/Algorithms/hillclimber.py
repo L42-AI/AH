@@ -11,7 +11,7 @@ class HillClimber:
         self.schedule = schedule
         self.MC = MC
 
-        self.multiplyer = 5
+        self.multiplyer = 0.01
 
     """ Inheritable methods """
 
@@ -46,9 +46,7 @@ class HillClimber:
         self.schedule_list.append(self.schedule)
 
         # Take 50 steps:
-        # while (self.malus['Total'] - start_malus['Total']) / start_malus['Total'] < 0.2:
         for _ in range(int(self.malus['Total'] * self.multiplyer)):
-            # self.malus = self.MC.compute_total_malus(self.schedule)
 
             # Make copy of schedule, complex because of dictionary
             # copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
