@@ -1,6 +1,5 @@
 import classes.GUI.init_GUI as InitApp
 
-
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 
 import cProfile
