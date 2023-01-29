@@ -26,24 +26,23 @@ POPULAR_OWN_DAY = False
 
 VISUALIZE_INIT = True
 
-def main_runner(COURSES, STUDENT_COURSES, ROOMS):
-
-
-    capacity = True
-    popular = True
-    popular_own_day = True
-        
-    G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
-        capacity, popular, popular_own_day)
-
-    # Run optimizing
-    result1, result2, result3, result4, result5 = G.optimize()
-
-    return result1, result2, result3, result4, result5
-
-
-# in order to run an experiment it is easier to run without the app
+# application or not
 application = False
+
+def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT):
+    if not CLIMBING:
+        if not VISUALIZE_INIT:
+            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
+        else:
+            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING, visualize=True)
+    else:
+        pass
+        # if not ANNEALING:
+        #     G = GeneratorClass.Generator_HC(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
+        #     G.optimize()
+        # else:
+        #     G = GeneratorClass.Generator_SA(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
+        #     G.optimize()
 
 if __name__ == '__main__':
     list_total_malus = []
@@ -62,7 +61,7 @@ if __name__ == '__main__':
 
         # run the experiment 30 times
         for i in range(2):
-            lists = main_runner(COURSES, STUDENT_COURSES, ROOMS)
+            lists = main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
 
             for lst, list_to_append in zip(lists, lists_to_append):
                 for value in lst:
