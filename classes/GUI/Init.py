@@ -66,9 +66,9 @@ class App(customtkinter.CTk):
         if state_greedy == 1:
             self.capacity_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Capacity', font=customtkinter.CTkFont(size=15))
             self.capacity_switch.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
-            self.popular_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Popular first', font=customtkinter.CTkFont(size=15))
+            self.popular_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Popular first', font=customtkinter.CTkFont(size=15), command=self.switch1_2_to_zero)
             self.popular_switch.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
-            self.popular_own_day_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Largest first', font=customtkinter.CTkFont(size=15), command=self.switch1_to_zero)
+            self.popular_own_day_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Largest first', font=customtkinter.CTkFont(size=15), command=self.switch1_1_to_zero)
             self.popular_own_day_switch.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
             self.difficult_students_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Busy Students', font=customtkinter.CTkFont(size=15), command=self.switch2_to_zero)
             self.difficult_students_switch.grid(row=5, column=0, padx=20, pady=10, sticky="nsew")
@@ -80,8 +80,13 @@ class App(customtkinter.CTk):
        
 
         
-    def switch1_to_zero(self):
+    def switch1_1_to_zero(self):
         state_popular = self.popular_own_day_switch.get()
+        if state_popular == 1:
+            self.difficult_students_switch.deselect()
+
+    def switch1_2_to_zero(self):
+        state_popular = self.popular_switch.get()
         if state_popular == 1:
             self.difficult_students_switch.deselect()
     
@@ -90,6 +95,7 @@ class App(customtkinter.CTk):
         state_difficult = self.difficult_students_switch.get()
         if state_difficult == 1:
             self.popular_own_day_switch.deselect()
+            self.popular_switch.deselect()
 
     def generate(self):
 
