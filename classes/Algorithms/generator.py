@@ -7,6 +7,8 @@ import classes.representation.room as RoomClass
 import classes.representation.roster as RosterClass
 import classes.representation.malus_calc as MalusCalculatorClass
 
+import classes.GUI.generator_GUI as GeneratorApp
+
 import os
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,19 +17,17 @@ import pandas as pd
 from tqdm import tqdm
 
 class Generator:
-    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, visualize=False, annealing=False, difficult_students=False):
+    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, visualize=False, annealing=False):
 
         # Set heuristics
         self.CAPACITY = capacity
         self.POPULAR = popular
         self.POPULAR_OWN_DAY = popular_own_day
         self.ANNEALING = annealing
-        self.DIFFICULT_STUDENTS = difficult_students
 
         # Save initialization
         self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
-    
-        
+
         if visualize:
             self.plot_startup(COURSES, STUDENT_COURSES, ROOMS)
 
@@ -85,15 +85,11 @@ class Generator:
 
         for course in course_list:
             course.enroll_students(student_list)
-            course.flag_hard_student(student_list)
 
         return course_list, student_list, rooms_list
 
     def schedule_fill(self, Roster, course_list, student_list):
         ''''method schedules a timeslot for every lecture, tutorial or practical that takes place'''
-
-
-        days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
         # first give the most popular courses a place in the schedule
         if self.POPULAR:
@@ -101,12 +97,7 @@ class Generator:
 
         # give the 5 most popular courses their own day to hold their lectures, to prevent gap hours
         if self.POPULAR_OWN_DAY:
-
-            for i in range(5):
-                course_list[i].day = days[i]
-        
-        if self.DIFFICULT_STUDENTS:
-            course_list = sorted(course_list, key=lambda x: x.prioritise)
+            days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
             for i in range(5):
                 course_list[i].day = days[i]
 
@@ -191,7 +182,7 @@ class Generator:
             parent_dir = os.path.dirname(current_dir)
 
             # Directory "visualize"
-            visualize_directory = os.path.join(parent_dir, 'AH\\_visualize')
+            visualize_directory = os.path.join(parent_dir, 'AH/visualize')
 
             # Export to excel file
             schedule_df.to_excel(f"{visualize_directory}/schedule.xlsx", index=False)
@@ -216,7 +207,6 @@ class Generator:
         # Compute Malus
         malus = MC.compute_total_malus(Roster.schedule)
 
-
         return malus, Roster, course_list, student_list, room_list, MC
 
     """ GET """
@@ -231,7 +221,7 @@ class Generator:
         self.iterations = []
         for i in tqdm(range(100)):
 
-            self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0]['Total'])
+            self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0])
 
             self.iterations.append(i)
 
@@ -240,10 +230,8 @@ class Generator:
 
         self.__run_random(COURSES, STUDENT_COURSES, ROOMS)
 
-        
-        if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY or self.DIFFICULT_STUDENTS:
-            fig_name = f"Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}_Difficult_students:{self.DIFFICULT_STUDENTS}.png"
-            print(fig_name)
+        if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY:
+            fig_name = f"Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}.png"
         else:
             fig_name = "Baseline_random.png"
 
@@ -253,8 +241,8 @@ class Generator:
         # Parent directory
         parent_dir = os.path.dirname(current_dir)
 
-        # destination
-        directory_plots = os.path.join(parent_dir, 'AH', 'visualize')
+        # Directory "visualize"
+        directory_plots = os.path.join(parent_dir, 'AH/visualize')
 
         plt.figure(figsize=(10,4))
         plt.style.use('seaborn-whitegrid')
@@ -267,9 +255,6 @@ class Generator:
         plt.xlabel('Malus')
         plt.savefig(os.path.join(directory_plots, fig_name))
 
-
     def optimize(self):
-            Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, annealing=self.ANNEALING)
-            Multiprocessor.run()
-
-
+        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, annealing=self.ANNEALING)
+        Multiprocessor.run()
