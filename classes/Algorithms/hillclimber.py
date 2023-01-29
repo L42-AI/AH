@@ -44,13 +44,23 @@ class HillClimber:
         # Compute malus with MalusCalculator
         self.malus = self.MC.compute_total_malus(self.schedule)
 
+        # set the iteration to 0
+        iteration = 0
+
+        # list with the malus points and the iteration
+        list_iterations = []
+        list_malus = []
+
         # Append the input roster
         self.schedule_list.append(self.schedule)
         double_hc = {'l': {'v': 0, 'student': []}, 't': {'v': 0, 'student': []}, 'p': {'v': 0, 'student': []}}
 
         # let the hillclimber take some steps
-        for _ in range(int(self.malus['Total'] * self.multiplier)):
+        # you can change if you want multiplier for now I want always 50
+        # for _ in range(int(self.malus['Total'] * self.multiplier)):
+        for i in range(50):
             # self.malus = self.MC.compute_total_malus(self.schedule)
+            iteration += 1
 
             # Make copy of schedule, complex because of dictionary
             copied_schedule = copy.deepcopy(self.schedule)
@@ -68,11 +78,15 @@ class HillClimber:
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
 
+            # if new_malus['Total'] < self.malus['Total']:
+            list_iterations.append(iteration)
+            list_malus.append(new_malus['Total'])
+
             # let the hillclimber make 3 changes before a new score is calculated
             self.__accept_schedule(new_malus, new_schedule, T, double_hc, M)
         # print(self.get_name(), self.double)
         # Return new roster
-        return self.schedule, self.malus
+        return self.schedule, self.malus, list_iterations, list_malus
 
     def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M):
         '''Takes in the new malus (dict) and schedule (dict) and compares it to the current version
