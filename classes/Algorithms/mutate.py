@@ -440,14 +440,12 @@ class Mutate():
         '''picks a random student from the student list, finds the day that causes the most gap hours
            and swithces one class from that student.'''
 
-        GAP = self.__gap()
-
         # pick a student to switch
         student_to_switch_id = self.__find_random_student()
         
 
         # find its worst day
-        worst_day = self.__worst_day_test_for_double(student_to_switch_id)
+        worst_day = self.__worst_daye(student_to_switch_id)
 
         # if worst_day had no bad scores, it is none and loop should stop
         if worst_day == None:
