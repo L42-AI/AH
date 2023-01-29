@@ -249,7 +249,7 @@ class Generator:
         parent_dir = os.path.dirname(current_dir)
 
         # Directory "visualize"
-        directory_plots = os.path.join(parent_dir, 'AH/visualize')
+        directory_plots = os.path.join(parent_dir, 'AH\\visualize')
         
         plt.figure(figsize=(10,4))
         plt.style.use('seaborn-whitegrid')

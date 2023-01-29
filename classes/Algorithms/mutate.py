@@ -314,6 +314,7 @@ class Mutate():
                             day_dict['p'] += 1
                             self.double['p']['v'] += 1
                             self.double['p']['student'].append(id)
+                    
 
                     # claculate the amount of gaps between lessons
                     if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
@@ -446,7 +447,7 @@ class Mutate():
         
 
         # find its worst day
-        worst_day = self.__worst_day(student_to_switch_id)
+        worst_day = self.__worst_day_test_for_double(student_to_switch_id)
 
         # if worst_day had no bad scores, it is none and loop should stop
         if worst_day == None:

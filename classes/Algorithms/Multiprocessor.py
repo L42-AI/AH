@@ -56,7 +56,7 @@ class Multiprocessor():
 
         self.malus = self.MC.compute_total_malus(self.schedule)
 
-        core_assignment_list = [0,0,1,1]
+        core_assignment_list = [0,1,2,3]
 
         # Print intitial
         print(f'\nInitialization')
@@ -153,8 +153,32 @@ class Multiprocessor():
         """Exponential decay temperature schedule"""
         return t*alpha
 
+    def __replace_roster(self, difference):
 
+        # If difference is positive
+        if difference > 0:
 
+            # Set the new roster to self.Roster
+            self.schedule, self.malus, name = self.output_schedules[self.best_index]
+            print(self.best_index)
+            self.fail_counter = 0
+
+            print(f'\n========================= Generation: {self.iter_counter} =========================\n')
+            print(f'Most effective function: HC{name}')
+            print(f'Malus improvement: {difference}')
+            print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
+            print(f'Duration since init: {round(self.duration, 2)} S.')
+            print(self.malus)
+
+        else:
+            self.fail_counter += 1
+
+            # print output
+            print(f'\n========================= Generation: {self.iter_counter} =========================\n')
+            print('FAIL')
+            print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
+            print(f'Duration since init: {round(self.duration, 2)} S.')
+            print(self.malus)
 
     """ Save and Visualize Data """
 
