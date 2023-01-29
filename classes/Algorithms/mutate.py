@@ -43,7 +43,7 @@ class Mutate():
     
 
 
-    def __find_random_student(self):
+    def __find_random_student(self) -> int:
         """ This function returns a random student picked from the schedule key called students
             it uses the id it gets from a random course and random class to find the student object 
             with the helper function self.__get_student_object"""
@@ -51,7 +51,7 @@ class Mutate():
         # get random course, moment and id
         _course = random.choice(list(self.schedule.keys()))
 
-        # do not accept the schedule filler 
+        # do not accept the schedule filler
         while _course == 'No course':
             _course = random.choice(list(self.schedule.keys()))
 
@@ -228,7 +228,7 @@ class Mutate():
 
     """ Helpers """
 
-    def __worst_day(self, id):
+    def __worst_day(self, id) -> str:
         '''finds worst day in the schedule of a student'''
 
         worst_day = None
@@ -274,7 +274,7 @@ class Mutate():
 
         return worst_day
 
-    def __fill_timeslots_student(self, id):
+    def __fill_timeslots_student(self, id) -> dict:
         student_days = {'Monday': [], 'Tuesday': [], 'Wednesday': [], 'Thursday': [], 'Friday': []}
         student_classes = {'Monday': {}, 'Tuesday': {}, 'Wednesday': {}, 'Thursday': {}, 'Friday': {}}
         # go over the schedule and find what timeslots this student has
@@ -293,7 +293,7 @@ class Mutate():
 
 
 
-    def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap):
+    def __get_day_gap_or_double(self, scores_per_day_double, scores_per_day_gap) -> str:
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
         return max(scores_per_day_gap, key=lambda x: scores_per_day_gap.get(x))
 
@@ -437,8 +437,6 @@ class Mutate():
             self.schedule[class_to_switch][group]['students'].remove(student_to_switch_id)
             self.schedule[class_to_switch][group]['students'].add(student_to_old_group)
             return
-
-
 
     def __gap(self):
         return False
