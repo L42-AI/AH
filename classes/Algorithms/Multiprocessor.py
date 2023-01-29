@@ -69,7 +69,11 @@ class Multiprocessor():
         while self.iter_counter != self.ITERS:
 
             if self.ANNEALING:
-                t = self.__get_temperature(t)
+                if t > .5:
+                    t = self.__get_temperature(t)
+                elif t <= 0.5:
+                    t = self.__get_temperature(t, alpha=0.65)
+                    
                 if t < 0.01:
                     t = 0.05
             else:
