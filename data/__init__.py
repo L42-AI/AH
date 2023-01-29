@@ -1,0 +1,1 @@
+__all__ = ['data', 'HCresults', 'schedule', 'settings', 'studenten_en_vakken', 'vakken', 'zalen']

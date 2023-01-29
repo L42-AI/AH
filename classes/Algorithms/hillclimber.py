@@ -1,8 +1,6 @@
 import classes.algorithms.mutate as MutateClass
 import random
 import copy
-import numpy as np
-
 """ Main HillClimber Class """
 
 class HillClimber:
@@ -12,7 +10,8 @@ class HillClimber:
         self.student_list = student_list
         self.schedule = schedule
         self.MC = MC
-        self.multiplyer = 2
+
+        self.multiplyer = 5
 
     """ Inheritable methods """
 
@@ -34,28 +33,28 @@ class HillClimber:
 
     def get_score(self):
         return self.MC.compute_total_malus(self.schedule)['Total']
-
+        
 
     """ Main Method """
 
     def climb(self, T):
-        self.double = {'l': set(), 't': set(), 'p': set()}
 
         # Compute malus with MalusCalculator
         self.malus = self.MC.compute_total_malus(self.schedule)
 
         # Append the input roster
         self.schedule_list.append(self.schedule)
-        double_hc = {'l': {'v': 0, 'student': []}, 't': {'v': 0, 'student': []}, 'p': {'v': 0, 'student': []}}
 
-        # let the hillclimber take some steps int(self.malus['Total'] * self.multiplyer)
-        for _ in range(50):
+        # Take 50 steps:
+        # while (self.malus['Total'] - start_malus['Total']) / start_malus['Total'] < 0.2:
+        for _ in range(int(self.malus['Total'] * self.multiplyer)):
             # self.malus = self.MC.compute_total_malus(self.schedule)
-            
-            # Make copy of schedule, complex because of dictionary
-            copied_schedule = copy.deepcopy(self.schedule)
 
-            # {k: {k2: {k3: [student for student in v3] for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
+            # Make copy of schedule, complex because of dictionary
+            # copied_schedule = {k: {k2: {k3: v3 for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
+            copied_schedule = copy.deepcopy(self.schedule)
+            # before_malus = self.MC.compute_total_malus(copied_schedule)
+
             # Create the mutate class
             M = self.make_mutate(copied_schedule)
 
@@ -68,52 +67,29 @@ class HillClimber:
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
 
-            # let the hillclimber make 3 changes before a new score is calculated
-            self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, _)
-        # print(self.get_name(), self.double)
+            # print(f"Difference everystep: {self.malus['Total']}, {before_malus['Total']}, {new_malus['Total']}")
+
+            self.__accept_schedule(new_malus, new_schedule, T)
+
         # Return new roster
         return self.schedule, self.malus
 
-    def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M, _):
-        '''Takes in the new malus (dict) and schedule (dict) and compares it to the current version
-           If it is better, it will update the self.schedule and malus'''
+    def __accept_schedule(self, new_malus, new_schedule, T):
 
+        prob = random.random()
 
         # only accept annealing if the rise in malus is not too large
         difference = self.malus['Total'] - new_malus['Total']
-
-        # if difference = 0 it will overflow
-        if difference < 0.01:
-            prob = 0
-        elif T != 0:
-            prob = np.exp(-difference / T )
-            prob /= 1000
-        else:
-            prob = 1
+        five_percent = self.malus['Total'] * 0.05
 
         # Compare with prior malus points
-        if new_malus['Total'] <= self.malus['Total']:
-            # print(self.get_name(), self.malus['Total'], new_malus['Total'])
+        if new_malus['Total'] < self.malus['Total']:
+            print(self.get_name())
             self.schedule = new_schedule
             self.malus = new_malus
-            double_hc['l']['v'] += M.double['l']['v']
-            double_hc['t']['v'] += M.double['t']['v']
-            double_hc['p']['v'] += M.double['p']['v']
-            double_hc['l']['student'].append(M.double['l']['student'])
-            double_hc['t']['student'].append(M.double['t']['student'])
-            double_hc['p']['student'].append(M.double['p']['student'])
-            
-            for key in double_hc:
-                # print(key)
-                # print(self.double[key])
-                if double_hc[key]['student']:
-                    for student in double_hc[key]['student']:
-                        if student:
-                            for id in student:
-                                if id not in self.double[key]:
-                                    self.double[key].add(id)
-        elif prob < T and _ < 1 and difference > - (100 - (1-T*200)):
-            print(f'worsening of {-difference} got accepted at T: {T}')
+
+        elif prob < T and difference < five_percent:
+            print(f'worsening of {difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
 

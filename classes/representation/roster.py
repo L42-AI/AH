@@ -55,6 +55,8 @@ class Roster():
                 self.malus_cause['Double Classes'] += student.malus_cause['Double Classes'][day]
 
     def __place_in_schedule(self, room, day, timeslot, course_name, classes, max_std):
+        # if classes[0] != 'l' and course_name != 'No course':
+            # print(max_std)
         # only need class if it is an actual lesson
         self.schedule[course_name][classes] = {}
         self.schedule[course_name][classes]['day'] = day
