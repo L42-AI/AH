@@ -2,7 +2,7 @@ import classes.algorithms.generator as GeneratorClass
 import classes.GUI.Init as InitClass
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS
-
+import pandas as pd
 import cProfile
 import pstats
 
@@ -25,6 +25,9 @@ POPULAR = False
 POPULAR_OWN_DAY = False
 
 VISUALIZE_INIT = True
+
+# application or not
+application = False
 
 def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT):
     if not CLIMBING:
