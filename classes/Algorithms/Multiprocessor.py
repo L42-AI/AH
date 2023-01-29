@@ -25,7 +25,7 @@ class Multiprocessor():
 
         student_malus_proportion = (malus['Double Classes'] + malus['Classes Gap'] + malus['Triple Gap']) / malus['Total']
 
-        schedule_malus_proportion = 1 - (malus['Night'] + malus['Capacity']) / malus['Total']
+        schedule_malus_proportion = (malus['Night'] + malus['Capacity']) / malus['Total']
 
         while len(core_assignment_list) < 4:
             prob = random.random()
@@ -62,21 +62,14 @@ class Multiprocessor():
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
-        if self.ANNEALING:
-            t = .8
-        else:
-            t = 0
-        # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while self.iter_counter != self.ITERS:
-            core_assignment_list = self.core_assignment(self.malus)
-            if self.ANNEALING:
-                if t > .5:
-                    t = self.__get_temperature(t)
-                elif t <= 0.5:
-                    t = self.__get_temperature(t, alpha=0.65)
 
-                if t < 0.01:
-                    t = 0.05
+        # while self.malus['Double Classes'] != 0 or self.malus['Capacity'] != 0:
+        while self.iter_counter != 0:
+
+            start_time = time.time()
+
+            if self.ANNEALING:
+                t = 0.25 - self.iter_counter / self.ITERS * 4
             else:
                 t = 0
 

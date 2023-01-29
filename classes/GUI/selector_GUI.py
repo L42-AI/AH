@@ -1,16 +1,24 @@
 import tkinter
 import tkinter.messagebox
 import customtkinter
+import time
+
+import os
+import shutil
+import pandas as pd
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
-
 class App(customtkinter.CTk):
-    def __init__(self):
+    def __init__(self, student_list, schedule):
         super().__init__()
 
-        self.schedule = {}
+        self.schedule = schedule
+
+        self.student_convert_dict = self.create_student_convert_dict(student_list)
+
+        self.student_dict, self.course_dict, self.room_dict = self.represent_schedule()
 
         # configure window
         self.title("Scheduly")
@@ -24,9 +32,95 @@ class App(customtkinter.CTk):
         self.create_sidebar()
         self.create_frames()
 
+        # Create variable to keep track of shown frame
+        self.shown = None
+
+        # Create export directory
+        self.create_export_directory()
+
 
     """ Init """
-    def create_sidebar(self):
+
+    def create_student_convert_dict(self, student_list) -> dict:
+        student_convert_dict = {}
+        for student in student_list:
+            student_convert_dict[student.id] = f'{student.f_name} {student.l_name}'
+        return student_convert_dict
+
+    def represent_schedule(self) -> tuple:
+
+        student_dict = self.__init_student_schedule(self.schedule)
+        course_dict = self.__init_course_schedule(self.schedule)
+        room_dict = self.__init_room_schedule(self.schedule)
+
+        return student_dict, course_dict, room_dict
+
+    def __init_student_schedule(self, schedule) -> dict:
+
+        student_dict = {}
+
+        for course in schedule:
+
+            for _class in schedule[course]:
+
+                timeslot = schedule[course][_class]
+
+                for student_id in schedule[course][_class]['students']:
+
+                    student_name = self.get_student_name(student_id)
+
+                    if student_name not in student_dict:
+                        student_dict[student_name] = {}
+                    if course not in student_dict[student_name]:
+                        student_dict[student_name][course] = []
+
+                    class_data = (_class, timeslot['day'], timeslot['timeslot'], timeslot['room'])
+
+                    student_dict[student_name][course].append(class_data)
+
+        return student_dict
+
+    def __init_course_schedule(self, schedule) -> dict:
+
+        course_dict = {}
+
+        for course in schedule:
+            if course == "No course":
+                continue
+
+            if course not in course_dict:
+                course_dict[course] = {}
+
+            for _class in schedule[course]:
+
+                timeslot = schedule[course][_class]
+
+                class_data = (timeslot['day'], timeslot['timeslot'], timeslot['room'])
+
+                course_dict[course][_class] =(class_data)
+
+        return course_dict
+
+    def __init_room_schedule(self, schedule) -> dict:
+
+        room_dict = {}
+
+        for course in schedule:
+
+            for _class in schedule[course]:
+
+                timeslot = schedule[course][_class]
+
+                if timeslot['room'] not in room_dict:
+                    room_dict[timeslot['room']] = []
+
+                class_data = (course, _class, timeslot['day'], timeslot['timeslot'])
+
+                room_dict[timeslot['room']].append(class_data)
+
+        return room_dict
+
+    def create_sidebar(self) -> None:
 
         # Frame
         self.sidebar_frame = customtkinter.CTkFrame(self, width=140, corner_radius=0)
@@ -49,10 +143,10 @@ class App(customtkinter.CTk):
         self.export_button.grid(row=4, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
         # Export All
-        self.export_all_button= customtkinter.CTkButton(self.sidebar_frame, text="Export All", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.export)
+        self.export_all_button= customtkinter.CTkButton(self.sidebar_frame, text="Export All", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.export_all)
         self.export_all_button.grid(row=8, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
-    def create_frames(self):
+    def create_frames(self) -> None:
 
         # Create student frame
         self.student_frame = customtkinter.CTkFrame(self, width=200, corner_radius=10)
@@ -79,7 +173,8 @@ class App(customtkinter.CTk):
 
         self.frame_room_content()
 
-    def frame_student_content(self):
+
+    def frame_student_content(self) -> None:
 
         # Search Frame
         self.student_search_frame = customtkinter.CTkFrame(self.student_frame, corner_radius=10)
@@ -89,7 +184,7 @@ class App(customtkinter.CTk):
 
         # Student option
         self.student_option = customtkinter.CTkOptionMenu(self.student_search_frame,
-                                                values=["Amalia Kro", "Jonas Bollewijk"])
+                                                values=sorted([student for student in self.student_dict]))
         self.student_option.grid(row=0, column=0, columnspan=7, padx=20, pady=20, sticky="ew")
         self.student_option.set('Student')
 
@@ -103,7 +198,7 @@ class App(customtkinter.CTk):
         self.student_schedule.grid_columnconfigure((0,1,2,3,4), weight=1)
         self.student_schedule.grid_rowconfigure((0,1,2,3,4), weight=1)
 
-    def frame_course_content(self):
+    def frame_course_content(self) -> None:
 
         # Search Frame
         self.course_search_frame = customtkinter.CTkFrame(self.course_frame, corner_radius=10)
@@ -113,7 +208,7 @@ class App(customtkinter.CTk):
 
         # Course option
         self.course_option = customtkinter.CTkOptionMenu(self.course_search_frame,
-                                                values=["Heuristics 2", "Heuristics 1"])
+                                                values=sorted([course for course in self.course_dict]))
         self.course_option.grid(row=0, column=0, columnspan=7, padx=20, pady=20, sticky="ew")
         self.course_option.set('Course')
 
@@ -127,7 +222,7 @@ class App(customtkinter.CTk):
         self.course_schedule.grid_columnconfigure((0,1,2,3,4), weight=1)
         self.course_schedule.grid_rowconfigure((0,1,2,3,4), weight=1)
 
-    def frame_room_content(self):
+    def frame_room_content(self) -> None:
 
         # Search Frame
         self.room_search_frame = customtkinter.CTkFrame(self.room_frame, corner_radius=10)
@@ -137,7 +232,7 @@ class App(customtkinter.CTk):
 
         # Room option
         self.room_option = customtkinter.CTkOptionMenu(self.room_search_frame,
-                                                values=["C1.102", "C1.103"])
+                                                values=sorted([room for room in self.room_dict]))
         self.room_option.grid(row=0, column=0, columnspan=7, padx=20, pady=20, sticky="ew")
         self.room_option.set('Room')
 
@@ -151,9 +246,24 @@ class App(customtkinter.CTk):
         self.room_schedule.grid_columnconfigure((0,1,2,3,4), weight=1)
         self.room_schedule.grid_rowconfigure((0,1,2,3,4), weight=1)
 
+    def create_export_directory(self) -> None:
+
+        working_dir = os.getcwd()
+
+        if os.path.exists(f'{working_dir}/schedules'):
+            shutil.rmtree(f'{working_dir}/schedules')
+            os.makedirs(f'{working_dir}/schedules')
+        else:
+            os.makedirs(f'{working_dir}/schedules')
+
+    """ Get """
+
+    def get_student_name(self, id) -> str:
+        return self.student_convert_dict.get(id)
+
     """ Methods """
 
-    def show_student_frame(self):
+    def show_student_frame(self) -> None:
         self.student_frame.tkraise()
 
         # Destroy any prior schedule
@@ -162,7 +272,9 @@ class App(customtkinter.CTk):
 
         self.student_option.set('Student')
 
-    def show_course_frame(self):
+        self.shown = 'student'
+
+    def show_course_frame(self) -> None:
         self.course_frame.tkraise()
 
         # Destroy any prior schedule
@@ -171,7 +283,9 @@ class App(customtkinter.CTk):
 
         self.course_option.set('Course')
 
-    def show_room_frame(self):
+        self.shown = 'course'
+
+    def show_room_frame(self) -> None:
         self.room_frame.tkraise()
 
         # Destroy any prior schedule
@@ -180,8 +294,10 @@ class App(customtkinter.CTk):
 
         self.room_option.set('Room')
 
+        self.shown = 'room'
 
-    def student_button_click(self):
+
+    def student_button_click(self) -> None:
 
         student = None
         while student == None:
@@ -189,9 +305,9 @@ class App(customtkinter.CTk):
 
         frame = self.student_schedule
 
-        self.create_grid(frame)
+        self.fill_grid(frame, 'student', student)
 
-    def course_button_click(self):
+    def course_button_click(self) -> None:
 
         course = None
         while course == None:
@@ -199,9 +315,9 @@ class App(customtkinter.CTk):
 
         frame = self.course_schedule
 
-        self.create_grid(frame)
+        self.fill_grid(frame, 'course', course)
 
-    def room_button_click(self):
+    def room_button_click(self) -> None:
 
         room = None
         while room == None:
@@ -209,9 +325,10 @@ class App(customtkinter.CTk):
 
         frame = self.room_schedule
 
-        self.create_grid(frame)
+        self.fill_grid(frame, 'room', room)
 
-    def create_grid(self, frame):
+
+    def create_grid(self, frame) -> tuple:
         days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
         timeslots = ["9-11", "11-13", "13-15", "15-17", "17-19"]
         timeslot_to_num = {9:0, 11:1, 13:2, 15:3, 17:4}
@@ -224,23 +341,157 @@ class App(customtkinter.CTk):
             self.time_label = customtkinter.CTkLabel(master=frame, text=timeslot, font=customtkinter.CTkFont(size=15, weight="bold"))
             self.time_label.grid(row=i+1, column=0, padx=10, pady=5, sticky='nsew')
 
-        for subject, subject_info in self.schedule.items():
+        return days, timeslot_to_num
 
-            for class_type, class_info in subject_info.items():
+    def fill_grid(self, frame, search_type, key) -> None:
 
-                day = class_info['day']
-                timeslot = class_info['timeslot']
-                room = class_info['room']
+        if hasattr(self, '_class'):
+            self._class.destroy()
 
-                col = timeslot_to_num[timeslot]
-                row = days.index(day) + 1
+        days, timeslot_to_num = self.create_grid(frame)
 
-                self._class = customtkinter.CTkLabel(master=frame, text=f"{subject}\n{class_type}\n{room}")
-                self._class.grid(row=row, column=col+1, sticky='nsew')
+        if search_type == 'student':
+            schedule_dict = self.student_dict
 
-    def export(self):
-        pass
+            # For each course:
+            for course in schedule_dict[key]:
 
-if __name__ == "__main__":
-    app = App()
-    app.mainloop()
+                # For each class moment:
+                for class_moment in schedule_dict[key][course]:
+
+                    # Unpack class info
+                    _class, day, timeslot, room = class_moment
+
+                    # Create widget
+                    self._class = customtkinter.CTkLabel(master=frame, text=f"{course}\n{_class}\n{room}")
+                    self.grid(days, timeslot_to_num, day, timeslot)
+
+        elif search_type == 'course':
+            schedule_dict = self.course_dict
+
+            # For each class
+            for _class in schedule_dict[key]:
+
+                # Unpack class info
+                day, timeslot, room = schedule_dict[key][_class]
+
+                # Create widget
+                self._class = customtkinter.CTkLabel(master=frame, text=f"{_class}\n{room}")
+                self.grid(days, timeslot_to_num, day, timeslot)
+
+        elif search_type == 'room':
+            schedule_dict = self.room_dict
+
+            # for each class moment:
+            for class_moments in schedule_dict[key]:
+
+                # Unpack class info
+                course, _class, day, timeslot = class_moments
+
+                # Create widget
+                self._class = customtkinter.CTkLabel(master=frame, text=f"{course}\n{_class}")
+                self.grid(days, timeslot_to_num, day, timeslot)
+
+    def grid(self, days, timeslot_to_num, day, timeslot) -> None:
+        row = timeslot_to_num[timeslot]
+        col = days.index(day)
+
+        self._class.grid(row=row+1, column=col+1, sticky='nsew')
+
+
+
+    def run(self) -> None:
+        self.mainloop()
+
+    def export(self) -> None:
+
+        df_course_list = []
+        df_class_list = []
+        df_day_list = []
+        df_time_list = []
+        df_room_list = []
+
+
+        if self.shown == 'student':
+            item = self.student_option.get()
+            dictionary = self.student_dict
+
+            for course in dictionary[item]:
+                for class_info in dictionary[item][course]:
+                    df_course_list.append(course)
+                    df_class_list.append(class_info[0])
+                    df_day_list.append(class_info[1])
+                    df_time_list.append(class_info[2])
+                    df_room_list.append(class_info[3])
+
+            df = pd.DataFrame({'Course': df_course_list, 'Class': df_class_list,
+                               'Day': df_day_list, 'Time': df_time_list,
+                               'Room': df_room_list})
+
+            df.to_csv(f'schedules/{item} schedule.csv', index=False)
+
+        elif self.shown == 'course':
+            item = self.course_option.get()
+            dictionary = self.course_dict
+
+            for _class in dictionary[item]:
+
+                class_info = dictionary[item][_class]
+
+                df_class_list.append(_class)
+                df_day_list.append(class_info[0])
+                df_time_list.append(class_info[1])
+                df_room_list.append(class_info[2])
+
+            df = pd.DataFrame({'Class': df_class_list,
+                               'Day': df_day_list, 'Time': df_time_list,
+                               'Room': df_room_list})
+
+            df.to_csv(f'schedules/{item} schedule.csv', index=False)
+
+        else:
+            item = self.room_option.get()
+            dictionary = self.room_dict
+
+            for class_info in dictionary[item]:
+
+                df_course_list.append(class_info[0])
+                df_class_list.append(class_info[1])
+                df_day_list.append(class_info[2])
+                df_time_list.append(class_info[3])
+
+            df = pd.DataFrame({'Course': df_course_list, 'Class': df_class_list,
+                'Day': df_day_list, 'Time': df_time_list})
+
+            df.to_csv(f'schedules/{item} schedule.csv', index=False)
+
+    def export_all(self) -> None:
+
+        df_student_list = []
+        df_course_list = []
+        df_class_list = []
+        df_day_list = []
+        df_time_list = []
+        df_room_list = []
+
+        # For each student:
+        for student in sorted(self.student_dict):
+
+            # For each course:
+            for course in self.student_dict[student]:
+
+                # For each class:
+                for class_data in self.student_dict[student][course]:
+
+                    # Add all relevant information ito lists
+                    df_student_list.append(student)
+                    df_course_list.append(course)
+                    df_class_list.append(class_data[0])
+                    df_day_list.append(class_data[1])
+                    df_time_list.append(class_data[2])
+                    df_room_list.append(class_data[3])
+
+        df = pd.DataFrame({'Student': df_student_list, 'Course': df_course_list, 'Class': df_class_list,
+            'Day': df_day_list, 'Time': df_time_list, 'Room': df_room_list})
+
+        df.to_csv('schedules/complete schedule.csv', index=False)
