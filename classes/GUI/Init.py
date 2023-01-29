@@ -89,7 +89,7 @@ class App(customtkinter.CTk):
         if not hill_climbing:
             self.destroy()
             G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
-                capacity, popular, popular_own_day, annealing=annealing, visualize=True)
+                capacity, popular, popular_own_day, visualize=True)
         else:
             self.destroy()
             G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\

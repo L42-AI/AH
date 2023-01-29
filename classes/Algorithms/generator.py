@@ -206,6 +206,7 @@ class Generator:
         # Compute Malus
         malus = MC.compute_total_malus(Roster.schedule)
 
+
         return malus, Roster, course_list, student_list, room_list, MC
 
     """ GET """
@@ -220,7 +221,7 @@ class Generator:
         self.iterations = []
         for i in tqdm(range(100)):
 
-            self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0])
+            self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0]['Total'])
 
             self.iterations.append(i)
 
