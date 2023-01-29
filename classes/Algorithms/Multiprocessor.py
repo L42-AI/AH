@@ -56,13 +56,13 @@ class Multiprocessor():
 
         self.malus = self.MC.compute_total_malus(self.schedule)
 
-        core_assignment_list = [0,1,2,3]
+        core_assignment_list = [0,0,1,1]
 
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
         if self.ANNEALING:
-            t = 1
+            t = .8
         else:
             t = 0
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:

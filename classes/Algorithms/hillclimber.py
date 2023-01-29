@@ -12,7 +12,7 @@ class HillClimber:
         self.student_list = student_list
         self.schedule = schedule
         self.MC = MC
-        self.multiplyer = 0.1
+        self.multiplyer = 2
 
     """ Inheritable methods """
 
@@ -48,10 +48,10 @@ class HillClimber:
         self.schedule_list.append(self.schedule)
         double_hc = {'l': {'v': 0, 'student': []}, 't': {'v': 0, 'student': []}, 'p': {'v': 0, 'student': []}}
 
-        # let the hillclimber take some steps
-        for _ in range(int(self.malus['Total'] * self.multiplyer)):
+        # let the hillclimber take some steps int(self.malus['Total'] * self.multiplyer)
+        for _ in range(50):
             # self.malus = self.MC.compute_total_malus(self.schedule)
-
+            
             # Make copy of schedule, complex because of dictionary
             copied_schedule = copy.deepcopy(self.schedule)
 
@@ -69,12 +69,12 @@ class HillClimber:
             new_malus = self.MC.compute_total_malus(new_schedule)
 
             # let the hillclimber make 3 changes before a new score is calculated
-            self.__accept_schedule(new_malus, new_schedule, T, double_hc, M)
+            self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, _)
         # print(self.get_name(), self.double)
         # Return new roster
         return self.schedule, self.malus
 
-    def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M):
+    def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M, _):
         '''Takes in the new malus (dict) and schedule (dict) and compares it to the current version
            If it is better, it will update the self.schedule and malus'''
 
@@ -112,8 +112,8 @@ class HillClimber:
                             for id in student:
                                 if id not in self.double[key]:
                                     self.double[key].add(id)
-        elif prob < T:
-            print(f'worsening of {difference} got accepted at T: {T}')
+        elif prob < T and _ < 10:
+            print(f'worsening of {-difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
 
