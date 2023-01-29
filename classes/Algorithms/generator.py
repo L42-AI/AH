@@ -104,7 +104,9 @@ class Generator:
         
         if self.DIFFICULT_STUDENTS:
             course_list = sorted(course_list, key=lambda x: x.prioritise)
-
+            for i in range(5):
+                course_list[i].day = days[i]
+                
         for course in course_list:
             # go over the number of lectures, tutorials and practicals needed
             for i in range(course.lectures):

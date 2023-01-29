@@ -70,7 +70,7 @@ class HillClimber:
 
             # let the hillclimber make 3 changes before a new score is calculated
             self.__accept_schedule(new_malus, new_schedule, T, double_hc, M)
-        print(self.get_name(), self.double)
+        # print(self.get_name(), self.double)
         # Return new roster
         return self.schedule, self.malus
 
