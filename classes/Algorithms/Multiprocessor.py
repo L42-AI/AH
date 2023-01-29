@@ -44,7 +44,12 @@ class Multiprocessor():
     def run(self):
 
         # Set lists
-        self.iterations_list = []
+        self.list_total_malus = []
+        self.list_class_random = []
+        self.list_class_capacity = []
+        self.list_student_gaphour = []
+        self.list_student_doublehour = []
+
         self.info = {}
 
         # Set counters
@@ -57,6 +62,13 @@ class Multiprocessor():
         self.schedule = self.Roster.schedule
 
         self.malus = self.MC.compute_total_malus(self.schedule)
+
+        # append initialized malus and 0 for the differences
+        self.list_total_malus.append(self.malus['Total'])
+        self.list_class_random.append(0)
+        self.list_class_capacity.append(0)
+        self.list_student_gaphour.append(0)
+        self.list_student_doublehour.append(0)
 
         core_assignment_list = [0,1,2,3]
 
@@ -96,9 +108,6 @@ class Multiprocessor():
                                                             (core_assignment_list[2], self.schedule, t, self.malus['Total']),
                                                             (core_assignment_list[3], self.schedule, t, self.malus['Total'])])
 
-            # Save data for plotting
-            self.iterations_list.append(self.iter_counter)
-
             # find the lowest malus of the output rosters
             min_malus = min([i[1]['Total'] for i in self.output_schedules])
 
@@ -108,17 +117,34 @@ class Multiprocessor():
             # Compute difference between new roster and current roster
             difference = self.malus['Total'] - self.output_schedules[self.best_index][1]['Total']
 
+            # append the difference each hillclimber made
+            self.list_class_random.append(self.malus['Total'] - self.output_schedules[0][1]['Total'])
+            self.list_class_capacity.append(self.malus['Total'] - self.output_schedules[1][1]['Total'])
+            self.list_student_gaphour.append(self.malus['Total'] - self.output_schedules[2][1]['Total'])
+            self.list_student_doublehour.append(self.malus['Total'] - self.output_schedules[3][1]['Total'])
+
             # Set finish time
             finish_time = time.time()
 
             self.iter_duration = finish_time - start_time
             self.duration += self.iter_duration
 
+
             # replace the roster if it is better
             self.__replace_roster(difference)
 
             # Increase iter counter
             self.iter_counter += 1
+
+            
+            # append the total malus
+            self.list_total_malus.append(self.malus['Total'])
+    
+        return self.list_total_malus, self.list_class_random, self.list_class_capacity, self.list_student_gaphour, self.list_student_doublehour
+
+
+
+            
 
     def run_HC(self, hc_tuple):
         activation, schedule, T, real_score = hc_tuple
