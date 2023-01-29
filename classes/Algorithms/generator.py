@@ -92,13 +92,16 @@ class Generator:
     def schedule_fill(self, Roster, course_list, student_list):
         ''''method schedules a timeslot for every lecture, tutorial or practical that takes place'''
 
+
+        days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+        
         # first give the most popular courses a place in the schedule
         if self.POPULAR:
             course_list = sorted(course_list, key = lambda x: x.enrolled, reverse = True)
 
         # give the 5 most popular courses their own day to hold their lectures, to prevent gap hours
         if self.POPULAR_OWN_DAY:
-            days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+            
             for i in range(5):
                 course_list[i].day = days[i]
         
@@ -106,7 +109,7 @@ class Generator:
             course_list = sorted(course_list, key=lambda x: x.prioritise)
             for i in range(5):
                 course_list[i].day = days[i]
-                
+
         for course in course_list:
             # go over the number of lectures, tutorials and practicals needed
             for i in range(course.lectures):
