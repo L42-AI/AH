@@ -1,7 +1,7 @@
 import classes.algorithms.hillclimber as HillCLimberClass
 from multiprocessing import Pool
 import random as random
-
+import classes.GUI.selector_GUI as SelectorApp
 
 import time
 import json
@@ -13,7 +13,7 @@ class Multiprocessor():
         self.Roster = Roster
         self.course_list = course_list
         self.student_list = student_list
-        self.ITERS = 10
+        self.ITERS = 1
         self.ANNEALING = annealing
 
         self.MC = MC
@@ -114,6 +114,12 @@ class Multiprocessor():
 
             # Increase iter counter
             self.iter_counter += 1
+
+        self.finish()
+
+    def finish(self):
+        app = SelectorApp.App(self.student_list, self.schedule)
+        app.mainloop()
 
     def run_HC(self, hc_tuple):
         activation, schedule, T, real_score = hc_tuple
