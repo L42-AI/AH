@@ -18,7 +18,7 @@ class Generator:
         self.POPULAR = popular
         self.POPULAR_OWN_DAY = popular_own_day
         self.ANNEALING = annealing
-
+        self.DIFFICULT_STUDENTS = difficult_students
         # Save initialization
         self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
 
@@ -79,6 +79,7 @@ class Generator:
 
         for course in course_list:
             course.enroll_students(student_list)
+            course.flag_hard_student(student_list)
 
         return course_list, student_list, rooms_list
 
@@ -92,6 +93,11 @@ class Generator:
         # give the 5 most popular courses their own day to hold their lectures, to prevent gap hours
         if self.POPULAR_OWN_DAY:
             days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+            for i in range(5):
+                course_list[i].day = days[i]
+
+        if self.DIFFICULT_STUDENTS:
+            course_list = sorted(course_list, key=lambda x: x.prioritise)
             for i in range(5):
                 course_list[i].day = days[i]
 

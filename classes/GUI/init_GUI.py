@@ -152,11 +152,39 @@ class App(customtkinter.CTk):
 
     def __run_algorithm(self, settings) -> None:
 
-        capacity, popular, popular_own_day, difficult_students, annealing, visualize = settings
+        true_false = [True, False]
+        for i in true_false:
+            for ii in true_false:
+                for iii in true_false:
+                    for iv in true_false:
+                        for v in true_false:
+                            capacity = i
+                            popular = ii
+                            popular_own_day = iii
+                            annealing = iv
+                            visualize = v
+                            difficult_students = False
+                            visualize = False
+                            
+                            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
+                            capacity, popular, popular_own_day, difficult_students, annealing, visualize)
 
-        G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
-            capacity, popular, popular_own_day, difficult_students, annealing, visualize)
+                            G.optimize()
+                    
+        for i in true_false:
+            for ii in true_false:
+                for iii in true_false:
+                        capacity = i
+                        difficult_students = ii
+                        annealing = iii
+                        visualize = iv
+                        popular = False
+                        popular_own_day = False
+                        G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
+                        capacity, popular, popular_own_day, difficult_students, annealing, visualize)
 
-        if visualize == False:
-            G.optimize()
+                        G.optimize()
+
+       
+       
 
