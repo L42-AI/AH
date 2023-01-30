@@ -2,17 +2,20 @@ import classes.algorithms.mutate as MutateClass
 import random
 import copy
 import numpy as np
+import csv
 
 """ Main HillClimber Class """
 
 class HillClimber:
-    def __init__(self, schedule, course_list, student_list, MC):
+    def __init__(self, schedule, course_list, student_list, MC, core_assignment, iteration):
         self.schedule_list = []
         self.course_list = course_list
         self.student_list = student_list
         self.schedule = schedule
         self.MC = MC
         self.multiplyer = 2
+        self.core_assignment = core_assignment
+        self.iteration = iteration
 
     """ Inheritable methods """
 
@@ -48,10 +51,10 @@ class HillClimber:
         self.schedule_list.append(self.schedule)
         double_hc = {'l': {'v': 0, 'student': []}, 't': {'v': 0, 'student': []}, 'p': {'v': 0, 'student': []}}
 
-        # let the hillclimber take some steps int(self.malus['Total'] * self.multiplyer)
-        for _ in range(50):
-            # self.malus = self.MC.compute_total_malus(self.schedule)
-            
+        # let the hillclimber take some steps 
+        for _ in range(int(self.malus['Total'] * self.multiplyer)):
+        # for _ in range(50):
+
             # Make copy of schedule, complex because of dictionary
             copied_schedule = copy.deepcopy(self.schedule)
 
@@ -68,11 +71,14 @@ class HillClimber:
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
 
+            self.save_results()
+
             # let the hillclimber make 3 changes before a new score is calculated
             self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, _)
-        # print(self.get_name(), self.double)
-        # Return new roster
-        return self.schedule, self.malus
+
+            self.iteration += 1
+
+        return self.schedule, self.malus, self.iteration
 
     def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M, _):
         '''Takes in the new malus (dict) and schedule (dict) and compares it to the current version
@@ -116,6 +122,17 @@ class HillClimber:
             print(f'worsening of {-difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
+
+    def save_results(self):
+        with open('data/HCResults.csv', 'a') as f:
+            csv_writer = csv.DictWriter(f, fieldnames=['HC1 type','HC1 iteration','HC1 malus','HC2 type','HC2 iteration','HC2 malus','HC3 type','HC3 iteration','HC3 malus','HC4 type','HC4 iteration','HC4 malus'])
+            info = {
+                f'HC{self.core_assignment} type': self.get_name(),
+                f'HC{self.core_assignment} iteration': self.iteration,
+                f'HC{self.core_assignment} malus': self.malus['Total']
+            }
+
+            csv_writer.writerow(info)
 
 """ Inherited HillClimber Classes """
 
