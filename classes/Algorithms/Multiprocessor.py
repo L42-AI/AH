@@ -168,22 +168,22 @@ class Multiprocessor():
             print(self.best_index)
             self.fail_counter = 0
 
-            print(f'\n========================= Generation: {self.multiprocessor_counter} =========================\n')
-            print(f'Most effective function: HC{name}')
-            print(f'Malus improvement: {difference}')
-            print(f'Duration of iteration: {round(self.multiprocess_duration, 2)} S.')
-            print(f'Duration since init: {round(self.duration, 2)} S.')
-            print(self.malus)
+            # print(f'\n========================= Generation: {self.multiprocessor_counter} =========================\n')
+            # print(f'Most effective function: HC{name}')
+            # print(f'Malus improvement: {difference}')
+            # print(f'Duration of iteration: {round(self.multiprocess_duration, 2)} S.')
+            # print(f'Duration since init: {round(self.duration, 2)} S.')
+            # print(self.malus)
 
         else:
             self.fail_counter += 1
 
             # print output
-            print(f'\n========================= Generation: {self.multiprocessor_counter} =========================\n')
-            print('FAIL')
-            print(f'Duration of iteration: {round(self.multiprocess_duration, 2)} S.')
-            print(f'Duration since init: {round(self.duration, 2)} S.')
-            print(self.malus)
+            # print(f'\n========================= Generation: {self.multiprocessor_counter} =========================\n')
+            # print('FAIL')
+            # print(f'Duration of iteration: {round(self.multiprocess_duration, 2)} S.')
+            # print(f'Duration since init: {round(self.duration, 2)} S.')
+            # print(self.malus)
 
 class Multiprocessor_SimAnnealing(Multiprocessor):
 

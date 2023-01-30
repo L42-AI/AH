@@ -3,7 +3,7 @@ import classes.algorithms.generator as GeneratorClass
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 
-computer = 'Luka'
+computer = 'Jacob'
 if __name__ == '__main__':
 
     if computer == 'Luka':
