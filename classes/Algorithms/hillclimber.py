@@ -7,14 +7,17 @@ import csv
 """ Main HillClimber Class """
 
 class HillClimber:
-    def __init__(self, schedule, course_list, student_list, MC, iteration):
+    def __init__(self, schedule, course_list, student_list, MC, core_assignment, iteration, hillclimber_iterations):
         self.schedule_list = []
         self.course_list = course_list
         self.student_list = student_list
         self.schedule = schedule
         self.MC = MC
         self.multiplyer = 0.3
+        self.core_assignment = core_assignment
         self.iteration = iteration
+        self.hillclimber_iterations = hillclimber_iterations
+
 
     """ Inheritable methods """
 
@@ -52,7 +55,7 @@ class HillClimber:
 
         # let the hillclimber take some steps 
         # for _ in range(int(self.malus['Total'] * self.multiplyer)):
-        for _ in range(1):
+        for _ in range(self.hillclimber_iterations):
 
             # Make copy of schedule, complex because of dictionary
             copied_schedule = copy.deepcopy(self.schedule)

@@ -59,7 +59,7 @@ class Multiprocessor():
         else:
             return 0
 
-    def run_combination(self):
+    def run_combination(self, mode):
         # Set counters
         self.fail_counter = 0
         self.multiprocessor_counter = 0
@@ -72,10 +72,10 @@ class Multiprocessor():
         T = self.__init_temp()
 
         # Initialize all hillclimbers
-        HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
-        HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
-        HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
-        HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
+        HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.course_list, self.student_list, self.MC, 0, self.hillclimber_counter, 1)
+        HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(self.schedule, self.course_list, self.student_list, self.MC, 0, self.hillclimber_counter, 1)
+        HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.schedule, self.course_list, self.student_list, self.MC, 0, self.hillclimber_counter, 1)
+        HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.schedule, self.course_list, self.student_list, self.MC, 0, self.hillclimber_counter, 1)
 
 
         # Print intitial
@@ -85,7 +85,7 @@ class Multiprocessor():
         # Run the optimizing loop
         while self.malus['Total'] > 100:
 
-            while self.malus['Total'] > 300:
+            while self.malus['Total'] > 250:
 
                 self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T)
 
@@ -106,37 +106,76 @@ class Multiprocessor():
 
             T = self.__set_temp(T)
 
-            activation = random.choice([1,3])
 
-            if activation == 1:
-                self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T)
-                HC1.schedule = self.schedule
-                HC1.iteration = self.hillclimber_counter
+            if mode == 'solo':
+                activation = random.choice([1,2,3])
 
-                # print(self.malus)
+                if activation == 1:
+                    HC1.schedule = self.schedule
+                    HC1.iteration = self.hillclimber_counter
+                    HC1.hillclimber_iterations = 1
 
-            elif activation == 2:
-                self.schedule, self.malus, self.hillclimber_counter = HC2.climb(T)
-                HC2.schedule = self.schedule
-                HC2.iteration = self.hillclimber_counter
-
-                # print(self.malus)
-
-            elif activation == 3:
-                self.schedule, self.malus, self.hillclimber_counter = HC3.climb(T)
-                HC3.schedule = self.schedule
-                HC3.iteration = self.hillclimber_counter
-
-                # print(self.malus)
-
-            elif activation == 4:
-                self.schedule, self.malus, self.hillclimber_counter = HC4.climb(T)
-                HC4.schedule = self.schedule
-                HC4.iteration = self.hillclimber_counter
-
-                # print(self.malus)
+                    self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T)
 
 
+                    # print(self.malus)
+
+                elif activation == 2:
+                    HC2.schedule = self.schedule
+                    HC2.iteration = self.hillclimber_counter
+                    HC2.hillclimber_iterations = 1
+
+                    self.schedule, self.malus, self.hillclimber_counter = HC2.climb(T)
+
+
+                    # print(self.malus)
+
+                elif activation == 3:
+                    HC3.schedule = self.schedule
+                    HC3.iteration = self.hillclimber_counter
+                    HC3.hillclimber_iterations = 1
+
+                    self.schedule, self.malus, self.hillclimber_counter = HC3.climb(T)
+
+
+                    # print(self.malus)
+
+                elif activation == 4:
+                    HC4.schedule = self.schedule
+                    HC4.iteration = self.hillclimber_counter
+                    HC4.hillclimber_iterations = 1
+
+                    self.schedule, self.malus, self.hillclimber_counter = HC4.climb(T)
+
+                    # print(self.malus)
+            elif mode == 'multi':
+
+                core_assignment_list = [0,1,1,2]
+
+                with Pool(4) as p:
+                    self.output_schedules = p.map(self.run_HC, [(core_assignment_list[0], self.schedule, T, 1, self.hillclimber_counter),
+                                                                (core_assignment_list[1], self.schedule, T, 2, self.hillclimber_counter),
+                                                                (core_assignment_list[2], self.schedule, T, 3, self.hillclimber_counter),
+                                                                (core_assignment_list[3], self.schedule, T, 4, self.hillclimber_counter)])
+                # find the lowest malus of the output rosters
+                min_malus = min([i[1]['Total'] for i in self.output_schedules])
+
+                # Use the lowest malus to find the index of the best roster
+                self.best_index = [i[1]['Total'] for i in self.output_schedules].index(min_malus)
+
+                self.hillclimber_counter = self.output_schedules[0][3]
+
+                # Compute difference between new roster and current roster
+                difference = self.malus['Total'] - self.output_schedules[self.best_index][1]['Total']
+
+                # replace the roster if it is better
+                self.__replace_roster(difference)
+                self.multiprocessor_counter += 1
+
+            # elif mode == 'genetic':
+            #     genetic_schedules = [schedule for copy.deepcopy(schedule) in range]
+                
+            #     while True:
 
 
 
@@ -300,28 +339,28 @@ class Multiprocessor():
         activation, schedule, T, core_assignment, iteration = hc_tuple
         if activation == 0:
 
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC, core_assignment, iteration)
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC, core_assignment, iteration, 50)
             schedule, malus, iteration = HC1.climb(T)
 
             return schedule, malus, HC1.get_name(), iteration
 
         elif activation == 1:
 
-            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC, core_assignment, iteration)
+            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC, core_assignment, iteration, 50)
             schedule, malus, iteration = HC2.climb(T)
 
             return schedule, malus, HC2.get_name(), iteration
 
         elif activation == 2:
 
-            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC, core_assignment, iteration)
+            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC, core_assignment, iteration, 50)
             schedule, malus, iteration = HC3.climb(T)
 
             return schedule, malus, HC3.get_name(), iteration
 
         elif activation == 3:
 
-            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC, core_assignment, iteration)
+            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC, core_assignment, iteration, 50)
             schedule, malus, iteration = HC4.climb(T)
 
             return schedule, malus, HC4.get_name(), iteration
@@ -333,10 +372,10 @@ class Multiprocessor():
     def __replace_roster(self, difference):
 
         # If difference is positive
-        if difference > 0:
+        if difference >= 0:
 
-            # # Set the new roster to self.Roster
-            # self.schedule, self.malus, name, _ = self.output_schedules[self.best_index]
+            # Set the new roster to self.Roster
+            self.schedule, self.malus, _, _ = self.output_schedules[self.best_index]
             self.fail_counter = 0
 
             # print(f'\n========================= Generation: {self.multiprocessor_counter} =========================\n')
