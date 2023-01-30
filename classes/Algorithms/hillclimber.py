@@ -2,6 +2,7 @@ import classes.algorithms.mutate as MutateClass
 import random
 import copy
 import numpy as np
+import decimal
 
 """ Main HillClimber Class """
 
@@ -37,7 +38,7 @@ class HillClimber:
 
     """ Main Method """
 
-    def climb(self, T, fail_counter):
+    def climb(self, T, fail_counter, ANNEALING=False):
         '''performs the climbing of a hillclimber. This method is inherited by every
            kind of hillclimber because it calls on make_mutate and step_methdod, allowing
            it to be easily changed when we want different kinds of hillclimbers. The
@@ -89,24 +90,31 @@ class HillClimber:
             list_malus.append(new_malus['Total'])
 
             # let the hillclimber make 3 changes before a new score is calculated
-            self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, fail_counter)
+            self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, fail_counter, ANNEALING, _)
 
         # Return new roster
         return self.schedule, self.malus, list_iterations, list_malus, self.accept_me
 
-    def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M, fail_counter):
+    def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M, fail_counter, ANNEALING, _):
         '''Takes in the new malus (dict) and schedule (dict) and compares it to the current version
            If it is better, it will update the self.schedule and malus'''
-
-        if new_malus['Total'] < 100:
-            T = 0.0001 + 0.015 * fail_counter
-        
-
 
         # only accept annealing if the rise in malus is not too large
         difference = self.malus['Total'] - new_malus['Total']
 
-        prob = np.exp((-difference/T))
+        if new_malus['Total'] < 140 and ANNEALING:
+            T = decimal.Decimal(0.0001 + 0.05 * fail_counter)
+            
+            
+            power = (-difference)/T
+            if power < -9:
+                prob = 0.0001
+            else: 
+                prob = decimal.Decimal(np.exp((power)))
+        else:
+            T = -1
+            prob = 1
+       
 
         # Compare with prior malus points
         if new_malus['Total'] <= self.malus['Total']:

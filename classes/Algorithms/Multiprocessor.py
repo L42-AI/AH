@@ -129,7 +129,6 @@ class Multiprocessor():
             # Make four deepcopys for each function to use
             self.schedules = [copy.copy(self.schedule) for _ in range(4)]
 
-                
             self.malus = self.MC.compute_total_malus(self.schedule)
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
@@ -137,8 +136,8 @@ class Multiprocessor():
                                                             (core_assignment_list[1], self.schedule, t, self.malus['Total']),
                                                             (core_assignment_list[2], self.schedule, t, self.malus['Total']),
                                                             (core_assignment_list[3], self.schedule, t, self.malus['Total'])])
-            for _, accept_now in enumerate(self.output_schedules[5]):
-                if accept_now:
+            for _, accept_now in enumerate(self.output_schedules):
+                if accept_now[5]:
                     self.best_index = _
                     self.__replace_roster(difference, accept=True)
                     continue
@@ -157,20 +156,6 @@ class Multiprocessor():
             self.list_class_capacity.append(self.malus['Total'] - self.output_schedules[1][1]['Total'])
             self.list_student_gaphour.append(self.malus['Total'] - self.output_schedules[2][1]['Total'])
             self.list_student_doublehour.append(self.malus['Total'] - self.output_schedules[3][1]['Total'])
-
-
-            # # append the different hillclimbers malus and iterations
-            # hillclimber_class_random_iterations.extend([x + (self.iter_counter * 50) for x in self.output_schedules[0][3]])
-            # hillclimber_class_random_malus.extend(self.output_schedules[0][4])
-
-            # hillclimber_class_capacity_iterations.extend([x + (self.iter_counter * 50) for x in self.output_schedules[1][3]])
-            # hillclimber_class_capacity_malus.extend(self.output_schedules[1][4])
-
-            # hillclimber_student_gaphour_iterations.extend([x + (self.iter_counter * 50) for x in self.output_schedules[2][3]])
-            # hillclimber_student_gaphour_malus.extend(self.output_schedules[2][4])
-
-            # hillclimber_student_doublehour_iterations.extend([x + (self.iter_counter * 50) for x in self.output_schedules[3][3]])
-            # hillclimber_student_doublehour_malus.extend(self.output_schedules[3][4])
 
             # Set finish time
             finish_time = time.time()
@@ -191,23 +176,6 @@ class Multiprocessor():
             # append the total malus
             self.list_total_malus.append(self.malus['Total'])
 
-        # # do this only for the one from luka
-        # data = {
-        #     'Iterations': hillclimber_class_random_iterations,
-        #     'Malus Class Random': hillclimber_class_random_malus,
-        #     # 'Iterations Class Capacity': hillclimber_class_capacity_iterations,
-        #     'Malus Class Capacity': hillclimber_class_capacity_malus,
-        #     # 'Iterations Student Gaphour': hillclimber_student_gaphour_iterations,
-        #     'Malus Student Gaphour': hillclimber_student_gaphour_malus,
-        #     # 'Iterations Student Doublehour': hillclimber_student_doublehour_iterations,
-        #     'Malus Student Doublehour': hillclimber_student_doublehour_malus
-        # }
-    
-        # df = pd.DataFrame(data)
-
-        # df.to_csv('data/Lukas Plot Data.csv')
-        # print(df)
-
         return self.list_iterations, self.list_total_malus, self.list_class_random, self.list_class_capacity, self.list_student_gaphour, self.list_student_doublehour, self.list_duration_since_innit
 
     def run_HC(self, hc_tuple):
@@ -219,7 +187,7 @@ class Multiprocessor():
             # print('looking to swap classes...')
             HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC, self.multiplier)
 
-            schedule, malus, list_iterations, list_malus, accept_me = HC1.climb(T, self.fail_counter)
+            schedule, malus, list_iterations, list_malus, accept_me = HC1.climb(T, self.fail_counter, self.ANNEALING)
         
             # print(f'HC1: {roster.malus_count}')
             return schedule, malus, HC1.get_name(), list_iterations, list_malus, accept_me
@@ -229,21 +197,21 @@ class Multiprocessor():
             HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC, self.multiplier)
 
             
-            schedule, malus, list_iterations, list_malus, accept_me = HC2.climb(T, self.fail_counter)
+            schedule, malus, list_iterations, list_malus, accept_me = HC2.climb(T, self.fail_counter, self.ANNEALING)
             # print(f'HC2: {roster.malus_count}')
             return schedule, malus, HC2.get_name(), list_iterations, list_malus, accept_me
 
         elif activation == 2:
             # print('looking to swap students on gap hour malus...')
             HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC, self.multiplier)
-            schedule, malus, list_iterations, list_malus, accept_me = HC3.climb(T, self.fail_counter)
+            schedule, malus, list_iterations, list_malus, accept_me = HC3.climb(T, self.fail_counter, self.ANNEALING)
             # print(f'HC3: {roster.malus_count}')
             return schedule, malus, HC3.get_name(), list_iterations, list_malus, accept_me
 
         elif activation == 3:
             # print('looking to swap students on double classes malus...')
             HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC, self.multiplier)
-            schedule, malus, list_iterations, list_malus, accept_me = HC4.climb(T, self.fail_counter)
+            schedule, malus, list_iterations, list_malus, accept_me = HC4.climb(T, self.fail_counter, self.ANNEALING)
             # print(f'HC4: {roster.malus_count}')
             return schedule, malus, HC4.get_name(), list_iterations, list_malus, accept_me
 
