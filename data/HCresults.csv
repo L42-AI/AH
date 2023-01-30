@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+HC1 type,HC1 iteration,HC1 malus,HC2 type,HC2 iteration,HC2 malus,HC3 type,HC3 iteration,HC3 malus,HC4 type,HC4 iteration,HC4 malus
+=======
 TimeSlotSwapRandom,0,1085
 TimeSlotSwapRandom,1,1085
 TimeSlotSwapRandom,2,1085
@@ -64271,3 +64274,4 @@ SwapBadTimeslots_GapHour,3076,223
 SwapBadTimeslots_GapHour,3077,223
 TimeSlotSwapRandom,3075,223
 SwapBadTimeslots_GapHour,3076,223
+>>>>>>> 9e3948f0324992cc9ced951c130d48bb49bb50ac
