@@ -63,6 +63,18 @@ class Multiprocessor():
         self.list_student_doublehour = []
         self.list_duration_since_innit = []
 
+        # # set lists for one run with all the different hillclimber steps
+        # hillclimber_class_random_iterations = []
+        # hillclimber_class_random_malus = []
+
+        # hillclimber_class_capacity_iterations = []
+        # hillclimber_class_capacity_malus = []
+        
+        # hillclimber_student_gaphour_iterations = []
+        # hillclimber_student_gaphour_malus = []
+
+        # hillclimber_student_doublehour_iterations = []
+        # hillclimber_student_doublehour_malus = []
 
         self.info = {}
 
@@ -95,10 +107,8 @@ class Multiprocessor():
             t = .8
         else:
             t = 0
-
-        not_improved = 0
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while self.fail_counter < 60:
+        while self.fail_counter < 30:
         # while self.iter_counter != 2:
 
             start_time = time.time()
@@ -126,31 +136,11 @@ class Multiprocessor():
                                                             (core_assignment_list[1], self.schedule, t, self.malus['Total']),
                                                             (core_assignment_list[2], self.schedule, t, self.malus['Total']),
                                                             (core_assignment_list[3], self.schedule, t, self.malus['Total'])])
-            populations = {self.output_schedules.index(output): (output[0], output[1]) for output in self.output_schedules}
-            populations = self.tournament(populations)
-        
-            
-            sim = False
             for _, accept_now in enumerate(self.output_schedules):
                 if accept_now[5]:
                     self.best_index = _
-                    old_schedule = self.schedule
-                    old_malus = self.malus
-                    if self.malus['Total'] >= old_malus['Total']:
-                        not_improved += 1
-                    else:
-                        not_improved = 0
                     self.__replace_roster(difference, accept=True)
-                    sim = True
-                    break
-            if sim:
-                continue
-            
-            # if after 30 iterations the worsening did not result in a better state, return to old
-            if not_improved > 30:
-                self.schedule = old_schedule
-                self.malus = old_malus
-
+                    continue
 
             # find the lowest malus of the output rosters
             min_malus = min([i[1]['Total'] for i in self.output_schedules])
@@ -187,18 +177,6 @@ class Multiprocessor():
             self.list_total_malus.append(self.malus['Total'])
 
         return self.list_iterations, self.list_total_malus, self.list_class_random, self.list_class_capacity, self.list_student_gaphour, self.list_student_doublehour, self.list_duration_since_innit
-
-    def tournament(populations):
-        while len(populations) > 4:
-            new_populations = {}
-            counter = 0
-            for i in range(0, len(populations.keys()), 2):
-                counter += 1
-                if populations[i][0]['Total'] > populations[i+1][0]['Total']:
-                    new_populations[counter] = populations[i]
-
-            populations = new_populations
-        return populations
 
     def run_HC(self, hc_tuple):
         '''method that run calls on with a list that is used to determine what hillclimbers should run.
@@ -256,7 +234,7 @@ class Multiprocessor():
             print(self.malus)
             return
         # If difference is positive
-        elif difference > 0:
+        if difference > 0:
 
             # Set the new roster to self.Roster
             self.schedule, self.malus, name, iterations, malus, _ = self.output_schedules[self.best_index]
