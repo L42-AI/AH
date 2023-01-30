@@ -119,7 +119,7 @@ class HillClimber:
                                 if id not in self.double[key]:
                                     self.double[key].add(id)
         elif prob < T and _ < 1 and difference > - (100 - (1-T*200)):
-            print(f'worsening of {-difference} got accepted at T: {T}')
+            # print(f'worsening of {-difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
 
