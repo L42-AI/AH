@@ -41,6 +41,79 @@ class Multiprocessor():
 
         return core_assignment_list
 
+    def run_solo(self):
+
+        # Set Initial variable
+        self.multiprocessor_counter = 0
+        self.hillclimber_counter = 0
+        self.fail_counter = 0
+        self.duration = 0
+
+        self.schedule = self.Roster.schedule
+
+        self.malus = self.MC.compute_total_malus(self.schedule)
+
+        # Print intitial
+        print(f'\nInitialization')
+        print(self.malus)
+        if self.ANNEALING:
+            t = .8
+        else:
+            t = 0
+
+        core_assignment_list = [0,0,0,0]
+
+
+        while self.fail_counter != 10:
+
+            if self.ANNEALING:
+                if t > .5:
+                    t = self.__get_temperature(t)
+                elif t <= 0.5:
+                    t = self.__get_temperature(t, alpha=0.65)
+
+                if t < 0.01:
+                    t = 0.05
+            else:
+                t = 0
+
+
+            if self.malus['Capacity'] < 15:
+                core_assignment_list = [0,1,2,3]
+
+            start_time = time.time()
+
+            # Fill the pool with all functions and their rosters
+            with Pool(4) as p:
+                self.output_schedules = p.map(self.run_HC, [(core_assignment_list[0], self.schedule, t, 1, self.hillclimber_counter),
+                                                            (core_assignment_list[1], self.schedule, t, 2, self.hillclimber_counter),
+                                                            (core_assignment_list[2], self.schedule, t, 3, self.hillclimber_counter),
+                                                            (core_assignment_list[3], self.schedule, t, 4, self.hillclimber_counter)])
+
+            # find the lowest malus of the output rosters
+            min_malus = min([i[1]['Total'] for i in self.output_schedules])
+
+            # Use the lowest malus to find the index of the best roster
+            self.best_index = [i[1]['Total'] for i in self.output_schedules].index(min_malus)
+
+            self.hillclimber_counter = self.output_schedules[0][3]
+
+            # Compute difference between new roster and current roster
+            difference = self.malus['Total'] - self.output_schedules[self.best_index][1]['Total']
+
+            # Set finish time
+            finish_time = time.time()
+
+            self.multiprocess_duration = finish_time - start_time
+            self.duration += self.multiprocess_duration
+
+            # replace the roster if it is better
+            self.__replace_roster(difference)
+
+            self.multiprocessor_counter += 1
+
+        self.finish()
+
     def run(self):
 
         # Set lists
@@ -66,15 +139,10 @@ class Multiprocessor():
         else:
             t = 0
 
-        if self.core_arrangement == 'Class':
-            core_assignment_list = [0,0,1,1]
-        elif self.core_arrangement == 'Student':
-            core_assignment_list = [2,2,3,3]
-        elif self.core_arrangement == 'Mix':
-            core_assignment_list = [0,1,2,3]
+        core_assignment_list = [0,0,0,0]
 
 
-        while self.fail_counter < 30:
+        while self.fail_counter != 10:
 
             if self.ANNEALING:
                 if t > .5:
@@ -86,6 +154,10 @@ class Multiprocessor():
                     t = 0.05
             else:
                 t = 0
+
+
+            if self.malus['Capacity'] < 15:
+                core_assignment_list = [0,1,2,3]
 
             start_time = time.time()
 
@@ -121,6 +193,10 @@ class Multiprocessor():
         self.finish()
 
     def finish(self):
+
+        with open('data/terminate.txt', 'w') as f:
+                f.write('True')
+
         app = SelectorApp.App(self.student_list, self.schedule)
         app.mainloop()
 
@@ -165,7 +241,7 @@ class Multiprocessor():
 
             # Set the new roster to self.Roster
             self.schedule, self.malus, name, _ = self.output_schedules[self.best_index]
-            print(self.best_index)
+
             self.fail_counter = 0
 
             # print(f'\n========================= Generation: {self.multiprocessor_counter} =========================\n')

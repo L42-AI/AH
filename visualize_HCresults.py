@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 df = pd.read_csv('data/HCresults.csv')
 
-# print(df.columns)
+print(df.columns)
 
 HC1_label = df['HC1 type']
 HC1_label.dropna(inplace=True)
@@ -35,12 +35,6 @@ HC4_x_values.dropna(inplace=True)
 HC4_y_values = df['HC4 malus']
 HC4_y_values.dropna(inplace=True)
 
-
-print(HC1_label.unique())
-print(HC2_label.unique())
-print(HC3_label.unique())
-print(HC4_label.unique())
-
 fig = plt.figure(figsize=(14, 7))
 
 ax1 = plt.subplot2grid((4,8), (0,0), colspan=2, rowspan=2)
@@ -49,20 +43,60 @@ ax3 = plt.subplot2grid((4,8), (2,0), colspan=2, rowspan=2)
 ax4 = plt.subplot2grid((4,8), (2,2), colspan=2, rowspan=2)
 ax5 = plt.subplot2grid((4,8), (0,4), colspan=4, rowspan=4)
 
-ax1.plot(HC1_x_values.to_list(), HC1_y_values.to_list(), c='r', label=HC1_label.unique()[0])
-ax2.plot(HC2_x_values.to_list(), HC2_y_values.to_list(), c='g', label=HC2_label.unique()[0])
-ax3.plot(HC3_x_values.to_list(), HC3_y_values.to_list(), c='b', label=HC3_label.unique()[0])
-ax4.plot(HC4_x_values.to_list(), HC4_y_values.to_list(), c='m', label=HC4_label.unique()[0])
+HC1_label = ''
+HC1_x_values = []
+HC1_y_values = []
 
-ax5.plot(HC1_x_values.to_list(), HC1_y_values.to_list(), c='r', label=HC1_label.unique()[0])
-ax5.plot(HC2_x_values.to_list(), HC2_y_values.to_list(), c='g', label=HC2_label.unique()[0])
-ax5.plot(HC3_x_values.to_list(), HC3_y_values.to_list(), c='b', label=HC3_label.unique()[0])
-ax5.plot(HC4_x_values.to_list(), HC4_y_values.to_list(), c='m', label=HC4_label.unique()[0])
+HC2_label = ''
+HC2_x_values = []
+HC2_y_values = []
 
-ax1.legend(loc='upper right')
-ax2.legend(loc='upper right')
-ax3.legend(loc='upper right')
-ax4.legend(loc='upper right')
-ax5.legend(loc='upper right')
-plt.tight_layout()
-plt.show()
+HC3_label = ''
+HC3_x_values = []
+HC3_y_values = []
+
+HC4_label = ''
+HC4_x_values = []
+HC4_y_values = []
+
+def update_data():
+    global HC1_label, HC1_x_values, HC1_y_values, HC2_label, HC2_x_values, HC2_y_values, HC3_label, HC3_x_values, HC3_y_values, HC4_label, HC4_x_values, HC4_y_values
+
+    data = pd.read_csv('generator_data.csv')
+    if data['HC1 type'].values[-1] != None:
+        HC1_label = data['HC1 type'].values[-1]
+        HC1_x_values.append(data['HC1 iterations'].values[-1])
+        HC1_y_values.append(data['HC1 values'].values[-1])
+    elif data['HC2 type'].values[-1] != None:
+        HC2_label = data['HC2 type'].values[-1]
+        HC2_x_values.append(data['HC2 iterations'].values[-1])
+        HC2_y_values.append(data['HC2 values'].values[-1])
+    elif data['HC3 type'].values[-1] != None:
+        HC3_label = data['HC3 type'].values[-1]
+        HC3_x_values.append(data['HC3 iterations'].values[-1])
+        HC3_y_values.append(data['HC3 values'].values[-1])
+    elif data['HC4 type'].values[-1] != None:
+        HC4_label = data['HC4 type'].values[-1]
+        HC4_x_values.append(data['HC4 iterations'].values[-1])
+        HC4_y_values.append(data['HC4 values'].values[-1])
+
+for _ in range (1000):
+    update_data()
+    ax1.plot(HC1_x_values, HC1_y_values, c='r', label=HC1_label)
+    ax2.plot(HC2_x_values, HC2_y_values, c='g', label=HC2_label)
+    ax3.plot(HC3_x_values, HC3_y_values, c='b', label=HC3_label)
+    ax4.plot(HC4_x_values, HC4_y_values, c='m', label=HC4_label)
+
+    ax5.plot(HC1_x_values, HC1_y_values, c='r', label=HC1_label)
+    ax5.plot(HC2_x_values, HC2_y_values, c='g', label=HC2_label)
+    ax5.plot(HC3_x_values, HC3_y_values, c='b', label=HC3_label)
+    ax5.plot(HC4_x_values, HC4_y_values, c='m', label=HC4_label)
+
+    ax1.legend(loc='upper right')
+    ax2.legend(loc='upper right')
+    ax3.legend(loc='upper right')
+    ax4.legend(loc='upper right')
+    ax5.legend(loc='upper right')
+
+    plt.tight_layout()
+    plt.show()

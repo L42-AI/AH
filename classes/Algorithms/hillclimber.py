@@ -13,7 +13,7 @@ class HillClimber:
         self.student_list = student_list
         self.schedule = schedule
         self.MC = MC
-        self.multiplyer = 2
+        self.multiplyer = 0.3
         self.core_assignment = core_assignment
         self.iteration = iteration
 
@@ -99,7 +99,7 @@ class HillClimber:
 
         # Compare with prior malus points
         if new_malus['Total'] <= self.malus['Total']:
-            # print(self.get_name(), self.malus['Total'], new_malus['Total'])
+            print(self.get_name(), self.malus['Total'], new_malus['Total'])
             self.schedule = new_schedule
             self.malus = new_malus
             double_hc['l']['v'] += M.double['l']['v']
