@@ -16,7 +16,7 @@ class Multiprocessor():
        making the proces much faster. Starting up the pools takes time, but when we run multiple hillclimber
        iterations per call, it makes up for it.'''
 
-    def __init__(self, Roster, course_list, student_list, MC, annealing=False):
+    def __init__(self, Roster, course_list, student_list, MC, annealing=False, multiplier=0.1):
         self.Roster = Roster
         self.course_list = course_list
         self.student_list = student_list
@@ -137,6 +137,11 @@ class Multiprocessor():
                                                             (core_assignment_list[1], self.schedule, t, self.malus['Total']),
                                                             (core_assignment_list[2], self.schedule, t, self.malus['Total']),
                                                             (core_assignment_list[3], self.schedule, t, self.malus['Total'])])
+            for _, accept_now in enumerate(self.output_schedules[5]):
+                if accept_now:
+                    self.best_index = _
+                    self.__replace_roster(difference, accept=True)
+                    continue
 
             # find the lowest malus of the output rosters
             min_malus = min([i[1]['Total'] for i in self.output_schedules])
@@ -214,47 +219,57 @@ class Multiprocessor():
             # print('looking to swap classes...')
             HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC, self.multiplier)
 
-            schedule, malus, list_iterations, list_malus = HC1.climb(T)
+            schedule, malus, list_iterations, list_malus, accept_me = HC1.climb(T, self.fail_counter)
         
             # print(f'HC1: {roster.malus_count}')
-            return schedule, malus, HC1.get_name(), list_iterations, list_malus
+            return schedule, malus, HC1.get_name(), list_iterations, list_malus, accept_me
 
         elif activation == 1:
             # print('looking to swap students randomly...')
             HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC, self.multiplier)
 
             
-            schedule, malus, list_iterations, list_malus = HC2.climb(T)
+            schedule, malus, list_iterations, list_malus, accept_me = HC2.climb(T, self.fail_counter)
             # print(f'HC2: {roster.malus_count}')
-            return schedule, malus, HC2.get_name(), list_iterations, list_malus
+            return schedule, malus, HC2.get_name(), list_iterations, list_malus, accept_me
 
         elif activation == 2:
             # print('looking to swap students on gap hour malus...')
             HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC, self.multiplier)
-            schedule, malus, list_iterations, list_malus = HC3.climb(T)
+            schedule, malus, list_iterations, list_malus, accept_me = HC3.climb(T, self.fail_counter)
             # print(f'HC3: {roster.malus_count}')
-            return schedule, malus, HC3.get_name(), list_iterations, list_malus
+            return schedule, malus, HC3.get_name(), list_iterations, list_malus, accept_me
 
         elif activation == 3:
             # print('looking to swap students on double classes malus...')
             HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC, self.multiplier)
-            schedule, malus, list_iterations, list_malus = HC4.climb(T)
+            schedule, malus, list_iterations, list_malus, accept_me = HC4.climb(T, self.fail_counter)
             # print(f'HC4: {roster.malus_count}')
-            return schedule, malus, HC4.get_name(), list_iterations, list_malus
+            return schedule, malus, HC4.get_name(), list_iterations, list_malus, accept_me
 
     def __get_temperature(self, t, alpha=0.995):
         """Exponential decay temperature schedule"""
         return t*alpha
 
-    def __replace_roster(self, difference):
+    def __replace_roster(self, difference, accept=False):
         '''replaces the current schedule with a new one if the malus is lower'''
 
+        if accept:
+            self.schedule, self.malus, name, iterations, malus, _ = self.output_schedules[self.best_index]
+            self.fail_counter = 0
+
+            print(f'\n========================= Generation: {self.iter_counter} =========================\n')
+            print(f'Accepted worsening from: {name}')
+            print(f'Malus worsening: {-difference}')
+            print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
+            print(f'Duration since init: {round(self.duration, 2)} S.')
+            print(self.malus)
+            return
         # If difference is positive
         if difference > 0:
 
             # Set the new roster to self.Roster
-            self.schedule, self.malus, name, iterations, malus = self.output_schedules[self.best_index]
-            print(self.best_index)
+            self.schedule, self.malus, name, iterations, malus, _ = self.output_schedules[self.best_index]
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {self.iter_counter} =========================\n')
@@ -274,20 +289,7 @@ class Multiprocessor():
             print(f'Duration since init: {round(self.duration, 2)} S.')
             print(self.malus)
 
-        if self.ANNEALING and self.iter_counter < 50:
-            p = random.random()
-            if p < 0.1:
-                # Set the new roster to self.Roster
-                self.schedule, self.malus, name = random.choice(self.output_schedules)
-                self.fail_counter = 0
-
-                print(f'\n========================= Generation: {self.iter_counter} =========================\n')
-                print(f'Accepted worse schedule')
-                print(f'Malus worsening: {difference}')
-                print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
-                print(f'Duration since init: {round(self.duration, 2)} S.')
-                print(self.malus)
-
+        
     """ Save and Visualize Data """
 
     def save_results(self):

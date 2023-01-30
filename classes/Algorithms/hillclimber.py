@@ -37,13 +37,14 @@ class HillClimber:
 
     """ Main Method """
 
-    def climb(self, T):
+    def climb(self, T, fail_counter):
         '''performs the climbing of a hillclimber. This method is inherited by every
            kind of hillclimber because it calls on make_mutate and step_methdod, allowing
            it to be easily changed when we want different kinds of hillclimbers. The
            self.double is not used by the program but serves as an analitical tool
            to inspect where double hours originate from'''
 
+        self.accept_me = False
         self.double = {'l': set(), 't': set(), 'p': set()}
 
         # Compute malus with MalusCalculator
@@ -88,26 +89,24 @@ class HillClimber:
             list_malus.append(new_malus['Total'])
 
             # let the hillclimber make 3 changes before a new score is calculated
-            self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, _)
+            self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, fail_counter)
 
         # Return new roster
-        return self.schedule, self.malus, list_iterations, list_malus
+        return self.schedule, self.malus, list_iterations, list_malus, self.accept_me
 
-    def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M, _):
+    def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M, fail_counter):
         '''Takes in the new malus (dict) and schedule (dict) and compares it to the current version
            If it is better, it will update the self.schedule and malus'''
+
+        if new_malus['Total'] < 100:
+            T = 0.0001 + 0.015 * fail_counter
+        
 
 
         # only accept annealing if the rise in malus is not too large
         difference = self.malus['Total'] - new_malus['Total']
 
-        # if difference = 0 it will overflow
-        if difference < 0.01:
-            prob = 1
-        elif T != 0:
-            prob = 1
-        else:
-            prob = 1
+        prob = np.exp((-difference/T))
 
         # Compare with prior malus points
         if new_malus['Total'] <= self.malus['Total']:
@@ -129,10 +128,13 @@ class HillClimber:
                             for id in student:
                                 if id not in self.double[key]:
                                     self.double[key].add(id)
-        elif prob < T and _ < 1 and difference > - (100 - (1-T*200)):
+        elif prob < T:
+
             print(f'worsening of {-difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
+            self.accept_me = True
+        return
 
 """ Inherited HillClimber Classes """
 
