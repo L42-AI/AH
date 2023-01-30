@@ -9,6 +9,11 @@ import copy
 import matplotlib.pyplot as plt
 
 class Multiprocessor():
+    '''Multiprocessor class calls on hillclimbers in a specific order. That order can distribute
+       the hillclimbers based on malus or spread it out evenly. It handles the pooling of the hillclimbers, 
+       making the proces much faster. Starting up the pools takes time, but when we run multiple hillclimber
+       iterations per call, it makes up for it.'''
+
     def __init__(self, Roster, course_list, student_list, MC, annealing=False):
         self.Roster = Roster
         self.course_list = course_list
@@ -19,6 +24,10 @@ class Multiprocessor():
         self.MC = MC
 
     def core_assignment(self, malus) -> list:
+        '''creates a lists with integers representing hillclimber classes based on
+           the current malus proportions, so when there are more gap hours, more students
+           will be switched and when there are more capacity malus points, more lectures and tutorials 
+           etc will be switched'''
 
         core_assignment_list = []
 
@@ -40,6 +49,8 @@ class Multiprocessor():
         return core_assignment_list
 
     def run(self):
+        '''Handles the process of running and stores that data for the GUI. This is
+           the main proces for finding the schedule'''
 
         # Set lists
         self.iterations_list = []
@@ -116,6 +127,9 @@ class Multiprocessor():
             self.iter_counter += 1
 
     def run_HC(self, hc_tuple):
+        '''method that run calls on with a list that is used to determine what hillclimbers should run.
+           The hillclimbers can be activated seperate from each other. Each hillclimber returns a schedule, 
+           malus and the name of the hillclimber that was used'''
         activation, schedule, T, real_score = hc_tuple
         if activation == 0:
             # print('looking to swap classes...')
@@ -154,13 +168,13 @@ class Multiprocessor():
         return t*alpha
 
     def __replace_roster(self, difference):
+        '''replaces the current schedule with a new one if the malus is lower'''
 
         # If difference is positive
         if difference > 0:
 
             # Set the new roster to self.Roster
             self.schedule, self.malus, name = self.output_schedules[self.best_index]
-            print(self.best_index)
             self.fail_counter = 0
 
             print(f'\n========================= Generation: {self.iter_counter} =========================\n')
@@ -179,6 +193,20 @@ class Multiprocessor():
             print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
             print(f'Duration since init: {round(self.duration, 2)} S.')
             print(self.malus)
+
+        if self.ANNEALING and self.iter_counter < 50:
+            p = random.random()
+            if p < 0.1:
+                # Set the new roster to self.Roster
+                self.schedule, self.malus, name = random.choice(self.output_schedules)
+                self.fail_counter = 0
+
+                print(f'\n========================= Generation: {self.iter_counter} =========================\n')
+                print(f'Accepted worse schedule')
+                print(f'Malus worsening: {difference}')
+                print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
+                print(f'Duration since init: {round(self.duration, 2)} S.')
+                print(self.malus)
 
     """ Save and Visualize Data """
 

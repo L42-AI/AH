@@ -17,28 +17,33 @@ class HillClimber:
     """ Inheritable methods """
 
     def step_method(self, M):
+        '''calls on a hillclimber specific step method'''
         pass
 
     def get_name(self):
+        '''helps with keeping track of what hillclimber does what'''
         pass
 
     def make_mutate(self, schedule):
+        '''Calls a mutate class. Can be easily changed when using different hillclimbers
+           to call on a different mutate with different criterea'''
         M = MutateClass.Mutate(self.course_list, self.student_list, schedule)
         return M
 
-    def replace_roster(self, T=None):
-        self.current_best_roster = min(self.rosters, key=lambda x: x.malus_count)
-
-        if self.best_malus > self.current_best_roster.malus_count:
-            self.best_schedule = self.current_best_roster
-
     def get_score(self):
+        '''Returns the total score of the current schedule'''
         return self.MC.compute_total_malus(self.schedule)['Total']
 
 
     """ Main Method """
 
     def climb(self, T):
+        '''performs the climbing of a hillclimber. This method is inherited by every
+           kind of hillclimber because it calls on make_mutate and step_methdod, allowing
+           it to be easily changed when we want different kinds of hillclimbers. The
+           self.double is not used by the program but serves as an analitical tool
+           to inspect where double hours originate from'''
+
         self.double = {'l': set(), 't': set(), 'p': set()}
 
         # Compute malus with MalusCalculator
@@ -70,7 +75,7 @@ class HillClimber:
 
             # let the hillclimber make 3 changes before a new score is calculated
             self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, _)
-        # print(self.get_name(), self.double)
+
         # Return new roster
         return self.schedule, self.malus
 
@@ -84,10 +89,9 @@ class HillClimber:
 
         # if difference = 0 it will overflow
         if difference < 0.01:
-            prob = 0
+            prob = 1
         elif T != 0:
-            prob = np.exp(-difference / T )
-            prob /= 1000
+            prob = 1
         else:
             prob = 1
 
@@ -104,8 +108,7 @@ class HillClimber:
             double_hc['p']['student'].append(M.double['p']['student'])
             
             for key in double_hc:
-                # print(key)
-                # print(self.double[key])
+
                 if double_hc[key]['student']:
                     for student in double_hc[key]['student']:
                         if student:
@@ -120,7 +123,8 @@ class HillClimber:
 """ Inherited HillClimber Classes """
 
 class HC_TimeSlotSwapRandom(HillClimber):
-    '''swaps a random class with another random class'''
+    '''swaps a random class with another random class, calls on its own
+       mutate method to swap 2 random lessons, either lectures, tutorials or practicals'''
     def step_method(self, M):
 
         # Take a random state to pass to function
