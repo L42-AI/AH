@@ -71,7 +71,8 @@ if __name__ == '__main__':
 
     # df.to_csv('data/Normal Hillclimber geen multiplier 30 keer.csv')
 
-    list_multipliers = [0.1, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+    # list_multipliers = [0.1, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+    list_multipliers = [4]
     list_iterations = []
     list_total_malus = []
     list_class_random = []
@@ -102,7 +103,7 @@ if __name__ == '__main__':
 
     df = pd.DataFrame(data)
 
-    df.to_csv('data/Different Multipliers.csv')
+    df.to_csv('data/Multiplier 4 only.csv')
 
 
     print(df)
