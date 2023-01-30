@@ -72,10 +72,10 @@ class Multiprocessor():
         T = self.__init_temp()
 
         # Initialize all hillclimbers
-        HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.course_list, self.student_list, self.MC, 0, self.hillclimber_counter, 1)
-        HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(self.schedule, self.course_list, self.student_list, self.MC, 0, self.hillclimber_counter, 1)
-        HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.schedule, self.course_list, self.student_list, self.MC, 0, self.hillclimber_counter, 1)
-        HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.schedule, self.course_list, self.student_list, self.MC, 0, self.hillclimber_counter, 1)
+        HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
+        HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
+        HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
+        HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
 
 
         # Print intitial
@@ -206,6 +206,8 @@ class Multiprocessor():
                                                                 (3, genetic_schedules[30], T, self.hillclimber_counter),
                                                                 (3, genetic_schedules[31], T, self.hillclimber_counter)])
 
+
+                
                 while True:
                     schedule1 = self.schedule
                     schedule2 = self.schedule
@@ -248,7 +250,21 @@ class Multiprocessor():
                                                                     (3, schedules[3], T, self.hillclimber_counter),
                                                                     (3, schedules[3], T, self.hillclimber_counter)])
 
+                    populations = {self.output_schedules.index(output): (output[0], output[1]) for output in self.output_schedules}
+                    populations = self.tournament(populations)
+                    print(populations)
 
+    def tournament(populations):
+            while len(populations) > 4:
+                new_populations = {}
+                counter = 0
+                for i in range(0, len(populations.keys()), 2):
+                    counter += 1
+                    if populations[i][0]['Total'] > populations[i+1][0]['Total']:
+                        new_populations[counter] = populations[i]
+
+                populations = new_populations
+            return populations
 
     def run(self):
 
