@@ -10,10 +10,8 @@ import matplotlib.animation as animation
 
 
 class App(customtkinter.CTk):
-    def __init__(self, process):
+    def __init__(self):
         super().__init__()
-
-        self.process = process
 
         # configure window
         self.title("Scheduly")
@@ -49,7 +47,7 @@ class App(customtkinter.CTk):
         self.malus_count_label = customtkinter.CTkLabel(self.frame, textvariable=self.malus_var, font=customtkinter.CTkFont(size=35, weight="bold"))
         self.malus_count_label.grid(row=1, column=1, padx=20, pady=20, sticky="new")
 
-        self.accept_button = customtkinter.CTkButton(self.frame, height=50, text="Finish", state='disabled', fg_color='red', hover_color='red', font=customtkinter.CTkFont(size=15, weight="bold"), command=self.finish)
+        self.accept_button = customtkinter.CTkButton(self.frame, height=50, text="Finish", state='disabled', fg_color='red', hover_color='red', font=customtkinter.CTkFont(size=15, weight="bold"))
         self.accept_button.grid(row=2, column=1, padx=40, pady=20, sticky="sew")
 
         self.colours = ['r', 'b', 'g', 'm']
@@ -80,5 +78,7 @@ class App(customtkinter.CTk):
     def run(self):
         self.mainloop()
 
-
+if __name__ == '__main__':
+    app = App()
+    app.run()
 

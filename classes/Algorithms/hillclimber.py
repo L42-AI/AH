@@ -7,15 +7,15 @@ import csv
 """ Main HillClimber Class """
 
 class HillClimber:
-    def __init__(self, schedule, course_list, student_list, MC, core_assignment, iteration):
+    def __init__(self, schedule, course_list, student_list, MC, iteration):
         self.schedule_list = []
         self.course_list = course_list
         self.student_list = student_list
         self.schedule = schedule
         self.MC = MC
-        self.multiplyer = 2
-        self.core_assignment = core_assignment
+        self.multiplyer = 0.3
         self.iteration = iteration
+
 
     """ Inheritable methods """
 
@@ -52,8 +52,8 @@ class HillClimber:
         double_hc = {'l': {'v': 0, 'student': []}, 't': {'v': 0, 'student': []}, 'p': {'v': 0, 'student': []}}
 
         # let the hillclimber take some steps 
-        for _ in range(int(self.malus['Total'] * self.multiplyer)):
-        # for _ in range(50):
+        # for _ in range(int(self.malus['Total'] * self.multiplyer)):
+        for _ in range(50):
 
             # Make copy of schedule, complex because of dictionary
             copied_schedule = copy.deepcopy(self.schedule)
@@ -71,7 +71,7 @@ class HillClimber:
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
 
-            self.save_results()
+            # self.save_results()
 
             # let the hillclimber make 3 changes before a new score is calculated
             self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, _)
@@ -99,7 +99,7 @@ class HillClimber:
 
         # Compare with prior malus points
         if new_malus['Total'] <= self.malus['Total']:
-            # print(self.get_name(), self.malus['Total'], new_malus['Total'])
+            print(self.get_name(), self.malus['Total'], new_malus['Total'])
             self.schedule = new_schedule
             self.malus = new_malus
             double_hc['l']['v'] += M.double['l']['v']
@@ -123,13 +123,24 @@ class HillClimber:
             self.schedule = new_schedule
             self.malus = new_malus
 
-    def save_results(self):
+    def save_results_multi(self):
         with open('data/HCResults.csv', 'a') as f:
             csv_writer = csv.DictWriter(f, fieldnames=['HC1 type','HC1 iteration','HC1 malus','HC2 type','HC2 iteration','HC2 malus','HC3 type','HC3 iteration','HC3 malus','HC4 type','HC4 iteration','HC4 malus'])
             info = {
                 f'HC{self.core_assignment} type': self.get_name(),
                 f'HC{self.core_assignment} iteration': self.iteration,
                 f'HC{self.core_assignment} malus': self.malus['Total']
+            }
+
+            csv_writer.writerow(info)
+
+    def save_results(self):
+        with open('data/HCResults.csv', 'a') as f:
+            csv_writer = csv.DictWriter(f, fieldnames=['HC type','HC iteration','HC malus'])
+            info = {
+                f'HC type': self.get_name(),
+                f'HC iteration': self.iteration,
+                f'HC malus': self.malus['Total']
             }
 
             csv_writer.writerow(info)

@@ -26,24 +26,21 @@ if __name__ == '__main__':
 
                         G.optimize()
 
-    elif computer == 'Jacob':
-        for A in [True, False]:
-            for B in [True, False]:
-                for C in [True, False]:
-                    for D in [True, False]:
-                        for E in ['Class', 'Student', 'Mix']:
-                            capacity = A
-                            popular = B
-                            popular_own_day = C
-                            annealing = D
-                            core_arrangement = E
+    # elif computer == 'Jacob':
+        # for E in ['Mix']:
+        #     capacity = True
+        #     popular = True
+        #     popular_own_day = True
+        #     annealing = False
+        #     core_arrangement = E
 
-                            difficult_students = False
-                            visualize = False
+        #     difficult_students = False   
+        #     visualize = False
 
-                            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
-                            capacity, popular, popular_own_day, difficult_students, annealing, visualize, core_arrangement)
+        #     G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
+        #     capacity, popular, popular_own_day, difficult_students, annealing, visualize, core_arrangement)
 
-                            G.optimize()
-    # App = InitApp.App()
-    # App.run()
+        #     G.optimize()
+        #     raise
+    App = InitApp.App()
+    App.run()

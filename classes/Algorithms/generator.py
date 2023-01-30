@@ -94,7 +94,7 @@ class Generator:
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         # give the 5 most popular courses their own day to hold their lectures, to prevent gap hours
         if self.POPULAR_OWN_DAY:
-            
+
             for i in range(5):
                 course_list[i].day = days[i]
 
@@ -199,4 +199,4 @@ class Generator:
 
     def optimize(self):
         Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING, self.core_arrangement)
-        Multiprocessor.run()
+        Multiprocessor.run_combination('Multi')
