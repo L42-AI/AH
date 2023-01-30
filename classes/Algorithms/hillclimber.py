@@ -1,4 +1,5 @@
 import classes.algorithms.mutate as MutateClass
+from helpers.shallow_copy import recursive_copy
 import random
 import copy
 import numpy as np
@@ -53,10 +54,10 @@ class HillClimber:
 
         # let the hillclimber take some steps 
         # for _ in range(int(self.malus['Total'] * self.multiplyer)):
-        for _ in range(250):
+        for _ in range(400):
 
             # Make copy of schedule, complex because of dictionary
-            copied_schedule = copy.deepcopy(self.schedule)
+            copied_schedule = recursive_copy(self.schedule)
 
             # {k: {k2: {k3: [student for student in v3] for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
             # Create the mutate class

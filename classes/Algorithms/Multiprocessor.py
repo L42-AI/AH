@@ -2,6 +2,7 @@ import classes.algorithms.hillclimber as HillCLimberClass
 from multiprocessing import Pool
 import random
 import classes.GUI.selector_GUI as SelectorApp
+from helpers.shallow_copy import recursive_copy
 
 import csv
 import time
@@ -88,7 +89,7 @@ class Multiprocessor():
 
             start_time = time.time()
 
-            while self.malus['Total'] > 200:
+            while self.malus['Total'] > 150:
 
                 self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T)
 
@@ -173,61 +174,23 @@ class Multiprocessor():
                 self.multiprocessor_counter += 1
 
             elif mode == 'genetic_pool':
-                # genetic_schedules = [copy.deepcopy(self.schedule) for _ in range(32)]
 
-                # with Pool(4) as p:
-                #     self.output_schedules = p.map(self.run_HC, [(0, genetic_schedules[0], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[1], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[2], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[3], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[4], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[5], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[6], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[7], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[8], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[9], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[10], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[11], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[12], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[13], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[14], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[15], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[16], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[17], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[18], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[19], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[20], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[21], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[22], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[23], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[24], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[25], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[26], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[27], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[28], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[29], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[30], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[31], T, self.hillclimber_counter)])
-
-                schedule1 = copy.deepcopy(self.schedule)
-                schedule2 = copy.deepcopy(self.schedule)
-                schedule3 = copy.deepcopy(self.schedule)
-                schedule4 = copy.deepcopy(self.schedule)
-
-                schedule_list = [schedule1, schedule2, schedule3, schedule4]
+                schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
 
                 while time.time() - start_time < 600:
-                    total_output = []
 
+                    gen_time_start = time.time()
+
+                    total_output = []
                     for schedule in schedule_list:
                         for _ in range(2):
-                            # print(f'before: {time.time() - start_time}')
+                            print(f'before: {time.time() - gen_time_start}')
                             with Pool(4) as p:
                                 output_schedules = p.map(self.run_HC, [(0, schedule, T, self.hillclimber_counter),
                                                                             (1, schedule, T, self.hillclimber_counter),
                                                                             (2, schedule, T, self.hillclimber_counter),
                                                                             (3, schedule, T, self.hillclimber_counter)])
-                            # print(f'after: {time.time() - start_time}')
+                            print(f'after: {time.time() - gen_time_start}')
                             total_output += output_schedules
 
                     # with Pool(4) as p:
@@ -272,28 +235,24 @@ class Multiprocessor():
 
                     populations = self.tournament(populations)
                     for pop in populations:
-                        print(time.time() - start_time)
+                        print(time.time() - gen_time_start)
                         print(populations[pop][1]['Total'])
 
                     schedule_list = [populations[value][0] for value in populations]
 
             elif mode == 'genetic':
-                schedule1 = copy.deepcopy(self.schedule)
-                schedule2 = copy.deepcopy(self.schedule)
-                schedule3 = copy.deepcopy(self.schedule)
-                schedule4 = copy.deepcopy(self.schedule)
 
-                schedule_list = [schedule1, schedule2, schedule3, schedule4]
+                schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
 
-                while start_time - time.time() < 900:
+                while time.time() - start_time < 900:
+
+                    gen_time_start = time.time()
+
                     total_output = []
-
-
-
                     for schedule in schedule_list:
                         for _ in range(2):
                             for i in range(4):
-                                schedule, malus, _, _ = self.run_HC(i, schedule, T, self.hillclimber_counter)
+                                schedule, malus, _, _ = self.run_HC((i, schedule, T, self.hillclimber_counter))
 
                                 total_output.append((schedule, malus))
 
@@ -306,7 +265,7 @@ class Multiprocessor():
 
                     populations = self.tournament(populations)
                     for pop in populations:
-                        print(time.time() - start_time)
+                        print(time.time() - gen_time_start)
                         print(populations[pop][1]['Total'])
 
                     schedule_list = [populations[value][0] for value in populations]
