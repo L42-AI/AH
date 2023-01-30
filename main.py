@@ -71,38 +71,40 @@ if __name__ == '__main__':
 
     # df.to_csv('data/Normal Hillclimber geen multiplier 30 keer.csv')
 
-    # list_multipliers = [0.1, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
-    # list_iterations = []
-    # list_total_malus = []
-    # list_class_random = []
-    # list_class_capacity = []
-    # list_student_gaphour = []
-    # list_student_doublehour = []
+    list_multipliers = [0.1, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+    list_iterations = []
+    list_total_malus = []
+    list_class_random = []
+    list_class_capacity = []
+    list_student_gaphour = []
+    list_student_doublehour = []
+    list_duration_since_innit = []
 
-    # lists_to_append = [list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour]
+    lists_to_append = [list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit]
 
-    # for multiplier in list_multipliers:
+    for multiplier in list_multipliers:
 
-    #     lists = main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT, multiplier)
+        lists = main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT, multiplier)
 
-    #     for lst, list_to_append in zip(lists, lists_to_append):
-    #         for word in lst:
-    #             list_to_append.append(word)
+        for lst, list_to_append in zip(lists, lists_to_append):
+            for word in lst:
+                list_to_append.append(word)
 
-    # data = {
-    #     'List Iterations': list_iterations,
-    #     'Total Malus': list_total_malus,
-    #     'Swap Class Random': list_class_random, 
-    #     'Swap Class Capacity': list_class_capacity,
-    #     'Swap Student Gaphour': list_student_gaphour,
-    #     'Swap Student Doublehour': list_student_doublehour
-    #     }
+    data = {
+        'List Iterations': list_iterations,
+        'Duration since innit': list_duration_since_innit,
+        'Total Malus': list_total_malus,
+        'Swap Class Random': list_class_random, 
+        'Swap Class Capacity': list_class_capacity,
+        'Swap Student Gaphour': list_student_gaphour,
+        'Swap Student Doublehour': list_student_doublehour
+        }
 
-    # df = pd.DataFrame(data)
+    df = pd.DataFrame(data)
 
-    # df.to_csv('data/Different Multipliers.csv')
+    df.to_csv('data/Different Multipliers.csv')
 
 
-    # print(df)
+    print(df)
 
-    main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
+    # main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
