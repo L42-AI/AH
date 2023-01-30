@@ -7,16 +7,14 @@ import csv
 """ Main HillClimber Class """
 
 class HillClimber:
-    def __init__(self, schedule, course_list, student_list, MC, core_assignment, iteration, hillclimber_iterations):
+    def __init__(self, schedule, course_list, student_list, MC, iteration):
         self.schedule_list = []
         self.course_list = course_list
         self.student_list = student_list
         self.schedule = schedule
         self.MC = MC
         self.multiplyer = 0.3
-        self.core_assignment = core_assignment
         self.iteration = iteration
-        self.hillclimber_iterations = hillclimber_iterations
 
 
     """ Inheritable methods """
@@ -55,7 +53,7 @@ class HillClimber:
 
         # let the hillclimber take some steps 
         # for _ in range(int(self.malus['Total'] * self.multiplyer)):
-        for _ in range(self.hillclimber_iterations):
+        for _ in range(50):
 
             # Make copy of schedule, complex because of dictionary
             copied_schedule = copy.deepcopy(self.schedule)
@@ -73,7 +71,7 @@ class HillClimber:
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
 
-            self.save_results()
+            # self.save_results()
 
             # let the hillclimber make 3 changes before a new score is calculated
             self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, _)

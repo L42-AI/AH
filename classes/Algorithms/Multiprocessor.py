@@ -113,7 +113,6 @@ class Multiprocessor():
                 if activation == 1:
                     HC1.schedule = self.schedule
                     HC1.iteration = self.hillclimber_counter
-                    HC1.hillclimber_iterations = 1
 
                     self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T)
 
@@ -123,7 +122,6 @@ class Multiprocessor():
                 elif activation == 2:
                     HC2.schedule = self.schedule
                     HC2.iteration = self.hillclimber_counter
-                    HC2.hillclimber_iterations = 1
 
                     self.schedule, self.malus, self.hillclimber_counter = HC2.climb(T)
 
@@ -133,7 +131,6 @@ class Multiprocessor():
                 elif activation == 3:
                     HC3.schedule = self.schedule
                     HC3.iteration = self.hillclimber_counter
-                    HC3.hillclimber_iterations = 1
 
                     self.schedule, self.malus, self.hillclimber_counter = HC3.climb(T)
 
@@ -172,10 +169,84 @@ class Multiprocessor():
                 self.__replace_roster(difference)
                 self.multiprocessor_counter += 1
 
-            # elif mode == 'genetic':
-            #     genetic_schedules = [schedule for copy.deepcopy(schedule) in range]
-                
-            #     while True:
+            elif mode == 'genetic':
+                genetic_schedules = [copy.deepcopy(self.schedule) for _ in range(32)]
+
+                with Pool(32) as p:
+                    self.output_schedules = p.map(self.run_HC, [(0, genetic_schedules[0], T, self.hillclimber_counter),
+                                                                (0, genetic_schedules[1], T, self.hillclimber_counter),
+                                                                (0, genetic_schedules[2], T, self.hillclimber_counter),
+                                                                (0, genetic_schedules[3], T, self.hillclimber_counter),
+                                                                (0, genetic_schedules[4], T, self.hillclimber_counter),
+                                                                (0, genetic_schedules[5], T, self.hillclimber_counter),
+                                                                (0, genetic_schedules[6], T, self.hillclimber_counter),
+                                                                (0, genetic_schedules[7], T, self.hillclimber_counter),
+                                                                (1, genetic_schedules[8], T, self.hillclimber_counter),
+                                                                (1, genetic_schedules[9], T, self.hillclimber_counter),
+                                                                (1, genetic_schedules[10], T, self.hillclimber_counter),
+                                                                (1, genetic_schedules[11], T, self.hillclimber_counter),
+                                                                (1, genetic_schedules[12], T, self.hillclimber_counter),
+                                                                (1, genetic_schedules[13], T, self.hillclimber_counter),
+                                                                (1, genetic_schedules[14], T, self.hillclimber_counter),
+                                                                (1, genetic_schedules[15], T, self.hillclimber_counter),
+                                                                (2, genetic_schedules[16], T, self.hillclimber_counter),
+                                                                (2, genetic_schedules[17], T, self.hillclimber_counter),
+                                                                (2, genetic_schedules[18], T, self.hillclimber_counter),
+                                                                (2, genetic_schedules[19], T, self.hillclimber_counter),
+                                                                (2, genetic_schedules[20], T, self.hillclimber_counter),
+                                                                (2, genetic_schedules[21], T, self.hillclimber_counter),
+                                                                (2, genetic_schedules[22], T, self.hillclimber_counter),
+                                                                (2, genetic_schedules[23], T, self.hillclimber_counter),
+                                                                (3, genetic_schedules[24], T, self.hillclimber_counter),
+                                                                (3, genetic_schedules[25], T, self.hillclimber_counter),
+                                                                (3, genetic_schedules[26], T, self.hillclimber_counter),
+                                                                (3, genetic_schedules[27], T, self.hillclimber_counter),
+                                                                (3, genetic_schedules[28], T, self.hillclimber_counter),
+                                                                (3, genetic_schedules[29], T, self.hillclimber_counter),
+                                                                (3, genetic_schedules[30], T, self.hillclimber_counter),
+                                                                (3, genetic_schedules[31], T, self.hillclimber_counter)])
+
+                while True:
+                    schedule1 = self.schedule
+                    schedule2 = self.schedule
+                    schedule3 = self.schedule
+                    schedule4 = self.schedule
+
+                    schedules = [schedule1, schedule2, schedule3, schedule4]
+
+                    with Pool(32) as p:
+                        self.output_schedules = p.map(self.run_HC, [(0, schedules[0], T, self.hillclimber_counter),
+                                                                    (0, schedules[0], T, self.hillclimber_counter),
+                                                                    (0, schedules[1], T, self.hillclimber_counter),
+                                                                    (0, schedules[1], T, self.hillclimber_counter),
+                                                                    (0, schedules[2], T, self.hillclimber_counter),
+                                                                    (0, schedules[2], T, self.hillclimber_counter),
+                                                                    (0, schedules[3], T, self.hillclimber_counter),
+                                                                    (0, schedules[3], T, self.hillclimber_counter),
+                                                                    (1, schedules[0], T, self.hillclimber_counter),
+                                                                    (1, schedules[0], T, self.hillclimber_counter),
+                                                                    (1, schedules[1], T, self.hillclimber_counter),
+                                                                    (1, schedules[1], T, self.hillclimber_counter),
+                                                                    (1, schedules[2], T, self.hillclimber_counter),
+                                                                    (1, schedules[2], T, self.hillclimber_counter),
+                                                                    (1, schedules[3], T, self.hillclimber_counter),
+                                                                    (1, schedules[3], T, self.hillclimber_counter),
+                                                                    (2, schedules[0], T, self.hillclimber_counter),
+                                                                    (2, schedules[0], T, self.hillclimber_counter),
+                                                                    (2, schedules[1], T, self.hillclimber_counter),
+                                                                    (2, schedules[1], T, self.hillclimber_counter),
+                                                                    (2, schedules[2], T, self.hillclimber_counter),
+                                                                    (2, schedules[2], T, self.hillclimber_counter),
+                                                                    (2, schedules[3], T, self.hillclimber_counter),
+                                                                    (2, schedules[3], T, self.hillclimber_counter),
+                                                                    (3, schedules[0], T, self.hillclimber_counter),
+                                                                    (3, schedules[0], T, self.hillclimber_counter),
+                                                                    (3, schedules[1], T, self.hillclimber_counter),
+                                                                    (3, schedules[1], T, self.hillclimber_counter),
+                                                                    (3, schedules[2], T, self.hillclimber_counter),
+                                                                    (3, schedules[2], T, self.hillclimber_counter),
+                                                                    (3, schedules[3], T, self.hillclimber_counter),
+                                                                    (3, schedules[3], T, self.hillclimber_counter)])
 
 
 
@@ -336,31 +407,31 @@ class Multiprocessor():
         app.mainloop()
 
     def run_HC(self, hc_tuple):
-        activation, schedule, T, core_assignment, iteration = hc_tuple
+        activation, schedule, T, iteration = hc_tuple
         if activation == 0:
 
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC, core_assignment, iteration, 50)
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC, iteration)
             schedule, malus, iteration = HC1.climb(T)
 
             return schedule, malus, HC1.get_name(), iteration
 
         elif activation == 1:
 
-            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC, core_assignment, iteration, 50)
+            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC, iteration)
             schedule, malus, iteration = HC2.climb(T)
 
             return schedule, malus, HC2.get_name(), iteration
 
         elif activation == 2:
 
-            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC, core_assignment, iteration, 50)
+            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC, iteration)
             schedule, malus, iteration = HC3.climb(T)
 
             return schedule, malus, HC3.get_name(), iteration
 
         elif activation == 3:
 
-            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC, core_assignment, iteration, 50)
+            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC, iteration, 50)
             schedule, malus, iteration = HC4.climb(T)
 
             return schedule, malus, HC4.get_name(), iteration
