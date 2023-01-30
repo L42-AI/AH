@@ -42,9 +42,9 @@ class HillClimber:
 
     """ Main Method """
 
-    def climb(self, T, fail_counter):
+    def climb(self, T, ANNEALING):
         self.double = {'l': set(), 't': set(), 'p': set()}
-
+        self.accept_me = False
         # Compute malus with MalusCalculator
         self.malus = self.MC.compute_total_malus(self.schedule)
 
@@ -54,7 +54,7 @@ class HillClimber:
 
         # let the hillclimber take some steps 
         # for _ in range(int(self.malus['Total'] * self.multiplyer)):
-        for _ in range(400):
+        for _ in range(200):
 
             # Make copy of schedule, complex because of dictionary
             copied_schedule = copy.deepcopy(self.schedule)
@@ -75,13 +75,13 @@ class HillClimber:
             # self.save_results()
 
             # let the hillclimber make 3 changes before a new score is calculated
-            self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, _, fail_counter)
+            self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, _, ANNEALING)
 
             self.iteration += 1
 
         return self.schedule, self.malus, self.iteration
 
-    def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M, _, ANNEALING, fail_counter):
+    def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M, _, ANNEALING):
         '''Takes in the new malus (dict) and schedule (dict) and compares it to the current version
            If it is better, it will update the self.schedule and malus'''
 
@@ -93,16 +93,12 @@ class HillClimber:
         difference = self.malus['Total'] - new_malus['Total']
         prob = random.random()
 
-        if new_malus['Total'] < 145 and ANNEALING:
-            T = decimal.Decimal(0.0001 + 0.0008 * fail_counter)
+        if new_malus['Total'] < 100 and ANNEALING and not self.accept_me:
+            T = decimal.Decimal(0.05)
 
             power = (-difference)/T
-            if fail_counter > 20 and _ < 1:
-                acpt = decimal.Decimal(np.exp((power)))
-            else:
-                acpt = 0
+            acpt = decimal.Decimal(np.exp((power)))
         else:
-    
             acpt = 0
 
         # Compare with prior malus points
@@ -130,6 +126,7 @@ class HillClimber:
             # print(f'worsening of {-difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
+            self.accept_me = True
 
     def save_results_multi(self):
         with open('data/HCResults.csv', 'a') as f:

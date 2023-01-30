@@ -1,1 +1,1 @@
-{"capacity": true, "popular": true, "popular_own_day": true, "difficult_students": false, "annealing": false, "visualize": false}
+{"capacity": true, "popular": true, "popular_own_day": true, "difficult_students": false, "annealing": true, "visualize": false}

@@ -90,7 +90,7 @@ class Multiprocessor():
 
             while self.malus['Total'] > 200:
 
-                self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T)
+                self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T, self.ANNEALING)
 
                 HC1.schedule = self.schedule
                 HC1.iteration = self.hillclimber_counter
@@ -111,7 +111,7 @@ class Multiprocessor():
 
 
             if mode == 'solo':
-                activation = random.choice([1,2,3])
+                activation = random.choice([1,2,3,4])
 
                 if activation == 1:
                     HC1.schedule = self.schedule
@@ -153,10 +153,10 @@ class Multiprocessor():
                 core_assignment_list = [0,1,1,2]
 
                 with Pool(4) as p:
-                    self.output_schedules = p.map(self.run_HC, [(core_assignment_list[0], self.schedule, T, 1, self.hillclimber_counter),
-                                                                (core_assignment_list[1], self.schedule, T, 2, self.hillclimber_counter),
-                                                                (core_assignment_list[2], self.schedule, T, 3, self.hillclimber_counter),
-                                                                (core_assignment_list[3], self.schedule, T, 4, self.hillclimber_counter)])
+                    self.output_schedules = p.map(self.run_HC, [(core_assignment_list[0], T, 1),
+                                                                (core_assignment_list[1], T, 2),
+                                                                (core_assignment_list[2], T, 3),
+                                                                (core_assignment_list[3], T, 4)])
                 # find the lowest malus of the output rosters
                 min_malus = min([i[1]['Total'] for i in self.output_schedules])
 
@@ -173,41 +173,6 @@ class Multiprocessor():
                 self.multiprocessor_counter += 1
 
             elif mode == 'genetic_pool':
-                # genetic_schedules = [copy.deepcopy(self.schedule) for _ in range(32)]
-
-                # with Pool(4) as p:
-                #     self.output_schedules = p.map(self.run_HC, [(0, genetic_schedules[0], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[1], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[2], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[3], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[4], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[5], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[6], T, self.hillclimber_counter),
-                #                                                 (0, genetic_schedules[7], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[8], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[9], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[10], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[11], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[12], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[13], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[14], T, self.hillclimber_counter),
-                #                                                 (1, genetic_schedules[15], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[16], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[17], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[18], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[19], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[20], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[21], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[22], T, self.hillclimber_counter),
-                #                                                 (2, genetic_schedules[23], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[24], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[25], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[26], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[27], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[28], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[29], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[30], T, self.hillclimber_counter),
-                #                                                 (3, genetic_schedules[31], T, self.hillclimber_counter)])
 
                 schedule1 = copy.deepcopy(self.schedule)
                 schedule2 = copy.deepcopy(self.schedule)
@@ -230,40 +195,6 @@ class Multiprocessor():
                             # print(f'after: {time.time() - start_time}')
                             total_output += output_schedules
 
-                    # with Pool(4) as p:
-                                # self.output_schedules = p.map(self.run_HC, [(0, schedules[0], T, self.hillclimber_counter),
-                                #                                             (0, schedules[0], T, self.hillclimber_counter),
-                                #                                             (0, schedules[1], T, self.hillclimber_counter),
-                                #                                             (0, schedules[1], T, self.hillclimber_counter),
-                                #                                             (0, schedules[2], T, self.hillclimber_counter),
-                                #                                             (0, schedules[2], T, self.hillclimber_counter),
-                                #                                             (0, schedules[3], T, self.hillclimber_counter),
-                                #                                             (0, schedules[3], T, self.hillclimber_counter),
-                                #                                             (1, schedules[0], T, self.hillclimber_counter),
-                                #                                             (1, schedules[0], T, self.hillclimber_counter),
-                                #                                             (1, schedules[1], T, self.hillclimber_counter),
-                                #                                             (1, schedules[1], T, self.hillclimber_counter),
-                                #                                             (1, schedules[2], T, self.hillclimber_counter),
-                                #                                             (1, schedules[2], T, self.hillclimber_counter),
-                                #                                             (1, schedules[3], T, self.hillclimber_counter),
-                                #                                             (1, schedules[3], T, self.hillclimber_counter),
-                                #                                             (2, schedules[0], T, self.hillclimber_counter),
-                                #                                             (2, schedules[0], T, self.hillclimber_counter),
-                                #                                             (2, schedules[1], T, self.hillclimber_counter),
-                                #                                             (2, schedules[1], T, self.hillclimber_counter),
-                                #                                             (2, schedules[2], T, self.hillclimber_counter),
-                                #                                             (2, schedules[2], T, self.hillclimber_counter),
-                                #                                             (2, schedules[3], T, self.hillclimber_counter),
-                                #                                             (2, schedules[3], T, self.hillclimber_counter),
-                                #                                             (3, schedules[0], T, self.hillclimber_counter),
-                                #                                             (3, schedules[0], T, self.hillclimber_counter),
-                                #                                             (3, schedules[1], T, self.hillclimber_counter),
-                                #                                             (3, schedules[1], T, self.hillclimber_counter),
-                                #                                             (3, schedules[2], T, self.hillclimber_counter),
-                                #                                             (3, schedules[2], T, self.hillclimber_counter),
-                                #                                             (3, schedules[3], T, self.hillclimber_counter),
-                                #                                             (3, schedules[3], T, self.hillclimber_counter)])
-
                     random.shuffle(total_output)
 
                     populations = {}
@@ -278,43 +209,69 @@ class Multiprocessor():
                     schedule_list = [populations[value][0] for value in populations]
 
             elif mode == 'genetic':
+
+                # first make 4 versions of the schedule
                 schedule1 = copy.deepcopy(self.schedule)
                 schedule2 = copy.deepcopy(self.schedule)
                 schedule3 = copy.deepcopy(self.schedule)
                 schedule4 = copy.deepcopy(self.schedule)
 
                 schedule_list = [schedule1, schedule2, schedule3, schedule4]
+                iteration_time = time.time()
 
-                while start_time - time.time() < 900:
+                # set the run time to 15 min
+                while start_time - time.time() < 1500:
                     total_output = []
+                    accepted = False
 
-
-
+                    # every schedule gets placed in each hillclimber twice
+                    accepted = False # boolean for annealing, when a worse schedule has to be accepted
                     for schedule in schedule_list:
                         for _ in range(2):
                             for i in range(4):
-                                schedule, malus, _, _ = self.run_HC(i, schedule, T, self.hillclimber_counter)
+                                schedule, malus, _, _, accept_me = self.run_HC((i, schedule, T, self.hillclimber_counter))
+                                if accept_me:
+
+                                    print(time.time() - iteration_time)
+                                    itertation_time = time.time()
+                                    print(populations[pop][1]['Total'])
+                                    # if there was a worsening, use that as new schedule
+                                    schedule_list = [schedule, schedule, schedule, schedule]
+                                    accepted = True
+                                    continue
 
                                 total_output.append((schedule, malus))
-
+                    if accepted:
+                        continue
 
                     random.shuffle(total_output)
 
+                    # dictionary to store the populations
                     populations = {}
                     for i, output in enumerate(total_output):
                         populations[i] = (output[0], output[1])
 
+                    # select 4 schedules to continue with in a 2v2 knockout tournament
                     populations = self.tournament(populations)
                     for pop in populations:
-                        print(time.time() - start_time)
+                        print(time.time() - iteration_time)
+                        itertation_time = time.time()
                         print(populations[pop][1]['Total'])
 
+                    # update the schedules for next iteration
                     schedule_list = [populations[value][0] for value in populations]
 
     def tournament(self, populations) -> dict:
+        '''method that 'holds a tournament' for the population in the genetic algorithm.
+           works by pairing two schedules and picking the best one. Therefore not neccesarily
+           returning the 4 best schedules.'''
+
+        # stop when there are 4 schedules left
         while len(populations) > 4:
             new_populations = {}
             counter = 0
+
+            # compare schedule to its neighbour
             for i in range(0, len(populations.keys()), 2):
                 if populations[i][1]['Total'] < populations[i+1][1]['Total']:
                     new_populations[counter] = populations[i]
@@ -443,7 +400,7 @@ class Multiprocessor():
                 self.schedule, malus, iteration = HC1.climb(t)
 
             else:
-                activation = random.choice([1,3])
+                activation = random.choice([1,2,3,4])
                 if activation == 1:
                     self.schedule, malus, iteration = HC1.climb(t)
                 if activation == 2:
@@ -486,36 +443,48 @@ class Multiprocessor():
         if activation == 0:
 
             HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC, iteration)
-            schedule, malus, iteration = HC1.climb(T, self.ANNEALING, self.fail_counter)
+            schedule, malus, iteration = HC1.climb(T, self.ANNEALING)
 
-            return schedule, malus, HC1.get_name(), iteration
+            return schedule, malus, HC1.get_name(), iteration, HC1.accept_me
 
         elif activation == 1:
 
             HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC, iteration)
-            schedule, malus, iteration = HC2.climb(T, self.ANNEALING, self.fail_counter)
+            schedule, malus, iteration = HC2.climb(T, self.ANNEALING)
 
-            return schedule, malus, HC2.get_name(), iteration
+            return schedule, malus, HC2.get_name(), iteration, HC2.accept_me
 
         elif activation == 2:
 
             HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC, iteration)
-            schedule, malus, iteration = HC3.climb(T, self.ANNEALING, self.fail_counter)
+            schedule, malus, iteration = HC3.climb(T, self.ANNEALING)
 
-            return schedule, malus, HC3.get_name(), iteration
+            return schedule, malus, HC3.get_name(), iteration, HC3.accept_me
 
         elif activation == 3:
 
             HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC, iteration)
-            schedule, malus, iteration = HC4.climb(T, self.ANNEALING, self.fail_counter)
+            schedule, malus, iteration = HC4.climb(T, self.ANNEALING)
 
-            return schedule, malus, HC4.get_name(), iteration
+            return schedule, malus, HC4.get_name(), iteration, HC4.accept_me
 
     def __get_temperature(self, t, alpha=0.995):
         """Exponential decay temperature schedule"""
         return t*alpha
 
     def __replace_roster(self, difference):
+
+        if new_malus['Total'] < 145 and ANNEALING:
+            T = decimal.Decimal(0.0001 + 0.0008 * fail_counter)
+
+            power = (-difference)/T
+            if fail_counter > 20 and _ < 1:
+                acpt = decimal.Decimal(np.exp((power)))
+            else:
+                acpt = 0
+        else:
+    
+            acpt = 0
 
         # If difference is positive
         if difference >= 0:

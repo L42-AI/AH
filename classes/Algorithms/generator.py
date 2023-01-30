@@ -198,5 +198,6 @@ class Generator:
         plt.savefig(os.path.join(directory_plots, fig_name))
 
     def optimize(self):
+        self.ANNEALING = True
         Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING, self.core_arrangement)
-        Multiprocessor.run_combination('genetic_pool')
+        Multiprocessor.run_combination('genetic')
