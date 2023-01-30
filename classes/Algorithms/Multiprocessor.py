@@ -98,8 +98,8 @@ class Multiprocessor():
         else:
             t = 0
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while self.fail_counter < 30:
-        # while self.iter_counter != 2:
+        # while self.fail_counter < 30:
+        while self.iter_counter != 2:
 
             start_time = time.time()
 
