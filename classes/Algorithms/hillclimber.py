@@ -53,7 +53,7 @@ class HillClimber:
 
         # let the hillclimber take some steps 
         # for _ in range(int(self.malus['Total'] * self.multiplyer)):
-        for _ in range(50):
+        for _ in range(250):
 
             # Make copy of schedule, complex because of dictionary
             copied_schedule = copy.deepcopy(self.schedule)
@@ -99,7 +99,7 @@ class HillClimber:
 
         # Compare with prior malus points
         if new_malus['Total'] <= self.malus['Total']:
-            print(self.get_name(), self.malus['Total'], new_malus['Total'])
+            # print(self.get_name(), self.malus['Total'], new_malus['Total'])
             self.schedule = new_schedule
             self.malus = new_malus
             double_hc['l']['v'] += M.double['l']['v']
