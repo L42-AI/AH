@@ -122,7 +122,7 @@ class App(customtkinter.CTk):
 
         self.__run_algorithm()
 
-        self.plot_progress()
+        # self.plot_progress()
 
     def __set_data(self) -> tuple:
 

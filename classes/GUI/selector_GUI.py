@@ -495,3 +495,6 @@ class App(customtkinter.CTk):
             'Day': df_day_list, 'Time': df_time_list, 'Room': df_room_list})
 
         df.to_csv('schedules/complete schedule.csv', index=False)
+
+if __name__ == '__main__':
+    app = App()
