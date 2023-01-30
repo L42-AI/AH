@@ -18,13 +18,9 @@ class Generator:
         self.POPULAR = popular
         self.POPULAR_OWN_DAY = popular_own_day
         self.ANNEALING = annealing
-<<<<<<< HEAD
-
         self.core_arrangement = core_arrangement
-
-=======
         self.DIFFICULT_STUDENTS = difficult_students
->>>>>>> 89c299b6e7453902660533bb4fa24b6cb639aeb6
+
         # Save initialization
         self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
 
