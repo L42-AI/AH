@@ -3,8 +3,8 @@ Algoritmes en Heuristieken
 
 Introduction
 
-This program makes a University Schedule. There are courses that have to be scheduled consisting of Lectures, Tutorials and Practicals. 
-These class moments are scheduled into a specific Room and timeslot. These Rooms can have a specific capacity of how many students they can hold.
+This program creates a university schedule by scheduling courses that consist of lectures, tutorials, and practicals into specific rooms and time slots.
+These Rooms can have a specific capacity of how many students they can hold.
 We have a costfunction/maluspoints, that we are trying to minimize. The maluspoints are defined like this: 
 Each student that would not fit the capacity of a room the class it is scheduled in is plus 1 maluspoint.
 If a student has one gaphour it is counted as 1 extra point, two gaphours as 3 and 3 gaphours is not allowed. 
