@@ -199,4 +199,4 @@ class Generator:
 
     def optimize(self):
         Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING, self.core_arrangement)
-        Multiprocessor.run_combination('Multi')
+        Multiprocessor.run_combination('genetic')
