@@ -40,7 +40,7 @@ class Mutate():
 
         # pick a student to switch
         student_to_switch_id = self.__find_random_student()
-
+        
         # find its worst day
         worst_day = self.__worst_day(student_to_switch_id)
 

@@ -1,51 +1,46 @@
+import classes.GUI.init_GUI as InitApp
 import classes.algorithms.generator as GeneratorClass
-import classes.GUI.Init as InitClass
 
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 
-import cProfile
-import pstats
-
-# Run profiler
-profile = False
-
-# Heuristic to employ Hill climbing algorithm
-CLIMBING = True
-
-# heuristics to allow for more random mutations before score calculation
-ANNEALING = False
-
-# heuristics to try and connect room size to class size
-CAPACITY = False
-
-# heuristic to first give the popular classes rooms
-POPULAR = False
-
-# heuristic to place the most popular course lectures on different days
-POPULAR_OWN_DAY = False
-
-VISUALIZE_INIT = True
-
-def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT):
-    if not CLIMBING:
-        if not VISUALIZE_INIT:
-            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
-        else:
-            G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING, visualize=True)
-    else:
-        if not ANNEALING:
-            G = GeneratorClass.Generator_HC(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
-            G.optimize()
-        else:
-            G = GeneratorClass.Generator_SA(COURSES, STUDENT_COURSES, ROOMS, annealing=ANNEALING, capacity=CAPACITY, popular=POPULAR, popular_own_day=POPULAR_OWN_DAY, climbing=CLIMBING)
-            G.optimize()
-
+computer = 'Jacob'
 if __name__ == '__main__':
-    # if profile:
-    #     cProfile.run('main_runner(ANNEALING, CAPACITY)', 'profile.out')
-    #     p = pstats.Stats('profile.out')
-    #     p.strip_dirs().sort_stats('time').print_stats(100)
-    # else:
-    #     main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
-    App = InitClass.App()
+
+    if computer == 'Luka':
+        for A in [True, False]:
+            for B in [True, False]:
+                for C in [True, False]:
+                    for D in ['Class', 'Student', 'Mix']:
+                        capacity = A
+                        difficult_students = B
+                        annealing = C
+                        core_arrangement = D
+
+                        visualize = False
+                        popular = False
+                        popular_own_day = False
+
+
+                        G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
+                        capacity, popular, popular_own_day, difficult_students, annealing, visualize, core_arrangement)
+
+                        G.optimize()
+
+    # elif computer == 'Jacob':
+        # for E in ['Mix']:
+        #     capacity = True
+        #     popular = True
+        #     popular_own_day = True
+        #     annealing = False
+        #     core_arrangement = E
+
+        #     difficult_students = False   
+        #     visualize = False
+
+        #     G = GeneratorClass.Generator(COURSES, STUDENT_COURSES, ROOMS,\
+        #     capacity, popular, popular_own_day, difficult_students, annealing, visualize, core_arrangement)
+
+        #     G.optimize()
+        #     raise
+    App = InitApp.App()
     App.run()

@@ -2,72 +2,59 @@ import classes.algorithms.mutate as MutateClass
 import random
 import copy
 import numpy as np
+import csv
 import decimal
 
 """ Main HillClimber Class """
 
 class HillClimber:
-    def __init__(self, schedule, course_list, student_list, MC, multiplier=0.1):
+    def __init__(self, schedule, course_list, student_list, MC, iteration):
         self.schedule_list = []
         self.course_list = course_list
         self.student_list = student_list
         self.schedule = schedule
         self.MC = MC
-        self.multiplier = multiplier
+        self.multiplyer = 0.3
+        self.iteration = iteration
+
 
     """ Inheritable methods """
 
     def step_method(self, M):
-        '''calls on a hillclimber specific step method'''
         pass
 
     def get_name(self):
-        '''helps with keeping track of what hillclimber does what'''
         pass
 
     def make_mutate(self, schedule):
-        '''Calls a mutate class. Can be easily changed when using different hillclimbers
-           to call on a different mutate with different criterea'''
         M = MutateClass.Mutate(self.course_list, self.student_list, schedule)
         return M
 
+    def replace_roster(self, T=None):
+        self.current_best_roster = min(self.rosters, key=lambda x: x.malus_count)
+
+        if self.best_malus > self.current_best_roster.malus_count:
+            self.best_schedule = self.current_best_roster
+
     def get_score(self):
-        '''Returns the total score of the current schedule'''
         return self.MC.compute_total_malus(self.schedule)['Total']
 
 
     """ Main Method """
 
-    def climb(self, T, fail_counter, ANNEALING=False):
-        '''performs the climbing of a hillclimber. This method is inherited by every
-           kind of hillclimber because it calls on make_mutate and step_methdod, allowing
-           it to be easily changed when we want different kinds of hillclimbers. The
-           self.double is not used by the program but serves as an analitical tool
-           to inspect where double hours originate from'''
-
-        self.accept_me = False
+    def climb(self, T, fail_counter):
         self.double = {'l': set(), 't': set(), 'p': set()}
 
         # Compute malus with MalusCalculator
         self.malus = self.MC.compute_total_malus(self.schedule)
 
-        # set the iteration to 0
-        iteration = 0
-
-        # list with the malus points and the iteration
-        list_iterations = []
-        list_malus = []
-
         # Append the input roster
         self.schedule_list.append(self.schedule)
         double_hc = {'l': {'v': 0, 'student': []}, 't': {'v': 0, 'student': []}, 'p': {'v': 0, 'student': []}}
 
-        # let the hillclimber take some steps
-        # you can change if you want multiplier for now I want always 50
-        for _ in range(int(self.malus['Total'] * self.multiplier)):
-        # for i in range(50):
-            # self.malus = self.MC.compute_total_malus(self.schedule)
-            iteration += 1
+        # let the hillclimber take some steps 
+        # for _ in range(int(self.malus['Total'] * self.multiplyer)):
+        for _ in range(400):
 
             # Make copy of schedule, complex because of dictionary
             copied_schedule = copy.deepcopy(self.schedule)
@@ -85,36 +72,38 @@ class HillClimber:
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
 
-            # if new_malus['Total'] < self.malus['Total']:
-            list_iterations.append(iteration)
-            list_malus.append(new_malus['Total'])
+            # self.save_results()
 
             # let the hillclimber make 3 changes before a new score is calculated
-            self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, fail_counter, ANNEALING, _)
+            self.__accept_schedule(new_malus, new_schedule, T, double_hc, M, _, fail_counter)
 
-        # Return new roster
-        return self.schedule, self.malus, list_iterations, list_malus, self.accept_me
+            self.iteration += 1
 
-    def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M, fail_counter, ANNEALING, _):
+        return self.schedule, self.malus, self.iteration
+
+    def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M, _, ANNEALING, fail_counter):
         '''Takes in the new malus (dict) and schedule (dict) and compares it to the current version
            If it is better, it will update the self.schedule and malus'''
 
+        prob = random.random()
         # only accept annealing if the rise in malus is not too large
         difference = self.malus['Total'] - new_malus['Total']
 
-        if new_malus['Total'] < 140 and ANNEALING:
-            T = decimal.Decimal(0.0001 + 0.05 * fail_counter)
-            
-            
+                # only accept annealing if the rise in malus is not too large
+        difference = self.malus['Total'] - new_malus['Total']
+        prob = random.random()
+
+        if new_malus['Total'] < 145 and ANNEALING:
+            T = decimal.Decimal(0.0001 + 0.0008 * fail_counter)
+
             power = (-difference)/T
-            if power < -9:
-                prob = 0.0001
-            else: 
-                prob = decimal.Decimal(np.exp((power)))
+            if fail_counter > 20 and _ < 1:
+                acpt = decimal.Decimal(np.exp((power)))
+            else:
+                acpt = 0
         else:
-            T = -1
-            prob = 1
-       
+    
+            acpt = 0
 
         # Compare with prior malus points
         if new_malus['Total'] <= self.malus['Total']:
@@ -129,26 +118,45 @@ class HillClimber:
             double_hc['p']['student'].append(M.double['p']['student'])
             
             for key in double_hc:
-
+                # print(key)
+                # print(self.double[key])
                 if double_hc[key]['student']:
                     for student in double_hc[key]['student']:
                         if student:
                             for id in student:
                                 if id not in self.double[key]:
                                     self.double[key].add(id)
-        elif prob < T:
-
-            print(f'worsening of {-difference} got accepted at T: {T}')
+        elif prob < acpt :
+            # print(f'worsening of {-difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
-            self.accept_me = True
-        return
+
+    def save_results_multi(self):
+        with open('data/HCResults.csv', 'a') as f:
+            csv_writer = csv.DictWriter(f, fieldnames=['HC1 type','HC1 iteration','HC1 malus','HC2 type','HC2 iteration','HC2 malus','HC3 type','HC3 iteration','HC3 malus','HC4 type','HC4 iteration','HC4 malus'])
+            info = {
+                f'HC{self.core_assignment} type': self.get_name(),
+                f'HC{self.core_assignment} iteration': self.iteration,
+                f'HC{self.core_assignment} malus': self.malus['Total']
+            }
+
+            csv_writer.writerow(info)
+
+    def save_results(self):
+        with open('data/HCResults.csv', 'a') as f:
+            csv_writer = csv.DictWriter(f, fieldnames=['HC type','HC iteration','HC malus'])
+            info = {
+                f'HC type': self.get_name(),
+                f'HC iteration': self.iteration,
+                f'HC malus': self.malus['Total']
+            }
+
+            csv_writer.writerow(info)
 
 """ Inherited HillClimber Classes """
 
 class HC_TimeSlotSwapRandom(HillClimber):
-    '''swaps a random class with another random class, calls on its own
-       mutate method to swap 2 random lessons, either lectures, tutorials or practicals'''
+    '''swaps a random class with another random class'''
     def step_method(self, M):
 
         # Take a random state to pass to function

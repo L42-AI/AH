@@ -88,9 +88,3 @@ Moeten we rekening houden met volgorde van lessen(Lecture1, Tutorial1, Lecture2,
 - tijdslot van een tut of pract groep binnen een vak (moeten er wel meerdere zijn)
 - tijdslot van een lecture van 2 verschillende vakken
 - tijdslot van een lecture binnen een vak (moeten er wel meerdere zijn) --> doet niks!!
-
-## Data verzamelen ##
-- elke combi van heuristieken
-- temperatuur schema's sim an
-- mogelijkheid om schema te accepteren wanneer double hours niet omhoog gaan --> werkt niet maar wel interresant om die data te kunnen presenteren
-
