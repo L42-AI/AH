@@ -108,7 +108,7 @@ class Multiprocessor():
         else:
             t = 0
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while self.fail_counter < 30:
+        while self.fail_counter < 60:
         # while self.iter_counter != 2:
 
             start_time = time.time()
@@ -234,7 +234,7 @@ class Multiprocessor():
             print(self.malus)
             return
         # If difference is positive
-        if difference > 0:
+        elif difference > 0:
 
             # Set the new roster to self.Roster
             self.schedule, self.malus, name, iterations, malus, _ = self.output_schedules[self.best_index]

@@ -102,15 +102,15 @@ class HillClimber:
         # only accept annealing if the rise in malus is not too large
         difference = self.malus['Total'] - new_malus['Total']
 
-        if new_malus['Total'] < 140 and ANNEALING:
-            T = decimal.Decimal(0.0001 + 0.05 * fail_counter)
+        if new_malus['Total'] < 120 and ANNEALING:
+            T = decimal.Decimal(0.0001 + 0.0025 * fail_counter)
+                        
             
-            
-            power = (-difference)/T
-            if power < -9:
-                prob = 0.0001
-            else: 
+            power = (difference)/T
+            if fail_counter > 5:
                 prob = decimal.Decimal(np.exp((power)))
+            else:
+                prob = 10
         else:
             T = -1
             prob = 1
