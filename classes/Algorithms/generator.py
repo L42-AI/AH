@@ -91,10 +91,10 @@ class Generator:
         # first give the most popular courses a place in the schedule
         if self.POPULAR:
             course_list = sorted(course_list, key = lambda x: x.enrolled, reverse = True)
-
+        days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         # give the 5 most popular courses their own day to hold their lectures, to prevent gap hours
         if self.POPULAR_OWN_DAY:
-            days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+            
             for i in range(5):
                 course_list[i].day = days[i]
 
