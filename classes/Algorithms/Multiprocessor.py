@@ -53,17 +53,17 @@ class Multiprocessor():
         self.list_student_doublehour = []
 
         # # set lists for one run with all the different hillclimber steps
-        # hillclimber_class_random_iterations = []
-        # hillclimber_class_random_malus = []
+        hillclimber_class_random_iterations = []
+        hillclimber_class_random_malus = []
 
         # hillclimber_class_capacity_iterations = []
-        # hillclimber_class_capacity_malus = []
+        hillclimber_class_capacity_malus = []
         
         # hillclimber_student_gaphour_iterations = []
-        # hillclimber_student_gaphour_malus = []
+        hillclimber_student_gaphour_malus = []
 
         # hillclimber_student_doublehour_iterations = []
-        # hillclimber_student_doublehour_malus = []
+        hillclimber_student_doublehour_malus = []
 
         self.info = {}
 
@@ -141,17 +141,17 @@ class Multiprocessor():
 
 
             # # append the different hillclimbers malus and iterations
-            # hillclimber_class_random_iterations.extend([x + (self.iter_counter * 50) for x in self.output_schedules[0][3]])
-            # hillclimber_class_random_malus.extend(self.output_schedules[0][4])
+            hillclimber_class_random_iterations.extend([x + (self.iter_counter * 50) for x in self.output_schedules[0][3]])
+            hillclimber_class_random_malus.extend(self.output_schedules[0][4])
 
             # hillclimber_class_capacity_iterations.extend([x + (self.iter_counter * 50) for x in self.output_schedules[1][3]])
-            # hillclimber_class_capacity_malus.extend(self.output_schedules[1][4])
+            hillclimber_class_capacity_malus.extend(self.output_schedules[1][4])
 
             # hillclimber_student_gaphour_iterations.extend([x + (self.iter_counter * 50) for x in self.output_schedules[2][3]])
-            # hillclimber_student_gaphour_malus.extend(self.output_schedules[2][4])
+            hillclimber_student_gaphour_malus.extend(self.output_schedules[2][4])
 
             # hillclimber_student_doublehour_iterations.extend([x + (self.iter_counter * 50) for x in self.output_schedules[3][3]])
-            # hillclimber_student_doublehour_malus.extend(self.output_schedules[3][4])
+            hillclimber_student_doublehour_malus.extend(self.output_schedules[3][4])
 
             # Set finish time
             finish_time = time.time()
@@ -172,19 +172,21 @@ class Multiprocessor():
             self.list_total_malus.append(self.malus['Total'])
 
         # # do this only for the one from luka
-        # data = {
-        #     'Iterations Class Random': hillclimber_class_random_iterations,
-        #     'Malus Class Random': hillclimber_class_random_malus,
-        #     'Iterations Class Capacity': hillclimber_class_capacity_iterations,
-        #     'Malus Class Capacity': hillclimber_class_capacity_malus,
-        #     'Iterations Student Gaphour': hillclimber_student_gaphour_iterations,
-        #     'Malus Student Gaphour': hillclimber_student_gaphour_malus,
-        #     'Iterations Student Doublehour': hillclimber_student_doublehour_iterations,
-        #     'Malus Student Doublehour': hillclimber_student_doublehour_malus
-        # }
+        data = {
+            'Iterations': hillclimber_class_random_iterations,
+            'Malus Class Random': hillclimber_class_random_malus,
+            # 'Iterations Class Capacity': hillclimber_class_capacity_iterations,
+            'Malus Class Capacity': hillclimber_class_capacity_malus,
+            # 'Iterations Student Gaphour': hillclimber_student_gaphour_iterations,
+            'Malus Student Gaphour': hillclimber_student_gaphour_malus,
+            # 'Iterations Student Doublehour': hillclimber_student_doublehour_iterations,
+            'Malus Student Doublehour': hillclimber_student_doublehour_malus
+        }
     
-        # df = pd.DataFrame(data)
-        # print(df)
+        df = pd.DataFrame(data)
+
+        df.to_csv('data/Lukas Plot Data.csv')
+        print(df)
 
         return self.list_iterations, self.list_total_malus, self.list_class_random, self.list_class_capacity, self.list_student_gaphour, self.list_student_doublehour
 
