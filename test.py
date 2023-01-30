@@ -1,29 +1,10 @@
-from multiprocessing import Process, Queue
-import time
+def save_results(info):
+    iter, dict_pair = info
+    with open('data/HCresults.csv', mode='a') as f:
 
-def multiprocessor(queue):
-    while True:
-        print('yes')
-        # time.sleep(1)
-        data = "data"
-        queue.put(data)
+        string = f'{iter},{list(dict_pair.keys())[0]},{list(dict_pair.values())[0]}'
+        print(string)
+        f.write(f'\n{string}')
 
-def gui(queue):
-    while True:
-        print('Yes')
-        data = queue.get()
-        print(data)
-
-
-if __name__ == "__main__":
-    queue = Queue()
-
-    multiprocessor_process = Process(target=multiprocessor, args=(queue,))
-    multiprocessor_process.start()
-
-    gui_process = Process(target=gui, args=(queue,))
-    gui_process.start()
-
-    multiprocessor_process.join()
-    gui_process.join()
-
+info = (1, {'HC3': 299})
+save_results(info)

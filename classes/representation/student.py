@@ -186,7 +186,6 @@ class Student():
             # Find and save the practicum timeslot
             self.__practicum_timeslot(course, current_course)
 
-
     def __days_in_schedule(self, Roster):
 
         # Create a days dictionary
