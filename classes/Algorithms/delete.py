@@ -1236,3 +1236,66 @@
                                 #                                             (3, schedules[2], T, self.hillclimber_counter),
                                 #                                             (3, schedules[3], T, self.hillclimber_counter),
                                 #                                             (3, schedules[3], T, self.hillclimber_counter)])
+
+
+            #                     if mode == 'solo':
+            #     activation = random.choice([1,2,3,4])
+
+            #     if activation == 1:
+            #         HC1.schedule = self.schedule
+            #         HC1.iteration = self.hillclimber_counter
+
+            #         self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T)
+
+
+            #         # print(self.malus)
+
+            #     elif activation == 2:
+            #         HC2.schedule = self.schedule
+            #         HC2.iteration = self.hillclimber_counter
+
+            #         self.schedule, self.malus, self.hillclimber_counter = HC2.climb(T)
+
+
+            #         # print(self.malus)
+
+            #     elif activation == 3:
+            #         HC3.schedule = self.schedule
+            #         HC3.iteration = self.hillclimber_counter
+
+            #         self.schedule, self.malus, self.hillclimber_counter = HC3.climb(T)
+
+
+            #         # print(self.malus)
+
+            #     elif activation == 4:
+            #         HC4.schedule = self.schedule
+            #         HC4.iteration = self.hillclimber_counter
+            #         HC4.hillclimber_iterations = 1
+
+            #         self.schedule, self.malus, self.hillclimber_counter = HC4.climb(T)
+
+            #         # print(self.malus)
+            # elif mode == 'multi':
+
+            #     core_assignment_list = [0,1,1,2]
+
+            #     with Pool(4) as p:
+            #         self.output_schedules = p.map(self.run_HC, [(core_assignment_list[0], T, 1),
+            #                                                     (core_assignment_list[1], T, 2),
+            #                                                     (core_assignment_list[2], T, 3),
+            #                                                     (core_assignment_list[3], T, 4)])
+            #     # find the lowest malus of the output rosters
+            #     min_malus = min([i[1]['Total'] for i in self.output_schedules])
+
+            #     # Use the lowest malus to find the index of the best roster
+            #     self.best_index = [i[1]['Total'] for i in self.output_schedules].index(min_malus)
+
+            #     self.hillclimber_counter = self.output_schedules[0][3]
+
+            #     # Compute difference between new roster and current roster
+            #     difference = self.malus['Total'] - self.output_schedules[self.best_index][1]['Total']
+
+            #     # replace the roster if it is better
+            #     self.__replace_roster(difference)
+            #     self.multiprocessor_counter += 1

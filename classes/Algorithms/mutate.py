@@ -356,7 +356,7 @@ class Mutate():
         return worst_day
 
 class Mutate_double_classes(Mutate):
-    '''mutate class that is the same as normal but makes changes to 
+    '''mutate class that is the same as normal but makes changes to
        the schedule based on the malus points caused by double hours instead
        of the gap hour points'''
 

@@ -8,6 +8,7 @@ import time
 import json
 import copy
 import matplotlib.pyplot as plt
+import pickle
 
 
 class Multiprocessor():
@@ -17,6 +18,7 @@ class Multiprocessor():
         self.student_list = student_list
         self.ITERS = 1
         self.ANNEALING = annealing
+        self.ANNEALING = True
         self.core_arrangement = core_arrangement
 
         self.MC = MC
@@ -48,18 +50,6 @@ class Multiprocessor():
         else:
             return float(0)
 
-    def __set_temp(self, T) -> float:
-        if self.ANNEALING:
-            if T > .5:
-                return self.__get_temperature(T)
-            elif T <= .5:
-                T = self.__get_temperature(T, alpha=0.65)
-
-            if T < 0.01:
-                return 0.05
-        else:
-            return 0
-
     def run_combination(self, mode):
         # Set counters
         self.fail_counter = 0
@@ -80,22 +70,23 @@ class Multiprocessor():
 
 
         # Print intitial
-        print(f'\nInitialization')
-        print(self.malus)
+        # print(f'\nInitialization')
+        # print(self.malus)
 
         # Run the optimizing loop
         while self.malus['Total'] > 100:
 
             start_time = time.time()
+            self.fail_counter = 0
+            plotting_output = []
+            while self.malus['Total'] > 125:
 
-            while self.malus['Total'] > 200:
-
-                self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T, self.ANNEALING)
+                self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T, self.ANNEALING, self.fail_counter)
 
                 HC1.schedule = self.schedule
                 HC1.iteration = self.hillclimber_counter
 
-                print(self.malus)
+                # print(self.malus)
 
             HC2.schedule = self.schedule
             HC2.iteration = self.hillclimber_counter
@@ -106,73 +97,13 @@ class Multiprocessor():
             HC4.schedule = self.schedule
             HC4.iteration = self.hillclimber_counter
 
-
-            T = self.__set_temp(T)
-
-
-            if mode == 'solo':
-                activation = random.choice([1,2,3,4])
-
-                if activation == 1:
-                    HC1.schedule = self.schedule
-                    HC1.iteration = self.hillclimber_counter
-
-                    self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T)
+          
+            T = 1
 
 
-                    # print(self.malus)
+            
 
-                elif activation == 2:
-                    HC2.schedule = self.schedule
-                    HC2.iteration = self.hillclimber_counter
-
-                    self.schedule, self.malus, self.hillclimber_counter = HC2.climb(T)
-
-
-                    # print(self.malus)
-
-                elif activation == 3:
-                    HC3.schedule = self.schedule
-                    HC3.iteration = self.hillclimber_counter
-
-                    self.schedule, self.malus, self.hillclimber_counter = HC3.climb(T)
-
-
-                    # print(self.malus)
-
-                elif activation == 4:
-                    HC4.schedule = self.schedule
-                    HC4.iteration = self.hillclimber_counter
-                    HC4.hillclimber_iterations = 1
-
-                    self.schedule, self.malus, self.hillclimber_counter = HC4.climb(T)
-
-                    # print(self.malus)
-            elif mode == 'multi':
-
-                core_assignment_list = [0,1,1,2]
-
-                with Pool(4) as p:
-                    self.output_schedules = p.map(self.run_HC, [(core_assignment_list[0], T, 1),
-                                                                (core_assignment_list[1], T, 2),
-                                                                (core_assignment_list[2], T, 3),
-                                                                (core_assignment_list[3], T, 4)])
-                # find the lowest malus of the output rosters
-                min_malus = min([i[1]['Total'] for i in self.output_schedules])
-
-                # Use the lowest malus to find the index of the best roster
-                self.best_index = [i[1]['Total'] for i in self.output_schedules].index(min_malus)
-
-                self.hillclimber_counter = self.output_schedules[0][3]
-
-                # Compute difference between new roster and current roster
-                difference = self.malus['Total'] - self.output_schedules[self.best_index][1]['Total']
-
-                # replace the roster if it is better
-                self.__replace_roster(difference)
-                self.multiprocessor_counter += 1
-
-            elif mode == 'genetic_pool':
+            if mode == 'genetic_pool':
 
                 schedule1 = copy.deepcopy(self.schedule)
                 schedule2 = copy.deepcopy(self.schedule)
@@ -202,28 +133,34 @@ class Multiprocessor():
                         populations[i] = (output[0], output[1])
 
                     populations = self.tournament(populations)
-                    for pop in populations:
-                        print(time.time() - start_time)
-                        print(populations[pop][1]['Total'])
+                    # for pop in populations:
+                        # print(time.time() - start_time)
+                        # print(populations[pop][1]['Total'])
 
                     schedule_list = [populations[value][0] for value in populations]
 
             elif mode == 'genetic':
 
                 # first make 4 versions of the schedule
-                schedule1 = copy.deepcopy(self.schedule)
-                schedule2 = copy.deepcopy(self.schedule)
-                schedule3 = copy.deepcopy(self.schedule)
-                schedule4 = copy.deepcopy(self.schedule)
+                schedule_list = [self.recursive_copy(self.schedule) for _ in range(4)]
 
-                schedule_list = [schedule1, schedule2, schedule3, schedule4]
                 iteration_time = time.time()
 
+                # when annealing, if the worsening did not make it better in the long run, return to best schedule
+                counter_since_improvement = 0
+                best_score = 1000
+                best_schedule = None
+
                 # set the run time to 15 min
-                while start_time - time.time() < 1500:
+                while time.time() - start_time < 1200:
+                    counter_since_improvement += 1
+
+                    # try 3000 iterations before giving up
+                    if counter_since_improvement > 3000:
+                        schedule_list = [schedule for schedule in best_schedule]
                     total_output = []
                     accepted = False
-
+                    T *= 0.995
                     # every schedule gets placed in each hillclimber twice
                     accepted = False # boolean for annealing, when a worse schedule has to be accepted
                     for schedule in schedule_list:
@@ -231,13 +168,14 @@ class Multiprocessor():
                             for i in range(4):
                                 schedule, malus, _, _, accept_me = self.run_HC((i, schedule, T, self.hillclimber_counter))
                                 if accept_me:
-
+                                    plotting_output.append((malus['Total'], time.time() - start_time))
                                     print(time.time() - iteration_time)
                                     itertation_time = time.time()
-                                    print(populations[pop][1]['Total'])
+                                    # print(populations[pop][1]['Total'])
                                     # if there was a worsening, use that as new schedule
                                     schedule_list = [schedule, schedule, schedule, schedule]
                                     accepted = True
+                                    self.fail_counter = 0
                                     continue
 
                                 total_output.append((schedule, malus))
@@ -251,16 +189,31 @@ class Multiprocessor():
                     for i, output in enumerate(total_output):
                         populations[i] = (output[0], output[1])
 
+
                     # select 4 schedules to continue with in a 2v2 knockout tournament
                     populations = self.tournament(populations)
-                    for pop in populations:
-                        print(time.time() - iteration_time)
+                    for _, pop in enumerate(populations):
+                        # print(time.time() - iteration_time)
                         itertation_time = time.time()
-                        print(populations[pop][1]['Total'])
+                        # print(populations[pop][1]['Total'])
+                        
+                        if _ % 4 == 0:
+                            plotting_output.append((populations[pop][1]['Total'], start_time - time.time()))
+                    
+                        if populations[pop][1]['Total'] < best_score:
+                            best_score = populations[pop][1]['Total']
+                            best_schedule = populations[pop][0]
+                            counter_since_improvement = 0
+                            self.fail_counter = 0
+                        else: 
+                            self.fail_counter += 1
+                    
 
                     # update the schedules for next iteration
                     schedule_list = [populations[value][0] for value in populations]
 
+                
+                return plotting_output, best_schedule
     def tournament(self, populations) -> dict:
         '''method that 'holds a tournament' for the population in the genetic algorithm.
            works by pairing two schedules and picking the best one. Therefore not neccesarily
@@ -443,28 +396,28 @@ class Multiprocessor():
         if activation == 0:
 
             HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC, iteration)
-            schedule, malus, iteration = HC1.climb(T, self.ANNEALING)
+            schedule, malus, iteration = HC1.climb(T, self.ANNEALING, self.fail_counter)
 
             return schedule, malus, HC1.get_name(), iteration, HC1.accept_me
 
         elif activation == 1:
 
             HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC, iteration)
-            schedule, malus, iteration = HC2.climb(T, self.ANNEALING)
+            schedule, malus, iteration = HC2.climb(T, self.ANNEALING, self.fail_counter)
 
             return schedule, malus, HC2.get_name(), iteration, HC2.accept_me
 
         elif activation == 2:
 
             HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC, iteration)
-            schedule, malus, iteration = HC3.climb(T, self.ANNEALING)
+            schedule, malus, iteration = HC3.climb(T, self.ANNEALING, self.fail_counter)
 
             return schedule, malus, HC3.get_name(), iteration, HC3.accept_me
 
         elif activation == 3:
 
             HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC, iteration)
-            schedule, malus, iteration = HC4.climb(T, self.ANNEALING)
+            schedule, malus, iteration = HC4.climb(T, self.ANNEALING, self.fail_counter)
 
             return schedule, malus, HC4.get_name(), iteration, HC4.accept_me
 
@@ -502,7 +455,7 @@ class Multiprocessor():
 
         else:
             self.fail_counter += 1
-            print(f'Fails: {self.fail_counter}')
+            # print(f'Fails: {self.fail_counter}')
 
             # print output
             # print(f'\n========================= Generation: {self.multiprocessor_counter} =========================\n')
@@ -510,6 +463,14 @@ class Multiprocessor():
             # print(f'Duration of iteration: {round(self.multiprocess_duration, 2)} S.')
             # print(f'Duration since init: {round(self.duration, 2)} S.')
             # print(self.malus)
+
+    def recursive_copy(self, obj):
+        if isinstance(obj, dict):
+            return {k: self.recursive_copy(v) for k, v in obj.items()}
+        elif isinstance(obj, set):
+            return {self.recursive_copy(x) for x in obj}
+        else:
+            return obj
 
 class Multiprocessor_SimAnnealing(Multiprocessor):
 

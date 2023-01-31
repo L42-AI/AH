@@ -14,12 +14,12 @@ class Generator:
     def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, difficult_students, annealing, visualize, core_arrangement):
 
         # Set heuristics
-        self.CAPACITY = capacity
-        self.POPULAR = popular
-        self.POPULAR_OWN_DAY = popular_own_day
-        self.ANNEALING = annealing
+        self.CAPACITY = False
+        self.POPULAR = False
+        self.POPULAR_OWN_DAY = False
+        self.ANNEALING = False
         self.core_arrangement = core_arrangement
-        self.DIFFICULT_STUDENTS = difficult_students
+        self.DIFFICULT_STUDENTS = False
 
         # Save initialization
         self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
@@ -200,4 +200,5 @@ class Generator:
     def optimize(self):
         self.ANNEALING = True
         Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING, self.core_arrangement)
-        Multiprocessor.run_combination('genetic')
+        total_output = Multiprocessor.run_combination('genetic')
+        return total_output
