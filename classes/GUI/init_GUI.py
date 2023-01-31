@@ -25,70 +25,38 @@ class App(customtkinter.CTk):
         self.toggle_frame = customtkinter.CTkFrame(self)
         self.toggle_frame.grid(row=0, column=0, rowspan=2, padx=20, pady=20, sticky="nsew")
         self.toggle_frame.grid_columnconfigure(0, weight=1)
-        self.toggle_frame.grid_rowconfigure((0,1,2,3,4,5,6,7), weight=1)
+        self.toggle_frame.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11), weight=1)
+    
+        
 
         self.label_experiment = customtkinter.CTkLabel(master=self.toggle_frame, text="Experiments:", font=customtkinter.CTkFont(size=15, weight='bold'))
         self.label_experiment.grid(row=0, column=0, padx=20, pady=10, sticky="nsew")
 
-        self.experiment1_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 1', font=customtkinter.CTkFont(size=15), command=self.experiment1_switch_click)
+        self.experiment1_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 1', font=customtkinter.CTkFont(size=15))
         self.experiment1_switch.grid(row=1, column=0, pady=10, padx=20, sticky="nsew")
 
-        self.experiment2_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 2', font=customtkinter.CTkFont(size=15), command=self.experiment2_switch_click)
+        self.experiment2_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 2', font=customtkinter.CTkFont(size=15))
         self.experiment2_switch.grid(row=2, column=0, pady=10, padx=20, sticky="nsew")
-
-        self.experiment3_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 3', font=customtkinter.CTkFont(size=15), command=self.experiment3_switch_click)
+        
+        self.experiment3_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 3', font=customtkinter.CTkFont(size=15))
         self.experiment3_switch.grid(row=3, column=0, pady=10, padx=20, sticky="nsew")
-
-        self.experiment4_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 3', font=customtkinter.CTkFont(size=15), command=self.experiment4_switch_click)
+        
+        self.experiment4_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 4', font=customtkinter.CTkFont(size=15))
         self.experiment4_switch.grid(row=4, column=0, pady=10, padx=20, sticky="nsew")
-
-        self.experiment5_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 3', font=customtkinter.CTkFont(size=15), command=self.experiment5_switch_click)
+        
+        self.experiment5_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 3', font=customtkinter.CTkFont(size=15))
         self.experiment5_switch.grid(row=5, column=0, pady=10, padx=20, sticky="nsew")
-
 
         self.create_own_exp_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Create your own:', font=customtkinter.CTkFont(size=15), command=self.create_own_experiment)
         self.create_own_exp_switch.grid(row=6, column=0, pady=10, padx=20, sticky="nsew")
+        
+        
 
         """ Setup Generate Button """
 
         # Generate Button
         self.generate_button = customtkinter.CTkButton(master=self, text="Generate", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.generate)
-        self.generate_button.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
-
-    def experiment1_switch_click(self) -> None:
-        self.experiment2_switch.deselect()
-        self.experiment3_switch.deselect()
-        self.experiment4_switch.deselect()
-        self.experiment5_switch.deselect()
-        self.create_own_exp_switch.deselect()
-
-    def experiment2_switch_click(self) -> None:
-        self.experiment1_switch.deselect()
-        self.experiment3_switch.deselect()
-        self.experiment4_switch.deselect()
-        self.experiment5_switch.deselect()
-        self.create_own_exp_switch.deselect()
-
-    def experiment3_switch_click(self) -> None:
-        self.experiment1_switch.deselect()
-        self.experiment2_switch.deselect()
-        self.experiment4_switch.deselect()
-        self.experiment5_switch.deselect()
-        self.create_own_exp_switch.deselect()
-
-    def experiment4_switch_click(self) -> None:
-        self.experiment1_switch.deselect()
-        self.experiment2_switch.deselect()
-        self.experiment3_switch.deselect()
-        self.experiment5_switch.deselect()
-        self.create_own_exp_switch.deselect()
-
-    def experiment5_switch_click(self) -> None:
-        self.experiment1_switch.deselect()
-        self.experiment2_switch.deselect()
-        self.experiment3_switch.deselect()
-        self.experiment4_switch.deselect()
-        self.create_own_exp_switch.deselect()
+        self.generate_button.grid(row=8, column=0, padx=20, pady=10, sticky="ew")
 
     def create_own_experiment(self):
 
@@ -101,55 +69,56 @@ class App(customtkinter.CTk):
             self.experiment5_switch.deselect()
 
             self.expand_gui()
-            self.create_own_exp_frame = customtkinter.CTkFrame(self)
-            self.create_own_exp_frame.grid(row=0, column=1, rowspan=2, padx=20, pady=20, sticky="nsew")
-            self.create_own_exp_frame.grid_columnconfigure(0, weight=1)
-            self.create_own_exp_frame.grid_rowconfigure((0,1,2,3,4,5,6,7), weight=1)
+            self.create_own_exp_frame1 = customtkinter.CTkFrame(self)
+            self.create_own_exp_frame1.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
+            self.create_own_exp_frame1.grid_columnconfigure(0, weight=1)
+            self.create_own_exp_frame1.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11), weight=1)
 
-            self.label_initialization = customtkinter.CTkLabel(master=self.create_own_exp_frame, text="Choose settings:", font=customtkinter.CTkFont(size=15, weight='bold'))
-            self.label_initialization.grid(row=0, column=0, padx=20, pady=10, sticky="nsew")
+            self.create_own_exp_frame2 = customtkinter.CTkFrame(self)
+            self.create_own_exp_frame2.grid(row=0, column=2, padx=20, pady=20, sticky="nsew")
+            self.create_own_exp_frame2.grid_columnconfigure(0, weight=1)
+            self.create_own_exp_frame2.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11), weight=1)
 
-            self.greedy_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame, text='Greedy', font=customtkinter.CTkFont(size=15), command=self.greedy_switch_click)
+            self.label_initialization = customtkinter.CTkLabel(master=self.create_own_exp_frame1, text="Choose settings:", font=customtkinter.CTkFont(size=15, weight='bold'))
+            self.label_initialization.grid(row=0, column=0, padx=20, pady=10, sticky="ns")
+            self.label_initialization = customtkinter.CTkLabel(master=self.create_own_exp_frame2, text="Choose settings:", font=customtkinter.CTkFont(size=15, weight='bold'))
+            self.label_initialization.grid(row=0, column=1, padx=20, pady=10, sticky="ns")
+
+            self.greedy_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Initialise:', font=customtkinter.CTkFont(size=15), command=self.greedy_switch_click)
             self.greedy_switch.grid(row=1, column=0, pady=10, padx=20, sticky="n")
 
-            self.hill_climbing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame, text='Hill Climbing', font=customtkinter.CTkFont(size=15), command=self.hillclimber_switch_click)
-            self.hill_climbing_switch.grid(row=6, column=0, pady=10, padx=20, sticky="n")
-
-            self.generate_button.grid(row=2, column=0, columnspan=2, padx=20, pady=10, sticky="nsew")
+            self.hill_climbing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Optimize:', font=customtkinter.CTkFont(size=15), command=self.hillclimber_switch_click)
+            self.hill_climbing_switch.grid(row=1, column=0, columnspan=4, pady=10, padx=20, sticky="n")
         else:
-
+            
             self.hill_climbing_switch.destroy()
-
             try:
                 self.annealing_switch.destroy()
             except:
                 pass
-
             self.greedy_switch.deselect()
-
             try:
                 self.greedy_switch_click()
             except:
                 pass
-
             self.label_initialization.destroy()
             self.greedy_switch.destroy()
-
+            
             self.collaps_gui()
-            self.create_own_exp_frame.destroy()
-            self.generate_button.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
+            self.create_own_exp_frame1.destroy()
+            self.create_own_exp_frame2.destroy()
 
     def expand_gui(self):
-        self.geometry(f"{500}x{450}")
+        self.geometry(f"{850}x{550}")
 
     def expand_gui_greedy(self):
-        self.geometry(f'{500}x{550}')
+        self.geometry(f'{850}x{550}')
 
     def expand_gui_hilli(self):
-        self.geometry(f'{500}x{550}')
+        self.geometry(f'{850}x{650}')
 
     def collaps_gui(self):
-        self.geometry(f'{250}x{450}')
+        self.geometry(f'{250}x{400}')
 
     def run(self) -> None:
         self.mainloop()
@@ -162,19 +131,38 @@ class App(customtkinter.CTk):
             self.expand_gui_hilli()
 
             self.genetic_switch_solo = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic', font=customtkinter.CTkFont(size=15), command=self.turn_of_pool)
-            self.genetic_switch_solo.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
+            self.genetic_switch_solo.grid(row=2, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
 
             self.genetic_switch_pool = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic pooling', font=customtkinter.CTkFont(size=15), command=self.turn_of_an_solo)
-            self.genetic_switch_pool.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
+            self.genetic_switch_pool.grid(row=3, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
 
             self.annealing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Sim. Annealing', font=customtkinter.CTkFont(size=15), command=self.turn_of_pool)
-            self.annealing_switch.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
+            self.annealing_switch.grid(row=4, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
 
             self.iterations_dependend_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='iterations dependend', font=customtkinter.CTkFont(size=15), command=self.iterations_dependend)
-            self.iterations_dependend_switch.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
+            self.iterations_dependend_switch.grid(row=4, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
 
             self.iterations_fixed_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Iterations fixed', font=customtkinter.CTkFont(size=15), command=self.iterations_fixed)
-            self.iterations_fixed_switch.grid(row=6, column=0, padx=20, pady=10, sticky="nsew")
+            self.iterations_fixed_switch.grid(row=6, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
+
+            self.duration_box = customtkinter.CTkComboBox(self.create_own_exp_frame2, values=["1", "5", "10", "15", "30", "45", "60", "120", "180"])
+            self.duration_box.grid(row=8, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
+            self.duration_box.set("Duration (Mins.)")
+
+            core_arangments = self.__gen_core_assignment_list()
+
+            self.core_assingment_box = customtkinter.CTkComboBox(self.create_own_exp_frame2, values=core_arangments)
+            self.core_assingment_box.grid(row=9, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
+            self.core_assingment_box.set("HC Distribution")
+
+            self.mode_menu1 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, width=2, font=customtkinter.CTkFont(size=15))
+            self.mode_menu1.grid(row=10, column=1, padx=20, pady=10, sticky='w')
+            self.mode_menu2 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, width=2, font=customtkinter.CTkFont(size=15))
+            self.mode_menu2.grid(row=10, column=2, padx=20, pady=10, sticky='w')
+            self.mode_menu3 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, width=2, font=customtkinter.CTkFont(size=15))
+            self.mode_menu3.grid(row=10, column=3, padx=20, pady=10, sticky='w')
+            self.mode_menu4 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, width=2, font=customtkinter.CTkFont(size=15))
+            self.mode_menu4.grid(row=10, column=0, padx=20, pady=10, sticky='w')
 
 
         else:
@@ -182,6 +170,15 @@ class App(customtkinter.CTk):
             self.genetic_switch_solo.destroy()
             self.genetic_switch_pool.destroy()
             self.annealing_switch.destroy()
+
+    def __gen_core_assignment_list(self) -> list:
+        core_arragments = []
+        for a in range(4):
+            for b in range(4):
+                for c in range(4):
+                    for d in range(4):
+                        core_arragments.append(f'{a}{b}{c}{d}')
+        return core_arragments
 
     def iterations_fixed(self):
         state = self.iterations_fixed_switch.get()
@@ -228,7 +225,6 @@ class App(customtkinter.CTk):
 
             self.difficult_students_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Busy Students', font=customtkinter.CTkFont(size=15), command=self.turn_off_popular)
             self.difficult_students_switch.grid(row=5, column=0, padx=20, pady=10, sticky="nsew")
-
 
         else:
             self.expand_gui()
@@ -308,32 +304,13 @@ class App(customtkinter.CTk):
 
     def generate(self) -> None:
 
-        exp1 = self.experiment1_switch.get()
-        exp2 = self.experiment2_switch.get()
-        exp3 = self.experiment3_switch.get()
-        exp4 = self.experiment4_switch.get()
-        exp5 = self.experiment5_switch.get()
-        own_exp = self.create_own_exp_switch.get()
+        # Extract state_data from GUI
+        settings = self.__set_data()
 
-        if exp1:
-            self.run_exp_1()
-        elif exp2:
-            self.run_exp_2()
-        elif exp3:
-            self.run_exp_3()
-        elif exp4:
-            self.run_exp_4()
-        elif exp5:
-            self.run_exp_5()
-        elif own_exp:
+        # Destroy window
+        self.destroy()
 
-            # Extract state_data from GUI
-            settings = self.__set_data()
-
-            # Destroy window
-            self.destroy()
-
-            self.__run_algorithm(settings)
+        self.__run_algorithm(settings)
 
     def finish(self, student_list):
 
@@ -392,12 +369,3 @@ class App(customtkinter.CTk):
 
         if not visualize:
             G.optimize()
-
-    def __gen_core_assignment_list(self) -> list:
-        core_arragments = []
-        for a in range(4):
-            for b in range(4):
-                for c in range(4):
-                    for d in range(4):
-                        core_arragments.append(f'{a}{b}{c}{d}')
-        return core_arragments
