@@ -6,26 +6,29 @@ import classes.representation.room as RoomClass
 import classes.representation.roster as RosterClass
 import classes.representation.malus_calc as MalusCalculatorClass
 
+from data.data import COURSES, STUDENT_COURSES, ROOMS
+
 import os
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 class Generator:
-    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, difficult_students, annealing, visualize, core_arrangement):
+    def __init__(self, capacity, popular, popular_own_day, difficult_students, annealing, visualize, mode, core_assignment=False, hill_climber_iters=200, experiment_iter=0):
 
         # Set heuristics
-        self.CAPACITY = False
-        self.POPULAR = False
-        self.POPULAR_OWN_DAY = False
-        self.ANNEALING = False
-        self.core_arrangement = core_arrangement
-        self.DIFFICULT_STUDENTS = False
+        self.CAPACITY = capacity
+        self.POPULAR = popular
+        self.POPULAR_OWN_DAY = popular_own_day
+        self.ANNEALING = annealing
+        self.DIFFICULT_STUDENTS = difficult_students
 
         # Save initialization
         self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
 
         if visualize:
             self.plot_startup(COURSES, STUDENT_COURSES, ROOMS)
+        else:
+            self.optimize(mode, core_assignment, hill_climber_iters, experiment_iter)
 
     """ INIT """
 
@@ -55,6 +58,8 @@ class Generator:
 
     def assign(self, COURSES, STUDENT_COURSES, ROOMS):
         """This Function takes in 3 Dataframes, loops over the dataframe and fills a list with the respective Class objects."""
+
+        global course_list, student_list, rooms_list
 
         course_list = []
         student_list = []
@@ -197,8 +202,12 @@ class Generator:
         plt.xlabel('Malus')
         plt.savefig(os.path.join(directory_plots, fig_name))
 
-    def optimize(self):
-        self.ANNEALING = True
-        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING, self.core_arrangement)
-        total_output = Multiprocessor.run_combination('genetic')
-        return total_output
+    def optimize(self, mode, core_assignment, hill_climber_iters, experiment_iter):
+        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING, experiment_iter)
+
+        if mode == 'sequential':
+            pass
+        elif mode == 'multiproccesing':
+            Multiprocessor.run_multi(core_assignment, hill_climber_iters)
+        elif mode == 'genetic':
+            Multiprocessor.run_genetic()
