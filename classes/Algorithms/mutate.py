@@ -186,7 +186,7 @@ class Mutate():
         '''finds worst day in the schedule of a student'''
 
         worst_day = None
-        student_days, student_classes = self.__fill_timeslots_student(id)
+        student_days, student_classes = self._fill_timeslots_student(id)
 
         scores_per_day = {day:(0, 0) for day in student_days}
         
@@ -308,7 +308,7 @@ class Mutate():
 
         return student_days, student_classes
 
-    def __fill_timeslots_student_test_for_double(self, id):
+    def _fill_timeslots_student_test_for_double(self, id):
         '''fills the timeslot of a student based on the complete schedule
            days keeps track of the timeslot, classes of the info of that specific class
            also keeps track of double hours by appending a tuple to student_days instead of just timeslot'''

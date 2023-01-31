@@ -88,7 +88,7 @@ class Multiprocessor():
         self.list_iterations.append(0)
         self.list_duration_since_innit.append(0)
 
-        core_assignment_list = [0, 0, 0, 0]
+        core_assignment_list = [2, 2, 3, 3]
 
         # Print intitial
         print(f'\nInitialization')
