@@ -88,7 +88,7 @@ class Multiprocessor():
         self.list_iterations.append(0)
         self.list_duration_since_innit.append(0)
 
-        core_assignment_list = [2, 2, 2, 2]
+        core_assignment_list = [0, 0, 0, 0]
 
         # Print intitial
         print(f'\nInitialization')
@@ -98,8 +98,8 @@ class Multiprocessor():
         else:
             t = 0
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while self.fail_counter < 30:
-        # while self.iter_counter != 2:
+        # while self.fail_counter < 30:
+        while self.iter_counter != 2:
 
             start_time = time.time()
 
@@ -115,8 +115,11 @@ class Multiprocessor():
             # Make four deepcopys for each function to use
             self.schedules = [copy.copy(self.schedule) for _ in range(4)]
 
-            if self.malus['Capacity'] < 10:
-                core_assignment_list = [2, 2, 2, 2]
+            if self.malus['Total'] < 125:
+                core_assignment_list = [0, 0, 2, 3]
+
+            elif self.malus['Total'] < 85:
+                core_assignment_list = [2, 2, 3, 3]
                 
             self.malus = self.MC.compute_total_malus(self.schedule)
             # Fill the pool with all functions and their rosters
