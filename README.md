@@ -1,6 +1,15 @@
 # AH
 Algoritmes en Heuristieken
 
+## BUGS
+
+Front end for setting own experiment not operational!
+To settup own experiment:
+Navigate to Classes/GUI/init_GUI, find method '____run_algorithm__', set variables:
+- Mode: choose from['multiproccesing', 'sequential', 'genetic', genetic pool]
+- Core Assignment: Insert four elements in the list from 0 to 3, these represent the assignemnt of different hill climbers to the multiprocessing cores
+- Hill Climber Iters: Set to interger or float. integer in range (50 - 1000) and float in range (0.1 - 5.0). These indicate the iteration length of the hill climbers
+
 ## Introduction
 
 This program creates a university schedule by scheduling courses that consist of lectures, tutorials, and practicals into specific rooms and timeslots.
