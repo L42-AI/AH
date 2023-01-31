@@ -17,13 +17,13 @@ CLIMBING = True
 ANNEALING = False
 
 # heuristics to try and connect room size to class size
-CAPACITY = False
+CAPACITY = True
 
 # heuristic to first give the popular classes rooms
-POPULAR = False
+POPULAR = True
 
 # heuristic to place the most popular course lectures on different days
-POPULAR_OWN_DAY = False
+POPULAR_OWN_DAY = True
 
 VISUALIZE_INIT = True
 
@@ -54,5 +54,5 @@ if __name__ == '__main__':
 
     for i in range(1):
         list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit = main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT, multiplier=multiplier)
-        write_to_csv('data/One Hillclimber different stages multiplier_4.csv', i, list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit)
+        write_to_csv('data/One Hillclimber different stages multiplier_4 with greedy.csv', i, list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit)
 

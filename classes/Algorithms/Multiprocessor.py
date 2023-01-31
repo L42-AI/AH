@@ -88,7 +88,7 @@ class Multiprocessor():
         self.list_iterations.append(0)
         self.list_duration_since_innit.append(0)
 
-        core_assignment_list = [2, 2, 3, 3]
+        core_assignment_list = [0, 0, 0, 0]
 
         # Print intitial
         print(f'\nInitialization')
@@ -116,7 +116,7 @@ class Multiprocessor():
             self.schedules = [copy.copy(self.schedule) for _ in range(4)]
 
             if self.malus['Total'] < 85:
-                core_assignment_list = [2, 2, 3, 3]
+                core_assignment_list = [0, 2, 2, 3]
 
             elif self.malus['Total'] < 125:
                 core_assignment_list = [0, 0, 2, 3]
