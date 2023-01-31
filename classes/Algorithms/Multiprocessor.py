@@ -60,7 +60,7 @@ class Multiprocessor():
 
     """ Multiprocessing """
 
-    def run_multi(self, core_assignment, hill_climber_iters):
+    def run_multi(self, experiment, core_assignment, hill_climber_iters):
 
         self.data = []
 
@@ -75,8 +75,6 @@ class Multiprocessor():
         self.schedule = self.Roster.schedule
 
         self.malus = self.MC.compute_total_malus(self.schedule)
-
-        core_assignment_list = core_assignment
 
         # Print intitial
         print(f'\nInitialization')
@@ -100,10 +98,10 @@ class Multiprocessor():
 
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
-                self.output_schedules = p.map(self.run_HC, [(core_assignment_list[0], schedule_list[0], t, self.hillclimber_iter_counter, hill_climber_iters),
-                                                            (core_assignment_list[1], schedule_list[1], t, self.hillclimber_iter_counter, hill_climber_iters),
-                                                            (core_assignment_list[2], schedule_list[2], t, self.hillclimber_iter_counter, hill_climber_iters),
-                                                            (core_assignment_list[3], schedule_list[3], t, self.hillclimber_iter_counter, hill_climber_iters)])
+                self.output_schedules = p.map(self.run_HC, [(core_assignment[0], schedule_list[0], t, self.hillclimber_iter_counter, hill_climber_iters),
+                                                            (core_assignment[1], schedule_list[1], t, self.hillclimber_iter_counter, hill_climber_iters),
+                                                            (core_assignment[2], schedule_list[2], t, self.hillclimber_iter_counter, hill_climber_iters),
+                                                            (core_assignment[3], schedule_list[3], t, self.hillclimber_iter_counter, hill_climber_iters)])
 
             # find the lowest malus of the output rosters
             min_malus = min([i[1]['Total'] for i in self.output_schedules])
@@ -125,15 +123,15 @@ class Multiprocessor():
             for output_schedule in self.output_schedules:
                 self.save_data_multi(output_schedule[2], output_schedule[1]['Total'], self.multiprocess_iter_counter, round(self.duration, 2))
 
-        self.export_data_multi()
+        self.export_data_multi(experiment)
 
     def save_data_multi(self, HC_name, cost, iteration, time):
         self.data.append({'Hill Climber': HC_name, 'Cost': cost, 'Iteration': iteration, 'Duration': time})
 
-    def export_data_multi(self):
+    def export_data_multi(self, experiment):
         fields = ['Hill Climber', 'Cost', 'Iteration', 'Duration']
 
-        with open('data/experiment1.csv', 'a', newline='') as f:
+        with open(f'data/experiment{experiment}.csv', 'a', newline='') as f:
             csv_writer = csv.DictWriter(f, fieldnames=fields)
 
             if self.experiment_iter == 0:
@@ -144,7 +142,7 @@ class Multiprocessor():
 
     """ Genetic """
 
-    def run_genetic_pool(self, hill_climber_iters):
+    def run_genetic_pool(self, experiment, core_assignment, hill_climber_iters):
 
         # Set Initial variable
         self.multiprocessor_counter = 0
@@ -170,7 +168,7 @@ class Multiprocessor():
 
         while self.malus['Capacity'] > 15:
             HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
-            self.schedule, self.malus, self.hillclimber_counter = HC1.climb()
+            self.schedule, self.malus, self.hillclimber_counter, _ = HC1.climb()
             print(self.malus)
 
         first_stage_duration = time.time() - first_stage_start_time
@@ -191,10 +189,10 @@ class Multiprocessor():
             total_output = []
             for schedule in schedule_list:
                 with Pool(4) as p:
-                    output_schedules = p.map(self.run_HC, [(0, schedule_list[0], t, self.hillclimber_counter, hill_climber_iters),
-                                                                (0, schedule_list[1], t, self.hillclimber_counter, hill_climber_iters),
-                                                                (2, schedule_list[2], t, self.hillclimber_counter, hill_climber_iters),
-                                                                (2, schedule_list[3], t, self.hillclimber_counter, hill_climber_iters)])
+                    output_schedules = p.map(self.run_HC, [(core_assignment[0], schedule, t, self.hillclimber_counter, hill_climber_iters),
+                                                                (core_assignment[1], schedule, t, self.hillclimber_counter, hill_climber_iters),
+                                                                (core_assignment[2], schedule, t, self.hillclimber_counter, hill_climber_iters),
+                                                                (core_assignment[3], schedule, t, self.hillclimber_counter, hill_climber_iters)])
 
                 total_output += output_schedules
 
@@ -218,11 +216,9 @@ class Multiprocessor():
                 lowest_malus = populations[pop][1]['Total']
                 self.schedule = populations[pop][0]
 
-        self.export_data_genetic()
+        self.export_data_genetic(experiment)
 
-        self.finish()
-
-    def run_genetic(self):
+    def run_genetic(self, experiment):
 
         # Set Initial variable
         self.fail_counter = 0
@@ -281,7 +277,7 @@ class Multiprocessor():
             for schedule_index, schedule in enumerate(schedule_list):
                 for _ in range(2):
                     for i in range(4):
-                        schedule, malus, _, __, accept_me = self.run_HC((i, schedule, T, 0,  self.hillclimber_counter))
+                        schedule, malus, _, __, accept_me = self.run_HC((i, schedule, T, 0, 1))
                         if accept_me:
 
                             # if this is the new schedule, make a data entry for every one of the 4 schedules
@@ -313,16 +309,12 @@ class Multiprocessor():
                     best_schedule = populations[pop][0]
                     counter_since_improvement = 0
                     self.fail_counter = 0
-                else: 
+                else:
                     self.fail_counter += 1
 
-            
             schedule_list = [populations[value][0] for value in populations]
 
-
-        self.export_data_genetic()
-
-        self.finish()
+        self.export_data_genetic(experiment)
 
 
     def tournament(self, populations) -> dict:
@@ -342,9 +334,9 @@ class Multiprocessor():
     def save_data_genetic(self, schedule_index, time, cost) -> None:
         self.data.append({'Schedule Index': schedule_index, 'Duration': time, 'Cost': cost})
 
-    def export_data_genetic(self) -> None:
+    def export_data_genetic(self, experiment) -> None:
         fields = ['Schedule Index', 'Duration', 'Cost']
-        with open('data/genetic.csv', 'w', newline='') as f:
+        with open(f'data/experiment{experiment}.csv', 'a', newline='') as f:
             csv_writer = csv.DictWriter(f, fieldnames=fields)
 
             if self.experiment_iter == 0:
@@ -432,29 +424,29 @@ class Multiprocessor():
         activation, schedule, T, iteration, hill_climber_iters = hc_tuple
         if activation == 0:
 
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC, iteration, hill_climber_iters)
-            schedule, malus, iteration, accept_me = HC1.climb(T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, self.MC, iteration)
+            schedule, malus, iteration, accept_me = HC1.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC1.get_name(), iteration, accept_me
 
         elif activation == 1:
 
-            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC, iteration, hill_climber_iters)
-            schedule, malus, iteration, accept_me = HC2.climb(T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
+            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, self.MC, iteration)
+            schedule, malus, iteration, accept_me = HC2.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC2.get_name(), iteration, accept_me
 
         elif activation == 2:
 
-            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC, iteration, hill_climber_iters)
-            schedule, malus, iteration, accept_me = HC3.climb(T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
+            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, self.MC, iteration)
+            schedule, malus, iteration, accept_me = HC3.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC3.get_name(), iteration, accept_me
 
         elif activation == 3:
 
-            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC, iteration, hill_climber_iters)
-            schedule, malus, iteration, accept_me = HC4.climb(T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
+            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, self.MC, iteration)
+            schedule, malus, iteration, accept_me = HC4.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC4.get_name(), iteration, accept_me
 

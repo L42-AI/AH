@@ -13,7 +13,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 class Generator:
-    def __init__(self, capacity, popular, popular_own_day, difficult_students, annealing, visualize, mode, core_assignment=False, hill_climber_iters=200, experiment_iter=0):
+    def __init__(self, capacity, popular, popular_own_day, difficult_students, annealing, visualize, experiment, mode, core_assignment=False, hill_climber_iters=200, experiment_iter=0):
 
         # Set heuristics
         self.CAPACITY = capacity
@@ -28,7 +28,7 @@ class Generator:
         if visualize:
             self.plot_startup(COURSES, STUDENT_COURSES, ROOMS)
         else:
-            self.optimize(mode, core_assignment, hill_climber_iters, experiment_iter)
+            self.optimize(experiment, mode, core_assignment, hill_climber_iters, experiment_iter)
 
     """ INIT """
 
@@ -202,12 +202,14 @@ class Generator:
         plt.xlabel('Malus')
         plt.savefig(os.path.join(directory_plots, fig_name))
 
-    def optimize(self, mode, core_assignment, hill_climber_iters, experiment_iter):
+    def optimize(self, experiment, mode, core_assignment, hill_climber_iters, experiment_iter):
         Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING, experiment_iter)
 
         if mode == 'sequential':
             pass
         elif mode == 'multiproccesing':
-            Multiprocessor.run_multi(core_assignment, hill_climber_iters)
+            Multiprocessor.run_multi(experiment, core_assignment, hill_climber_iters)
         elif mode == 'genetic':
-            Multiprocessor.run_genetic()
+            Multiprocessor.run_genetic(experiment)
+        elif mode == 'genetic pool':
+            Multiprocessor.run_genetic_pool(experiment, core_assignment, hill_climber_iters)

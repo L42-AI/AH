@@ -3,7 +3,6 @@ import csv
 import classes.algorithms.generator as GeneratorClass
 import classes.GUI.selector_GUI as SelectorApp
 import pickle
-from classes.algorithms.generator import student_list
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -28,7 +27,7 @@ class App(customtkinter.CTk):
         self.toggle_frame.grid_columnconfigure(0, weight=1)
         self.toggle_frame.grid_rowconfigure((0,1,2,3,4,5,6,7,8), weight=1)
 
-        self.experiment1_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Experiment 1', font=customtkinter.CTkFont(size=15), command=self.experiment1_switch_click)
+        self.experiment1_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Experiment 1', font=customtkinter.CTkFont(size=15), command=self.experiment5_switch_click)
         self.experiment1_switch.grid(row=0, column=0, pady=10, padx=20, sticky="n")
 
         self.label_initialization = customtkinter.CTkLabel(master=self.toggle_frame, text="Initialize", font=customtkinter.CTkFont(size=15, weight='bold'))
@@ -103,6 +102,8 @@ class App(customtkinter.CTk):
 
         visualize = False
 
+        experiment = 1
+
         mode = 'multiproccesing'
 
         core_assignment = [0,0,2,2]
@@ -111,18 +112,150 @@ class App(customtkinter.CTk):
 
         self.destroy()
 
-        with open('data/experiment1.csv', 'w', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerows([])
+        self.__reset_data_file(experiment)
 
         for i in range(30):
             GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize,
-                                     mode, core_assignment, hill_climber_iters, i)
-
+                                     experiment, mode, core_assignment,
+                                     hill_climber_iters, i)
         # Plot Funtion
 
-        self.finish(student_list)
+    def experiment2_switch_click(self) -> None:
+        # Set setting for initialization plot or optimalization
+
+        capacity = False
+
+        popular = False
+
+        popular_own_day = False
+
+        difficult_students = False
+
+        annealing = False
+
+        visualize = False
+
+        experiment = 2
+
+        mode = 'multiproccesing'
+
+        core_assignment = [0,0,0,0]
+
+        hill_climber_iters = 50
+
+        self.destroy()
+
+        self.__reset_data_file(experiment)
+
+        for i in range(30):
+            GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                     difficult_students, annealing, visualize,
+                                     experiment, mode, core_assignment,
+                                     hill_climber_iters, i)
+        # Plot Funtion
+
+    def experiment3_switch_click(self) -> None:
+        # Set setting for initialization plot or optimalization
+
+        capacity = False
+
+        popular = False
+
+        popular_own_day = False
+
+        difficult_students = False
+
+        annealing = False
+
+        visualize = False
+
+        experiment = 3
+
+        mode = 'multiproccesing'
+
+        core_assignment = [2,2,2,2]
+
+        hill_climber_iters = 50
+
+        self.destroy()
+
+        self.__reset_data_file(experiment)
+
+        for i in range(30):
+            GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                     difficult_students, annealing, visualize,
+                                     experiment, mode, core_assignment,
+                                     hill_climber_iters, i)
+        # Plot Funtion
+
+    def experiment4_switch_click(self) -> None:
+        capacity = False
+
+        popular = False
+
+        popular_own_day = False
+
+        difficult_students = False
+
+        annealing = False
+
+        visualize = False
+
+        experiment = 4
+
+        mode = 'multiproccesing'
+
+        core_assignment = [2,2,2,2]
+
+        hill_climber_iters = 0.1
+
+        self.__reset_data_file(experiment)
+
+        GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                    difficult_students, annealing, visualize,
+                                    experiment, mode, core_assignment,
+                                    hill_climber_iters, 1)
+
+        for i, hill_climber_iters in enumerate[0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]:
+            GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                     difficult_students, annealing, visualize,
+                                     experiment, mode, core_assignment,
+                                     hill_climber_iters, i)
+
+    def experiment5_switch_click(self) -> None:
+        capacity = False
+
+        popular = False
+
+        popular_own_day = False
+
+        difficult_students = False
+
+        annealing = False
+
+        visualize = False
+
+        experiment = 4
+
+        mode = 'genetic pool'
+
+        core_assignment = [0,0,2,2]
+
+        hill_climber_iters = 400
+
+        self.__reset_data_file(experiment)
+
+        for i in range(30):
+            GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                     difficult_students, annealing, visualize,
+                                     experiment, mode, core_assignment,
+                                     hill_climber_iters, i)
+
+    def __reset_data_file(self, experiment) -> None:
+        with open(f'data/experiment{experiment}.csv', 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerows([])
 
 
     def turn_off_difficult_POD(self) -> None:
