@@ -3,7 +3,6 @@ import csv
 import classes.algorithms.generator as GeneratorClass
 import classes.GUI.selector_GUI as SelectorApp
 import pickle
-from classes.algorithms.generator import student_list
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -12,7 +11,7 @@ customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "gre
 class App(customtkinter.CTk):
     def __init__(self) -> None:
         super().__init__()
-
+       
         # configure window
         self.title("Scheduly")
         self.geometry(f"{250}x{350}")
@@ -22,32 +21,89 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
 
         """ Optimize Configure Frame """
-
+        
         self.toggle_frame = customtkinter.CTkFrame(self)
         self.toggle_frame.grid(row=0, column=0, rowspan=2, padx=20, pady=20, sticky="nsew")
         self.toggle_frame.grid_columnconfigure(0, weight=1)
-        self.toggle_frame.grid_rowconfigure((0,1,2,3,4,5,6,7,8), weight=1)
+        self.toggle_frame.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11), weight=1)
+    
+        
 
-        self.experiment1_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Experiment 1', font=customtkinter.CTkFont(size=15), command=self.experiment1_switch_click)
-        self.experiment1_switch.grid(row=0, column=0, pady=10, padx=20, sticky="n")
+        self.label_experiment = customtkinter.CTkLabel(master=self.toggle_frame, text="Experiments:", font=customtkinter.CTkFont(size=15, weight='bold'))
+        self.label_experiment.grid(row=0, column=0, padx=20, pady=10, sticky="nsew")
 
-        self.label_initialization = customtkinter.CTkLabel(master=self.toggle_frame, text="Initialize", font=customtkinter.CTkFont(size=15, weight='bold'))
-        self.label_initialization.grid(row=1, column=0, padx=20, pady=10, sticky="nsew")
+        self.experiment1_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 1', font=customtkinter.CTkFont(size=15))
+        self.experiment1_switch.grid(row=1, column=0, pady=10, padx=20, sticky="nsew")
 
-        self.greedy_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Greedy', font=customtkinter.CTkFont(size=15), command=self.greedy_switch_click)
-        self.greedy_switch.grid(row=3, column=0, pady=10, padx=20, sticky="n")
+        self.experiment2_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 2', font=customtkinter.CTkFont(size=15))
+        self.experiment2_switch.grid(row=2, column=0, pady=10, padx=20, sticky="nsew")
+        
+        self.experiment3_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 3', font=customtkinter.CTkFont(size=15))
+        self.experiment3_switch.grid(row=3, column=0, pady=10, padx=20, sticky="nsew")
 
-        self.label_optimization = customtkinter.CTkLabel(master=self.toggle_frame, text="Optimize", font=customtkinter.CTkFont(size=15, weight='bold'))
-        self.label_optimization.grid(row=7, column=0, padx=20, pady=10, sticky="nsew")
-
-        self.hill_climbing_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Hill Climbing', font=customtkinter.CTkFont(size=15), command=self.hillclimber_switch_click)
-        self.hill_climbing_switch.grid(row=8, column=0, pady=10, padx=20, sticky="n")
+        self.create_own_exp_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Create your own:', font=customtkinter.CTkFont(size=15), command=self.create_own_experiment)
+        self.create_own_exp_switch.grid(row=4, column=0, pady=10, padx=20, sticky="nsew")
+        
+        
 
         """ Setup Generate Button """
 
         # Generate Button
         self.generate_button = customtkinter.CTkButton(master=self, text="Generate", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.generate)
-        self.generate_button.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
+        self.generate_button.grid(row=8, column=0, padx=20, pady=10, sticky="ew")
+
+    def create_own_experiment(self):
+
+        state_own = self.create_own_exp_switch.get()
+        if state_own:
+            self.experiment1_switch.deselect()
+            self.experiment2_switch.deselect()
+            self.experiment3_switch.deselect()
+            self.experiment4_switch.deselect()
+            self.experiment5_switch.deselect()
+
+            self.expand_gui()
+            self.create_own_exp_frame = customtkinter.CTkFrame(self)
+            self.create_own_exp_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
+            self.create_own_exp_frame.grid_columnconfigure(0, weight=1)
+            self.create_own_exp_frame.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11), weight=1)
+            self.label_initialization = customtkinter.CTkLabel(master=self.create_own_exp_frame, text="Choose settings:", font=customtkinter.CTkFont(size=15, weight='bold'))
+            self.label_initialization.grid(row=0, column=0, padx=20, pady=10, sticky="nsew")
+
+            self.greedy_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame, text='Greedy', font=customtkinter.CTkFont(size=15), command=self.greedy_switch_click)
+            self.greedy_switch.grid(row=1, column=0, pady=10, padx=20, sticky="n")
+
+            self.hill_climbing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame, text='Hill Climbing', font=customtkinter.CTkFont(size=15), command=self.hillclimber_switch_click)
+            self.hill_climbing_switch.grid(row=6, column=0, pady=10, padx=20, sticky="n")
+        else:
+            
+            self.hill_climbing_switch.destroy()
+            try:
+                self.annealing_switch.destroy()
+            except:
+                pass
+            self.greedy_switch.deselect()
+            try:
+                self.greedy_switch_click()
+            except:
+                pass
+            self.label_initialization.destroy()
+            self.greedy_switch.destroy()
+            
+            self.collaps_gui()
+            self.create_own_exp_frame.destroy()
+
+    def expand_gui(self):
+        self.geometry(f"{500}x{550}")
+
+    def expand_gui_greedy(self):
+        self.geometry(f'{500}x{550}')
+
+    def expand_gui_hilli(self):
+        self.geometry(f'{500}x{650}')
+
+    def collaps_gui(self):
+        self.geometry(f'{250}x{350}')
 
     def run(self) -> None:
         self.mainloop()
@@ -57,38 +113,44 @@ class App(customtkinter.CTk):
         state_hc = self.hill_climbing_switch.get()
 
         if state_hc == 1:
-            self.annealing_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Sim. Annealing', font=customtkinter.CTkFont(size=15))
-            self.annealing_switch.grid(row=8, column=0, padx=20, pady=10, sticky="nsew")
+            self.expand_gui_hilli()
+            self.annealing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame, text='Sim. Annealing', font=customtkinter.CTkFont(size=15))
+            self.annealing_switch.grid(row=7, column=0, padx=20, pady=10, sticky="nsew")
         else:
+            self.expand_gui_greedy()
             self.annealing_switch.destroy()
 
     def greedy_switch_click(self) -> None:
+        
 
         state_greedy = self.greedy_switch.get()
 
         if state_greedy == 1:
-            self.capacity_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Capacity', font=customtkinter.CTkFont(size=15))
-            self.capacity_switch.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
+            self.expand_gui_greedy()
+            self.capacity_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame, text='Capacity', font=customtkinter.CTkFont(size=15))
+            self.capacity_switch.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
 
-            self.popular_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Popular first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_P)
-            self.popular_switch.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
+            self.popular_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame, text='Popular first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_P)
+            self.popular_switch.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
 
-            self.popular_own_day_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Largest first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_POD)
-            self.popular_own_day_switch.grid(row=5, column=0, padx=20, pady=10, sticky="nsew")
+            self.popular_own_day_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame, text='Largest first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_POD)
+            self.popular_own_day_switch.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
 
-            self.difficult_students_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Busy Students', font=customtkinter.CTkFont(size=15), command=self.turn_off_popular)
-            self.difficult_students_switch.grid(row=6, column=0, padx=20, pady=10, sticky="nsew")
+            self.difficult_students_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame, text='Busy Students', font=customtkinter.CTkFont(size=15), command=self.turn_off_popular)
+            self.difficult_students_switch.grid(row=5, column=0, padx=20, pady=10, sticky="nsew")
 
-            self.geometry(f"{250}x{525}")
         else:
+            self.expand_gui()
             self.capacity_switch.destroy()
             self.popular_switch.destroy()
             self.popular_own_day_switch.destroy()
             self.difficult_students_switch.destroy()
 
-            self.geometry(f"{250}x{350}")
+    def run_experiment(self):
+        if self.experiment1_switch.get():
+            self.run_exp_1()
 
-    def experiment1_switch_click(self) -> None:
+    def run_exp_1(self) -> None:
         # Set setting for initialization plot or optimalization
 
         capacity = False
