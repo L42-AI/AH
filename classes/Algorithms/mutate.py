@@ -290,7 +290,7 @@ class Mutate():
 
         return worst_day
 
-    def __fill_timeslots_student(self, id) -> dict:
+    def _fill_timeslots_student(self, id) -> dict:
         '''fills the timeslot of a student based on the complete schedule 
            days keeps track of the timeslot, classes of the info of that specific class'''
         student_days = {'Monday': [], 'Tuesday': [], 'Wednesday': [], 'Thursday': [], 'Friday': []}
