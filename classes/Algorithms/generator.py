@@ -6,19 +6,20 @@ import classes.representation.room as RoomClass
 import classes.representation.roster as RosterClass
 import classes.representation.malus_calc as MalusCalculatorClass
 
+from data.data import COURSES, STUDENT_COURSES, ROOMS
+
 import os
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 class Generator:
-    def __init__(self, COURSES, STUDENT_COURSES, ROOMS, capacity, popular, popular_own_day, difficult_students, annealing, visualize, core_arrangement):
+    def __init__(self, capacity, popular, popular_own_day, difficult_students, annealing, visualize):
 
         # Set heuristics
         self.CAPACITY = capacity
         self.POPULAR = popular
         self.POPULAR_OWN_DAY = popular_own_day
         self.ANNEALING = annealing
-        self.core_arrangement = core_arrangement
         self.DIFFICULT_STUDENTS = difficult_students
 
         # Save initialization
@@ -198,5 +199,5 @@ class Generator:
         plt.savefig(os.path.join(directory_plots, fig_name))
 
     def optimize(self):
-        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING, self.core_arrangement)
-        Multiprocessor.run_combination('genetic_pool')
+        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING)
+        Multiprocessor.run()

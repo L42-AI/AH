@@ -4,21 +4,16 @@ import random
 import classes.GUI.selector_GUI as SelectorApp
 from helpers.shallow_copy import recursive_copy
 
-import csv
 import time
-import json
-import copy
-import matplotlib.pyplot as plt
 
 
 class Multiprocessor():
-    def __init__(self, Roster, course_list, student_list, MC, annealing, core_arrangement):
+    def __init__(self, Roster, course_list, student_list, MC, annealing):
         self.Roster = Roster
         self.course_list = course_list
         self.student_list = student_list
         self.ITERS = 1
         self.ANNEALING = annealing
-        self.core_arrangement = core_arrangement
 
         self.MC = MC
 
@@ -73,174 +68,135 @@ class Multiprocessor():
 
         T = self.__init_temp()
 
-        # Initialize all hillclimbers
-        HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
-        HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
-        HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
-        HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
-
-
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
 
-        # Run the optimizing loop
-        while self.malus['Total'] > 100:
+        hillclimb_iters = 1000
 
-            start_time = time.time()
+        start_time = time.time()
 
-            while self.malus['Total'] > 150:
+        while self.malus['Total'] > 150:
 
-                self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T)
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter, hillclimb_iters)
+            self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T)
+            HC1.schedule = self.schedule
+            HC1.iteration = self.hillclimber_counter
 
-                HC1.schedule = self.schedule
-                HC1.iteration = self.hillclimber_counter
+            print(self.malus)
 
-                print(self.malus)
-
-            HC2.schedule = self.schedule
-            HC2.iteration = self.hillclimber_counter
-
-            HC3.schedule = self.schedule
-            HC3.iteration = self.hillclimber_counter
-
-            HC4.schedule = self.schedule
-            HC4.iteration = self.hillclimber_counter
+        # Initialize all hillclimbers
+        
+        # HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter, hillclimb_iters)
+        # HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter, hillclimb_iters)
+        # HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter, hillclimb_iters)
 
 
-            T = self.__set_temp(T)
+        # HC2.schedule = self.schedule
+        # HC2.iteration = self.hillclimber_counter
+
+        # HC3.schedule = self.schedule
+        # HC3.iteration = self.hillclimber_counter
+
+        # HC4.schedule = self.schedule
+        # HC4.iteration = self.hillclimber_counter
 
 
-            if mode == 'solo':
-                activation = random.choice([1,2,3])
+        T = self.__set_temp(T)
 
-                if activation == 1:
-                    HC1.schedule = self.schedule
-                    HC1.iteration = self.hillclimber_counter
+        hillclimb_iters = 250
 
-                    self.schedule, self.malus, self.hillclimber_counter = HC1.climb(T)
+        if mode == 'multi':
 
+            core_assignment_list = [0,1,1,2]
 
-                    # print(self.malus)
+            with Pool(4) as p:
+                self.output_schedules = p.map(self.run_HC, [(core_assignment_list[0], self.schedule, T, 1, self.hillclimber_counter),
+                                                            (core_assignment_list[1], self.schedule, T, 2, self.hillclimber_counter),
+                                                            (core_assignment_list[2], self.schedule, T, 3, self.hillclimber_counter),
+                                                            (core_assignment_list[3], self.schedule, T, 4, self.hillclimber_counter)])
+            # find the lowest malus of the output rosters
+            min_malus = min([i[1]['Total'] for i in self.output_schedules])
 
-                elif activation == 2:
-                    HC2.schedule = self.schedule
-                    HC2.iteration = self.hillclimber_counter
+            # Use the lowest malus to find the index of the best roster
+            self.best_index = [i[1]['Total'] for i in self.output_schedules].index(min_malus)
 
-                    self.schedule, self.malus, self.hillclimber_counter = HC2.climb(T)
+            self.hillclimber_counter = self.output_schedules[0][3]
 
+            # Compute difference between new roster and current roster
+            difference = self.malus['Total'] - self.output_schedules[self.best_index][1]['Total']
 
-                    # print(self.malus)
+            # replace the roster if it is better
+            self.__replace_roster(difference)
+            self.multiprocessor_counter += 1
 
-                elif activation == 3:
-                    HC3.schedule = self.schedule
-                    HC3.iteration = self.hillclimber_counter
+        elif mode == 'genetic_pool':
 
-                    self.schedule, self.malus, self.hillclimber_counter = HC3.climb(T)
+            schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
 
+            while time.time() - start_time < 900:
 
-                    # print(self.malus)
+                gen_time_start = time.time()
 
-                elif activation == 4:
-                    HC4.schedule = self.schedule
-                    HC4.iteration = self.hillclimber_counter
-                    HC4.hillclimber_iterations = 1
+                total_output = []
+                for schedule in schedule_list:
+                    print(f'before: {time.time() - gen_time_start}')
+                    with Pool(4) as p:
+                        output_schedules = p.map(self.run_HC, [(0, schedule, T, self.hillclimber_counter, hillclimb_iters),
+                                                                    (1, schedule, T, self.hillclimber_counter, hillclimb_iters),
+                                                                    (2, schedule, T, self.hillclimber_counter, hillclimb_iters),
+                                                                    (3, schedule, T, self.hillclimber_counter, hillclimb_iters)])
+                    print(f'after: {time.time() - gen_time_start}')
+                    total_output += output_schedules
 
-                    self.schedule, self.malus, self.hillclimber_counter = HC4.climb(T)
+                # with Pool(4) as p:
+                            # self.output_schedules = p.map(self.run_HC, [(0, schedules[0], T, self.hillclimber_counter),
+                            #                                             (0, schedules[0], T, self.hillclimber_counter),
+                            #                                             (0, schedules[1], T, self.hillclimber_counter),
+                            #                                             (0, schedules[1], T, self.hillclimber_counter),
+                            #                                             (0, schedules[2], T, self.hillclimber_counter),
+                            #                                             (0, schedules[2], T, self.hillclimber_counter),
+                            #                                             (0, schedules[3], T, self.hillclimber_counter),
+                            #                                             (0, schedules[3], T, self.hillclimber_counter),
+                            #                                             (1, schedules[0], T, self.hillclimber_counter),
+                            #                                             (1, schedules[0], T, self.hillclimber_counter),
+                            #                                             (1, schedules[1], T, self.hillclimber_counter),
+                            #                                             (1, schedules[1], T, self.hillclimber_counter),
+                            #                                             (1, schedules[2], T, self.hillclimber_counter),
+                            #                                             (1, schedules[2], T, self.hillclimber_counter),
+                            #                                             (1, schedules[3], T, self.hillclimber_counter),
+                            #                                             (1, schedules[3], T, self.hillclimber_counter),
+                            #                                             (2, schedules[0], T, self.hillclimber_counter),
+                            #                                             (2, schedules[0], T, self.hillclimber_counter),
+                            #                                             (2, schedules[1], T, self.hillclimber_counter),
+                            #                                             (2, schedules[1], T, self.hillclimber_counter),
+                            #                                             (2, schedules[2], T, self.hillclimber_counter),
+                            #                                             (2, schedules[2], T, self.hillclimber_counter),
+                            #                                             (2, schedules[3], T, self.hillclimber_counter),
+                            #                                             (2, schedules[3], T, self.hillclimber_counter),
+                            #                                             (3, schedules[0], T, self.hillclimber_counter),
+                            #                                             (3, schedules[0], T, self.hillclimber_counter),
+                            #                                             (3, schedules[1], T, self.hillclimber_counter),
+                            #                                             (3, schedules[1], T, self.hillclimber_counter),
+                            #                                             (3, schedules[2], T, self.hillclimber_counter),
+                            #                                             (3, schedules[2], T, self.hillclimber_counter),
+                            #                                             (3, schedules[3], T, self.hillclimber_counter),
+                            #                                             (3, schedules[3], T, self.hillclimber_counter)])
 
-                    # print(self.malus)
-            elif mode == 'multi':
+                random.shuffle(total_output)
 
-                core_assignment_list = [0,1,1,2]
+                populations = {}
+                for i, output in enumerate(total_output):
+                    populations[i] = (output[0], output[1])
 
-                with Pool(4) as p:
-                    self.output_schedules = p.map(self.run_HC, [(core_assignment_list[0], self.schedule, T, 1, self.hillclimber_counter),
-                                                                (core_assignment_list[1], self.schedule, T, 2, self.hillclimber_counter),
-                                                                (core_assignment_list[2], self.schedule, T, 3, self.hillclimber_counter),
-                                                                (core_assignment_list[3], self.schedule, T, 4, self.hillclimber_counter)])
-                # find the lowest malus of the output rosters
-                min_malus = min([i[1]['Total'] for i in self.output_schedules])
+                populations = self.tournament(populations)
+                for pop in populations:
+                    print(time.time() - gen_time_start)
+                    print(populations[pop][1]['Total'])
 
-                # Use the lowest malus to find the index of the best roster
-                self.best_index = [i[1]['Total'] for i in self.output_schedules].index(min_malus)
+                schedule_list = [populations[value][0] for value in populations]
 
-                self.hillclimber_counter = self.output_schedules[0][3]
-
-                # Compute difference between new roster and current roster
-                difference = self.malus['Total'] - self.output_schedules[self.best_index][1]['Total']
-
-                # replace the roster if it is better
-                self.__replace_roster(difference)
-                self.multiprocessor_counter += 1
-
-            elif mode == 'genetic_pool':
-
-                schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
-
-                while time.time() - start_time < 600:
-
-                    gen_time_start = time.time()
-
-                    total_output = []
-                    for schedule in schedule_list:
-                        for _ in range(2):
-                            print(f'before: {time.time() - gen_time_start}')
-                            with Pool(4) as p:
-                                output_schedules = p.map(self.run_HC, [(0, schedule, T, self.hillclimber_counter),
-                                                                            (1, schedule, T, self.hillclimber_counter),
-                                                                            (2, schedule, T, self.hillclimber_counter),
-                                                                            (3, schedule, T, self.hillclimber_counter)])
-                            print(f'after: {time.time() - gen_time_start}')
-                            total_output += output_schedules
-
-                    # with Pool(4) as p:
-                                # self.output_schedules = p.map(self.run_HC, [(0, schedules[0], T, self.hillclimber_counter),
-                                #                                             (0, schedules[0], T, self.hillclimber_counter),
-                                #                                             (0, schedules[1], T, self.hillclimber_counter),
-                                #                                             (0, schedules[1], T, self.hillclimber_counter),
-                                #                                             (0, schedules[2], T, self.hillclimber_counter),
-                                #                                             (0, schedules[2], T, self.hillclimber_counter),
-                                #                                             (0, schedules[3], T, self.hillclimber_counter),
-                                #                                             (0, schedules[3], T, self.hillclimber_counter),
-                                #                                             (1, schedules[0], T, self.hillclimber_counter),
-                                #                                             (1, schedules[0], T, self.hillclimber_counter),
-                                #                                             (1, schedules[1], T, self.hillclimber_counter),
-                                #                                             (1, schedules[1], T, self.hillclimber_counter),
-                                #                                             (1, schedules[2], T, self.hillclimber_counter),
-                                #                                             (1, schedules[2], T, self.hillclimber_counter),
-                                #                                             (1, schedules[3], T, self.hillclimber_counter),
-                                #                                             (1, schedules[3], T, self.hillclimber_counter),
-                                #                                             (2, schedules[0], T, self.hillclimber_counter),
-                                #                                             (2, schedules[0], T, self.hillclimber_counter),
-                                #                                             (2, schedules[1], T, self.hillclimber_counter),
-                                #                                             (2, schedules[1], T, self.hillclimber_counter),
-                                #                                             (2, schedules[2], T, self.hillclimber_counter),
-                                #                                             (2, schedules[2], T, self.hillclimber_counter),
-                                #                                             (2, schedules[3], T, self.hillclimber_counter),
-                                #                                             (2, schedules[3], T, self.hillclimber_counter),
-                                #                                             (3, schedules[0], T, self.hillclimber_counter),
-                                #                                             (3, schedules[0], T, self.hillclimber_counter),
-                                #                                             (3, schedules[1], T, self.hillclimber_counter),
-                                #                                             (3, schedules[1], T, self.hillclimber_counter),
-                                #                                             (3, schedules[2], T, self.hillclimber_counter),
-                                #                                             (3, schedules[2], T, self.hillclimber_counter),
-                                #                                             (3, schedules[3], T, self.hillclimber_counter),
-                                #                                             (3, schedules[3], T, self.hillclimber_counter)])
-
-                    random.shuffle(total_output)
-
-                    populations = {}
-                    for i, output in enumerate(total_output):
-                        populations[i] = (output[0], output[1])
-
-                    populations = self.tournament(populations)
-                    for pop in populations:
-                        print(time.time() - gen_time_start)
-                        print(populations[pop][1]['Total'])
-
-                    schedule_list = [populations[value][0] for value in populations]
-
-            elif mode == 'genetic':
+        elif mode == 'genetic':
 
                 schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
 
@@ -300,61 +256,64 @@ class Multiprocessor():
         print(f'\nInitialization')
         print(self.malus)
 
-        if self.ANNEALING:
-            t = .8
-        else:
-            t = 0
+        first_stage_start_time = time.time()
 
-        core_assignment_list = [0,0,0,0]
+        """ First Stage """
 
+        t = self.__init_temp()
 
-        while self.fail_counter != 10:
+        while self.malus['Capacity'] > 15:
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.course_list, self.student_list, self.MC, self.hillclimber_counter)
+            self.schedule, self.malus, self.hillclimber_counter = HC1.climb(t)
+            print(self.malus)
 
-            if self.ANNEALING:
-                if t > .5:
-                    t = self.__get_temperature(t)
-                elif t <= 0.5:
-                    t = self.__get_temperature(t, alpha=0.65)
+        first_stage_duration = time.time() - first_stage_start_time
 
-                if t < 0.01:
-                    t = 0.05
-            else:
-                t = 0
+        print(f'\nFirst stage duration: {round(first_stage_duration, 2)} Seconds\n')
 
 
-            if self.malus['Capacity'] < 15:
-                core_assignment_list = [0,1,2,3]
+        """ Second Stage """
 
-            start_time = time.time()
+        second_stage_start_time = time.time()
 
-            # Fill the pool with all functions and their rosters
-            with Pool(4) as p:
-                self.output_schedules = p.map(self.run_HC, [(core_assignment_list[0], self.schedule, t, 1, self.hillclimber_counter),
-                                                            (core_assignment_list[1], self.schedule, t, 2, self.hillclimber_counter),
-                                                            (core_assignment_list[2], self.schedule, t, 3, self.hillclimber_counter),
-                                                            (core_assignment_list[3], self.schedule, t, 4, self.hillclimber_counter)])
+        schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
 
-            # find the lowest malus of the output rosters
-            min_malus = min([i[1]['Total'] for i in self.output_schedules])
+        while time.time() - second_stage_start_time < 1:
 
-            # Use the lowest malus to find the index of the best roster
-            self.best_index = [i[1]['Total'] for i in self.output_schedules].index(min_malus)
+            gen_time_start = time.time()
 
-            self.hillclimber_counter = self.output_schedules[0][3]
+            total_output = []
+            for schedule in schedule_list:
+                # for _ in range (2):
+                    print(f'before: {time.time() - gen_time_start}')
 
-            # Compute difference between new roster and current roster
-            difference = self.malus['Total'] - self.output_schedules[self.best_index][1]['Total']
+                    with Pool(4) as p:
+                        output_schedules = p.map(self.run_HC, [(0, schedule, t, self.hillclimber_counter),
+                                                                    (0, schedule, t, self.hillclimber_counter),
+                                                                    (2, schedule, t, self.hillclimber_counter),
+                                                                    (2, schedule, t, self.hillclimber_counter)])
 
-            # Set finish time
-            finish_time = time.time()
+                    print(f'after: {time.time() - gen_time_start}')
+                    total_output += output_schedules
 
-            self.multiprocess_duration = finish_time - start_time
-            self.duration += self.multiprocess_duration
+            random.shuffle(total_output)
 
-            # replace the roster if it is better
-            self.__replace_roster(difference)
+            populations = {}
+            for i, output in enumerate(total_output):
+                populations[i] = (output[0], output[1])
 
-            self.multiprocessor_counter += 1
+            populations = self.tournament(populations)
+            for pop in populations:
+                print(time.time() - gen_time_start)
+                print(populations[pop][1]['Total'])
+
+            schedule_list = [populations[value][0] for value in populations]
+
+        lowest_malus = 9999
+        for pop in populations:
+            if populations[pop][1]['Total'] < lowest_malus:
+                lowest_malus = populations[pop][1]['Total']
+                self.schedule = populations[pop][0]
 
         self.finish()
 
@@ -433,9 +392,6 @@ class Multiprocessor():
         self.finish()
 
     def finish(self):
-
-        with open('data/terminate.txt', 'w') as f:
-                f.write('True')
 
         app = SelectorApp.App(self.student_list, self.schedule)
         app.mainloop()

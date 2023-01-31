@@ -2,15 +2,6 @@ import customtkinter
 
 import classes.algorithms.generator as GeneratorClass
 
-from data.data import COURSES, STUDENT_COURSES, ROOMS
-
-import json
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-import pandas as pd
-
-import subprocess
-
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
@@ -18,9 +9,6 @@ customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "gre
 class App(customtkinter.CTk):
     def __init__(self) -> None:
         super().__init__()
-
-
-        self.ax = plt.figure(figsize=(14, 7))
 
         # configure window
         self.title("Scheduly")
@@ -118,11 +106,7 @@ class App(customtkinter.CTk):
         # Destroy window
         self.destroy()
 
-        self.export_data(settings)
-
-        self.__run_algorithm()
-
-        # self.plot_progress()
+        self.__run_algorithm(settings)
 
     def __set_data(self) -> tuple:
 
@@ -163,68 +147,12 @@ class App(customtkinter.CTk):
 
         return capacity, popular, popular_own_day, difficult_students, annealing, visualize
 
-    def export_data(self, settings) -> None:
+    def __run_algorithm(self, settings) -> None:
 
         capacity, popular, popular_own_day, difficult_students, annealing, visualize = settings
 
-        dictionary = {
-            'capacity': capacity,
-            'popular': popular,
-            'popular_own_day': popular_own_day,
-            'difficult_students': difficult_students,
-            'annealing': annealing,
-            'visualize': visualize,
-        }
-        with open('data/settings.json', 'w') as f:
-            json.dump(dictionary, f)
+        G = GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                     difficult_students, annealing, visualize)
 
-    def __run_algorithm(self) -> None:
-
-        with open('data/terminate.txt', 'w') as f:
-                f.write('False')
-
-        subprocess.Popen(['python3', 'run_algorithm.py'])
-
-    def plot_progress(self) -> None:
-
-        while True:
-            with open('data/terminate.txt', 'r') as f:
-                finished = f.read()
-                if finished == 'True':
-                    plt.close()
-                    break
-
-            df = pd.read_csv('data/HCresults.csv')
-
-            HC1_x_values = df['HC1 iteration']
-            HC1_x_values.dropna(inplace=True)
-
-            HC1_y_values = df['HC1 malus']
-            HC1_y_values.dropna(inplace=True)
-
-            HC2_x_values = df['HC2 iteration']
-            HC2_x_values.dropna(inplace=True)
-
-            HC2_y_values = df['HC2 malus']
-            HC2_y_values.dropna(inplace=True)
-
-            HC3_x_values = df['HC3 iteration']
-            HC3_x_values.dropna(inplace=True)
-
-            HC3_y_values = df['HC3 malus']
-            HC3_y_values.dropna(inplace=True)
-
-            HC4_x_values = df['HC4 iteration']
-            HC4_x_values.dropna(inplace=True)
-
-            HC4_y_values = df['HC4 malus']
-            HC4_y_values.dropna(inplace=True)
-
-            plt.plot(HC1_x_values.to_list(), HC1_y_values.to_list(), c='r', label='HC1')
-            plt.plot(HC2_x_values.to_list(), HC2_y_values.to_list(), c='g', label='HC2')
-            plt.plot(HC3_x_values.to_list(), HC3_y_values.to_list(), c='b', label='HC3')
-            plt.plot(HC4_x_values.to_list(), HC4_y_values.to_list(), c='m', label='HC4')
-
-            plt.pause(0.0001)
-
-
+        if not visualize:
+            G.optimize()

@@ -8,7 +8,7 @@ import csv
 """ Main HillClimber Class """
 
 class HillClimber:
-    def __init__(self, schedule, course_list, student_list, MC, iteration):
+    def __init__(self, schedule, course_list, student_list, MC, iteration, ):
         self.schedule_list = []
         self.course_list = course_list
         self.student_list = student_list
@@ -16,7 +16,6 @@ class HillClimber:
         self.MC = MC
         self.multiplyer = 0.3
         self.iteration = iteration
-
 
     """ Inheritable methods """
 
