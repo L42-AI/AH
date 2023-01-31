@@ -32,19 +32,19 @@ class App(customtkinter.CTk):
         self.label_experiment = customtkinter.CTkLabel(master=self.toggle_frame, text="Experiments:", font=customtkinter.CTkFont(size=15, weight='bold'))
         self.label_experiment.grid(row=0, column=0, padx=20, pady=10, sticky="nsew")
 
-        self.experiment1_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 1', font=customtkinter.CTkFont(size=15))
+        self.experiment1_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 1', font=customtkinter.CTkFont(size=15), command=self.experiment1_switch_click)
         self.experiment1_switch.grid(row=1, column=0, pady=10, padx=20, sticky="nsew")
 
-        self.experiment2_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 2', font=customtkinter.CTkFont(size=15))
+        self.experiment2_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 2', font=customtkinter.CTkFont(size=15), command=self.experiment2_switch_click)
         self.experiment2_switch.grid(row=2, column=0, pady=10, padx=20, sticky="nsew")
         
-        self.experiment3_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 3', font=customtkinter.CTkFont(size=15))
+        self.experiment3_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 3', font=customtkinter.CTkFont(size=15), command=self.experiment3_switch_click)
         self.experiment3_switch.grid(row=3, column=0, pady=10, padx=20, sticky="nsew")
         
-        self.experiment4_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 4', font=customtkinter.CTkFont(size=15))
+        self.experiment4_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 4', font=customtkinter.CTkFont(size=15), command=self.experiment4_switch_click)
         self.experiment4_switch.grid(row=4, column=0, pady=10, padx=20, sticky="nsew")
         
-        self.experiment5_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 3', font=customtkinter.CTkFont(size=15))
+        self.experiment5_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 3', font=customtkinter.CTkFont(size=15), command=self.experiment5_switch_click)
         self.experiment5_switch.grid(row=5, column=0, pady=10, padx=20, sticky="nsew")
 
         self.create_own_exp_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Create your own:', font=customtkinter.CTkFont(size=15), command=self.create_own_experiment)
@@ -170,6 +170,42 @@ class App(customtkinter.CTk):
             self.genetic_switch_solo.destroy()
             self.genetic_switch_pool.destroy()
             self.annealing_switch.destroy()
+
+    # get ready for the most repetative block of code you've ever seen...
+    def experiment1_switch_click(self) -> None:
+        self.experiment2_switch.deselect()
+        self.experiment3_switch.deselect()
+        self.experiment4_switch.deselect()
+        self.experiment5_switch.deselect()
+        self.create_own_exp_switch.deselect()
+
+    def experiment2_switch_click(self) -> None:
+        self.experiment1_switch.deselect()
+        self.experiment3_switch.deselect()
+        self.experiment4_switch.deselect()
+        self.experiment5_switch.deselect()
+        self.create_own_exp_switch.deselect()
+
+    def experiment3_switch_click(self) -> None:
+        self.experiment1_switch.deselect()
+        self.experiment2_switch.deselect()
+        self.experiment4_switch.deselect()
+        self.experiment5_switch.deselect()
+        self.create_own_exp_switch.deselect()
+
+    def experiment4_switch_click(self) -> None:
+        self.experiment1_switch.deselect()
+        self.experiment2_switch.deselect()
+        self.experiment3_switch.deselect()
+        self.experiment5_switch.deselect()
+        self.create_own_exp_switch.deselect()
+
+    def experiment5_switch_click(self) -> None:
+        self.experiment1_switch.deselect()
+        self.experiment2_switch.deselect()
+        self.experiment3_switch.deselect()
+        self.experiment4_switch.deselect()
+        self.create_own_exp_switch.deselect()
 
     def __gen_core_assignment_list(self) -> list:
         core_arragments = []
