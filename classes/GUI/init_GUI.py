@@ -477,11 +477,27 @@ class App(customtkinter.CTk):
 
         capacity, popular, popular_own_day, difficult_students, annealing, visualize = settings
 
-        G = GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize)
+        # if not visualize:
+        #     duration = self.duration_box.get()
+        #     print(duration, type(duration))
+        #     print(self.core_assingment_box.get(), type(self.core_assingment_box.get()))
+        #     print(self.mode_menu.get(), type(self.mode_menu.get()))
 
-        if not visualize:
-            G.optimize()
+        experiment = 0
+
+        mode = 'multiproccesing'
+
+        core_assignment = [0,0,2,2]
+
+        hill_climber_iters = 50
+
+        self.__reset_data_file(experiment)
+
+        for i in range(1):
+            GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                     difficult_students, annealing, visualize,
+                                     experiment, mode, core_assignment,
+                                     hill_climber_iters, i)
 
     def __gen_core_assignment_list(self) -> list:
         core_arragments = []
