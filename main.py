@@ -33,13 +33,12 @@ application = False
 DIFICULT_STUDENTS = False
 
 def write_to_csv(iteration, list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit):
-    with open('data/Test Results.csv', 'a', newline='') as f:
+    with open('data/Testing Heuristic_0 30 times.csv', 'a', newline='') as f:
         writer = csv.writer(f)
         if iteration == 0:
             writer.writerow(['Iteration', 'list_iterations', 'Iteration', 'Swap Class Random', 'Swap Class Capacity', 'Swap Student Gaphour', 'Swap Student Doublehour', 'list_duration_since_innit'])
 
         for i in range(len(list_iterations)):
-            
             writer.writerow([iteration, list_iterations[i], list_total_malus[i], list_class_random[i], list_class_capacity[i], list_student_gaphour[i], list_student_doublehour[i], list_duration_since_innit[i]])
 
 def main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT, multiplier=0.1):
@@ -118,9 +117,10 @@ if __name__ == '__main__':
 
 
     # print(df)
+    
+    # multiplier = 4
 
-
-    for i in range(2):
+    for i in range(30):
         list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit = main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
         write_to_csv(i, list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit)
 

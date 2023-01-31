@@ -57,8 +57,8 @@ class HillClimber:
 
         # let the hillclimber take some steps
         # you can change if you want multiplier for now I want always 50
-        for _ in range(int(self.malus['Total'] * self.multiplier)):
-        # for i in range(50):
+        # for _ in range(int(self.malus['Total'] * self.multiplier)):
+        for i in range(50):
             # self.malus = self.MC.compute_total_malus(self.schedule)
             iteration += 1
 
