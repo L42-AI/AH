@@ -213,3 +213,5 @@ class Generator:
             Multiprocessor.run_genetic(experiment)
         elif mode == 'genetic pool':
             Multiprocessor.run_genetic_pool(experiment, core_assignment, hill_climber_iters)
+
+        return self.student_list

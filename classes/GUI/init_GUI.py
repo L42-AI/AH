@@ -237,11 +237,12 @@ class App(customtkinter.CTk):
         self.__reset_data_file(experiment)
 
         for i in range(30):
-            GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize,
-                                     experiment, mode, core_assignment,
-                                     hill_climber_iters, i)
+            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                     difficult_students, annealing, visualize)
+            student_list = G.optimize(self, experiment, mode, core_assignment, hill_climber_iters, i)
         # Plot Funtion
+
+        self.finish(student_list)
 
     def run_exp_2(self) -> None:
         # Set setting for initialization plot or optimalization
@@ -271,11 +272,12 @@ class App(customtkinter.CTk):
         self.__reset_data_file(experiment)
 
         for i in range(30):
-            GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize,
-                                     experiment, mode, core_assignment,
-                                     hill_climber_iters, i)
+            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                     difficult_students, annealing, visualize)
+            student_list = G.optimize(self, experiment, mode, core_assignment, hill_climber_iters, i)
         # Plot Funtion
+
+        self.finish(student_list)
 
     def run_exp_3(self) -> None:
         # Set setting for initialization plot or optimalization
@@ -305,12 +307,12 @@ class App(customtkinter.CTk):
         self.__reset_data_file(experiment)
 
         for i in range(30):
-            GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize,
-                                     experiment, mode, core_assignment,
-                                     hill_climber_iters, i)
+            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                     difficult_students, annealing, visualize)
+            student_list = G.optimize(self, experiment, mode, core_assignment, hill_climber_iters, i)
         # Plot Funtion
 
+        self.finish(student_list)
     def run_exp_4(self) -> None:
         capacity = False
 
@@ -334,16 +336,20 @@ class App(customtkinter.CTk):
 
         self.__reset_data_file(experiment)
 
-        GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                    difficult_students, annealing, visualize,
-                                    experiment, mode, core_assignment,
-                                    hill_climber_iters, 1)
+        G = GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                    difficult_students, annealing, visualize)
+        student_list = G.optimize(self, experiment, mode, core_assignment, hill_climber_iters)
+        # Plot Funtion
+
+        self.finish(student_list)
 
         for i, hill_climber_iters in enumerate[0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]:
-            GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize,
-                                     experiment, mode, core_assignment,
-                                     hill_climber_iters, i)
+            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                     difficult_students, annealing, visualize)
+            student_list = G.optimize(self, experiment, mode, core_assignment, hill_climber_iters, i)
+        # Plot Funtion
+
+        self.finish(student_list)
 
     def run_exp_5(self) -> None:
         capacity = False
@@ -369,10 +375,12 @@ class App(customtkinter.CTk):
         self.__reset_data_file(experiment)
 
         for i in range(30):
-            GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize,
-                                     experiment, mode, core_assignment,
-                                     hill_climber_iters, i)
+            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                     difficult_students, annealing, visualize)
+            student_list = G.optimize(self, experiment, mode, core_assignment, hill_climber_iters, i)
+        # Plot Funtion
+
+        self.finish(student_list)
 
     def __reset_data_file(self, experiment) -> None:
         with open(f'data/experiment{experiment}.csv', 'w', newline='') as f:
@@ -493,11 +501,12 @@ class App(customtkinter.CTk):
 
         self.__reset_data_file(experiment)
 
-        for i in range(1):
-            GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize,
-                                     experiment, mode, core_assignment,
-                                     hill_climber_iters, i)
+        G = GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                    difficult_students, annealing, visualize)
+        student_list = G.optimize(self, experiment, mode, core_assignment, hill_climber_iters)
+        # Plot Funtion
+
+        self.finish(student_list)
 
     def __gen_core_assignment_list(self) -> list:
         core_arragments = []
