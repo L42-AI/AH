@@ -200,16 +200,16 @@ class Generator:
         plt.xlabel('Malus')
         plt.savefig(os.path.join(directory_plots, fig_name))
 
-    def optimize(self, experiment, mode, core_assignment, hill_climber_iters, experiment_iter=0):
-        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING, experiment_iter=0)
+    def optimize(self, experiment, mode, core_assignment, hill_climber_iters, duration, experiment_iter=0):
+        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING, experiment_iter)
 
         if mode == 'sequential':
             pass
         elif mode == 'multiproccesing':
-            Multiprocessor.run_multi(experiment, core_assignment, hill_climber_iters)
+            Multiprocessor.run_multi(duration, experiment, core_assignment, hill_climber_iters)
         elif mode == 'genetic':
-            Multiprocessor.run_genetic(experiment)
+            Multiprocessor.run_genetic(duration, experiment)
         elif mode == 'genetic pool':
-            Multiprocessor.run_genetic_pool(experiment, core_assignment, hill_climber_iters)
+            Multiprocessor.run_genetic_pool(duration, experiment, core_assignment, hill_climber_iters)
 
         return self.student_list

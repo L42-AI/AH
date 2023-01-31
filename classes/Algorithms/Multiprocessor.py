@@ -60,7 +60,7 @@ class Multiprocessor():
 
     """ Multiprocessing """
 
-    def run_multi(self, experiment, core_assignment, hill_climber_iters):
+    def run_multi(self, algorithm_duration, experiment, core_assignment, hill_climber_iters):
 
         self.data = []
 
@@ -83,8 +83,11 @@ class Multiprocessor():
             t = 1
         else:
             t = 0
+
+        init_time = time.time()
+
         # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
-        while self.multiprocess_iter_counter != 5:
+        while time.time() - init_time < algorithm_duration:
         # while self.iter_counter != 2:
 
             start_time = time.time()
@@ -142,7 +145,7 @@ class Multiprocessor():
 
     """ Genetic """
 
-    def run_genetic_pool(self, experiment, core_assignment, hill_climber_iters):
+    def run_genetic_pool(self, algorithm_duration, experiment, core_assignment, hill_climber_iters):
 
         # Set Initial variable
         self.multiprocessor_counter = 0
@@ -184,7 +187,7 @@ class Multiprocessor():
 
         schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
 
-        while time.time() - second_stage_start_time < 900:
+        while time.time() - second_stage_start_time < algorithm_duration:
 
             total_output = []
             for schedule in schedule_list:
@@ -218,7 +221,7 @@ class Multiprocessor():
 
         self.export_data_genetic(experiment)
 
-    def run_genetic(self, experiment):
+    def run_genetic(self, algorithm_duration, experiment):
 
         # Set Initial variable
         self.fail_counter = 0
@@ -262,7 +265,7 @@ class Multiprocessor():
 
         schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
 
-        while time.time() - second_stage_start_time < 1200:
+        while time.time() - second_stage_start_time < algorithm_duration:
             counter_since_improvement += 1
 
             if self.ANNEALING:

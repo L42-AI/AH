@@ -226,6 +226,8 @@ class App(customtkinter.CTk):
 
         experiment = 1
 
+        duration = 15 * 60
+
         mode = 'multiproccesing'
 
         core_assignment = [0,0,2,2]
@@ -239,7 +241,7 @@ class App(customtkinter.CTk):
         for i in range(30):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            student_list = G.optimize(self, experiment, mode, core_assignment, hill_climber_iters, i)
+            student_list = G.optimize(self, experiment, mode, core_assignment, duration, hill_climber_iters, i)
         # Plot Funtion
 
         self.finish(student_list)
@@ -261,6 +263,8 @@ class App(customtkinter.CTk):
 
         experiment = 2
 
+        duration = 15 * 60
+
         mode = 'multiproccesing'
 
         core_assignment = [0,0,0,0]
@@ -274,7 +278,7 @@ class App(customtkinter.CTk):
         for i in range(30):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            student_list = G.optimize(self, experiment, mode, core_assignment, hill_climber_iters, i)
+            student_list = G.optimize(self, experiment, mode, core_assignment, duration, hill_climber_iters, i)
         # Plot Funtion
 
         self.finish(student_list)
@@ -296,6 +300,8 @@ class App(customtkinter.CTk):
 
         experiment = 3
 
+        duration = 15 * 60
+
         mode = 'multiproccesing'
 
         core_assignment = [2,2,2,2]
@@ -309,7 +315,7 @@ class App(customtkinter.CTk):
         for i in range(30):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            student_list = G.optimize(self, experiment, mode, core_assignment, hill_climber_iters, i)
+            student_list = G.optimize(self, experiment, mode, core_assignment, duration, hill_climber_iters, i)
         # Plot Funtion
 
         self.finish(student_list)
@@ -328,6 +334,8 @@ class App(customtkinter.CTk):
 
         experiment = 4
 
+        duration = 15 * 60
+
         mode = 'multiproccesing'
 
         core_assignment = [2,2,2,2]
@@ -338,7 +346,7 @@ class App(customtkinter.CTk):
 
         G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                     difficult_students, annealing, visualize)
-        student_list = G.optimize(self, experiment, mode, core_assignment, hill_climber_iters)
+        student_list = G.optimize(self, experiment, mode, core_assignment, duration, hill_climber_iters)
         # Plot Funtion
 
         self.finish(student_list)
@@ -346,7 +354,7 @@ class App(customtkinter.CTk):
         for i, hill_climber_iters in enumerate[0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]:
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            student_list = G.optimize(self, experiment, mode, core_assignment, hill_climber_iters, i)
+            student_list = G.optimize(self, experiment, mode, core_assignment, duration, hill_climber_iters, i)
         # Plot Funtion
 
         self.finish(student_list)
@@ -364,6 +372,8 @@ class App(customtkinter.CTk):
 
         visualize = False
 
+        duration = 15 * 60
+
         experiment = 4
 
         mode = 'genetic pool'
@@ -377,7 +387,7 @@ class App(customtkinter.CTk):
         for i in range(30):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            student_list = G.optimize(self, experiment, mode, core_assignment, hill_climber_iters, i)
+            student_list = G.optimize(self, experiment, mode, core_assignment, duration, hill_climber_iters, i)
         # Plot Funtion
 
         self.finish(student_list)
@@ -483,32 +493,28 @@ class App(customtkinter.CTk):
         capacity, popular, popular_own_day, difficult_students, annealing, visualize = settings
 
         if not visualize:
-            duration = int(self.duration_box.get())
+            duration = int(self.duration_box.get()) * 60
             core_assignment_str = self.core_assingment_box.get()
             mode_str = self.mode_menu.get()
 
 
-        core_assignment = []
-        for core_assign in core_assignment_str:
-            core_assignment.append(int(core_assign))
+            core_assignment = []
+            for core_assign in core_assignment_str:
+                core_assignment.append(int(core_assign))
 
-        if mode_str == 'Seq':
-            mode = 'sequential'
-        elif mode_str == 'Multi':
-            mode = 'multiproccesing'
-        if mode_str == 'Genetic Seq':
-            mode = 'genetic'
-        if mode_str == 'Genetic Multi':
-            mode = 'genetic pool'
+            if mode_str == 'Seq':
+                mode = 'sequential'
+            elif mode_str == 'Multi':
+                mode = 'multiproccesing'
+            if mode_str == 'Genetic Seq':
+                mode = 'genetic'
+            if mode_str == 'Genetic Multi':
+                mode = 'genetic pool'
 
         # Destroy window
         self.destroy()
 
         experiment = 0
-
-        print(mode)
-
-        print(core_assignment)
 
         hill_climber_iters = 50
 
@@ -516,10 +522,11 @@ class App(customtkinter.CTk):
 
         G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                     difficult_students, annealing, visualize)
-        student_list = G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters)
-        # Plot Funtion
+        if not visualize:
+            student_list = G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters)
+            # Plot Funtion
 
-        self.finish(student_list)
+            self.finish(student_list)
 
     def __gen_core_assignment_list(self) -> list:
         core_arragments = []
