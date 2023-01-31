@@ -32,8 +32,8 @@ application = False
 
 DIFICULT_STUDENTS = False
 
-def write_to_csv(iteration, list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit):
-    with open('data/Testing Heuristic_0 30 times.csv', 'a', newline='') as f:
+def write_to_csv( save_location, iteration, list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit):
+    with open(save_location, 'a', newline='') as f:
         writer = csv.writer(f)
         if iteration == 0:
             writer.writerow(['Iteration', 'list_iterations', 'Iteration', 'Swap Class Random', 'Swap Class Capacity', 'Swap Student Gaphour', 'Swap Student Doublehour', 'list_duration_since_innit'])
@@ -122,5 +122,5 @@ if __name__ == '__main__':
 
     for i in range(30):
         list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit = main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT)
-        write_to_csv(i, list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit)
+        write_to_csv( 'data/Testing Hillclimber_2 30 keer.csv',i, list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit)
 

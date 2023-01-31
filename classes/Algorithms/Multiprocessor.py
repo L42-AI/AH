@@ -88,7 +88,7 @@ class Multiprocessor():
         self.list_iterations.append(0)
         self.list_duration_since_innit.append(0)
 
-        core_assignment_list = [0, 0, 0, 0]
+        core_assignment_list = [2, 2, 2, 2]
 
         # Print intitial
         print(f'\nInitialization')
@@ -116,7 +116,7 @@ class Multiprocessor():
             self.schedules = [copy.copy(self.schedule) for _ in range(4)]
 
             if self.malus['Capacity'] < 10:
-                core_assignment_list = [0, 0, 0, 0]
+                core_assignment_list = [2, 2, 2, 2]
                 
             self.malus = self.MC.compute_total_malus(self.schedule)
             # Fill the pool with all functions and their rosters
