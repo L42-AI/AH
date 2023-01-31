@@ -293,10 +293,6 @@ class App(customtkinter.CTk):
     def turn_off_difficult_POD(self) -> None:
         state_popular_own_day = self.popular_own_day_switch.get()
         if state_popular_own_day == 1:
-
-    def turn_off_difficult_POD(self) -> None:
-        state_popular_own_day = self.popular_own_day_switch.get()
-        if state_popular_own_day == 1:
             self.difficult_students_switch.deselect()
 
     def turn_off_difficult_P(self) -> None:
