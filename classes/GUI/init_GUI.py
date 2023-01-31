@@ -495,21 +495,20 @@ class App(customtkinter.CTk):
         if not visualize:
             duration = int(self.duration_box.get()) * 60
             core_assignment_str = self.core_assingment_box.get()
-            mode_str = self.mode_menu.get()
 
 
             core_assignment = []
             for core_assign in core_assignment_str:
                 core_assignment.append(int(core_assign))
 
-            if mode_str == 'Seq':
-                mode = 'sequential'
-            elif mode_str == 'Multi':
+            if self.hillclimber_multi.get():
                 mode = 'multiproccesing'
-            if mode_str == 'Genetic Seq':
+            if self.genetic_switch_solo.get():
                 mode = 'genetic'
-            if mode_str == 'Genetic Multi':
+            if self.genetic_switch_pool.get():
                 mode = 'genetic pool'
+            else:
+                mode = 'sequential'
 
         # Destroy window
         self.destroy()
