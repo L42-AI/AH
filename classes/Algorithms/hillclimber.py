@@ -9,7 +9,7 @@ import decimal
 """ Main HillClimber Class """
 
 class HillClimber:
-    def __init__(self, schedule, course_list, student_list, MC, hill_climber_iters, iteration=0, ):
+    def __init__(self, schedule, course_list, student_list, MC, iteration=0):
         self.schedule_list = []
         self.course_list = course_list
         self.student_list = student_list
@@ -19,11 +19,6 @@ class HillClimber:
 
         # Compute malus with MalusCalculator
         self.malus = self.MC.compute_total_malus(self.schedule)
-
-        if type(hill_climber_iters) == int:
-            self.hill_climber_iters = hill_climber_iters
-        else:
-            self.hill_climber_iters = int(self.malus['Total'] * hill_climber_iters)
 
     """ Inheritable methods """
 
@@ -49,7 +44,7 @@ class HillClimber:
 
     """ Main Method """
 
-    def climb(self, T=0, ANNEALING=False, fail_counter=None):
+    def climb(self, hill_climber_iters=400, T=0, ANNEALING=False, fail_counter=None):
         self.double = {'l': set(), 't': set(), 'p': set()}
         self.accept_me = False
         # Compute malus with MalusCalculator
@@ -57,6 +52,13 @@ class HillClimber:
 
         # Append the input roster
         self.schedule_list.append(self.schedule)
+
+        if type(hill_climber_iters) == float:
+            multiplier = True
+            self.hill_climber_iters = int(self.malus['total'] * hill_climber_iters)
+        else:
+            multiplier = False
+            self.hill_climber_iters = hill_climber_iters
 
         # let the hillclimber take some steps 
         # for _ in range(int(self.malus['Total'] * self.multiplyer)):
@@ -84,6 +86,9 @@ class HillClimber:
             self.__accept_schedule(new_malus, new_schedule, T=T, ANNEALING=ANNEALING, fail_counter=fail_counter)
 
             self.iteration += 1
+
+            if multiplier:
+                self.hill_climber_iters = int(self.malus['total'] * hill_climber_iters)
 
         return self.schedule, self.malus, self.iteration, self.accept_me
 
