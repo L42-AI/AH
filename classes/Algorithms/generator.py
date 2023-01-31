@@ -13,7 +13,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 class Generator:
-    def __init__(self, capacity, popular, popular_own_day, difficult_students, annealing, visualize):
+    def __init__(self, capacity, popular, popular_own_day, difficult_students, annealing, visualize, mode, core_assignment=False, hill_climber_iters=200, experiment_iter=0):
 
         # Set heuristics
         self.CAPACITY = capacity
@@ -27,6 +27,8 @@ class Generator:
 
         if visualize:
             self.plot_startup(COURSES, STUDENT_COURSES, ROOMS)
+        else:
+            self.optimize(mode, core_assignment, hill_climber_iters, experiment_iter)
 
     """ INIT """
 
@@ -57,6 +59,7 @@ class Generator:
     def assign(self, COURSES, STUDENT_COURSES, ROOMS):
         """This Function takes in 3 Dataframes, loops over the dataframe and fills a list with the respective Class objects."""
 
+        global course_list, student_list, rooms_list
         course_list = []
         student_list = []
         rooms_list = []
@@ -198,6 +201,12 @@ class Generator:
         plt.xlabel('Malus')
         plt.savefig(os.path.join(directory_plots, fig_name))
 
-    def optimize(self):
-        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING)
-        Multiprocessor.run()
+    def optimize(self, mode, core_assignment, hill_climber_iters, experiment_iter):
+        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING, experiment_iter)
+
+        if mode == 'sequential':
+            pass
+        elif mode == 'multiproccesing':
+            Multiprocessor.run_multi(core_assignment, hill_climber_iters)
+        elif mode == 'genetic':
+            Multiprocessor.run_genetic()

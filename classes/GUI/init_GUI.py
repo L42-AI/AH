@@ -1,6 +1,9 @@
 import customtkinter
-
+import csv
 import classes.algorithms.generator as GeneratorClass
+import classes.GUI.selector_GUI as SelectorApp
+import pickle
+from classes.algorithms.generator import student_list
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -25,17 +28,20 @@ class App(customtkinter.CTk):
         self.toggle_frame.grid_columnconfigure(0, weight=1)
         self.toggle_frame.grid_rowconfigure((0,1,2,3,4,5,6,7,8), weight=1)
 
+        self.experiment1_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Experiment 1', font=customtkinter.CTkFont(size=15), command=self.experiment1_switch_click)
+        self.experiment1_switch.grid(row=0, column=0, pady=10, padx=20, sticky="n")
+
         self.label_initialization = customtkinter.CTkLabel(master=self.toggle_frame, text="Initialize", font=customtkinter.CTkFont(size=15, weight='bold'))
-        self.label_initialization.grid(row=0, column=0, padx=20, pady=10, sticky="nsew")
+        self.label_initialization.grid(row=1, column=0, padx=20, pady=10, sticky="nsew")
 
         self.greedy_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Greedy', font=customtkinter.CTkFont(size=15), command=self.greedy_switch_click)
-        self.greedy_switch.grid(row=1, column=0, pady=10, padx=20, sticky="n")
+        self.greedy_switch.grid(row=3, column=0, pady=10, padx=20, sticky="n")
 
         self.label_optimization = customtkinter.CTkLabel(master=self.toggle_frame, text="Optimize", font=customtkinter.CTkFont(size=15, weight='bold'))
-        self.label_optimization.grid(row=6, column=0, padx=20, pady=10, sticky="nsew")
+        self.label_optimization.grid(row=7, column=0, padx=20, pady=10, sticky="nsew")
 
         self.hill_climbing_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Hill Climbing', font=customtkinter.CTkFont(size=15), command=self.hillclimber_switch_click)
-        self.hill_climbing_switch.grid(row=7, column=0, pady=10, padx=20, sticky="nsew")
+        self.hill_climbing_switch.grid(row=8, column=0, pady=10, padx=20, sticky="n")
 
         """ Setup Generate Button """
 
@@ -62,16 +68,16 @@ class App(customtkinter.CTk):
 
         if state_greedy == 1:
             self.capacity_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Capacity', font=customtkinter.CTkFont(size=15))
-            self.capacity_switch.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
+            self.capacity_switch.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
 
             self.popular_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Popular first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_P)
-            self.popular_switch.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
+            self.popular_switch.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
 
             self.popular_own_day_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Largest first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_POD)
-            self.popular_own_day_switch.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
+            self.popular_own_day_switch.grid(row=5, column=0, padx=20, pady=10, sticky="nsew")
 
             self.difficult_students_switch = customtkinter.CTkSwitch(master=self.toggle_frame, text='Busy Students', font=customtkinter.CTkFont(size=15), command=self.turn_off_popular)
-            self.difficult_students_switch.grid(row=5, column=0, padx=20, pady=10, sticky="nsew")
+            self.difficult_students_switch.grid(row=6, column=0, padx=20, pady=10, sticky="nsew")
 
             self.geometry(f"{250}x{525}")
         else:
@@ -81,6 +87,43 @@ class App(customtkinter.CTk):
             self.difficult_students_switch.destroy()
 
             self.geometry(f"{250}x{350}")
+
+    def experiment1_switch_click(self) -> None:
+        # Set setting for initialization plot or optimalization
+
+        capacity = False
+
+        popular = False
+
+        popular_own_day = False
+
+        difficult_students = False
+
+        annealing = False
+
+        visualize = False
+
+        mode = 'multiproccesing'
+
+        core_assignment = [0,0,2,2]
+
+        hill_climber_iters = 50
+
+        self.destroy()
+
+        with open('data/experiment1.csv', 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerows([])
+
+        for i in range(30):
+            GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                     difficult_students, annealing, visualize,
+                                     mode, core_assignment, hill_climber_iters, i)
+
+        # Plot Funtion
+
+        self.finish(student_list)
+
 
     def turn_off_difficult_POD(self) -> None:
         state_popular_own_day = self.popular_own_day_switch.get()
@@ -107,6 +150,15 @@ class App(customtkinter.CTk):
         self.destroy()
 
         self.__run_algorithm(settings)
+
+    def finish(self, student_list):
+
+        with open('schedule.pkl', 'rb') as f:
+            schedule = pickle.load(f)
+
+        app = SelectorApp.App(student_list, schedule)
+        app.mainloop()
+
 
     def __set_data(self) -> tuple:
 
