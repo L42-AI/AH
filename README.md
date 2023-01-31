@@ -21,14 +21,15 @@ The first two hillclimbers swap classes as a whole, meaning that they relocate t
 
 The other two hill climbers swap the assigned groups a student is enrolled in
 - HC_SwapBadTimeslots_GapHour pickes the student with the most malus points based on gap hours. Then it looked at their 'worst day', the day that causes the most mals. This could for example be a day where he/she started at 9 and had one final siminar at 5 o'clocks, which results in 3 gap hours. This Hillclimber would then pick one of the two seminar types, tutorial or practical, and try to change the group a student is enrolled in, for example from tutorial 1, to tutorial 3. A student cannot change lecture group, since all students enrolled in a course go to the same lecture.
-- HC_SwapBadTimeslots_DoubleHour
+- HC_SwapBadTimeslots_DoubleHour is identical to HC_SwapBadTimeslots_GapHour but instead of selecting the 'worst day' by looking at gap hours, it looks at double hours.
+
+When a new schedule is created by the Hillclimbers, it is normally only accepted when it results in a lower malus score. When Simulated Annealing is turned on, it generates a probabilty and an acceptance rate based of a Temperature that follows a cooling scheme. Without going into many technical details, it is neccesarily to explain that our Simulated Annealing mostly gets activated when the Hillclimbers are converging to a malus score (=cannot improve) and not at the beginning of the experiment. When that happens, there is a possibility that the program accepts a worse schedule in order to escape a local optimum.
+
+Besides a Hillclimber and a Simulated Annealing algorithm, we run a Genetic Algorithm. Since we have 4 types of Hillclimbers, we start of by sending 4 identical schedules to each Hillclimber 2 times. This results in 32 new schedules. These schedules get paired with another schedule and the schedule with the *highest* malus score is thrown out. These 'rounds' continue untill there are 4 schedules left. These 4 schedules get placed into each Hillclimber twice again. This process is called Genetic because it 'selects' from its population 4 schedules that show good improvement but do not have to be the best 4, allowing the algorithm to explore other options too. 
 
 
 
-
-
-
-We minimize the maluspoints by using a hillclimber-, simmulated annealing- and a of a greedy algorithm. In this version of annealing it is not used at the start of the hillclimber, but rather at the end. So when it seems, that we have diverged annealing is started and we try to walk down to a better optimum, then the local optimum we just were.
+We minimize the maluspoints by using a hillclimber-, simmulated annealing- and or a greedy algorithm. In this version of annealing it is not used at the start of the hillclimber, but rather at the end. So when it seems that we have diverged annealing is started and we try to walk down to a better optimum, then the local optimum we just were.
 The hillclimber consists of 4 possible changes to the roster. They all are called an equal amount of times each generation.
 The first method swaps one class with another class or one class with a room and timeslot that is still available. 
 The second method swaps classes with the highest capacity points and swaps it with a random other room.
@@ -48,4 +49,5 @@ To run our application, you first install the required libraries:
 
 - Activate the ProgLab environment
 - pip install customtkinter
+- 
 
