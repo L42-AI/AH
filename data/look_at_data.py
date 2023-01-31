@@ -88,7 +88,7 @@ plt.scatter(minimum_x, minimum_y, c='green')
 plt.annotate(f'Minimum: {minimum_y}', (minimum_x, minimum_y), textcoords='offset points', xytext=(-15,10), ha='center', color='green', fontsize=12)
 
 plt.axhline(y=average_malus, color='red', linestyle='--')
-plt.text(0, average_malus + 30, f'Average: {average_malus:.2f}', color='red', fontsize=12, ha='left', va='center')
+plt.text(0, average_malus + 30, f'Average: {average_malus}', color='red', fontsize=12, ha='left', va='center')
 
 plt.xlabel('Iteration')
 plt.ylabel('Malus')
