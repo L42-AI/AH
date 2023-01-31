@@ -60,6 +60,7 @@ class Generator:
         """This Function takes in 3 Dataframes, loops over the dataframe and fills a list with the respective Class objects."""
 
         global course_list, student_list, rooms_list
+
         course_list = []
         student_list = []
         rooms_list = []
