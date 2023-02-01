@@ -58,8 +58,8 @@ class Optimize():
             iteration_start_time = time.time()
 
             # Initiate the hillclimbers
-            HC1 = HillCLimberClass.ClassesSwapRandom(self.schedule, self.hillclimber_counter)
-            HC2 = HillCLimberClass.ClassesSwapCapacity(self.schedule, self.hillclimber_counter)
+            HC1 = HillCLimberClass.SeminarSwapRandom(self.schedule, self.hillclimber_counter)
+            HC2 = HillCLimberClass.SeminarSwapCapacity(self.schedule, self.hillclimber_counter)
             HC3 = HillCLimberClass.StudentSwapGapHour(self.schedule, self.hillclimber_counter)
             HC4 = HillCLimberClass.StudentSwapDoubleHour(self.schedule, self.hillclimber_counter)
 
@@ -257,7 +257,7 @@ class Optimize():
         T = self.__init_temp()
 
         while self.malus['Total'] > 125:
-            HC1 = HillCLimberClass.ClassesSwapRandom(self.schedule, self.hillclimber_counter)
+            HC1 = HillCLimberClass.SeminarSwapRandom(self.schedule, self.hillclimber_counter)
             self.schedule, self.malus, self.hillclimber_counter, _ = HC1.climb()
             print(self.malus)
         first_stage_duration = time.time() - first_stage_start_time
@@ -393,7 +393,7 @@ class Optimize():
         while self.malus['Total'] > 125:
 
             # Create the first hillclimber
-            HC1 = HillCLimberClass.ClassesSwapRandom(self.schedule, self.hillclimber_counter)
+            HC1 = HillCLimberClass.SeminarSwapRandom(self.schedule, self.hillclimber_counter)
 
             # Do a climb iteration
             self.schedule, self.malus, self.hillclimber_counter, _ = HC1.climb(hill_climber_iters)
@@ -543,14 +543,14 @@ class Optimize():
         if activation == 0:
 
             # create the class and climb.
-            HC1 = HillCLimberClass.ClassesSwapRandom(schedule, self.hillclimber_counter)
+            HC1 = HillCLimberClass.SeminarSwapRandom(schedule, self.hillclimber_counter)
             schedule, malus, iteration, accept_me = HC1.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC1.get_name(), iteration, accept_me
 
         elif activation == 1:
 
-            HC2 = HillCLimberClass.ClassesSwapCapacity(schedule, self.hillclimber_counter)
+            HC2 = HillCLimberClass.SeminarSwapCapacity(schedule, self.hillclimber_counter)
             schedule, malus, iteration, accept_me = HC2.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC2.get_name(), iteration, accept_me

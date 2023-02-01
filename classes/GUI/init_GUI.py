@@ -569,7 +569,7 @@ class App(customtkinter.CTk):
 
         visualize = False
 
-        duration = 15 * 60
+        duration = 45 * 60
 
         experiment = 4
 
