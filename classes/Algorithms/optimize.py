@@ -76,13 +76,16 @@ class Optimize():
                 if activation == 1:
                     schedule, malus, iteration, _ = HC1.climb(hill_climber_iters)
                     name = HC1.get_name()
+
                 elif activation == 2:
                     schedule, malus, iteration, _ = HC2.climb(hill_climber_iters)
                     name = HC2.get_name()
+
                 elif activation == 3:
                     schedule, malus, iteration, _ = HC3.climb(hill_climber_iters)
                     name = HC3.get_name()
-                elif activation == 4:
+
+                else:
                     schedule, malus, iteration, _ = HC4.climb(hill_climber_iters)
                     name = HC4.get_name()
 
