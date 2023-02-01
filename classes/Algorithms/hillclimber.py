@@ -60,7 +60,6 @@ class HillClimber:
         """
         return self.MC.compute_total_malus(self.schedule)
 
-
     """ Main Method """
 
     def climb(self, hill_climber_iters=400, T=0, ANNEALING=False, fail_counter=None):
@@ -150,10 +149,10 @@ class HillClimber:
             self.accept_me = True
 
     def recursive_copy(self, obj):
-        '''
-        method that makes a copy of our schedule that does not change the schedule
+        """
+        This method that makes a copy of our schedule that does not change the schedule
         when we modify the copy. This eliminates the need for deepcopy
-        '''
+        """
 
         # if instance is a dict
         if isinstance(obj, dict):
@@ -174,7 +173,7 @@ class HillClimber:
 
 class SeminarSwapRandom(HillClimber):
     """
-    swaps a random class with another random class
+    This method swaps a random class with another random class
     """
     def step_method(self, M):
         """
@@ -186,15 +185,16 @@ class SeminarSwapRandom(HillClimber):
 
     def get_name(self):
         """
-        Get the name of the method used
+        This method gets the name of the method used
         """
         return "SeminarSwapRandom"
 
 class SeminarSwapCapacity(SeminarSwapRandom):
-    '''swaps the class that has the most capacity malus points with a random class'''
+    """ This class swaps the seminar that has the most capacity malus points with a random other seminar """
+    
     def make_mutate(self, schedule):
         """
-        Initiate mutate class
+        Initiates the mutate class
         """
         M = MutateClass.Mutate_Course_Swap_Capacity(schedule)
         return M
@@ -206,9 +206,9 @@ class SeminarSwapCapacity(SeminarSwapRandom):
         return "SeminarSwapCapacity"
 
 class StudentSwapGapHour(HillClimber):
-    '''This class takes a random student and finds the day with the most gap hours.
+    """ This class takes a random student and finds the day with the most gap hours.
        When found, it will swap one tut or pract with a student from a different group
-       that has the most malus points from that group'''
+       that has the most malus points from that group """
 
     def step_method(self, M):
         """
@@ -223,9 +223,11 @@ class StudentSwapGapHour(HillClimber):
         return 'StudentSwapGapHour'
 
 class StudentSwapDoubleHour(HillClimber):
-    '''This class takes a random student and finds the day with the most double classes.
-       When found, it will swap one tut or pract with a student from a different group
-       that has the most malus points from that group'''
+    """
+    This class takes a random student and finds the day with the most double classes.
+    When found, it will swap one tut or pract with a student from a different group
+    that has the most malus points from that group
+    """
 
     def make_mutate(self, schedule):
         """
