@@ -19,7 +19,7 @@ class Roster():
         # capacity is a greedy function with default False
         self.CAPACITY = capacity
 
-    def init_student_timeslots(self):
+    def schedule_students(self):
         """This method takes in a student list and initializes student time slots for all the students."""
 
         # loop over the list of students and initialize timeslots
@@ -131,3 +131,7 @@ class Roster():
 
                 succes = True
             i += 1
+
+    def reset_room_availability(self, room_list):
+        for room in room_list:
+            room.initialize_availability()

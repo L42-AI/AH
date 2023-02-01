@@ -16,8 +16,8 @@ class Optimize():
     the git for more detail
     '''
 
-    def __init__(self, schedule, annealing, experiment_iter):
-        self.schedule = schedule
+    def __init__(self, Roster, annealing, experiment_iter):
+        self.schedule = Roster.schedule
         self.course_list = course_list
         self.student_list = student_list
         self.ITERS = 1
