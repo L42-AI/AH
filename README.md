@@ -72,7 +72,7 @@ To run our application, you first install the required libraries:
 - pip install customtkinter
 
 
-When running main.py, user will be prompted with a GUI. This will provide the options to reproduce any of our 5 experiments, or, create your own experiment. When selecting this, the user is presented with two switches: Heuristics and Algorithms, these represent the possible heuristics and algorithms to be run. If you only select Heuristics, the algorithm will initialize 300 times and then present you with a historgram plotting the malus and the frequency. If however, you also turn on Algorithms, you are presented with a number of options to customize the algorithm:
+When running main.py, user will be prompted with a Graphical User Interface (GUI). This will provide the options to reproduce any of our 5 experiments, or, create your own experiment. When selecting this, the user is presented with two switches: Heuristics and Algorithms, these represent the possible heuristics and algorithms to be run. If you only select Heuristics, the algorithm will initialize 300 times and then present you with a historgram plotting the malus and the frequency. If however, you also turn on Algorithms, you are presented with a number of options to customize the algorithm:
 
 - Modes:
 - Hillclimber single core
@@ -100,7 +100,7 @@ Notes:
 
 ** Genetic runs with one hillclimber up until a malus of 125, because this has shown to be very effective in solving the initial phase of the problem. Hence, in the code of genetic runs, the process is split into two stages
 
-A tutorial showing a full interaction with this gui can be found here: https://user-images.githubusercontent.com/70103333/216183452-08bb9086-0f96-4b93-81aa-c4305fb34abc.mp4
+A tutorial showing a full interaction with the GUI can be found here: https://user-images.githubusercontent.com/70103333/216183452-08bb9086-0f96-4b93-81aa-c4305fb34abc.mp4
 
 After finishing the algorithm run, a second GUI will show up. This GUI lets the user interact with the best found schedule during the run of the algorithm. In the left siderbar there are 3 buttons indicating 'Student', 'Course' and 'Room'. Select these to see the search engine to locate the wanted schedule. Just select the room, course or student of choice and press the 'Search' button. To export the schedule on your screen, press 'Export' or 'Export all' to extract the whole schedule. These buttons will create a schedule csv in the folder AH/schedules.
 
