@@ -33,7 +33,7 @@ class HillClimber:
         pass
 
     def make_mutate(self, schedule):
-        M = MutateClass.Mutate(self.course_list, self.student_list, schedule)
+        M = MutateClass.Mutate(schedule)
         return M
 
     def replace_roster(self, T=None):
@@ -158,7 +158,7 @@ class HC_TimeSlotSwapRandom(HillClimber):
 
         # Take a random state to pass to function
         state = random.choice((True, False))
-        M.swap_random_lessons(state)
+        M.swap_random_seminars(state)
 
     def get_name(self):
         return "TimeSlotSwapRandom"
@@ -166,7 +166,7 @@ class HC_TimeSlotSwapRandom(HillClimber):
 class HC_TimeSlotSwapCapacity(HC_TimeSlotSwapRandom):
     '''swaps the class that has the most capacity malus points with a random class'''
     def make_mutate(self, schedule):
-        M = MutateClass.Mutate_Course_Swap_Capacity(self.course_list, self.student_list, schedule)
+        M = MutateClass.Mutate_Course_Swap_Capacity(schedule)
         return M
 
     def get_name(self):
@@ -189,7 +189,7 @@ class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
        that has the most malus points from that group'''
 
     def make_mutate(self, schedule):
-        M = MutateClass.Mutate_double_classes(self.course_list, self.student_list, schedule)
+        M = MutateClass.Mutate_double_classes(schedule)
         return M
 
     def step_method(self, M):

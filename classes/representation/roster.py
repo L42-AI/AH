@@ -103,7 +103,9 @@ class Roster():
                             continue
                         if class_type != 'lecture' and room.id == 'C0.110' or room.id == 'C0.112':
                             continue
-
+                
+                # check if the lecture_day is None if not check if its a lecture, if it is skip the rostering
+                # part of the most POPULAR and DIFICULT_STUDENTS algorithm in generator.py
                 if course.lecture_day != None:
                     if course.lecture_day != day and class_type == 'lecture':
                         continue
@@ -111,11 +113,15 @@ class Roster():
                 self.schedule[course.name][f'{class_type} {count}'] = {}
                 class_number = f"{class_type} {count}"
                 
-                # if 
+                # if the class is a tutorial roster it
                 if class_number[0] == 't':
-                    self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_tutorial)
+                    self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_tutorial)\
+                
+                # if the class is a practical roster it
                 elif class_number[0] == 'p':
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_practical)
+
+                # roster the lecture
                 else:
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, 1000)
                     

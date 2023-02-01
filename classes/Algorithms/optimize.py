@@ -572,7 +572,7 @@ class Optimize():
 
     def __get_temperature(self, t, alpha=0.995):
         """Exponential decay temperature schedule"""
-        return t*alpha
+        return t * alpha
 
     def __replace_roster(self, difference):
 
