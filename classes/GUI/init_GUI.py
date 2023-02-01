@@ -546,9 +546,11 @@ class App(customtkinter.CTk):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
             G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
-        # Plot Funtion
+        
 
         self.finish(student_list)
+
+
 
 
     def turn_off_difficult_POD(self) -> None:
@@ -703,13 +705,16 @@ class App(customtkinter.CTk):
 
         experiment = 0
 
-        hill_climber_iters = iterations
-
         self.__reset_data_file(experiment)
 
         G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                     difficult_students, annealing, visualize)
         if not visualize:
+
+            # Set the hill climber iterations
+            hill_climber_iters = iterations
+
+            # Run the optimize function
             G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration)
             # Plot Funtion
 

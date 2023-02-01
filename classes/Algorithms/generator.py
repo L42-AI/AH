@@ -1,6 +1,5 @@
 import classes.algorithms.optimize as OptimizeClass
 import classes.representation.malus_calc as MalusCalculatorClass
-import classes.representation.roster as RosterClass
 
 from data.assign import course_list, student_list, room_list
 
@@ -192,13 +191,13 @@ class Generator:
     def initialize(self, student_list, course_list, room_list):
 
         self.schedule = {}
-
+        print('yes')
         # Fill the roster
         self.schedule_fill(student_list, course_list, room_list)
-
+        print('yes')
         # Compute Malus
         malus = self.MC.compute_total_malus(self.schedule)
-
+        print('yes')
         return malus, self.schedule
 
     """ METHODS """
