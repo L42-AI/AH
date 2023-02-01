@@ -20,7 +20,7 @@ class Roster():
         self.CAPACITY = capacity
 
     def schedule_students(self):
-        """This method takes in a student list and initializes student time slots for all the students."""
+        """ This method takes in a student list and initializes student time slots for all the students """
 
         # loop over the list of students and initialize timeslots
         for student in self.student_list:
@@ -130,8 +130,9 @@ class Roster():
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, 1000)
 
                 succes = True
-            i += 1
 
     def reset_room_availability(self, room_list):
+        """ This method resets the availability of all the rooms back to true """
+
         for room in room_list:
             room.initialize_availability()
