@@ -27,9 +27,34 @@ When a new schedule is created by the Hillclimbers, it is normally only accepted
 
 Besides a Hillclimber and a Simulated Annealing algorithm, we run a Genetic Algorithm. Since we have 4 types of Hillclimbers, we start of by sending 4 identical schedules to each Hillclimber 2 times. This results in 32 new schedules. These schedules get paired with another schedule and the schedule with the *highest* malus score is thrown out. These 'rounds' continue untill there are 4 schedules left. These 4 schedules get placed into each Hillclimber twice again. This process is called Genetic because it 'selects' from its population 4 schedules that show good improvement but do not have to be the best 4, allowing the algorithm to explore other options too. 
 
-Reproducibility of Results
+## Reproducibility of Results
 
-We have ran 
+With this approach and the outline of the heuristics and algorithms used for this project we have devised 5 experiments
+
+For our first experiment, we ran multiprocessing 30 times, for this we attributed the four processing cores to the two SeminarSwap hillclimbers.
+
+After running this we chose to run a similar experiment but this time with the cores attributed to the two StudentSwap hillclimbers.
+
+By comparing these results we concluded that a better result could be achieved with a combination of the two. Hence, our third experiment employs all four hillclimbers.
+
+After seeing better results with this arrangement we discovered that the iteration count attributed to the hillclimbers also has effect on the schedulers effectivity. Therefore, our fourth experiment runs the multiprocessor with all four hillclimbers, but with different steps of iterations. Here we chose for a float that functions as a multiplication with the current malus in the algorithm to calculate the iterations for the hill climbers. We ran this with a multiplier of 0.1 and afterwards the values 0.5 up until 5 with steps of 0.5.
+
+After seeing improvements in the effectiveness of our application, we started to explore other possible algorithms to improve our application.
+
+For our fifth and final experiment we ran a two staged process of singular hillclimbing, combined with an genetic multiprocessing algorithm.
+
+When using the application, the user can select any of these experiments to reproduce the results in the interest of reliability and replicability.
+Reproducibility of Lecture Graphs
+
+In order to reproduce the different plots go to the Experiment folder and run:
+
+- Experiment_best_multiplier.py for the different Multipliers plot
+- Experiment_300_Generations.py for the 300 generations Experiment
+- Experiment_avg_30_Hillclimbers.py for the average of 30 hillclimbers plot
+- plot_experiments.py and set activation to 0 for the Hillclimber with different stages and multiplier 4
+- plot_experiments.py and set activation to 1 for the Hillcimber run 30 times
+- plot_experiments.py and set activation to 2 for the Hillclimber testing Hillclimber 2
+- plot_experiments.py and set activation to 3 for the Hillclimber different stages with a multiplier of 4 and greedy
 
 
 
@@ -39,11 +64,9 @@ To run our application, you first install the required libraries:
 
 - Activate the ProgLab environment
 - pip install customtkinter
-- 
 
 
-
-When running main.py, you will be confronted with a GUI. This will provide the options to reproduce any of our 5 experiments, or, create your own experiment. When selecting this, the user is presented with two switches: Heuristics and Algorithms, these represent the possible heuristics and algorithms to be run. If you only select Heuristics, the algorithm will initialize 300 times and then present you with a historgram plotting the malus and the frequency. If however, you also turn on Algorithms, you are presented with a number of options to customize the algorithm:
+When running main.py, user will be prompted with a GUI. This will provide the options to reproduce any of our 5 experiments, or, create your own experiment. When selecting this, the user is presented with two switches: Heuristics and Algorithms, these represent the possible heuristics and algorithms to be run. If you only select Heuristics, the algorithm will initialize 300 times and then present you with a historgram plotting the malus and the frequency. If however, you also turn on Algorithms, you are presented with a number of options to customize the algorithm:
 
 - Modes:
 - Hillclimber single core
@@ -51,9 +74,23 @@ When running main.py, you will be confronted with a GUI. This will provide the o
 - Hillclimber multiple cores
   This runs four hillclimbers at a time on four different cores using multiproccessor*
 - Genetic
-  This runs one hill climber until a malus of 125**, and afterwards generates a gentic alogorithm where 32 schedules compete to survive.
+  This runs one hill climber until a malus of 125**, and afterwards generates a gentic alogorithm where 32 schedules compete to 'survive'.
 - Gentic Pooling
   This also runs one hillclimber up until a malus of 125**, but afterwards runs a genetic algorithm using four cores with multiprocessing.
+ -Iterations dependent
+  Set the number of mutations a hillclimber is allowed to perform before returning the new schedule to compare with the other schedules to be dependent on the malus     score. The mutations allowed on each iteration of the algorithm will be given by: Total malus * iterations dependent. In our experience, 4 resulted in the best         results as can be seen in the graph below
+ -Iterations fixed
+  Give the hillclimbers a fixed number of allowed mutations before returning its new schedule
+ -Duration
+  The duration of the optimalization process in minutes. A value can be selected or typed.
+ -Choose Hillclimber
+  Prompts a menu where the hillclimbers can be assigned. 0,1,2 and 3 stand for our hillclimbers in the same order as they were explained. Default is set to 1,2,3
+ -Generate
+  This will start the experiment. Will not start when the user selects "Algorithms" but does not actually select one or does not provide a duration or iteration number
+  
+  Graph with different multipliers:
+  ![Plot Duration and Malus different Multipliers](https://user-images.githubusercontent.com/70103333/216183743-fbe1525b-3d97-48b0-872a-405342545189.png)
+
  
  
 
@@ -63,6 +100,10 @@ Notes:
 
 ** Genetic runs with one hillclimber up until a malus of 125, because this has shown to be very effective in solving the initial phase of the problem. Hence, in the code of genetic runs, the process is split into two stages
 
-A tutorial showing a full interaction with this gui can be found here: ***HYPERLINK***
+A tutorial showing a full interaction with this gui can be found here: https://user-images.githubusercontent.com/70103333/216183452-08bb9086-0f96-4b93-81aa-c4305fb34abc.mp4
 
 After finishing the algorithm run, a second GUI will show up. This GUI lets the user interact with the best found schedule during the run of the algorithm. In the left siderbar there are 3 buttons indicating 'Student', 'Course' and 'Room'. Select these to see the search engine to locate the wanted schedule. Just select the room, course or student of choice and press the 'Search' button. To export the schedule on your screen, press 'Export' or 'Export all' to extract the whole schedule. These buttons will create a schedule csv in the folder AH/schedules.
+
+
+
+
