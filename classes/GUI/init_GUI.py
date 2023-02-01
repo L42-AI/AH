@@ -379,6 +379,9 @@ class App(customtkinter.CTk):
     """ Run functions """
 
     def generate(self) -> None:
+        '''
+        This method is the activation method. It checks the state of the settings and performs an experiment accordingly
+        '''
 
         exp1 = self.experiment1_switch.get()
         exp2 = self.experiment2_switch.get()
@@ -387,24 +390,46 @@ class App(customtkinter.CTk):
         exp5 = self.experiment5_switch.get()
         own_exp = self.create_own_exp_switch.get()
 
+        # set the experiment parameters accordingly
         if exp1:
-            self.run_exp_1()
+            mode = 'multiproccesing'
+            hillclimber_assignment = [0,0,2,2]
+            hill_climber_iters = 50
+            experiment = 1
+            self.run_exp(mode, hillclimber_assignment)
         elif exp2:
-            self.run_exp_2()
+            mode = 'multiproccesing'
+            hillclimber_assignment = [0,0,0,0]
+            hill_climber_iters = 50
+            experiment = 2
         elif exp3:
-            self.run_exp_3()
+            mode = 'multiproccesing'
+            hillclimber_assignment = [2,2,2,2]
+            hill_climber_iters = 50
+            experiment = 13
         elif exp4:
-            self.run_exp_4()
+            mode = 'multiproccesing'
+            hillclimber_assignment = [2,2,2,2]
+            hill_climber_iters = 0.1
+            experiment = 4
         elif exp5:
-            self.run_exp_5()
-        elif own_exp:
+            mode = 'genetic pool'
+            hillclimber_assignment = [0,0,2,2]
+            hill_climber_iters = 400
+            experiment = 5
+        
+        # run a standart experiment
+        if not own_exp:
+            self.run_exp(mode, hillclimber_assignment, hill_climber_iters, experiment)
+
+        if own_exp:
 
             # Extract state_data from GUI
             settings = self.__set_data()
 
             self.__run_algorithm(settings)
 
-    def run_exp_1(self) -> None:
+    def run_exp(self, _mode, _hillclimber_assignment, _hillclimber_iters, _experiment) -> None:
 
         # Set setting for initialization plot or optimalization
 
@@ -420,15 +445,15 @@ class App(customtkinter.CTk):
 
         visualize = False
 
-        experiment = 1
+        experiment = _experiment
 
         duration = 15 * 60
 
-        mode = 'multiproccesing'
+        mode = _mode
 
-        hillclimber_assignment = [0,0,2,2]
+        hillclimber_assignment = _hillclimber_assignment
 
-        hill_climber_iters = 50
+        hill_climber_iters = _hillclimber_iters
 
         # Destroy GUI window
         self.destroy()
@@ -441,157 +466,6 @@ class App(customtkinter.CTk):
             G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
 
         # Plot Funtion
-
-        self.finish(student_list)
-
-    def run_exp_2(self) -> None:
-        # Set setting for initialization plot or optimalization
-
-        capacity = False
-
-        popular = False
-
-        popular_own_day = False
-
-        difficult_students = False
-
-        annealing = False
-
-        visualize = False
-
-        experiment = 2
-
-        duration = 15 * 60
-
-        mode = 'multiproccesing'
-
-        hillclimber_assignment = [0,0,0,0]
-
-        hill_climber_iters = 50
-
-        self.destroy()
-
-        self.__reset_data_file(experiment)
-
-        for i in range(30):
-            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
-        # Plot Funtion
-
-        self.finish(student_list)
-
-    def run_exp_3(self) -> None:
-        # Set setting for initialization plot or optimalization
-
-        capacity = False
-
-        popular = False
-
-        popular_own_day = False
-
-        difficult_students = False
-
-        annealing = False
-
-        visualize = False
-
-        experiment = 3
-
-        duration = 15 * 60
-
-        mode = 'multiproccesing'
-
-        hillclimber_assignment = [2,2,2,2]
-
-        hill_climber_iters = 50
-
-        self.destroy()
-
-        self.__reset_data_file(experiment)
-
-        for i in range(30):
-            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
-        # Plot Funtion
-
-        self.finish(student_list)
-
-    def run_exp_4(self) -> None:
-        capacity = False
-
-        popular = False
-
-        popular_own_day = False
-
-        difficult_students = False
-
-        annealing = False
-
-        visualize = False
-
-        experiment = 4
-
-        duration = 15 * 60
-
-        mode = 'multiproccesing'
-
-        hillclimber_assignment = [2,2,2,2]
-
-        hill_climber_iters = 0.1
-
-        self.__reset_data_file(experiment)
-
-        self.destroy()
-
-        G = GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                    difficult_students, annealing, visualize)
-        G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration)
-        # Plot Funtion
-
-        self.finish(student_list)
-
-        for i, hill_climber_iters in enumerate[0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]:
-            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
-        # Plot Funtion
-
-        self.finish(student_list)
-
-    def run_exp_5(self) -> None:
-        capacity = False
-
-        popular = False
-
-        popular_own_day = False
-
-        difficult_students = False
-
-        annealing = False
-
-        visualize = False
-
-        duration = 15 * 60
-
-        experiment = 4
-
-        mode = 'genetic pool'
-
-        hillclimber_assignment = [0,0,2,2]
-
-        hill_climber_iters = 400
-
-        self.__reset_data_file(experiment)
-
-        self.destroy()
-
-        for i in range(30):
-            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
-        
 
         self.finish(student_list)
 

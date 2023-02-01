@@ -186,6 +186,7 @@ class Optimize():
                 self.malus = output_schedules[self.best_index][1]
 
 
+
             finish_time = time.time()
 
             self.iter_duration = finish_time - start_time
@@ -291,14 +292,14 @@ class Optimize():
 
             # flag variable to stop running one iteration if a sim annealing worsening happened
             accepted = False
-            for schedule in enumerate(schedule_list):
+            for schedule in schedule_list:
                 for _ in range(2):
                     for i in range(4):
-                        schedule, malus, _, _, accept_me = self.run_HC((i, schedule, T, 0, 1))
+                        schedule, malus, _, _, accept_me = self.run_HC((i, schedule, T, 1))
                         if accept_me:
 
                             # if this is the new schedule, make a data entry for every one of the 4 schedules
-                            for i in range(4):
+                            for j in range(4):
                                 self.save_data_genetic(i, time.time(), malus['Total'])
 
                             schedule_list = [schedule, schedule, schedule, schedule]
@@ -340,6 +341,7 @@ class Optimize():
                     # Set new schedule and malus
                     best_score = populations[pop][1]['Total']
                     best_schedule = populations[pop][0]
+                    print(best_score)
 
                     # Save the schedule
                     self.save_schedule(best_schedule)
