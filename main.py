@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
     multiplier = 4
 
-    for i in range(1):
+    for i in range(29, 30):
         list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit = main_runner(ANNEALING, CAPACITY, POPULAR, POPULAR_OWN_DAY, CLIMBING, VISUALIZE_INIT, multiplier=multiplier)
         write_to_csv('data/One Hillclimber different stages multiplier_4 with greedy.csv', i, list_iterations, list_total_malus, list_class_random, list_class_capacity, list_student_gaphour, list_student_doublehour, list_duration_since_innit)
 
