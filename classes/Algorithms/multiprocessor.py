@@ -502,6 +502,6 @@ class Optimize():
             # print(f'Duration since init: {round(self.duration, 2)} S.')
             # print(self.malus)
 
-    def save_schedule(schedule):
+    def save_schedule(self, schedule):
         with open('schedule.pkl', 'wb') as f:
             pickle.dump(schedule, f)
