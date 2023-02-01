@@ -130,39 +130,33 @@ class App(customtkinter.CTk):
         if state_hc == 1:
             self.expand_gui_hilli()
 
-            self.genetic_switch_solo = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic', font=customtkinter.CTkFont(size=15), command=self.turn_of_pool)
-            self.genetic_switch_solo.grid(row=2, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
+            self.hillclimber_multi = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Hilclimber multiple cores', font=customtkinter.CTkFont(size=15), command=self.hilli_multi)
+            self.hillclimber_multi.grid(row=2, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
 
-            self.genetic_switch_pool = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic pooling', font=customtkinter.CTkFont(size=15), command=self.turn_of_an_solo)
-            self.genetic_switch_pool.grid(row=3, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
+            self.hillclimber_single = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Hilclimber single cores', font=customtkinter.CTkFont(size=15), command=self.hilli_single)
+            self.hillclimber_single.grid(row=3, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
 
-            self.annealing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Sim. Annealing', font=customtkinter.CTkFont(size=15), command=self.turn_of_pool)
-            self.annealing_switch.grid(row=4, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
+            self.genetic_switch_solo = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic', font=customtkinter.CTkFont(size=15), command=self.genni_single)
+            self.genetic_switch_solo.grid(row=5, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
+
+            self.genetic_switch_pool = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic pooling', font=customtkinter.CTkFont(size=15), command=self.genni_multi)
+            self.genetic_switch_pool.grid(row=4, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
 
             self.iterations_dependend_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='iterations dependend', font=customtkinter.CTkFont(size=15), command=self.iterations_dependend)
-            self.iterations_dependend_switch.grid(row=4, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
+            self.iterations_dependend_switch.grid(row=7, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
 
             self.iterations_fixed_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Iterations fixed', font=customtkinter.CTkFont(size=15), command=self.iterations_fixed)
-            self.iterations_fixed_switch.grid(row=6, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
+            self.iterations_fixed_switch.grid(row=9, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
 
             self.duration_box = customtkinter.CTkComboBox(self.create_own_exp_frame2, values=["1", "5", "10", "15", "30", "45", "60", "120", "180"])
-            self.duration_box.grid(row=8, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
+            self.duration_box.grid(row=11, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
             self.duration_box.set("Duration (Mins.)")
 
-            core_arangments = self.__gen_core_assignment_list()
 
-            self.core_assingment_box = customtkinter.CTkComboBox(self.create_own_exp_frame2, values=core_arangments)
-            self.core_assingment_box.grid(row=9, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
-            self.core_assingment_box.set("HC Distribution")
-
-            self.mode_menu1 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, width=2, font=customtkinter.CTkFont(size=15))
-            self.mode_menu1.grid(row=10, column=1, padx=20, pady=10, sticky='w')
-            self.mode_menu2 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, width=2, font=customtkinter.CTkFont(size=15))
-            self.mode_menu2.grid(row=10, column=2, padx=20, pady=10, sticky='w')
-            self.mode_menu3 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, width=2, font=customtkinter.CTkFont(size=15))
-            self.mode_menu3.grid(row=10, column=3, padx=20, pady=10, sticky='w')
-            self.mode_menu4 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, width=2, font=customtkinter.CTkFont(size=15))
-            self.mode_menu4.grid(row=10, column=0, padx=20, pady=10, sticky='w')
+            # create a pop up menu
+            self.hillclimber_assignment =customtkinter.CTkButton(self.create_own_exp_frame2, text="Choose Hillclimbers", command=self.button_click_event)
+            self.hillclimber_assignment.place(relx=0.5, rely=0.5, anchor='center')
+            self.hillclimber_assignment.grid(row=12, column=0, padx=20, pady=10, sticky="nsew")
 
 
         else:
@@ -170,7 +164,64 @@ class App(customtkinter.CTk):
             self.genetic_switch_solo.destroy()
             self.genetic_switch_pool.destroy()
             self.annealing_switch.destroy()
+            self.iterations_dependend_switch.destroy()
+            self.iterations_fixed_switch.destroy()
+            self.duration_box.destroy()
+            self.hillclimber_assignment.destroy()
+            self.hillclimber_multi.destroy()
 
+    def hilli_multi(self):
+        if self.hillclimber_multi.get():
+            self.hillclimber_single.deselect()
+            self.annealing_switch.deselect()
+            self.genetic_switch_pool.deselect()
+            self.genetic_switch_solo.deselect()
+    def hilli_single(self):
+        if self.hillclimber_single.get():
+            self.hillclimber_multi.deselect()
+            self.annealing_switch.deselect()
+            self.genetic_switch_pool.deselect()
+            self.genetic_switch_solo.deselect()
+
+    def genni_single(self):
+        if self.genetic_switch_solo.get():
+            self.annealing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Sim. Annealing', font=customtkinter.CTkFont(size=15), command=self.simmi_an)
+            self.annealing_switch.grid(row=6, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
+            self.genetic_switch_pool.deselect()
+            self.hillclimber_single.deselect()
+            self.hillclimber_multi.deselect()
+        else:
+            self.annealing_switch.destroy()
+    
+    def genni_multi(self):
+        if self.genetic_switch_pool.get():
+            self.genetic_switch_solo.deselect()
+            self.hillclimber_single.deselect()
+            self.hillclimber_multi.deselect()
+            self.annealing_switch.deselect()
+
+    def simmi_an(self):
+        if not self.genetic_switch_solo.get():
+            self.annealing_switch.deselect()
+        elif self.annealing_switch.get():
+            self.hillclimber_single.deselect()
+            self.hillclimber_multi.deselect()
+            self.genetic_switch_pool.deselect()
+
+    def button_click_event(self):
+        dialog = customtkinter.CTkInputDialog(text="please enter 4 digits from 0 to 3\ndefault: 0123", title="Hillclimbers")
+
+    def try_again(self):
+        dialog = customtkinter.CTkInputDialog(text="please enter 4 digits from 0 to 3\ndefault: 0123", title="Hillclimbers")
+
+    def __gen_core_assignment_list(self) -> list:
+        core_arragments = []
+        for a in range(4):
+            for b in range(4):
+                for c in range(4):
+                    for d in range(4):
+                        core_arragments.append(f'{a}{b}{c}{d}')
+        return core_arragments
     # get ready for the most repetative block of code you've ever seen...
     def experiment1_switch_click(self) -> None:
         self.experiment2_switch.deselect()
@@ -220,7 +271,7 @@ class App(customtkinter.CTk):
         state = self.iterations_fixed_switch.get()
         if state:
             self.iterations1 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, font=customtkinter.CTkFont(size=15))
-            self.iterations1.grid(row=7, column=0, padx=20, pady=10, sticky="nsew")
+            self.iterations1.grid(row=10, column=0, padx=20, pady=10, sticky="nsew")
             self.iterations_dependend_switch.deselect()
             try:
                 self.iterations2.destroy()
@@ -233,7 +284,7 @@ class App(customtkinter.CTk):
         state = self.iterations_dependend_switch.get()
         if state:
             self.iterations2 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, font=customtkinter.CTkFont(size=15))
-            self.iterations2.grid(row=5, column=0, padx=20, pady=10, sticky="nsew")
+            self.iterations2.grid(row=8, column=0, padx=20, pady=10, sticky="nsew")
             self.iterations_fixed_switch.deselect()
             try:
                 self.iterations1.destroy()
@@ -270,16 +321,20 @@ class App(customtkinter.CTk):
             self.difficult_students_switch.destroy()
 
     def turn_of_pool(self):
+        
         state1 = self.annealing_switch.get()
         state2 = self.genetic_switch_solo.get()
         if state1 or state2:
             self.genetic_switch_pool.deselect()
+        
 
     def turn_of_an_solo(self):
         state1 = self.genetic_switch_pool.get()
         if state1:
             self.annealing_switch.deselect()
             self.genetic_switch_solo.deselect()
+       
+
 
     def run_experiment(self):
         if self.experiment1_switch.get():
@@ -339,6 +394,7 @@ class App(customtkinter.CTk):
             self.popular_switch.deselect()
 
     def generate(self) -> None:
+        # state_hillclimbers = 
 
         # Extract state_data from GUI
         settings = self.__set_data()
