@@ -128,8 +128,8 @@ class App(customtkinter.CTk):
             self.label_initialization.grid(row=0, column=1, padx=20, pady=10, sticky="ns")
 
             # initiate the heuristic menu if clicked
-            self.heuristick_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Heuristics:', font=customtkinter.CTkFont(size=15), command=self.heuristick_switch_click)
-            self.heuristick_switch.grid(row=1, column=0, pady=10, padx=20, sticky="n")
+            self.heuristic_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Heuristics:', font=customtkinter.CTkFont(size=15), command=self.heuristic_switch_click)
+            self.heuristic_switch.grid(row=1, column=0, pady=10, padx=20, sticky="n")
 
             # initiate the algorithm menu if clicked
             self.algorithm_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Algorithms:', font=customtkinter.CTkFont(size=15), command=self.algorithm_switch_click)
@@ -139,14 +139,14 @@ class App(customtkinter.CTk):
             self.toggle_buttons(6)
 
 
-    def heuristick_switch_click(self) -> None:
+    def heuristic_switch_click(self) -> None:
         '''
         Drops down a menu in the GUI where the user can select heuristics to influence the initialisation
         of the schedule
         '''
 
         # check its state
-        state_greedy = self.heuristick_switch.get()
+        state_greedy = self.heuristic_switch.get()
         if state_greedy == 1:
 
             # resize and create switches
@@ -484,38 +484,28 @@ class App(customtkinter.CTk):
 
         # Collect state of hill climbing switch
         algorithm = self.algorithm_switch.get()
+        heuristic = self.heuristic_switch.get()
 
         # Set setting for initialization plot or optimalization
         if algorithm:
             visualize = False
+            annealing = bool(self.annealing_switch.get())
         else:
             visualize = True
+            annealing = False
 
-        # Try all other switches on state
-        try:
+        # Try all other switches on based on g
+        if heuristic:
             capacity = bool(self.capacity_switch.get())
-        except:
-            capacity = False
-
-        try:
             popular = bool(self.popular_switch.get())
-        except:
-            popular = False
-
-        try:
             popular_own_day = bool(self.popular_own_day_switch.get())
-        except:
-            popular_own_day = False
-
-        try:
             difficult_students = bool(self.difficult_students_switch.get())
-        except:
+        else:
+            capacity = False
+            popular = False
+            popular_own_day = False
             difficult_students = False
 
-        try:
-            annealing = bool(self.annealing_switch.get())
-        except:
-            annealing = False
 
         return capacity, popular, popular_own_day, difficult_students, annealing, visualize
 
@@ -524,11 +514,16 @@ class App(customtkinter.CTk):
         capacity, popular, popular_own_day, difficult_students, annealing, visualize = settings
 
         if not visualize:
+
+            # check for duration input
+            # return if incorrect
             try:
                 duration = int(self.duration_box.get()) * 60
             except:
                 return
 
+            # check for iteration input
+            # return if incorrect
             if self.iterations_fixed_switch.get():
                 try:
                     iterations = int(self.iterations1.get())
@@ -542,6 +537,7 @@ class App(customtkinter.CTk):
             else:
                 return
 
+            # check for more
             if self.hillclimber_single.get():
                 mode = 'sequential'
             elif self.hillclimber_multi.get():
@@ -553,7 +549,7 @@ class App(customtkinter.CTk):
             else:
                 return
 
-        hillclimber_assignment = []
+        # test input of hillclimber assignment
         try:
             if len(self.hillclimber_assignment) < 4:
                 hillclimber_assignment = [0,1,2,3]
@@ -563,14 +559,17 @@ class App(customtkinter.CTk):
         except:
             hillclimber_assignment = [0,1,2,3]
 
+        # visualize choice
         print('The Hillclimbers you selected are:')
         print(hillclimber_assignment)
 
-        # Destroy window
+        # destroy window
         self.destroy()
 
+        # set experiment
         experiment = 0
 
+        # run reset method
         self.__reset_data_file(experiment)
 
         G = GeneratorClass.Generator(capacity, popular, popular_own_day,
