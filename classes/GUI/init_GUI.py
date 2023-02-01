@@ -20,14 +20,11 @@ class App(customtkinter.CTk):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
 
-        """ Optimize Configure Frame """
-        
+        """ Start by creating 5 experiments to choose from or make your own """
         self.toggle_frame = customtkinter.CTkFrame(self)
         self.toggle_frame.grid(row=0, column=0, rowspan=2, padx=20, pady=20, sticky="nsew")
         self.toggle_frame.grid_columnconfigure(0, weight=1)
         self.toggle_frame.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11), weight=1)
-    
-        
 
         self.label_experiment = customtkinter.CTkLabel(master=self.toggle_frame, text="Experiments:", font=customtkinter.CTkFont(size=15, weight='bold'))
         self.label_experiment.grid(row=0, column=0, padx=20, pady=10, sticky="nsew")
@@ -59,21 +56,30 @@ class App(customtkinter.CTk):
         self.generate_button.grid(row=8, column=0, padx=20, pady=10, sticky="ew")
 
     def create_own_experiment(self):
+        '''This method expands the interface and prompts the user with two options:
+           - set the greedy initialisation settings
+           - set the type of algorithm you want to run when optimizing'''
 
         state_own = self.create_own_exp_switch.get()
         if state_own:
+
+            # not possible to create your own experiment and run another one too
             self.experiment1_switch.deselect()
             self.experiment2_switch.deselect()
             self.experiment3_switch.deselect()
             self.experiment4_switch.deselect()
             self.experiment5_switch.deselect()
 
+            # expand the interface
             self.expand_gui()
+
+            # first frame that holds the initialisation settings
             self.create_own_exp_frame1 = customtkinter.CTkFrame(self)
             self.create_own_exp_frame1.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
             self.create_own_exp_frame1.grid_columnconfigure(0, weight=1)
             self.create_own_exp_frame1.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11), weight=1)
 
+            # second frame that holds the initialisation settings
             self.create_own_exp_frame2 = customtkinter.CTkFrame(self)
             self.create_own_exp_frame2.grid(row=0, column=2, padx=20, pady=20, sticky="nsew")
             self.create_own_exp_frame2.grid_columnconfigure(0, weight=1)
@@ -90,7 +96,7 @@ class App(customtkinter.CTk):
             self.hill_climbing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Optimize:', font=customtkinter.CTkFont(size=15), command=self.hillclimber_switch_click)
             self.hill_climbing_switch.grid(row=1, column=0, columnspan=4, pady=10, padx=20, sticky="n")
         else:
-            
+
             self.hill_climbing_switch.destroy()
             try:
                 self.annealing_switch.destroy()
@@ -103,12 +109,13 @@ class App(customtkinter.CTk):
                 pass
             self.label_initialization.destroy()
             self.greedy_switch.destroy()
-            
+
             self.collaps_gui()
             self.create_own_exp_frame1.destroy()
             self.create_own_exp_frame2.destroy()
 
     def expand_gui(self):
+        '''expands the gui so it can fit the frames for 'make own experiment' '''
         self.geometry(f"{850}x{550}")
 
     def expand_gui_greedy(self):
