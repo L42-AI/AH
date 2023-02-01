@@ -11,6 +11,15 @@ import decimal
 """ Main HillClimber Class """
 
 class HillClimber:
+    '''
+    This class is the framework for all hillclimbers. It is designed to be inherited
+    by other Hillclimbers to perform one specific task. These tasks can be the following:
+    - Swapping two random chosen seminars from two courses
+    - Swapping one seminar that is causing the most capacity problems with a random seminar
+    - Swapping one student to different tutorial group based on the group that is causing the most gap hours
+    - Swapping one student to different tutorial group based on the group that is causing the most double hours
+    '''
+
     def __init__(self, schedule, iteration=0):
         self.schedule_list = []
         self.course_list = course_list
@@ -48,7 +57,13 @@ class HillClimber:
     """ Main Method """
 
     def climb(self, hill_climber_iters=400, T=0, ANNEALING=False, fail_counter=None):
-        self.double = {'l': set(), 't': set(), 'p': set()}
+        '''
+        this method is the 'core' of every optimize algorithm. It performs a random mutation by calling
+        a case specific mutate method and compares the schedule that mutation created to the current one
+        the amount of iterations it makes before returning to the optimize script to compare results with
+        other Hillclimbers is dependend on hill_climber_iters
+        '''
+
         self.accept_me = False
         # Compute malus with MalusCalculator
         self.malus = self.MC.compute_total_malus(self.schedule)
