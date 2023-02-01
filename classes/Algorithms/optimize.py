@@ -135,12 +135,12 @@ class Optimize():
         self.fail_counter = 0
         self.duration = 0
 
-        # set a 'lowest' malus
-        lowest_malus = 9999
+        
 
         # self.schedule and self.malus will always hold the best schedule
         self.schedule = self.Roster.schedule
         self.malus = self.MC.compute_total_malus(self.schedule)
+        lowest_malus = self.malus['Total']
 
         # Print intitial
         print(f'\nInitialization')
@@ -157,7 +157,6 @@ class Optimize():
             self.multiprocessor_counter += 1
 
             # set schedules and malus for the next iteration
-            self.malus = self.MC.compute_total_malus(self.schedule)
             schedule_list = [self.recursive_copy(self.schedule) for _ in range(4)]
 
             # Fill the pool with all functions and their rosters
@@ -174,13 +173,18 @@ class Optimize():
             self.best_index = [i[1]['Total'] for i in output_schedules].index(min_malus)
 
             # Compute difference between new roster and current roster
-            difference = self.malus['Total'] - output_schedules[self.best_index][1]['Total']
-
+            difference = self.malus['Total'] - min_malus
 
             if output_schedules[self.best_index][1]['Total'] < self.malus['Total']:
-                self.malus = output_schedules[self.best_index][1]
-                self.schedule = output_schedules[self.best_index][0]
+                # Save the schedule
                 self.save_schedule(output_schedules[self.best_index][0])
+
+                # Set schedule to self
+                self.schedule = output_schedules[self.best_index][0]
+
+                # Set malus to self
+                self.malus = output_schedules[self.best_index][1]
+
 
             finish_time = time.time()
 
