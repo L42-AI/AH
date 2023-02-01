@@ -74,7 +74,7 @@ class HillClimber:
         # set the number of iterations depending on user input
         if type(hill_climber_iters) == float:
             multiplier = True
-            self.hill_climber_iters = int(self.malus['total'] * hill_climber_iters)
+            self.hill_climber_iters = int(self.malus['Total'] * hill_climber_iters)
         else:
             multiplier = False
             self.hill_climber_iters = hill_climber_iters
@@ -103,7 +103,7 @@ class HillClimber:
             self.iteration += 1
 
             if multiplier:
-                self.hill_climber_iters = int(self.malus['total'] * hill_climber_iters)
+                self.hill_climber_iters = int(self.malus['Total'] * hill_climber_iters)
 
         return self.schedule, self.malus, self.iteration, self.accept_me
 
