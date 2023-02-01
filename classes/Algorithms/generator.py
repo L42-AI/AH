@@ -28,15 +28,20 @@ class Generator:
     """ INIT """
 
     def schedule_fill(self, Roster, course_list):
-        ''''method schedules a timeslot for every lecture, tutorial or practical that takes place'''
+        """
+        This function creates the schedule
+        """
 
-        # first give the most popular courses a place in the schedule
-        if self.POPULAR:
-            course_list = sorted(course_list, key = lambda x: x.enrolled, reverse = True)
+        # Set the days list
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+
+        # Check heuristics state
+        if self.POPULAR:
+            # Sort the course list on popularity (enrolled)
+            course_list = sorted(course_list, key = lambda x: x.enrolled, reverse = True)
+
         # give the 5 most popular courses their own day to hold their lectures, to prevent gap hours
         if self.POPULAR_OWN_DAY:
-
             for i in range(5):
                 course_list[i].day = days[i]
 
