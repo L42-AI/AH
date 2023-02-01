@@ -12,7 +12,8 @@ customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "gre
 class App(customtkinter.CTk):
     def __init__(self) -> None:
         super().__init__()
-       
+
+        # set a starting height and width
         self.width = 250
         self.height = 450
 
@@ -24,8 +25,13 @@ class App(customtkinter.CTk):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
 
+        self.init_gui()
+
+    """ Init """
+
+    def init_gui(self):
         """ Optimize Configure Frame """
-        
+
         self.toggle_frame = customtkinter.CTkFrame(self)
         self.toggle_frame.grid(row=0, column=0, rowspan=2, padx=20, pady=20, sticky="nsew")
         self.toggle_frame.grid_columnconfigure(0, weight=1)
@@ -58,6 +64,8 @@ class App(customtkinter.CTk):
         # Generate Button
         self.generate_button = customtkinter.CTkButton(master=self, text="Generate", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.generate)
         self.generate_button.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
+
+    """ Toggle switches """
 
     def experiment1_switch_click(self) -> None:
         self.experiment2_switch.deselect()
@@ -149,45 +157,130 @@ class App(customtkinter.CTk):
             self.create_own_exp_frame2.destroy()
 
 
-    def iterations_fixed(self):
-        state = self.iterations_fixed_switch.get()
-        if state:
-            if not self.iterations_dependend_switch.get():
-                self.height += 75
+    def greedy_switch_click(self) -> None:
+
+        state_greedy = self.greedy_switch.get()
+
+        if state_greedy == 1:
+            self.width += 20
 
             self.geometry(f"{self.width}x{self.height}")
-            self.iterations1 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, font=customtkinter.CTkFont(size=15))
-            self.iterations1.grid(row=10, column=0, padx=20, pady=10, sticky="nsew")
-            self.iterations_dependend_switch.deselect()
+            self.capacity_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Capacity', font=customtkinter.CTkFont(size=15))
+            self.capacity_switch.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
+
+            self.popular_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Popular first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_P)
+            self.popular_switch.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
+
+            self.popular_own_day_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Largest first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_POD)
+            self.popular_own_day_switch.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
+
+            self.difficult_students_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Busy Students', font=customtkinter.CTkFont(size=15), command=self.turn_off_popular)
+            self.difficult_students_switch.grid(row=5, column=0, padx=20, pady=10, sticky="nsew")
+
+        else:
+            self.width -= 20
+
+            self.geometry(f"{self.width}x{self.height}")
+
+            self.capacity_switch.destroy()
+            self.popular_switch.destroy()
+            self.popular_own_day_switch.destroy()
+            self.difficult_students_switch.destroy()
+
+    def turn_off_difficult_POD(self) -> None:
+        state_popular_own_day = self.popular_own_day_switch.get()
+        if state_popular_own_day == 1:
+            self.difficult_students_switch.deselect()
+
+    def turn_off_difficult_P(self) -> None:
+        state_popular = self.popular_switch.get()
+        if state_popular == 1:
+            self.difficult_students_switch.deselect()
+
+    def turn_off_popular(self) -> None:
+        state_difficult = self.difficult_students_switch.get()
+        if state_difficult == 1:
+            self.popular_own_day_switch.deselect()
+            self.popular_switch.deselect()
+
+
+    def hillclimber_switch_click(self) -> None:
+
+        state_hc = self.hill_climbing_switch.get()
+
+        if state_hc == 1:
+            self.width += 200
+            self.height += 100
+
+            self.geometry(f"{self.width}x{self.height}")
+            self.hillclimber_multi = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Hilclimber multiple cores', font=customtkinter.CTkFont(size=15), command=self.hilli_multi)
+            self.hillclimber_multi.grid(row=2, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
+
+            self.hillclimber_single = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Hilclimber single cores', font=customtkinter.CTkFont(size=15), command=self.hilli_single)
+            self.hillclimber_single.grid(row=3, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
+
+            self.genetic_switch_solo = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic', font=customtkinter.CTkFont(size=15), command=self.genni_single)
+            self.genetic_switch_solo.grid(row=5, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
+
+            self.genetic_switch_pool = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic pooling', font=customtkinter.CTkFont(size=15), command=self.genni_multi)
+            self.genetic_switch_pool.grid(row=4, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
+
+            self.iterations_dependend_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='iterations dependend', font=customtkinter.CTkFont(size=15), command=self.iterations_dependend)
+            self.iterations_dependend_switch.grid(row=7, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
+
+            self.iterations_fixed_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Iterations fixed', font=customtkinter.CTkFont(size=15), command=self.iterations_fixed)
+            self.iterations_fixed_switch.grid(row=9, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
+
+            self.duration_box = customtkinter.CTkComboBox(self.create_own_exp_frame2, values=["1", "5", "10", "15", "30", "45", "60", "120", "180"])
+            self.duration_box.grid(row=11, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
+            self.duration_box.set("Duration (Mins.)")
+
+
+            # create a pop up menu
+            self.hillclimber_assignment = customtkinter.CTkButton(self.create_own_exp_frame2, text="Choose Hillclimbers", command=self.open_input_window)
+            self.hillclimber_assignment.place(relx=0.5, rely=0.5, anchor='center')
+            self.hillclimber_assignment.grid(row=12, column=0, padx=20, pady=10, sticky="nsew")
+
+
+        else:
+            self.width -= 200
+            self.height -= 100
+
+            self.geometry(f"{self.width}x{self.height}")
+            self.genetic_switch_solo.destroy()
+            self.genetic_switch_pool.destroy()
             try:
-                self.iterations2.destroy()
+                self.annealing_switch.destroy()
             except:
                 pass
-        else:
-            self.height -= 75
-            self.geometry(f"{self.width}x{self.height}")
-            self.iterations1.destroy()
-
-    def iterations_dependend(self):
-        state = self.iterations_dependend_switch.get()
-        if state:
-            if not self.iterations_fixed_switch.get():
-                self.height += 75
-
-            self.geometry(f"{self.width}x{self.height}")
-            self.iterations2 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, font=customtkinter.CTkFont(size=15))
-            self.iterations2.grid(row=8, column=0, padx=20, pady=10, sticky="nsew")
-
-            self.iterations_fixed_switch.deselect()
             try:
                 self.iterations1.destroy()
             except:
                 pass
-        else:
+            try:
+                self.iterations2.destroy()
+            except:
+                pass
+            self.iterations_dependend_switch.destroy()
+            self.iterations_fixed_switch.destroy()
+            self.duration_box.destroy()
+            self.hillclimber_assignment.destroy()
+            self.hillclimber_multi.destroy()
+            self.hillclimber_single.destroy()
 
-            self.height -= 75
-            self.geometry(f"{self.width}x{self.height}")
-            self.iterations2.destroy()
+
+    def turn_of_pool(self):
+
+        state1 = self.annealing_switch.get()
+        state2 = self.genetic_switch_solo.get()
+        if state1 or state2:
+            self.genetic_switch_pool.deselect()
+
+    def turn_of_an_solo(self):
+        state1 = self.genetic_switch_pool.get()
+        if state1:
+            self.annealing_switch.deselect()
+            self.genetic_switch_solo.deselect()
 
 
     def hilli_multi(self):
@@ -247,121 +340,83 @@ class App(customtkinter.CTk):
             self.hillclimber_multi.deselect()
             self.genetic_switch_pool.deselect()
 
-    def button_click_event(self):
-        dialog = customtkinter.CTkInputDialog(text="Please enter 4 digits from 0 to 3\nDefault: 0123", title="Hillclimbers")
-        self.hillclimber_assignment = dialog.get_input()
 
+    """ Interacting functions """
 
-    def hillclimber_switch_click(self) -> None:
-
-        state_hc = self.hill_climbing_switch.get()
-
-        if state_hc == 1:
-            self.width += 200
-            self.height += 100
+    def iterations_fixed(self):
+        state = self.iterations_fixed_switch.get()
+        if state:
+            if not self.iterations_dependend_switch.get():
+                self.height += 75
 
             self.geometry(f"{self.width}x{self.height}")
-            self.hillclimber_multi = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Hilclimber multiple cores', font=customtkinter.CTkFont(size=15), command=self.hilli_multi)
-            self.hillclimber_multi.grid(row=2, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
-
-            self.hillclimber_single = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Hilclimber single cores', font=customtkinter.CTkFont(size=15), command=self.hilli_single)
-            self.hillclimber_single.grid(row=3, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
-
-            self.genetic_switch_solo = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic', font=customtkinter.CTkFont(size=15), command=self.genni_single)
-            self.genetic_switch_solo.grid(row=5, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
-
-            self.genetic_switch_pool = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic pooling', font=customtkinter.CTkFont(size=15), command=self.genni_multi)
-            self.genetic_switch_pool.grid(row=4, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
-
-            self.iterations_dependend_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='iterations dependend', font=customtkinter.CTkFont(size=15), command=self.iterations_dependend)
-            self.iterations_dependend_switch.grid(row=7, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
-
-            self.iterations_fixed_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Iterations fixed', font=customtkinter.CTkFont(size=15), command=self.iterations_fixed)
-            self.iterations_fixed_switch.grid(row=9, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
-
-            self.duration_box = customtkinter.CTkComboBox(self.create_own_exp_frame2, values=["1", "5", "10", "15", "30", "45", "60", "120", "180"])
-            self.duration_box.grid(row=11, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
-            self.duration_box.set("Duration (Mins.)")
-
-
-            # create a pop up menu
-            self.hillclimber_assignment = customtkinter.CTkButton(self.create_own_exp_frame2, text="Choose Hillclimbers", command=self.button_click_event)
-            self.hillclimber_assignment.place(relx=0.5, rely=0.5, anchor='center')
-            self.hillclimber_assignment.grid(row=12, column=0, padx=20, pady=10, sticky="nsew")
-
-
-        else:
-            self.width -= 200
-            self.height -= 100
-
-            self.geometry(f"{self.width}x{self.height}")
-            self.genetic_switch_solo.destroy()
-            self.genetic_switch_pool.destroy()
-            try:
-                self.annealing_switch.destroy()
-            except:
-                pass
-            try:
-                self.iterations1.destroy()
-            except:
-                pass
+            self.iterations1 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, font=customtkinter.CTkFont(size=15))
+            self.iterations1.grid(row=10, column=0, padx=20, pady=10, sticky="nsew")
+            self.iterations_dependend_switch.deselect()
             try:
                 self.iterations2.destroy()
             except:
                 pass
-            self.iterations_dependend_switch.destroy()
-            self.iterations_fixed_switch.destroy()
-            self.duration_box.destroy()
-            self.hillclimber_assignment.destroy()
-            self.hillclimber_multi.destroy()
-            self.hillclimber_single.destroy()
-
-    def greedy_switch_click(self) -> None:
-
-        state_greedy = self.greedy_switch.get()
-
-        if state_greedy == 1:
-            self.width += 20
-
-            self.geometry(f"{self.width}x{self.height}")
-            self.capacity_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Capacity', font=customtkinter.CTkFont(size=15))
-            self.capacity_switch.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
-
-            self.popular_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Popular first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_P)
-            self.popular_switch.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
-
-            self.popular_own_day_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Largest first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_POD)
-            self.popular_own_day_switch.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
-
-            self.difficult_students_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Busy Students', font=customtkinter.CTkFont(size=15), command=self.turn_off_popular)
-            self.difficult_students_switch.grid(row=5, column=0, padx=20, pady=10, sticky="nsew")
-
         else:
-            self.width -= 20
+            self.height -= 75
+            self.geometry(f"{self.width}x{self.height}")
+            self.iterations1.destroy()
+
+    def iterations_dependend(self):
+        state = self.iterations_dependend_switch.get()
+        if state:
+            if not self.iterations_fixed_switch.get():
+                self.height += 75
 
             self.geometry(f"{self.width}x{self.height}")
+            self.iterations2 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, font=customtkinter.CTkFont(size=15))
+            self.iterations2.grid(row=8, column=0, padx=20, pady=10, sticky="nsew")
 
-            self.capacity_switch.destroy()
-            self.popular_switch.destroy()
-            self.popular_own_day_switch.destroy()
-            self.difficult_students_switch.destroy()
+            self.iterations_fixed_switch.deselect()
+            try:
+                self.iterations1.destroy()
+            except:
+                pass
+        else:
 
+            self.height -= 75
+            self.geometry(f"{self.width}x{self.height}")
+            self.iterations2.destroy()
 
-    def turn_of_pool(self):
+    def open_input_window(self):
+        dialog = customtkinter.CTkInputDialog(text="Please enter 4 digits from 0 to 3\nDefault: 0123", title="Hillclimbers")
+        self.hillclimber_assignment = dialog.get_input()
 
-        state1 = self.annealing_switch.get()
-        state2 = self.genetic_switch_solo.get()
-        if state1 or state2:
-            self.genetic_switch_pool.deselect()
+    """ Run functions """
 
-    def turn_of_an_solo(self):
-        state1 = self.genetic_switch_pool.get()
-        if state1:
-            self.annealing_switch.deselect()
-            self.genetic_switch_solo.deselect()
+    def generate(self) -> None:
 
+        exp1 = self.experiment1_switch.get()
+        exp2 = self.experiment2_switch.get()
+        exp3 = self.experiment3_switch.get()
+        exp4 = self.experiment4_switch.get()
+        exp5 = self.experiment5_switch.get()
+        own_exp = self.create_own_exp_switch.get()
+
+        if exp1:
+            self.run_exp_1()
+        elif exp2:
+            self.run_exp_2()
+        elif exp3:
+            self.run_exp_3()
+        elif exp4:
+            self.run_exp_4()
+        elif exp5:
+            self.run_exp_5()
+        elif own_exp:
+
+            # Extract state_data from GUI
+            settings = self.__set_data()
+
+            self.__run_algorithm(settings)
 
     def run_exp_1(self) -> None:
+
         # Set setting for initialization plot or optimalization
 
         capacity = False
@@ -386,6 +441,7 @@ class App(customtkinter.CTk):
 
         hill_climber_iters = 50
 
+        # Destroy GUI window
         self.destroy()
 
         self.__reset_data_file(experiment)
@@ -550,53 +606,12 @@ class App(customtkinter.CTk):
 
         self.finish(student_list)
 
+    """ Methods """
 
+    def run(self) -> None:
+        self.mainloop()
 
-
-    def turn_off_difficult_POD(self) -> None:
-        state_popular_own_day = self.popular_own_day_switch.get()
-        if state_popular_own_day == 1:
-            self.difficult_students_switch.deselect()
-
-    def turn_off_difficult_P(self) -> None:
-        state_popular = self.popular_switch.get()
-        if state_popular == 1:
-            self.difficult_students_switch.deselect()
-
-    def turn_off_popular(self) -> None:
-        state_difficult = self.difficult_students_switch.get()
-        if state_difficult == 1:
-            self.popular_own_day_switch.deselect()
-            self.popular_switch.deselect()
-
-
-    def generate(self) -> None:
-
-        exp1 = self.experiment1_switch.get()
-        exp2 = self.experiment2_switch.get()
-        exp3 = self.experiment3_switch.get()
-        exp4 = self.experiment4_switch.get()
-        exp5 = self.experiment5_switch.get()
-        own_exp = self.create_own_exp_switch.get()
-
-        if exp1:
-            self.run_exp_1()
-        elif exp2:
-            self.run_exp_2()
-        elif exp3:
-            self.run_exp_3()
-        elif exp4:
-            self.run_exp_4()
-        elif exp5:
-            self.run_exp_5()
-        elif own_exp:
-
-            # Extract state_data from GUI
-            settings = self.__set_data()
-
-            self.__run_algorithm(settings)
-
-    def finish(self, student_list):
+    def finish(self, student_list) -> None:
 
         with open('schedule.pkl', 'rb') as f:
             schedule = pickle.load(f)
@@ -604,10 +619,7 @@ class App(customtkinter.CTk):
         app = SelectorApp.App(student_list, schedule)
         app.mainloop()
 
-
-    def run(self) -> None:
-        self.mainloop()
-
+    """ Helpers """
 
     def __reset_data_file(self, experiment) -> None:
         with open(f'data/experiment{experiment}.csv', 'w', newline='') as f:
@@ -720,10 +732,4 @@ class App(customtkinter.CTk):
 
             self.finish(student_list)
 
-        core_arragments = []
-        for a in range(4):
-            for b in range(4):
-                for c in range(4):
-                    for d in range(4):
-                        core_arragments.append(f'{a}{b}{c}{d}')
-        return core_arragments
+        self.mainloop()
