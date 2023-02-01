@@ -476,7 +476,7 @@ class App(customtkinter.CTk):
 
         mode = 'multiproccesing'
 
-        hillclimber_assignment = [0,0,0,0]
+        hillclimber_assignment = [0,0,1,1]
 
         hill_climber_iters = 50
 
@@ -513,7 +513,7 @@ class App(customtkinter.CTk):
 
         mode = 'multiproccesing'
 
-        hillclimber_assignment = [2,2,2,2]
+        hillclimber_assignment = [2,2,3,3]
 
         hill_climber_iters = 50
 
@@ -548,7 +548,7 @@ class App(customtkinter.CTk):
 
         mode = 'multiproccesing'
 
-        hillclimber_assignment = [2,2,2,2]
+        hillclimber_assignment = [0,1,2,3]
 
         hill_climber_iters = 0.1
 
@@ -590,7 +590,7 @@ class App(customtkinter.CTk):
 
         mode = 'genetic pool'
 
-        hillclimber_assignment = [0,0,2,2]
+        hillclimber_assignment = [0,1,2,3]
 
         hill_climber_iters = 400
 
@@ -731,5 +731,3 @@ class App(customtkinter.CTk):
             # Plot Funtion
 
             self.finish(student_list)
-
-        self.mainloop()
