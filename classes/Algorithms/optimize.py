@@ -133,6 +133,8 @@ class Optimize():
         self.fail_counter = 0
         self.duration = 0
 
+        self.malus = self.MC.compute_total_malus(self.schedule)
+
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
@@ -147,7 +149,7 @@ class Optimize():
             # Increase iter counter
             self.multiprocessor_counter += 1
 
-            # Set schedules
+            # set schedules for the next iteration
             schedule_list = [self.recursive_copy(self.schedule) for _ in range(4)]
 
             # Fill the pool with all functions and their rosters
@@ -287,7 +289,7 @@ class Optimize():
             for schedule in enumerate(schedule_list):
                 for _ in range(2):
                     for i in range(4):
-                        schedule, malus, _, _, accept_me = self.run_HC((i, schedule, T, 1))
+                        schedule, malus, _, _, accept_me = self.run_HC((i, schedule, T, 0, 1))
                         if accept_me:
 
                             # if this is the new schedule, make a data entry for every one of the 4 schedules
@@ -423,10 +425,10 @@ class Optimize():
                 for _ in range(2):
                     # Run multicore with all settings
                     with Pool(4) as p:
-                        output_schedules = p.map(self.run_HC, [(core_assignment[0], schedule, t, hill_climber_iters),
-                                                                    (core_assignment[1], schedule, t, hill_climber_iters),
-                                                                    (core_assignment[2], schedule, t, hill_climber_iters),
-                                                                    (core_assignment[3], schedule, t, hill_climber_iters)])
+                        output_schedules = p.map(self.run_HC, [(core_assignment[0], schedule, t, self.hillclimber_counter, hill_climber_iters),
+                                                                    (core_assignment[1], schedule, t, self.hillclimber_counter, hill_climber_iters),
+                                                                    (core_assignment[2], schedule, t, self.hillclimber_counter, hill_climber_iters),
+                                                                    (core_assignment[3], schedule, t, self.hillclimber_counter, hill_climber_iters)])
 
                     # Add this output to the total output list
                     total_output += output_schedules
