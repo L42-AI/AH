@@ -42,6 +42,7 @@ class Optimize():
            read README on git for more info'''
 
         self.data = []
+        init_time = time.time()
 
         # Set counters
         self.multiprocess_iter_counter = 0
@@ -60,30 +61,26 @@ class Optimize():
         print(f'\nInitialization')
         print(self.malus)
 
-
+        # set a temperature dependend on simulated annealing or not
         t = self.__init_temp()
 
-        init_time = time.time()
-
-        # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
+        # run for a given amount of time
         while time.time() - init_time < algorithm_duration:
-        # while self.iter_counter != 2:
-
             start_time = time.time()
 
             # Increase iter counter
             self.multiprocess_iter_counter += 1
 
+            # set schedules and malus for the next iteration
             self.malus = self.MC.compute_total_malus(self.schedule)
-
             schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
 
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
-                self.output_schedules = p.map(self.run_HC, [(core_assignment[0], schedule_list[0], t, self.hillclimber_iter_counter, hill_climber_iters),
-                                                            (core_assignment[1], schedule_list[1], t, self.hillclimber_iter_counter, hill_climber_iters),
-                                                            (core_assignment[2], schedule_list[2], t, self.hillclimber_iter_counter, hill_climber_iters),
-                                                            (core_assignment[3], schedule_list[3], t, self.hillclimber_iter_counter, hill_climber_iters)])
+                self.output_schedules = p.map(self.run_HC, [(core_assignment[0], schedule_list[0], t, hill_climber_iters),
+                                                            (core_assignment[1], schedule_list[1], t, hill_climber_iters),
+                                                            (core_assignment[2], schedule_list[2], t, hill_climber_iters),
+                                                            (core_assignment[3], schedule_list[3], t, hill_climber_iters)])
 
             # find the lowest malus of the output rosters
             min_malus = min([i[1]['Total'] for i in self.output_schedules])
@@ -442,31 +439,31 @@ class Optimize():
             self.multiprocessor_counter += 1
 
     def run_HC(self, hc_tuple):
-        activation, schedule, T, iteration, hill_climber_iters = hc_tuple
+        activation, schedule, T, hill_climber_iters = hc_tuple
         if activation == 0:
 
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, iteration)
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.hillclimber_iter_counter)
             schedule, malus, iteration, accept_me = HC1.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC1.get_name(), iteration, accept_me
 
         elif activation == 1:
 
-            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, iteration)
+            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.hillclimber_iter_counter)
             schedule, malus, iteration, accept_me = HC2.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC2.get_name(), iteration, accept_me
 
         elif activation == 2:
 
-            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, iteration)
+            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.hillclimber_iter_counter)
             schedule, malus, iteration, accept_me = HC3.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC3.get_name(), iteration, accept_me
 
         elif activation == 3:
 
-            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, iteration)
+            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.hillclimber_itekrrhillclimber_iter_counter)
             schedule, malus, iteration, accept_me = HC4.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC4.get_name(), iteration, accept_me
