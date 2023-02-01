@@ -66,8 +66,8 @@ def visualize_experiments(file_location, save_location, title, iteration_name, m
 
 if __name__ == '__main__':
 
-    # visualize_experiments('One Hillclimber different stages multiplier_4.csv', 'Plot Hillclimber Multiplier 4.png', 'Experiment Hillclimber Multiplier 4', \
-    # 'list_iterations' ,'Iteration.1', 1700, 1750, 20, 50, (12, 12))
+    visualize_experiments('One Hillclimber different stages multiplier_4.csv', 'Plot Hillclimber Multiplier 4.png', 'Experiment Hillclimber Multiplier 4', \
+    'list_iterations' ,'Iteration.1', 1700, 1750, 20, 50, (12, 12))
 
     # visualize_experiments('Testing Hillclimber_0 30 times.csv', 'Plot Testing Hillclimber_0.png', 'Experiment Hillclimber Swap Random Lessons', \
     #     'list_iterations', 'Iteration.1', 1700, 1750, 80, 50, (12, 12))
