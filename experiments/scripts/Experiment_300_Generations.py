@@ -4,7 +4,7 @@ import pandas as pd
 
 if __name__ == '__main__':
 
-    df = pd.read_csv('data/Hillclimber Run for 300 Generatinos Multiplier 4.csv')
+    df = pd.read_csv('Hillclimber Run for 300 Generatinos Multiplier 4.csv')
 
     sns.lineplot(data=df, x=df.index, y='Iteration.1')
 
