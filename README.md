@@ -69,6 +69,7 @@ To run our application, you first install the required libraries:
 
 - Activate the ProgLab environment
 - pip install customtkinter
+- pip install seaborn
 
 
 When running main.py, user will be prompted with a GUI. This will provide the options to reproduce any of our 5 experiments, or, create your own experiment. When selecting this, the user is presented with two switches: Heuristics and Algorithms, these represent the possible heuristics and algorithms to be run. If you only select Heuristics, the algorithm will initialize 300 times and then present you with a historgram plotting the malus and the frequency. If however, you also turn on Algorithms, you are presented with a number of options to customize the algorithm:
