@@ -3,6 +3,8 @@
 import random
 
 class Roster():
+    """This class creates a roster of courses, rooms and students with a schedule of courses and room assignments for each day and timeslot."""
+
     def __init__(self, rooms_list, student_list, course_list, capacity=False):
         self.schedule = {}
         self.rooms_list = rooms_list
@@ -10,16 +12,23 @@ class Roster():
         self.course_list = course_list
         self.course_capacity_malus_sorted = []
 
+        # this is a greedy function with as default set to False
         self.CAPACITY = capacity
 
     def init_student_timeslots(self, student_list):
+        """This method takes in a list of students and initializes student timeslots for all students in the roster."""
+
+        # loop over each student and initialize the timeslots
         for student in student_list:
             student.student_timeslots(self)
 
     def __merge(self, dict1, dict2):
+        """This method takes in two dictionaries and returns the merged dictionary."""
         return{**dict1, **dict2}
 
     def __init_malus(self):
+        """This method initialized the malus counters for all the different causes."""
+        
         self.malus_count = 0
         self.malus_cause = {}
         self.malus_cause['Night'] = 0
