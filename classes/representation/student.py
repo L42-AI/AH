@@ -160,6 +160,7 @@ class Student():
             self.__pract_tut_timeslot(course, current_course, 'practical')
 
     def __days_in_schedule(self, Roster):
+        """ This method finds out how often a student has seminars in a day and appends it into the list for that day """
 
         # Create a days dictionary
         days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
@@ -168,11 +169,12 @@ class Student():
         for course in Roster.schedule:
 
             # For each class:
-            for classes in Roster.schedule[course]:
+            for seminars in Roster.schedule[course]:
 
                 # Set the class info
-                class_info = Roster.schedule[course][classes]
+                class_info = Roster.schedule[course][seminars]
 
+                # if the student follows that seminar
                 if self.id in class_info['students']:
 
                     # Add the timeslots into the days dictionary
