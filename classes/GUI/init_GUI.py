@@ -122,10 +122,10 @@ class App(customtkinter.CTk):
             self.label_initialization = customtkinter.CTkLabel(master=self.create_own_exp_frame2, text="Choose settings:", font=customtkinter.CTkFont(size=15, weight='bold'))
             self.label_initialization.grid(row=0, column=1, padx=20, pady=10, sticky="ns")
 
-            self.greedy_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Initialise:', font=customtkinter.CTkFont(size=15), command=self.greedy_switch_click)
+            self.greedy_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Heuristics:', font=customtkinter.CTkFont(size=15), command=self.greedy_switch_click)
             self.greedy_switch.grid(row=1, column=0, pady=10, padx=20, sticky="n")
 
-            self.hill_climbing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Optimize:', font=customtkinter.CTkFont(size=15), command=self.hillclimber_switch_click)
+            self.hill_climbing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Algorithms:', font=customtkinter.CTkFont(size=15), command=self.hillclimber_switch_click)
             self.hill_climbing_switch.grid(row=1, column=0, columnspan=4, pady=10, padx=20, sticky="n")
         else:
 
@@ -270,7 +270,7 @@ class App(customtkinter.CTk):
             self.genetic_switch_solo = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic', font=customtkinter.CTkFont(size=15), command=self.genni_single)
             self.genetic_switch_solo.grid(row=5, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
 
-            self.genetic_switch_pool = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic pooling', font=customtkinter.CTkFont(size=15), command=self.genni_multi)
+            self.genetic_switch_pool = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic multiple cores', font=customtkinter.CTkFont(size=15), command=self.genni_multi)
             self.genetic_switch_pool.grid(row=4, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
 
             self.iterations_dependend_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='iterations dependend', font=customtkinter.CTkFont(size=15), command=self.iterations_dependend)
