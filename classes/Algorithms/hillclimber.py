@@ -1,3 +1,7 @@
+"""
+This file contains the class hillclimber and all the classes that inherit this class
+"""
+
 import classes.algorithms.mutate as MutateClass
 import classes.representation.malus_calc as MalusCalculatorClass
 from data.assign import student_list, course_list

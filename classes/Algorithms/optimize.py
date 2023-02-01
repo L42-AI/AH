@@ -463,6 +463,9 @@ class Optimize():
 
                     # Set new malus
                     lowest_malus = populations[pop][1]['Total']
+                    
+                    # Visualize malus
+                    print(populations[pop][1])
 
                     # Save the schedule
                     self.save_schedule(populations[pop][0])

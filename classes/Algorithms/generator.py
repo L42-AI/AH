@@ -26,7 +26,7 @@ class Generator:
         self.MC = MalusCalculatorClass.MC()
 
         # Save initialization
-        self.malus, self.Roster = self.initialise()
+        self.malus, self.Roster = self.initialize()
 
         # if in the GUI visualize is set to true show the graph of the baseline
         if visualize:
@@ -85,8 +85,10 @@ class Generator:
         # reset all availability of rooms
         Roster.reset_room_availability(room_list)
 
-    def initialise(self):
-        """ This method initializes the roster """
+    def initialize(self):
+        """
+        This method initializes the roster
+        """
 
         # Create a roster
         Roster = RosterClass.Roster(capacity=self.CAPACITY)
@@ -100,26 +102,32 @@ class Generator:
         return malus, Roster
 
     def __run_random(self):
-        """ This method runs the initialise for 500 iterations and appends the malus points to the list cost """
+        """
+        This method runs the initialize for 500 iterations and appends the malus points to the list cost
+        """
 
         # make the lists
         self.costs = []
         self.iterations = []
 
-        # 
+        # Run the initialize function 500 times
         for i in tqdm(range(500)):
 
-            self.costs.append(self.initialise()[0]['Total'])
+            self.costs.append(self.initialize()[0]['Total'])
 
             self.iterations.append(i)
 
     def plot_startup(self):
-        """ This method plots 500 random startups to get an idea of what a random score would be """
+        """
+        This method plots 500 random startups to get an idea of what a random score would be
+        """
 
+        # Run the random function
         self.__run_random()
 
+        # Set the file name based on the heuristic that are enabled
         if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY:
-            fig_name = f'Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}.png'
+            fig_name = f'Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}_Busy_Students:{self.DIFFICULT_STUDENTS}.png'
         else:
             fig_name = "Baseline_random.png"
 
@@ -132,6 +140,7 @@ class Generator:
         # Directory "visualize"
         directory_plots = os.path.join(parent_dir, 'AH/visualize')
 
+        # Set settings for plot
         plt.figure(figsize=(10,4))
         plt.style.use('seaborn-whitegrid')
 
@@ -142,6 +151,7 @@ class Generator:
         plt.ylabel('Iterations')
         plt.xlabel('Malus')
         plt.savefig(os.path.join(directory_plots, fig_name))
+        plt.show()
 
     def optimize(self, experiment, mode, core_assignment, hill_climber_iters, algorithm_duration, experiment_iter=0):
 
