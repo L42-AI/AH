@@ -210,8 +210,8 @@ class App(customtkinter.CTk):
             self.genetic_switch_pool = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Genetic pooling', font=customtkinter.CTkFont(size=15), command=self.genni_multi)
             self.genetic_switch_pool.grid(row=4, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
 
-            self.iterations_dependend_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='iterations dependend', font=customtkinter.CTkFont(size=15), command=self.iterations_dependend)
-            self.iterations_dependend_switch.grid(row=7, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
+            self.iterations_dependent_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='iterations dependent', font=customtkinter.CTkFont(size=15), command=self.iterations_dependent)
+            self.iterations_dependent_switch.grid(row=7, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
 
             self.iterations_fixed_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Iterations fixed', font=customtkinter.CTkFont(size=15), command=self.iterations_fixed)
             self.iterations_fixed_switch.grid(row=9, column=0, columnspan=4, padx=20, pady=10, sticky="nsew")
@@ -247,7 +247,7 @@ class App(customtkinter.CTk):
                 self.iterations2.destroy()
             except:
                 pass
-            self.iterations_dependend_switch.destroy()
+            self.iterations_dependent_switch.destroy()
             self.iterations_fixed_switch.destroy()
             self.duration_box.destroy()
             self.hillclimber_assignment.destroy()
@@ -335,13 +335,13 @@ class App(customtkinter.CTk):
     def iterations_fixed(self):
         state = self.iterations_fixed_switch.get()
         if state:
-            if not self.iterations_dependend_switch.get():
+            if not self.iterations_dependent_switch.get():
                 self.height += 75
 
             self.geometry(f"{self.width}x{self.height}")
             self.iterations1 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, font=customtkinter.CTkFont(size=15))
             self.iterations1.grid(row=10, column=0, padx=20, pady=10, sticky="nsew")
-            self.iterations_dependend_switch.deselect()
+            self.iterations_dependent_switch.deselect()
             try:
                 self.iterations2.destroy()
             except:
@@ -351,8 +351,8 @@ class App(customtkinter.CTk):
             self.geometry(f"{self.width}x{self.height}")
             self.iterations1.destroy()
 
-    def iterations_dependend(self):
-        state = self.iterations_dependend_switch.get()
+    def iterations_dependent(self):
+        state = self.iterations_dependent_switch.get()
         if state:
             if not self.iterations_fixed_switch.get():
                 self.height += 75
@@ -534,7 +534,7 @@ class App(customtkinter.CTk):
                     iterations = int(self.iterations1.get())
                 except:
                     return
-            elif self.iterations_dependend_switch.get():
+            elif self.iterations_dependent_switch.get():
                 try:
                     iterations = float(self.iterations2.get())
                 except:
