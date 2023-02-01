@@ -68,7 +68,7 @@ class HillClimber:
         this method is the 'core' of every optimize algorithm. It performs a random mutation by calling
         a case specific mutate method and compares the schedule that mutation created to the current one
         the amount of iterations it makes before returning to the optimize script to compare results with
-        other Hillclimbers is dependend on hill_climber_iters
+        other Hillclimbers is dependent on hill_climber_iters
         '''
 
         # Set boolean
