@@ -27,10 +27,23 @@ When a new schedule is created by the Hillclimbers, it is normally only accepted
 
 Besides a Hillclimber and a Simulated Annealing algorithm, we run a Genetic Algorithm. Since we have 4 types of Hillclimbers, we start of by sending 4 identical schedules to each Hillclimber 2 times. This results in 32 new schedules. These schedules get paired with another schedule and the schedule with the *highest* malus score is thrown out. These 'rounds' continue untill there are 4 schedules left. These 4 schedules get placed into each Hillclimber twice again. This process is called Genetic because it 'selects' from its population 4 schedules that show good improvement but do not have to be the best 4, allowing the algorithm to explore other options too. 
 
-Reproducibility of Results
+## Reproducibility of Results
 
-We have ran
+With this approach and the outline of the heuristics and algorithms used for this project we have devised 5 experiments
 
+For our first experiment, we ran multiprocessing 30 times, for this we attributed the four processing cores to the two SeminarSwap hillclimbers.
+
+After running this we chose to run a similar experiment but this time with the cores attributed to the two StudentSwap hillclimbers.
+
+By comparing these results we concluded that a better result could be achieved with a combination of the two. Hence, our third experiment employs all four hillclimbers.
+
+After seeing better results with this arrangement we discovered that the iteration count attributed to the hillclimbers also has effect on the schedulers effectivity. Therefore, our fourth experiment runs the multiprocessor with all four hillclimbers, but with different steps of iterations. Here we chose for a float that functions as a multiplication with the current malus in the algorithm to calculate the iterations for the hill climbers. We ran this with a multiplier of 0.1 and afterwards the values 0.5 up until 5 with steps of 0.5.
+
+After seeing improvements in the effectiveness of our application, we started to explore other possible algorithms to improve our application.
+
+For our fifth and final experiment we ran a two staged process of singular hillclimbing, combined with an genetic multiprocessing algorithm.
+
+When using the application, the user can select any of these experiments to reproduce the results in the interest of reliability and replicability.
 Reproducibility of Lecture Graphs
 
 In order to reproduce the different plots go to the Experiment folder and run:
