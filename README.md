@@ -56,8 +56,11 @@ In order to reproduce the different plots go to the Experiment folder and run:
 - plot_experiments.py and set activation to 2 for the Hillclimber testing Hillclimber 2
 - plot_experiments.py and set activation to 3 for the Hillclimber different stages with a multiplier of 4 and greedy
 
-
-
+this will result in the following plots:
+![Plot Duration and Malus different Multipliers](https://user-images.githubusercontent.com/70103333/216183743-fbe1525b-3d97-48b0-872a-405342545189.png)
+![Plot Hillcimber 300 Generations](https://user-images.githubusercontent.com/70103333/216187894-33347cb9-b607-43b0-a642-bb69c17d8764.png)
+![Plot Hillclimber 30 times](https://user-images.githubusercontent.com/70103333/216187954-272c9ae7-a122-4ab5-b178-fdfa1030043d.png)
+the plots where each hillclimber is tested seperately will be added later as they are still loading
 ## Usage
 
 To run our application, you first install the required libraries:
@@ -78,7 +81,7 @@ When running main.py, user will be prompted with a GUI. This will provide the op
 - Gentic Pooling
   This also runs one hillclimber up until a malus of 125**, but afterwards runs a genetic algorithm using four cores with multiprocessing.
  - Iterations dependent
-  Set the number of mutations a hillclimber is allowed to perform before returning the new schedule to compare with the other schedules to be dependent on the malus     score. The mutations allowed on each iteration of the algorithm will be given by: Total malus * iterations dependent. In our experience, 4 resulted in the best         results as can be seen in the graph below
+  Set the number of mutations a hillclimber is allowed to perform before returning the new schedule to compare with the other schedules to be dependent on the malus     score. The mutations allowed on each iteration of the algorithm will be given by: Total malus * iterations dependent. In our experience, 4 resulted in the best         results as can be seen in the graph above
  - Iterations fixed
   Give the hillclimbers a fixed number of allowed mutations before returning its new schedule
  - Duration
@@ -88,8 +91,7 @@ When running main.py, user will be prompted with a GUI. This will provide the op
  - Generate
   This will start the experiment. Will not start when the user selects "Algorithms" but does not actually select one or does not provide a duration or iteration number
   
-  Graph with different multipliers:
-  ![Plot Duration and Malus different Multipliers](https://user-images.githubusercontent.com/70103333/216183743-fbe1525b-3d97-48b0-872a-405342545189.png)
+
 
  
  
