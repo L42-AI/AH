@@ -109,6 +109,7 @@ class Student():
                 self.__pick_group(course, group_dict, class_num, max_std, group)
 
     def __lecture_timeslot(self, course, current_course):
+        """ This method adds the student Id's to the lectures """
 
         if course.lectures > 0:
             # For each lecture in the course:
@@ -121,7 +122,7 @@ class Student():
                 current_course[current_lecture]['students'].add(self.id)
 
     def __pract_tut_timeslot(self, course, current_course, seminar_type):
-        """ This method adds the """
+        """ This method adds the student Id's to practicals or tutorials """
 
         #
         if seminar_type == "tutorial" and course.tutorials > 0:
