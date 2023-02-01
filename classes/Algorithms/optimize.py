@@ -42,6 +42,7 @@ class Optimize():
         self.hillclimber_counter = 1
         self.fail_counter = 0
         self.duration = 0
+        self.data = []
 
         # Print intitial
         print(f'\nInitialization')
@@ -580,7 +581,7 @@ class Optimize():
     def __replace_roster(self, difference):
 
         # print output
-        if difference >= 0:
+        if difference > 0:
             print(f'\n========================= Generation: {self.multiprocessor_counter} =========================\n')
             print(f'Malus improvement: {difference}')
             print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')

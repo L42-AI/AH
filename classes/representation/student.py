@@ -120,56 +120,22 @@ class Student():
                 # Add course and class to timeslot info
                 current_course[current_lecture]['students'].add(self.id)
 
-    def __tutorial_timeslot(self, course, current_course):
+    def __pract_tut_timeslot(self, course, current_course, seminar_type):
+        """ This method adds the """
 
-        if course.tutorials > 0:
-            # For each tutorial in the course:
-            for index in range(course.tutorials):
+        #
+        if seminar_type == "tutorial" and course.tutorials > 0:
+            group = self.tut_group[course.name]
 
-                # Set the current class
-                # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
-                current_tutorial = f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"
+        elif seminar_type == "practical" and course.practicals > 0:
+            group = self.pract_group[course.name]
 
-                # Add course and class to timeslot info
-                current_course[current_tutorial]['students'].add(self.id)
+        else:
+            return "Error No Seminar of this type!"
 
-    def __practicum_timeslot(self, course, current_course):
-
-        if course.practicals > 0:       ## This if is unnecassary, because if it is zero it will not do the for loop even once
-            # For each practicum in the course:
-            for index in range(course.practicals):
-
-                # Set the current class
-                # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
-                current_practicum = f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"
-
-                # Add course and class to timeslot info
-                current_course[current_practicum]['students'].add(self.id)
-
-    # def __seminar_timeslot(self, course, current_course, session_type):
-
-    #     # check if seminar, tutorial or lecture
-    #     if session_type == 'lecture':
-    #         num_seminars = course.lectures
-    #         seminar_type = 'lecture'
-
-    #     elif session_type == 'tutorial':
-    #         num_seminars = course.tutorials
-    #         seminar_type = 'tutorial'
-    #         index_offset = self.tut_group[course.name]
-
-    #     elif session_type == 'practical':
-    #         num_seminars = course.practicals
-    #         seminar_type = 'practical'
-    #         index_offset = self.pract_group[course.name]
-
-    #     else:
-    #         return 'Error Not a correct session type!'
-
-    #     # for each seminar in the course
-    #     for index in range(num_seminars):
-    #         current_seminar = f'{seminar_type} {index + index_offset}'
-    #         current_course[current_seminar]['students'].add(self.id)
+        for index in range(eval(f"course.{seminar_type}s")):
+            current_class = f"{seminar_type} {group + group * index}"
+            current_course[current_class]['students'].add(self.id)
 
     def student_timeslots(self, schedule):
         """
@@ -187,11 +153,10 @@ class Student():
             self.__lecture_timeslot(course, current_course)
 
             # Find and save the tutorial timeslot
-            self.__tutorial_timeslot(course, current_course)
+            self.__pract_tut_timeslot(course, current_course, 'tutorial')
 
             # Find and save the practicum timeslot
-            self.__practicum_timeslot(course, current_course)
-
+            self.__pract_tut_timeslot(course, current_course, 'practical')
 
     def __days_in_schedule(self, Roster):
 
