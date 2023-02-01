@@ -77,15 +77,15 @@ When running main.py, user will be prompted with a GUI. This will provide the op
   This runs one hill climber until a malus of 125**, and afterwards generates a gentic alogorithm where 32 schedules compete to 'survive'.
 - Gentic Pooling
   This also runs one hillclimber up until a malus of 125**, but afterwards runs a genetic algorithm using four cores with multiprocessing.
- -Iterations dependent
+ - Iterations dependent
   Set the number of mutations a hillclimber is allowed to perform before returning the new schedule to compare with the other schedules to be dependent on the malus     score. The mutations allowed on each iteration of the algorithm will be given by: Total malus * iterations dependent. In our experience, 4 resulted in the best         results as can be seen in the graph below
- -Iterations fixed
+ - Iterations fixed
   Give the hillclimbers a fixed number of allowed mutations before returning its new schedule
- -Duration
+ - Duration
   The duration of the optimalization process in minutes. A value can be selected or typed.
- -Choose Hillclimber
+ - Choose Hillclimber
   Prompts a menu where the hillclimbers can be assigned. 0,1,2 and 3 stand for our hillclimbers in the same order as they were explained. Default is set to 1,2,3
- -Generate
+ - Generate
   This will start the experiment. Will not start when the user selects "Algorithms" but does not actually select one or does not provide a duration or iteration number
   
   Graph with different multipliers:
