@@ -79,6 +79,10 @@ class App(customtkinter.CTk):
 
     """ Toggle switches """
     def toggle_buttons(self, i):
+        '''
+        Method goes over all the experiments buttons and deselects every button that does not correspond to the
+        input integer connected to a specific button. Adjusts the GUI frame if necessary with the try-except statement
+        '''
         for _, button in enumerate(self.buttons):
             if _ != i:
                 button.deselect()
@@ -92,11 +96,18 @@ class App(customtkinter.CTk):
                 self.geometry(f"{self.width}x{self.height}")
 
     def create_own_experiment(self):
+        '''
+        Method expands the GUI when users want to create their own experiment. Also collapses the GUI by calling the toggle_button
+        '''
 
+        # check if activated
         state_own = self.create_own_exp_switch.get()
         if state_own:
+
+            # disable other experiment buttons
             self.toggle_buttons(5)
 
+            # expand GUI
             self.width += 500
             self.geometry(f"{self.width}x{self.height}")
 
@@ -110,94 +121,83 @@ class App(customtkinter.CTk):
             self.create_own_exp_frame2.grid_columnconfigure(0, weight=1)
             self.create_own_exp_frame2.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11), weight=1)
 
+            # create labels 
             self.label_initialization = customtkinter.CTkLabel(master=self.create_own_exp_frame1, text="Choose settings:", font=customtkinter.CTkFont(size=15, weight='bold'))
             self.label_initialization.grid(row=0, column=0, padx=20, pady=10, sticky="ns")
             self.label_initialization = customtkinter.CTkLabel(master=self.create_own_exp_frame2, text="Choose settings:", font=customtkinter.CTkFont(size=15, weight='bold'))
             self.label_initialization.grid(row=0, column=1, padx=20, pady=10, sticky="ns")
 
-            self.greedy_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Heuristics:', font=customtkinter.CTkFont(size=15), command=self.greedy_switch_click)
-            self.greedy_switch.grid(row=1, column=0, pady=10, padx=20, sticky="n")
+            # initiate the heuristic menu if clicked
+            self.heuristick_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Heuristics:', font=customtkinter.CTkFont(size=15), command=self.heuristick_switch_click)
+            self.heuristick_switch.grid(row=1, column=0, pady=10, padx=20, sticky="n")
 
-            self.hill_climbing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Algorithms:', font=customtkinter.CTkFont(size=15), command=self.hillclimber_switch_click)
-            self.hill_climbing_switch.grid(row=1, column=0, columnspan=4, pady=10, padx=20, sticky="n")
+            # initiate the algorithm menu if clicked
+            self.algorithm_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Algorithms:', font=customtkinter.CTkFont(size=15), command=self.algorithm_switch_click)
+            self.algorithm_switch.grid(row=1, column=0, columnspan=4, pady=10, padx=20, sticky="n")
         else:
 
-            self.width -= 500
-            self.geometry(f"{self.width}x{self.height}")
-
-            self.hill_climbing_switch.destroy()
-            try:
-                self.annealing_switch.destroy()
-            except:
-                pass
-            self.greedy_switch.deselect()
-            try:
-                self.greedy_switch_click()
-            except:
-                pass
-            self.label_initialization.destroy()
-            self.greedy_switch.destroy()
-
-            self.create_own_exp_frame1.destroy()
-            self.create_own_exp_frame2.destroy()
+            self.toggle_buttons(6)
 
 
-    def greedy_switch_click(self) -> None:
+    def heuristick_switch_click(self) -> None:
+        '''
+        Drops down a menu in the GUI where the user can select heuristics to influence the initialisation
+        of the schedule
+        '''
 
-        state_greedy = self.greedy_switch.get()
-
+        # check its state
+        state_greedy = self.heuristick_switch.get()
         if state_greedy == 1:
+
+            # resize and create switches
             self.width += 20
 
             self.geometry(f"{self.width}x{self.height}")
+            self.heursistic_buttons = []
             self.capacity_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Capacity', font=customtkinter.CTkFont(size=15))
             self.capacity_switch.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
-
-            self.popular_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Popular first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_P)
+            self.popular_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Popular first', font=customtkinter.CTkFont(size=15), command=lambda: self.turn_of_heuristics(1))
             self.popular_switch.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
-
-            self.popular_own_day_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Largest first', font=customtkinter.CTkFont(size=15), command=self.turn_off_difficult_POD)
+            self.popular_own_day_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Largest first', font=customtkinter.CTkFont(size=15), command=lambda: self.turn_of_heuristics(2))
             self.popular_own_day_switch.grid(row=4, column=0, padx=20, pady=10, sticky="nsew")
-
-            self.difficult_students_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Busy Students', font=customtkinter.CTkFont(size=15), command=self.turn_off_popular)
+            self.difficult_students_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Busy Students', font=customtkinter.CTkFont(size=15), command=lambda: self.turn_of_heuristics(3))
             self.difficult_students_switch.grid(row=5, column=0, padx=20, pady=10, sticky="nsew")
+            self.heursistic_buttons.append(self.popular_switch)
+            self.heursistic_buttons.append(self.popular_own_day_switch)
+            self.heursistic_buttons.append(self.difficult_students_switch)
 
         else:
+            # destroy its content when turned of and resize
             self.width -= 20
-
             self.geometry(f"{self.width}x{self.height}")
-
             self.capacity_switch.destroy()
             self.popular_switch.destroy()
             self.popular_own_day_switch.destroy()
             self.difficult_students_switch.destroy()
 
-    def turn_off_difficult_POD(self) -> None:
-        state_popular_own_day = self.popular_own_day_switch.get()
-        if state_popular_own_day == 1:
-            self.difficult_students_switch.deselect()
+    def turn_of_heuristics(self, i):
+        if i != 3:
+            self.heursistic_buttons[2].deselect()
+        else:
+            for ii in range(2):
+                self.heursistic_buttons[ii].deselect()
 
-    def turn_off_difficult_P(self) -> None:
-        state_popular = self.popular_switch.get()
-        if state_popular == 1:
-            self.difficult_students_switch.deselect()
+    def algorithm_switch_click(self) -> None:
+        '''
+        Method drops down a menu to select what type of algorithm user wants to use. Consult README on git 
+        for more details about what each option does
+        '''
 
-    def turn_off_popular(self) -> None:
-        state_difficult = self.difficult_students_switch.get()
-        if state_difficult == 1:
-            self.popular_own_day_switch.deselect()
-            self.popular_switch.deselect()
-
-
-    def hillclimber_switch_click(self) -> None:
-
-        state_hc = self.hill_climbing_switch.get()
+        # check the state
+        state_hc = self.algorithm_switch.get()
 
         if state_hc == 1:
+            # expand the GUI
             self.width += 200
             self.height += 100
-
             self.geometry(f"{self.width}x{self.height}")
+
+            # create the buttons for algorithm selection options
             self.hillclimber_multi = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Hilclimber multiple cores', font=customtkinter.CTkFont(size=15), command=self.hilli_multi)
             self.hillclimber_multi.grid(row=2, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
 
@@ -228,13 +228,14 @@ class App(customtkinter.CTk):
 
 
         else:
+            # collaps GUI
             self.width -= 200
             self.height -= 100
 
             self.geometry(f"{self.width}x{self.height}")
             self.genetic_switch_solo.destroy()
             self.genetic_switch_pool.destroy()
-            try:
+            try: # cannot destroy items that are not present, so unfortunately try-except are needed
                 self.annealing_switch.destroy()
             except:
                 pass
@@ -253,22 +254,10 @@ class App(customtkinter.CTk):
             self.hillclimber_multi.destroy()
             self.hillclimber_single.destroy()
 
-
-    def turn_of_pool(self):
-
-        state1 = self.annealing_switch.get()
-        state2 = self.genetic_switch_solo.get()
-        if state1 or state2:
-            self.genetic_switch_pool.deselect()
-
-    def turn_of_an_solo(self):
-        state1 = self.genetic_switch_pool.get()
-        if state1:
-            self.annealing_switch.deselect()
-            self.genetic_switch_solo.deselect()
-
-
     def hilli_multi(self):
+        '''
+        method that deselects options that are not compatible with hillclimber
+        '''
         if self.hillclimber_multi.get():
             self.hillclimber_single.deselect()
             self.genetic_switch_pool.deselect()
@@ -279,6 +268,9 @@ class App(customtkinter.CTk):
                 pass
 
     def hilli_single(self):
+        '''
+        method that deselects options that are not compatible with hillclimber
+        '''
         if self.hillclimber_single.get():
             self.hillclimber_multi.deselect()
             self.genetic_switch_pool.deselect()
@@ -289,25 +281,34 @@ class App(customtkinter.CTk):
                 pass
 
     def genni_single(self):
+        '''
+        method that deselects options that are not compatible with genetic algorithm
+        '''
         if self.genetic_switch_solo.get():
-            self.height += 50
 
+            # update GUI size
+            self.height += 50
             self.geometry(f"{self.width}x{self.height}")
+
+            # create an annealing switch
             self.annealing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Sim. Annealing', font=customtkinter.CTkFont(size=15), command=self.simmi_an)
             self.annealing_switch.grid(row=6, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
             self.genetic_switch_pool.deselect()
             self.hillclimber_single.deselect()
             self.hillclimber_multi.deselect()
         else:
+            # collaps GUI
             self.height -= 50
-
             self.geometry(f"{self.width}x{self.height}")
-            try:
+            try: # if there is an annealing switch, destroy
                 self.annealing_switch.destroy()
             except:
                 pass
 
     def genni_multi(self):
+        '''
+        method that deselects options that are not compatible with genetic multiple cores algorithm
+        '''
         if self.genetic_switch_pool.get():
             self.genetic_switch_solo.deselect()
             self.hillclimber_single.deselect()
@@ -318,6 +319,9 @@ class App(customtkinter.CTk):
             pass
 
     def simmi_an(self):
+        '''
+        method that updates the simulated annealing
+        '''
         if not self.genetic_switch_solo.get():
             self.annealing_switch.deselect()
         elif self.annealing_switch.get():
@@ -375,6 +379,9 @@ class App(customtkinter.CTk):
     """ Run functions """
 
     def generate(self) -> None:
+        '''
+        This method is the activation method. It checks the state of the settings and performs an experiment accordingly
+        '''
 
         exp1 = self.experiment1_switch.get()
         exp2 = self.experiment2_switch.get()
@@ -383,24 +390,46 @@ class App(customtkinter.CTk):
         exp5 = self.experiment5_switch.get()
         own_exp = self.create_own_exp_switch.get()
 
+        # set the experiment parameters accordingly
         if exp1:
-            self.run_exp_1()
+            mode = 'multiproccesing'
+            hillclimber_assignment = [0,0,2,2]
+            hill_climber_iters = 50
+            experiment = 1
+            self.run_exp(mode, hillclimber_assignment)
         elif exp2:
-            self.run_exp_2()
+            mode = 'multiproccesing'
+            hillclimber_assignment = [0,0,0,0]
+            hill_climber_iters = 50
+            experiment = 2
         elif exp3:
-            self.run_exp_3()
+            mode = 'multiproccesing'
+            hillclimber_assignment = [2,2,2,2]
+            hill_climber_iters = 50
+            experiment = 13
         elif exp4:
-            self.run_exp_4()
+            mode = 'multiproccesing'
+            hillclimber_assignment = [2,2,2,2]
+            hill_climber_iters = 0.1
+            experiment = 4
         elif exp5:
-            self.run_exp_5()
-        elif own_exp:
+            mode = 'genetic pool'
+            hillclimber_assignment = [0,0,2,2]
+            hill_climber_iters = 400
+            experiment = 5
+        
+        # run a standart experiment
+        if not own_exp:
+            self.run_exp(mode, hillclimber_assignment, hill_climber_iters, experiment)
+
+        if own_exp:
 
             # Extract state_data from GUI
             settings = self.__set_data()
 
             self.__run_algorithm(settings)
 
-    def run_exp_1(self) -> None:
+    def run_exp(self, _mode, _hillclimber_assignment, _hillclimber_iters, _experiment) -> None:
 
         # Set setting for initialization plot or optimalization
 
@@ -416,15 +445,15 @@ class App(customtkinter.CTk):
 
         visualize = False
 
-        experiment = 1
+        experiment = _experiment
 
         duration = 15 * 60
 
-        mode = 'multiproccesing'
+        mode = _mode
 
-        hillclimber_assignment = [0,0,2,2]
+        hillclimber_assignment = _hillclimber_assignment
 
-        hill_climber_iters = 50
+        hill_climber_iters = _hillclimber_iters
 
         # Destroy GUI window
         self.destroy()
@@ -437,157 +466,6 @@ class App(customtkinter.CTk):
             G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
 
         # Plot Funtion
-
-        self.finish(student_list)
-
-    def run_exp_2(self) -> None:
-        # Set setting for initialization plot or optimalization
-
-        capacity = False
-
-        popular = False
-
-        popular_own_day = False
-
-        difficult_students = False
-
-        annealing = False
-
-        visualize = False
-
-        experiment = 2
-
-        duration = 15 * 60
-
-        mode = 'multiproccesing'
-
-        hillclimber_assignment = [0,0,1,1]
-
-        hill_climber_iters = 50
-
-        self.destroy()
-
-        self.__reset_data_file(experiment)
-
-        for i in range(30):
-            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
-        # Plot Funtion
-
-        self.finish(student_list)
-
-    def run_exp_3(self) -> None:
-        # Set setting for initialization plot or optimalization
-
-        capacity = False
-
-        popular = False
-
-        popular_own_day = False
-
-        difficult_students = False
-
-        annealing = False
-
-        visualize = False
-
-        experiment = 3
-
-        duration = 15 * 60
-
-        mode = 'multiproccesing'
-
-        hillclimber_assignment = [2,2,3,3]
-
-        hill_climber_iters = 50
-
-        self.destroy()
-
-        self.__reset_data_file(experiment)
-
-        for i in range(30):
-            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
-        # Plot Funtion
-
-        self.finish(student_list)
-
-    def run_exp_4(self) -> None:
-        capacity = False
-
-        popular = False
-
-        popular_own_day = False
-
-        difficult_students = False
-
-        annealing = False
-
-        visualize = False
-
-        experiment = 4
-
-        duration = 15 * 60
-
-        mode = 'multiproccesing'
-
-        hillclimber_assignment = [0,1,2,3]
-
-        hill_climber_iters = 0.1
-
-        self.__reset_data_file(experiment)
-
-        self.destroy()
-
-        G = GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                    difficult_students, annealing, visualize)
-        G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration)
-        # Plot Funtion
-
-        self.finish(student_list)
-
-        for i, hill_climber_iters in enumerate[0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]:
-            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
-        # Plot Funtion
-
-        self.finish(student_list)
-
-    def run_exp_5(self) -> None:
-        capacity = False
-
-        popular = False
-
-        popular_own_day = False
-
-        difficult_students = False
-
-        annealing = False
-
-        visualize = False
-
-        duration = 45 * 60
-
-        experiment = 4
-
-        mode = 'genetic pool'
-
-        hillclimber_assignment = [0,1,2,3]
-
-        hill_climber_iters = 400
-
-        self.__reset_data_file(experiment)
-
-        self.destroy()
-
-        for i in range(30):
-            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
-                                     difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
-        
 
         self.finish(student_list)
 
@@ -614,10 +492,10 @@ class App(customtkinter.CTk):
     def __set_data(self) -> tuple:
 
         # Collect state of hill climbing switch
-        hill_climbing = self.hill_climbing_switch.get()
+        algorithm = self.algorithm_switch.get()
 
         # Set setting for initialization plot or optimalization
-        if hill_climbing:
+        if algorithm:
             visualize = False
         else:
             visualize = True
