@@ -1,17 +1,12 @@
 import random
+from data.assign import student_list, course_list
 
 class Mutate():
-    def __init__(self, course_list, student_list, schedule):
+    def __init__(self, schedule):
         self.schedule = schedule
         self.course_list = course_list
         self.student_list = student_list
-        self.double = {'l': {'v': 0, 'student': []}, 't': {'v': 0, 'student': []}, 'p': {'v': 0, 'student': []}}
 
-    """ Method 1 """
-
-    def swap_2_students(self):
-
-        self.__students_to_shuffle()
 
     """ Method 2 """
 
@@ -227,68 +222,6 @@ class Mutate():
         worst_day = self.return_none(scores_per_day, worst_day)
 
         return worst_day
-    
-    def __worst_day_test_for_double(self, id):
-        '''finds worst day in the schedule of a student but keeps track
-           of double hours and what caused them, method will mostly be used 
-           in testing'''
-
-        worst_day = None
-        student_days, student_classes = self.__fill_timeslots_student_test_for_double(id)
-
-        scores_per_day = {day:(0, {'value': 0, 'l': 0, 't': 0, 'p':0}) for day in student_days}
-
-        
-        # For each week
-        for day in student_days:
-            day_dict = {'value': 0, 'l': 0, 't': 0, 'p':0}
-            
-            # Sort timeslots in each day
-            only_time = [x[0] for x in student_days[day]]
-            timeslot_list = sorted(only_time, reverse=True)
-
-            # Only compute if list includes more than 1 timeslot
-            if len(timeslot_list) > 1:
-
-                # For each timeslot number: (range is -1 to ensure the use of index + 1)
-                for timeslot_num in range(len(timeslot_list) - 1):
-                    day_dict['value'] += 1
-
-                    if timeslot_list[timeslot_num] == timeslot_list[timeslot_num + 1]:
-
-                        scores_per_day[day] = (scores_per_day[day][0], day_dict)
-                        if student_days[day][timeslot_num][1][0] == 'l':
-                            day_dict['l'] += 1
-                            self.double['l']['v'] += 1
-                            self.double['l']['student'].append(id)
-                            scores_per_day[day] = (scores_per_day[day][0], scores_per_day[day][1]['l'] + 1)
-                        if student_days[day][timeslot_num][1][0] == 't':
-                            day_dict['t'] += 1
-                            self.double['t']['v'] += 1
-                            self.double['t']['student'].append(id)
-                        if student_days[day][timeslot_num][1][0] == 'p':
-                            day_dict['p'] += 1
-                            self.double['p']['v'] += 1
-                            self.double['p']['student'].append(id)
-
-                    # claculate the amount of gaps between lessons
-                    if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
-                        lesson_gaps = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
-
-                        # check if one gap hour
-                        if lesson_gaps == 1:
-                            scores_per_day[day] = (scores_per_day[day][0] + 1, scores_per_day[day][1])
-
-                        elif lesson_gaps == 2:
-                            scores_per_day[day] = (scores_per_day[day][0] + 3, scores_per_day[day][1])
-
-                        elif lesson_gaps > 2:
-                            scores_per_day[day] = (scores_per_day[day][0] + 5, scores_per_day[day][1])
-                    scores_per_day[day] = (scores_per_day[day][0], day_dict)
-        # gets the day with most gap or double hours
-        worst_day = self.get_day_gap_or_double_test_for_double(scores_per_day)
-
-        return worst_day
 
     def __fill_timeslots_student(self, id) -> dict:
         '''fills the timeslot of a student based on the complete schedule 
@@ -308,46 +241,13 @@ class Mutate():
 
         return student_days, student_classes
 
-    def __fill_timeslots_student_test_for_double(self, id):
-        '''fills the timeslot of a student based on the complete schedule
-           days keeps track of the timeslot, classes of the info of that specific class
-           also keeps track of double hours by appending a tuple to student_days instead of just timeslot'''
-        
-        student_days = {'Monday': [], 'Tuesday': [], 'Wednesday': [], 'Thursday': [], 'Friday': []}
-        student_classes = {'Monday': {}, 'Tuesday': {}, 'Wednesday': {}, 'Thursday': {}, 'Friday': {}}
-
-        # go over the schedule and find what timeslots this student has
-        for _course in self.schedule:
-            for _class in self.schedule[_course]:
-                if id in self.schedule[_course][_class]['students']:
-                    timeslot = self.schedule[_course][_class]['timeslot']
-                    day = self.schedule[_course][_class]['day']
-
-                    # append the timeslot to the day that class is being held
-                    student_days[day].append((timeslot, _class))
-                    student_classes[day][_course] = _class
-
-        return student_days, student_classes
-
+   
 
     def get_day_gap_or_double(self, scores_per_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
         
         return max(scores_per_day, key=lambda x: x[0])
 
-    def get_day_gap_or_double_test_for_double(self, scores_per_day):
-        '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
-
-        best_score = 0
-        worst_day = None
-        for key in scores_per_day:
-  
-            score = scores_per_day[key][0]
-            if score >= best_score:
-                best_score = score
-                worst_day = key
-
-        return worst_day
 
     def return_none(self,scores_per_day, worst_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
@@ -363,19 +263,6 @@ class Mutate_double_classes(Mutate):
     def get_day_gap_or_double(self, scores_per_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
         return max(scores_per_day, key=lambda x: x[1])
-
-    def get_day_gap_or_double_test_for_double(self, scores_per_day):
-        '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
-        # print(scores_per_day)
-        best_score = 0
-        for key in scores_per_day:
-            print(f'key: {key}')
-            score = scores_per_day[key][1]['value']
-            if score >= best_score:
-                best_score = score
-                worst_day = key
-
-        return key
 
     def return_none(self,scores_per_day, worst_day):
         '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
