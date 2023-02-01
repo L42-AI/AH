@@ -566,7 +566,7 @@ class Optimize():
 
         elif activation == 3:
 
-            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.hillclimber_itekrrhillclimber_iter_counter)
+            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.hillclimber_iter_counter)
             schedule, malus, iteration, accept_me = HC4.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC4.get_name(), iteration, accept_me
