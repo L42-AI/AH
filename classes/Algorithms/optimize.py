@@ -76,13 +76,16 @@ class Optimize():
                 if activation == 1:
                     schedule, malus, iteration, _ = HC1.climb(hill_climber_iters)
                     name = HC1.get_name()
+
                 elif activation == 2:
                     schedule, malus, iteration, _ = HC2.climb(hill_climber_iters)
                     name = HC2.get_name()
+
                 elif activation == 3:
                     schedule, malus, iteration, _ = HC3.climb(hill_climber_iters)
                     name = HC3.get_name()
-                elif activation == 4:
+
+                else:
                     schedule, malus, iteration, _ = HC4.climb(hill_climber_iters)
                     name = HC4.get_name()
 
@@ -182,6 +185,7 @@ class Optimize():
 
                 # Set malus to self
                 self.malus = output_schedules[self.best_index][1]
+
 
 
             finish_time = time.time()
@@ -291,14 +295,14 @@ class Optimize():
 
             # flag variable to stop running one iteration if a sim annealing worsening happened
             accepted = False
-            for schedule in enumerate(schedule_list):
+            for schedule in schedule_list:
                 for _ in range(2):
                     for i in range(4):
-                        schedule, malus, _, _, accept_me = self.run_HC((i, schedule, T, 0, 1))
+                        schedule, malus, _, _, accept_me = self.run_HC((i, schedule, T, 1))
                         if accept_me:
 
                             # if this is the new schedule, make a data entry for every one of the 4 schedules
-                            for i in range(4):
+                            for j in range(4):
                                 self.save_data_genetic(i, time.time(), malus['Total'])
 
                             schedule_list = [schedule, schedule, schedule, schedule]
@@ -340,6 +344,7 @@ class Optimize():
                     # Set new schedule and malus
                     best_score = populations[pop][1]['Total']
                     best_schedule = populations[pop][0]
+                    print(best_score)
 
                     # Save the schedule
                     self.save_schedule(best_schedule)
