@@ -133,9 +133,6 @@ class Optimize():
         self.fail_counter = 0
         self.duration = 0
 
-        # set a 'lowest' malus
-        lowest_malus = 9999
-
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
@@ -167,13 +164,18 @@ class Optimize():
             self.best_index = [i[1]['Total'] for i in output_schedules].index(min_malus)
 
             # Compute difference between new roster and current roster
-            difference = self.malus['Total'] - output_schedules[self.best_index][1]['Total']
-
+            difference = self.malus['Total'] - min_malus
 
             if output_schedules[self.best_index][1]['Total'] < self.malus['Total']:
-                self.malus = output_schedules[self.best_index][1]
-                self.schedule = output_schedules[self.best_index][0]
+                # Save the schedule
                 self.save_schedule(output_schedules[self.best_index][0])
+
+                # Set schedule to self
+                self.schedule = output_schedules[self.best_index][0]
+
+                # Set malus to self
+                self.malus = output_schedules[self.best_index][1]
+
 
             finish_time = time.time()
 
