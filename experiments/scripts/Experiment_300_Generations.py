@@ -29,6 +29,6 @@ if __name__ == '__main__':
 
     plt.title('Run Hillclimber for 300 Generations')
 
-    plt.savefig('Plot Hillcimber 300 Generations.png')
+    plt.savefig('plots/Plot Hillcimber 300 Generations.png')
 
     plt.show()
