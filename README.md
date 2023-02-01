@@ -90,7 +90,7 @@ When running main.py, user will be prompted with a GUI. This will provide the op
  - Duration
   The duration of the optimalization process in minutes. A value can be selected or typed.
  - Choose Hillclimber
-  Prompts a menu where the hillclimbers can be assigned. 0,1,2 and 3 stand for our hillclimbers in the same order as they were explained. Default is set to 1,2,3
+  Prompts a menu where the hillclimbers can be assigned. 0,1,2 and 3 stand for our hillclimbers in the same order as they were explained. Default is set to 0,1,2,3
  - Generate
   This will start the experiment. Will not start when the user selects "Algorithms" but does not actually select one or does not provide a duration or iteration number
 
