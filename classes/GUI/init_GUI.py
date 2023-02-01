@@ -13,9 +13,12 @@ class App(customtkinter.CTk):
     def __init__(self) -> None:
         super().__init__()
        
+        self.width = 250
+        self.height = 450
+
         # configure window
         self.title("Scheduly")
-        self.geometry(f"{250}x{450}")
+        self.geometry(f"{self.width}x{self.height}")
 
         # configure grid layout (4x4)
         self.grid_columnconfigure(0, weight=1)
@@ -101,7 +104,9 @@ class App(customtkinter.CTk):
             self.experiment4_switch.deselect()
             self.experiment5_switch.deselect()
 
-            self.expand_gui()
+            self.width += 500
+            self.geometry(f"{self.width}x{self.height}")
+
             self.create_own_exp_frame1 = customtkinter.CTkFrame(self)
             self.create_own_exp_frame1.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
             self.create_own_exp_frame1.grid_columnconfigure(0, weight=1)
@@ -124,6 +129,9 @@ class App(customtkinter.CTk):
             self.hill_climbing_switch.grid(row=1, column=0, columnspan=4, pady=10, padx=20, sticky="n")
         else:
 
+            self.width -= 500
+            self.geometry(f"{self.width}x{self.height}")
+
             self.hill_climbing_switch.destroy()
             try:
                 self.annealing_switch.destroy()
@@ -137,27 +145,17 @@ class App(customtkinter.CTk):
             self.label_initialization.destroy()
             self.greedy_switch.destroy()
 
-            self.collaps_gui()
             self.create_own_exp_frame1.destroy()
             self.create_own_exp_frame2.destroy()
-
-
-    def expand_gui(self):
-        self.geometry(f"{850}x{450}")
-
-    def expand_gui_greedy(self):
-        self.geometry(f'{850}x{550}')
-
-    def expand_gui_hilli(self):
-        self.geometry(f'{850}x{550}')
-
-    def collaps_gui(self):
-        self.geometry(f'{250}x{450}')
 
 
     def iterations_fixed(self):
         state = self.iterations_fixed_switch.get()
         if state:
+            if not self.iterations_dependend_switch.get():
+                self.height += 75
+
+            self.geometry(f"{self.width}x{self.height}")
             self.iterations1 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, font=customtkinter.CTkFont(size=15))
             self.iterations1.grid(row=10, column=0, padx=20, pady=10, sticky="nsew")
             self.iterations_dependend_switch.deselect()
@@ -166,19 +164,29 @@ class App(customtkinter.CTk):
             except:
                 pass
         else:
+            self.height -= 75
+            self.geometry(f"{self.width}x{self.height}")
             self.iterations1.destroy()
 
     def iterations_dependend(self):
         state = self.iterations_dependend_switch.get()
         if state:
+            if not self.iterations_fixed_switch.get():
+                self.height += 75
+
+            self.geometry(f"{self.width}x{self.height}")
             self.iterations2 = customtkinter.CTkEntry(master=self.create_own_exp_frame2, font=customtkinter.CTkFont(size=15))
             self.iterations2.grid(row=8, column=0, padx=20, pady=10, sticky="nsew")
+
             self.iterations_fixed_switch.deselect()
             try:
                 self.iterations1.destroy()
             except:
                 pass
         else:
+
+            self.height -= 75
+            self.geometry(f"{self.width}x{self.height}")
             self.iterations2.destroy()
 
 
@@ -191,6 +199,7 @@ class App(customtkinter.CTk):
                 self.annealing_switch.destroy()
             except:
                 pass
+
     def hilli_single(self):
         if self.hillclimber_single.get():
             self.hillclimber_multi.deselect()
@@ -200,14 +209,21 @@ class App(customtkinter.CTk):
                 self.annealing_switch.destroy()
             except:
                 pass
+
     def genni_single(self):
         if self.genetic_switch_solo.get():
+            self.height += 50
+
+            self.geometry(f"{self.width}x{self.height}")
             self.annealing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Sim. Annealing', font=customtkinter.CTkFont(size=15), command=self.simmi_an)
             self.annealing_switch.grid(row=6, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
             self.genetic_switch_pool.deselect()
             self.hillclimber_single.deselect()
             self.hillclimber_multi.deselect()
         else:
+            self.height -= 50
+
+            self.geometry(f"{self.width}x{self.height}")
             try:
                 self.annealing_switch.destroy()
             except:
@@ -235,13 +251,16 @@ class App(customtkinter.CTk):
         dialog = customtkinter.CTkInputDialog(text="Please enter 4 digits from 0 to 3\nDefault: 0123", title="Hillclimbers")
         self.hillclimber_assignment = dialog.get_input()
 
+
     def hillclimber_switch_click(self) -> None:
 
         state_hc = self.hill_climbing_switch.get()
 
         if state_hc == 1:
-            self.expand_gui_hilli()
+            self.width += 200
+            self.height += 100
 
+            self.geometry(f"{self.width}x{self.height}")
             self.hillclimber_multi = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Hilclimber multiple cores', font=customtkinter.CTkFont(size=15), command=self.hilli_multi)
             self.hillclimber_multi.grid(row=2, column=0, padx=20, columnspan=4, pady=10, sticky="nsew")
 
@@ -272,11 +291,22 @@ class App(customtkinter.CTk):
 
 
         else:
-            self.expand_gui_greedy()
+            self.width -= 200
+            self.height -= 100
+
+            self.geometry(f"{self.width}x{self.height}")
             self.genetic_switch_solo.destroy()
             self.genetic_switch_pool.destroy()
             try:
                 self.annealing_switch.destroy()
+            except:
+                pass
+            try:
+                self.iterations1.destroy()
+            except:
+                pass
+            try:
+                self.iterations2.destroy()
             except:
                 pass
             self.iterations_dependend_switch.destroy()
@@ -287,12 +317,13 @@ class App(customtkinter.CTk):
             self.hillclimber_single.destroy()
 
     def greedy_switch_click(self) -> None:
-        
 
         state_greedy = self.greedy_switch.get()
 
         if state_greedy == 1:
-            self.expand_gui_greedy()
+            self.width += 20
+
+            self.geometry(f"{self.width}x{self.height}")
             self.capacity_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame1, text='Capacity', font=customtkinter.CTkFont(size=15))
             self.capacity_switch.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
 
@@ -306,12 +337,14 @@ class App(customtkinter.CTk):
             self.difficult_students_switch.grid(row=5, column=0, padx=20, pady=10, sticky="nsew")
 
         else:
-            self.expand_gui()
+            self.width -= 20
+
+            self.geometry(f"{self.width}x{self.height}")
+
             self.capacity_switch.destroy()
             self.popular_switch.destroy()
             self.popular_own_day_switch.destroy()
             self.difficult_students_switch.destroy()
-
 
 
     def turn_of_pool(self):
@@ -326,6 +359,7 @@ class App(customtkinter.CTk):
         if state1:
             self.annealing_switch.deselect()
             self.genetic_switch_solo.deselect()
+
 
     def run_exp_1(self) -> None:
         # Set setting for initialization plot or optimalization
@@ -635,9 +669,10 @@ class App(customtkinter.CTk):
             elif self.iterations_dependend_switch.get():
                 try:
                     iterations = float(self.iterations2.get())
-                    print(iterations)
                 except:
                     return
+            else:
+                return
 
             if self.hillclimber_single.get():
                 mode = 'sequential'
@@ -654,11 +689,12 @@ class App(customtkinter.CTk):
         try:
             if len(self.hillclimber_assignment) < 4:
                 hillclimber_assignment = [0,1,2,3]
+            else:
+                for digit in self.hillclimber_assignment:
+                    hillclimber_assignment.append(int(digit))
         except:
             hillclimber_assignment = [0,1,2,3]
-        else:
-            for digit in self.hillclimber_assignment:
-                hillclimber_assignment.append(int(digit))
+
         print('The Hillclimbers you selected are:')
         print(hillclimber_assignment)
 
@@ -667,7 +703,7 @@ class App(customtkinter.CTk):
 
         experiment = 0
 
-        hill_climber_iters = 50
+        hill_climber_iters = iterations
 
         self.__reset_data_file(experiment)
 

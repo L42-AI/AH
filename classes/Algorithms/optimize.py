@@ -51,8 +51,6 @@ class Optimize():
         print(f'\nInitialization')
         print(self.malus)
 
-        t = self.__init_temp()
-
         # Set starting time for the process
         process_start_time = time.time()
 
@@ -70,7 +68,7 @@ class Optimize():
 
             # Run hill climber 1 if malus is larger than 125
             if self.malus['Total'] > 125:
-                schedule, malus, iteration = HC1.climb(hill_climber_iters)
+                schedule, malus, iteration, _ = HC1.climb(hill_climber_iters)
 
             else:
                 # Randomize activation from core assignment
@@ -78,13 +76,13 @@ class Optimize():
 
                 # Run hill climber
                 if activation == 1:
-                    schedule, malus, iteration = HC1.climb(hill_climber_iters)
+                    schedule, malus, iteration, _ = HC1.climb(hill_climber_iters)
                 elif activation == 2:
-                    schedule, malus, iteration = HC2.climb(hill_climber_iters)
+                    schedule, malus, iteration, _ = HC2.climb(hill_climber_iters)
                 elif activation == 3:
-                    schedule, malus, iteration = HC3.climb(hill_climber_iters)
+                    schedule, malus, iteration, _ = HC3.climb(hill_climber_iters)
                 elif activation == 4:
-                    schedule, malus, iteration = HC4.climb(hill_climber_iters)
+                    schedule, malus, iteration, _ = HC4.climb(hill_climber_iters)
 
             # Set the iteration
             self.hillclimber_counter += iteration
@@ -150,8 +148,11 @@ class Optimize():
         # set a temperature dependend on simulated annealing or not
         t = self.__init_temp()
 
+        print(algorithm_duration)
+
         # run for a given amount of time
         while time.time() - init_time < algorithm_duration:
+            print(time.time() - init_time)
             start_time = time.time()
 
             # Increase iter counter
@@ -569,10 +570,6 @@ class Optimize():
             schedule, malus, iteration, accept_me = HC4.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC4.get_name(), iteration, accept_me
-
-    def __get_temperature(self, t, alpha=0.995):
-        """Exponential decay temperature schedule"""
-        return t * alpha
 
     def __replace_roster(self, difference):
 

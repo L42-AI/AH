@@ -166,23 +166,23 @@ class App(customtkinter.CTk):
 
         # Text
         self.application_name = customtkinter.CTkLabel(self.sidebar_frame, text="Schedule Selector", font=customtkinter.CTkFont(size=20, weight="bold"))
-        self.application_name.grid(row=0, column=0, padx=20, pady=20)
+        self.application_name.grid(row=0, column=0, padx=20, pady=20, sticky="n")
 
         # Buttons
         self.student_button = customtkinter.CTkButton(self.sidebar_frame, text="Student", command=self.show_student_frame)
-        self.student_button.grid(row=1, column=0, padx=20, pady=20)
+        self.student_button.grid(row=1, column=0, padx=20, pady=20, sticky="new")
         self.course_button = customtkinter.CTkButton(self.sidebar_frame, text="Course", command=self.show_course_frame)
-        self.course_button.grid(row=2, column=0, padx=20, pady=20)
+        self.course_button.grid(row=2, column=0, padx=20, pady=20, sticky="new")
         self.room_button = customtkinter.CTkButton(self.sidebar_frame, text="Room", command=self.show_room_frame)
-        self.room_button.grid(row=3, column=0, padx=20, pady=20)
+        self.room_button.grid(row=3, column=0, padx=20, pady=20, sticky="new")
 
         # Export
         self.export_button = customtkinter.CTkButton(self.sidebar_frame, text="Export", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.export)
-        self.export_button.grid(row=4, column=0, padx=20, pady=20, sticky="sew")
+        self.export_button.grid(row=4, column=0, padx=20, pady=20, sticky="new")
 
         # Export All
         self.export_all_button = customtkinter.CTkButton(self.sidebar_frame, text="Export All", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.export_all)
-        self.export_all_button.grid(row=5, column=0, padx=20, pady=20, sticky="sew")
+        self.export_all_button.grid(row=5, column=0, padx=20, pady=20, sticky="new")
 
     def create_frames(self) -> None:
         """
