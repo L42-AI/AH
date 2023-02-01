@@ -1,4 +1,4 @@
-import classes.algorithms.multiprocessor as MultiprocessorClass
+import classes.algorithms.optimize as OptimizeClass
 import classes.representation.malus_calc as MalusCalculatorClass
 import classes.representation.roster as RosterClass
 
@@ -139,13 +139,13 @@ class Generator:
 
     def optimize(self, experiment, mode, core_assignment, hill_climber_iters, algorithm_duration, experiment_iter=0):
 
-        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.ANNEALING, experiment_iter)
+        Optimize = OptimizeClass.Optimize(self.Roster, self.ANNEALING, experiment_iter)
 
         if mode == 'sequential':
             pass
         elif mode == 'multiproccesing':
-            Multiprocessor.run_multi(algorithm_duration, experiment, core_assignment, hill_climber_iters)
+            Optimize.run_multi(algorithm_duration, experiment, core_assignment, hill_climber_iters)
         elif mode == 'genetic':
-            Multiprocessor.run_genetic(algorithm_duration, experiment)
+            Optimize.run_genetic(algorithm_duration, experiment)
         elif mode == 'genetic pool':
-            Multiprocessor.run_genetic_pool(algorithm_duration, experiment, core_assignment, hill_climber_iters)
+            Optimize.run_genetic_pool(algorithm_duration, experiment, core_assignment, hill_climber_iters)
