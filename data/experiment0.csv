@@ -1,0 +1,25 @@
+Hill Climber,Cost,Iteration,Duration
+TimeSlotSwapRandom,684,1,7.99
+TimeSlotSwapCapacity,800,1,7.99
+TimeSlotSwapRandom,601,1,7.99
+SwapBadTimeslots_DoubleClasses,1245,1,7.99
+TimeSlotSwapRandom,472,2,16.84
+TimeSlotSwapCapacity,540,2,16.84
+TimeSlotSwapRandom,444,2,16.84
+SwapBadTimeslots_DoubleClasses,592,2,16.84
+TimeSlotSwapRandom,406,3,25.39
+TimeSlotSwapCapacity,416,3,25.39
+TimeSlotSwapRandom,410,3,25.39
+SwapBadTimeslots_DoubleClasses,432,3,25.39
+TimeSlotSwapRandom,371,4,34.03
+TimeSlotSwapCapacity,344,4,34.03
+TimeSlotSwapRandom,361,4,34.03
+SwapBadTimeslots_DoubleClasses,399,4,34.03
+TimeSlotSwapRandom,313,5,43.07
+TimeSlotSwapCapacity,327,5,43.07
+TimeSlotSwapRandom,317,5,43.07
+SwapBadTimeslots_DoubleClasses,340,5,43.07
+TimeSlotSwapRandom,298,6,52.18
+TimeSlotSwapCapacity,307,6,52.18
+TimeSlotSwapRandom,284,6,52.18
+SwapBadTimeslots_DoubleClasses,308,6,52.18
