@@ -96,7 +96,7 @@ class Roster():
                 class_number = f"{class_type} {count}"
                 
                 if class_number[0] == 't':
-                    self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std)
+                    self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_tutorial)
                     # print(f'tut: {course.max_std}')
                 elif class_number[0] == 'p':
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_practical)

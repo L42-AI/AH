@@ -139,7 +139,7 @@ class Generator:
 
     def optimize(self, experiment, mode, core_assignment, hill_climber_iters, algorithm_duration, experiment_iter=0):
 
-        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.ANNEALING, experiment_iter)
+        Multiprocessor = MultiprocessorClass.Optimize(self.Roster, self.ANNEALING, experiment_iter)
 
         if mode == 'sequential':
             pass

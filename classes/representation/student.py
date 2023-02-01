@@ -49,7 +49,7 @@ class Student():
             # Set all values of tutorial
             group_dict = course.tut_group_dict
             class_num = course.tutorials
-            max_std = course.max_std
+            max_std = course.max_std_tutorial
             group = self.tut_group
         else:
             # Set all values of practica
