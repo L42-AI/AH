@@ -417,7 +417,7 @@ class App(customtkinter.CTk):
             hillclimber_assignment = [0,0,2,2]
             hill_climber_iters = 400
             experiment = 5
-        
+
         # run a standart experiment
         if not own_exp:
             self.run_exp(mode, hillclimber_assignment, hill_climber_iters, experiment)
@@ -432,27 +432,16 @@ class App(customtkinter.CTk):
     def run_exp(self, _mode, _hillclimber_assignment, _hillclimber_iters, _experiment) -> None:
 
         # Set setting for initialization plot or optimalization
-
         capacity = False
-
         popular = False
-
         popular_own_day = False
-
         difficult_students = False
-
         annealing = False
-
         visualize = False
-
         experiment = _experiment
-
         duration = 15 * 60
-
         mode = _mode
-
         hillclimber_assignment = _hillclimber_assignment
-
         hill_climber_iters = _hillclimber_iters
 
         # Destroy GUI window
@@ -460,6 +449,7 @@ class App(customtkinter.CTk):
 
         self.__reset_data_file(experiment)
 
+        # run the experiment, good luck cooling your pc
         for i in range(30):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
@@ -475,7 +465,9 @@ class App(customtkinter.CTk):
         self.mainloop()
 
     def finish(self, student_list) -> None:
-
+        '''
+        Method that places the schedule in a pickle file
+        '''
         with open('schedule.pkl', 'rb') as f:
             schedule = pickle.load(f)
 
@@ -483,7 +475,6 @@ class App(customtkinter.CTk):
         app.mainloop()
 
     """ Helpers """
-
     def __reset_data_file(self, experiment) -> None:
         with open(f'data/experiment{experiment}.csv', 'w', newline='') as f:
             writer = csv.writer(f)
