@@ -107,7 +107,7 @@ class Roster():
                             continue
                         if class_type != 'lecture' and room.id == 'C0.110' or room.id == 'C0.112':
                             continue
-                
+
                 # check if the lecture_day is None if not check if its a lecture, if it is skip the rostering
                 # part of the most POPULAR and DIFICULT_STUDENTS algorithm in generator.py
                 if course.lecture_day != None:
