@@ -72,7 +72,7 @@ To run our application, you first install the required libraries:
 - pip install customtkinter
 
 
-When running main.py, user will be prompted with a GUI. This will provide the options to reproduce any of our 5 experiments, or, create your own experiment. When selecting this, the user is presented with two switches: Heuristics and Algorithms, these represent the possible heuristics and algorithms to be run. If you only select Heuristics, the algorithm will initialize 300 times and then present you with a historgram plotting the malus and the frequency. If however, you also turn on Algorithms, you are presented with a number of options to customize the algorithm:
+When running main.py, user will be prompted with a Graphical User Interface (GUI). This will provide the options to reproduce any of our 5 experiments, or, create your own experiment. When selecting this, the user is presented with two switches: Heuristics and Algorithms, these represent the possible heuristics and algorithms to be run. If you only select Heuristics, the algorithm will initialize 300 times and then present you with a historgram plotting the malus and the frequency. If however, you also turn on Algorithms, you are presented with a number of options to customize the algorithm:
 
 - Modes:
 - Hillclimber single core
@@ -90,7 +90,7 @@ When running main.py, user will be prompted with a GUI. This will provide the op
  - Duration
   The duration of the optimalization process in minutes. A value can be selected or typed.
  - Choose Hillclimber
-  Prompts a menu where the hillclimbers can be assigned. 0,1,2 and 3 stand for our hillclimbers in the same order as they were explained. Default is set to 1,2,3
+  Prompts a menu where the hillclimbers can be assigned. 0,1,2 and 3 stand for our hillclimbers in the same order as they were explained. Default is set to 0,1,2,3
  - Generate
   This will start the experiment. Will not start when the user selects "Algorithms" but does not actually select one or does not provide a duration or iteration number
 
@@ -100,12 +100,12 @@ Notes:
 
 ** Genetic runs with one hillclimber up until a malus of 125, because this has shown to be very effective in solving the initial phase of the problem. Hence, in the code of genetic runs, the process is split into two stages
 
-A tutorial showing a full interaction with this gui can be found here: https://user-images.githubusercontent.com/70103333/216183452-08bb9086-0f96-4b93-81aa-c4305fb34abc.mp4
+A tutorial showing a full interaction with the GUI can be found here: https://user-images.githubusercontent.com/70103333/216183452-08bb9086-0f96-4b93-81aa-c4305fb34abc.mp4
 
 After finishing the algorithm run, a second GUI will show up. This GUI lets the user interact with the best found schedule during the run of the algorithm. In the left siderbar there are 3 buttons indicating 'Student', 'Course' and 'Room'. Select these to see the search engine to locate the wanted schedule. Just select the room, course or student of choice and press the 'Search' button. To export the schedule on your screen, press 'Export' or 'Export all' to extract the whole schedule. These buttons will create a schedule csv in the folder AH/schedules.
 
 Future work:
-- We would like to test different temperature schemes. Right now, the temperature and therefore the rate of acceptance of worse schedules depends heavily on the fail counter. So when the Algorithm converges, it is more likely to accept a worse schedule. In future work we would like to experiment with different temperature schemes.
+- We would like to test different temperature schemes. Right now, the temperature and therefore the rate of acceptance of worse schedules depends heavily on the fail counter. So when the Algorithm converges, it is more likely to accept a worse schedule. In future work we would like to experiment with different temperature schemes. Also, we would like to run the Simulated Annealing algorithm for a few hours so it has more time to 'explore' the state space. 
 - We would also like to increase our genetic pool. In its current fase, it keeps 4 schedules and expands its population to 32 schedules before selecting 4 of those to continue. We would like to increase these numbers, but since they are computational heavy, for now we decided not to. 
 - We would like run each configuration 30 times. Since our application has so many options, we have not been able to run everything often and collect statistical valid results. We have worked for weeks on the project, so we know what works well and what does not. This is not how science is done however, and ideally we would like to test each configuration 30 times. 
 - We are curious how a plant propagation algorithm works for our case. It would look like our genetic algorithm, but would assign different allowed mutations to each schedule depending on its score relative to the best score. To us, it seems that this could greatly benefit our results
