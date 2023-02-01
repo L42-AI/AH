@@ -41,7 +41,7 @@ class Student():
 
 
     def __set_type(self, course, class_type):
-        """ This function sets parameters used in pick_group"""
+        """ This function sets parameters used in pick_group """
 
         # If class is tutorial:
         if class_type == 'Tutorial':
@@ -145,6 +145,31 @@ class Student():
 
                 # Add course and class to timeslot info
                 current_course[current_practicum]['students'].add(self.id)
+
+    # def __seminar_timeslot(self, course, current_course, session_type):
+
+    #     # check if seminar, tutorial or lecture
+    #     if session_type == 'lecture':
+    #         num_seminars = course.lectures
+    #         seminar_type = 'lecture'
+
+    #     elif session_type == 'tutorial':
+    #         num_seminars = course.tutorials
+    #         seminar_type = 'tutorial'
+    #         index_offset = self.tut_group[course.name]
+
+    #     elif session_type == 'practical':
+    #         num_seminars = course.practicals
+    #         seminar_type = 'practical'
+    #         index_offset = self.pract_group[course.name]
+
+    #     else:
+    #         return 'Error Not a correct session type!'
+
+    #     # for each seminar in the course
+    #     for index in range(num_seminars):
+    #         current_seminar = f'{seminar_type} {index + index_offset}'
+    #         current_course[current_seminar]['students'].add(self.id)
 
     def student_timeslots(self, Roster):
         """
