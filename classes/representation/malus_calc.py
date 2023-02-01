@@ -2,6 +2,8 @@ import copy
 from data.assign import student_list, course_list, room_list
 
 class MC:
+    '''Class that handles malus calculations. It uses the schedule and the set of
+       students connnected to each seminar to do so'''
 
     def __init__(self) -> None:
 
@@ -17,6 +19,8 @@ class MC:
     """ INIT """
 
     def init_malus(self) -> None:
+        '''create a malus dictionary that will hold the points'''
+
         self.malus = {}
 
         self.malus['Total'] = 0
@@ -40,14 +44,20 @@ class MC:
     """ GET """
 
     def get_student(self, id) -> object:
+        '''returns student object'''
         return self.student_dict.get(id)
 
     def get_course(self, name) -> object:
+        '''returns course object'''
         return self.course_dict.get(name)
 
     """ Methods """
 
     def compute_schedule_malus(self, schedule) -> None:
+        '''
+        computes the malus by looping over every course and its seminars
+        in the schedule
+        '''
 
         # For each course:
         for course_name in schedule:
@@ -97,6 +107,10 @@ class MC:
                     self.malus['Total'] += occupation
 
     def __days_in_schedule(self, schedule) -> dict:
+        '''
+        returns a dictionary called timeslots that holds the information about gap and double hours
+        for every student
+        '''
 
         # Create empty dict
         timeslots = {}
@@ -120,6 +134,10 @@ class MC:
         return timeslots
 
     def compute_student_malus(self, schedule) -> None:
+        '''
+        Uses the timeslots dictionary to go over every student in order to
+        'reward' the malus points associated with his/hers schedule
+        '''
 
         # Set timeslots
         timeslots = self.__days_in_schedule(schedule)
@@ -167,6 +185,11 @@ class MC:
                                 self.malus['Total'] += 5
 
     def compute_total_malus(self, schedule) -> dict:
+        '''
+        method to call on outside this class that calls all malus
+        calculation methods in the correct order
+        '''
+
         self.init_malus()
         self.compute_schedule_malus(schedule)
         self.compute_student_malus(schedule)

@@ -4,7 +4,10 @@ from data.assign import student_list, course_list, room_list
 import random
 
 class Roster():
-    """This class creates a roster of courses, rooms, and students with a schedule of courses and room assignments for each day and time slot."""
+    """
+    This class creates a roster of courses, rooms, and students with
+    a schedule of courses and room assignments for each day and time slot.
+    """
 
     def __init__(self, capacity=False):
         self.schedule = {}
@@ -84,9 +87,14 @@ class Roster():
         if course.name not in self.schedule:
             self.schedule[course.name] = {}
 
-        succes = False
+        # counter
+        i = 0
 
+        succes = False
         while not succes:
+
+            # count plus 1
+            i += 1
 
             # Generate a random room, day and timeslot:
             room = random.choice(self.room_list)
@@ -112,11 +120,11 @@ class Roster():
 
                 self.schedule[course.name][f'{class_type} {count}'] = {}
                 class_number = f"{class_type} {count}"
-                
+
                 # if the class is a tutorial roster it
                 if class_number[0] == 't':
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_tutorial)\
-                
+
                 # if the class is a practical roster it
                 elif class_number[0] == 'p':
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_practical)
@@ -124,5 +132,6 @@ class Roster():
                 # roster the lecture
                 else:
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, 1000)
-                    
+
                 succes = True
+            i += 1

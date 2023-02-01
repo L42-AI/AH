@@ -1,5 +1,4 @@
 import classes.algorithms.mutate as MutateClass
-from helpers.shallow_copy import recursive_copy
 import classes.representation.malus_calc as MalusCalculatorClass
 from data.assign import student_list, course_list
 
@@ -12,6 +11,15 @@ import decimal
 """ Main HillClimber Class """
 
 class HillClimber:
+    '''
+    This class is the framework for all hillclimbers. It is designed to be inherited
+    by other Hillclimbers to perform one specific task. These tasks can be the following:
+    - Swapping two random chosen seminars from two courses
+    - Swapping one seminar that is causing the most capacity problems with a random seminar
+    - Swapping one student to different tutorial group based on the group that is causing the most gap hours
+    - Swapping one student to different tutorial group based on the group that is causing the most double hours
+    '''
+
     def __init__(self, schedule, iteration=0):
         self.schedule_list = []
         self.course_list = course_list
@@ -49,7 +57,13 @@ class HillClimber:
     """ Main Method """
 
     def climb(self, hill_climber_iters=400, T=0, ANNEALING=False, fail_counter=None):
-        self.double = {'l': set(), 't': set(), 'p': set()}
+        '''
+        this method is the 'core' of every optimize algorithm. It performs a random mutation by calling
+        a case specific mutate method and compares the schedule that mutation created to the current one
+        the amount of iterations it makes before returning to the optimize script to compare results with
+        other Hillclimbers is dependend on hill_climber_iters
+        '''
+
         self.accept_me = False
         # Compute malus with MalusCalculator
         self.malus = self.MC.compute_total_malus(self.schedule)
@@ -57,6 +71,7 @@ class HillClimber:
         # Append the input roster
         self.schedule_list.append(self.schedule)
 
+        # set the number of iterations depending on user input
         if type(hill_climber_iters) == float:
             multiplier = True
             self.hill_climber_iters = int(self.malus['total'] * hill_climber_iters)
@@ -64,14 +79,12 @@ class HillClimber:
             multiplier = False
             self.hill_climber_iters = hill_climber_iters
 
-        # let the hillclimber take some steps 
-        # for _ in range(int(self.malus['Total'] * self.multiplyer)):
+        # let the hillclimber take some steps
         for _ in range(self.hill_climber_iters):
 
             # Make copy of schedule, complex because of dictionary
-            copied_schedule = recursive_copy(self.schedule)
+            copied_schedule = self.recursive_copy(self.schedule)
 
-            # {k: {k2: {k3: [student for student in v3] for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
             # Create the mutate class
             M = self.make_mutate(copied_schedule)
 
@@ -84,8 +97,6 @@ class HillClimber:
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
 
-            # self.save_results()
-
             # let the hillclimber make 3 changes before a new score is calculated
             self.__accept_schedule(new_malus, new_schedule, T=T, ANNEALING=ANNEALING, fail_counter=fail_counter)
 
@@ -97,8 +108,10 @@ class HillClimber:
         return self.schedule, self.malus, self.iteration, self.accept_me
 
     def __accept_schedule(self, new_malus, new_schedule, T=0, ANNEALING=False, fail_counter=None):
-        '''Takes in the new malus (dict) and schedule (dict) and compares it to the current version
-           If it is better, it will update the self.schedule and malus'''
+        '''
+        Takes in the new malus (dict) and schedule (dict) and compares it to the current version
+        If it is better, it will update the self.schedule and malus
+        '''
 
         prob = random.random()
         # only accept annealing if the rise in malus is not too large
@@ -119,6 +132,7 @@ class HillClimber:
             self.schedule = new_schedule
             self.malus = new_malus
 
+        # do not accept worsenings that are too large
         elif prob > accept and difference < 20:
             T = 0
             # print(f'worsening of {-difference} got accepted at T: {T}')
@@ -126,7 +140,17 @@ class HillClimber:
             self.malus = new_malus
             self.accept_me = True
 
-
+    def recursive_copy(self, obj):
+        '''
+        method that makes a copy of our schedule that does not change the schedule
+        when we modify the copy. This eliminates the need for deepcopy
+        '''
+        if isinstance(obj, dict):
+            return {k: self.recursive_copy(v) for k, v in obj.items()}
+        elif isinstance(obj, set):
+            return {self.recursive_copy(x) for x in obj}
+        else:
+            return obj
 
     def save_results_multi(self):
         with open('data/HCResults.csv', 'a') as f:
