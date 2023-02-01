@@ -91,6 +91,7 @@ class Optimize():
             # Compute difference between new roster and current roster
             difference = self.malus['Total'] - self.output_schedules[self.best_index][1]['Total']
 
+
             if self.output_schedules[self.best_index][1]['Total'] < lowest_malus:
                 lowest_malus = self.output_schedules[self.best_index][1]['Total']
                 self.save_schedule(self.output_schedules[self.best_index][0])
@@ -430,18 +431,22 @@ class Optimize():
             # Set finish time
             finish_time = time.time()
 
+            # record the time
             self.multiprocess_duration = finish_time - iteration_start_time
             self.duration += self.multiprocess_duration
 
-            # replace the roster if it is better
+            # replace the roster if it is better and print output
             self.__replace_roster(difference)
-
             self.multiprocessor_counter += 1
 
     def run_HC(self, hc_tuple):
+        '''Method gets called to run and climb 1 Hillclimber, depending on the parameters inside the tuple'''
+        
+        # what hillclimber to run, current schedule, temperature, and number of iterations the hillclimber gets
         activation, schedule, T, hill_climber_iters = hc_tuple
         if activation == 0:
 
+            # create the class and climb.
             HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.hillclimber_iter_counter)
             schedule, malus, iteration, accept_me = HC1.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
