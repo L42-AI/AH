@@ -17,13 +17,13 @@ CLIMBING = True
 ANNEALING = False
 
 # heuristics to try and connect room size to class size
-CAPACITY = True
+CAPACITY = False
 
 # heuristic to first give the popular classes rooms
-POPULAR = True
+POPULAR = False
 
 # heuristic to place the most popular course lectures on different days
-POPULAR_OWN_DAY = True
+POPULAR_OWN_DAY = False
 
 VISUALIZE_INIT = True
 
