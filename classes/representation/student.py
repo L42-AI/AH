@@ -9,6 +9,8 @@ compute_malus runs these functions.
 import random
 
 class Student():
+    """This class represents a single student"""
+
     def __init__(self, data, courses):
 
         # Set attributes
@@ -30,9 +32,6 @@ class Student():
         
         # Initiate malus
         self.init_malus()
-
-    # def __str__(self):
-    #     return f"{self.f_name} {self.l_name}"
 
     def init_malus(self):
         self.malus_count = 0
@@ -260,11 +259,8 @@ class Student():
                             self.malus_cause['Classes Gap'][day] += 3
                             self.malus_count += 3
 
+                        # we choose to give triple hours or more a value of 5, because it makes the data visibly more appealing
+                        # and with this value the 'Tripple Gap' always convergace
                         elif lesson_gaps > 2:
                             self.malus_cause['Tripple Gap'][day] += 5
                             self.malus_count += 5
-
-    def compute_malus(self, schedule):
-        """ Run required functions to compute student malus """
-        self.student_timeslots(schedule)
-        self.malus_points(schedule)
