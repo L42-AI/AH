@@ -28,14 +28,6 @@ class Optimize():
 
         self.malus = self.MC.compute_total_malus(self.schedule)
 
-    def __init_temp(self) -> float:
-        '''Sets the temperature to 1 to start simmulated annealing if simulated annealing is selected'''
-
-        if self.ANNEALING:
-            return 1
-        else:
-            return 0
-
     """ Sequential """
 
     def run_solo(self, algorithm_duration, experiment, core_assignment, hill_climber_iters):
@@ -68,6 +60,7 @@ class Optimize():
             # Run hill climber 1 if malus is larger than 125
             if self.malus['Total'] > 125:
                 schedule, malus, iteration, _ = HC1.climb(hill_climber_iters)
+                name = HC1.get_name()
 
             else:
                 # Randomize activation from core assignment
@@ -76,12 +69,16 @@ class Optimize():
                 # Run hill climber
                 if activation == 1:
                     schedule, malus, iteration, _ = HC1.climb(hill_climber_iters)
+                    name = HC1.get_name()
                 elif activation == 2:
                     schedule, malus, iteration, _ = HC2.climb(hill_climber_iters)
+                    name = HC2.get_name()
                 elif activation == 3:
                     schedule, malus, iteration, _ = HC3.climb(hill_climber_iters)
+                    name = HC3.get_name()
                 elif activation == 4:
                     schedule, malus, iteration, _ = HC4.climb(hill_climber_iters)
+                    name = HC4.get_name()
 
             # Set the iteration
             self.hillclimber_counter += iteration
@@ -111,7 +108,11 @@ class Optimize():
             # replace the roster if it is better and print output
             self.__replace_roster(difference)
 
+            self.save_data(name, malus, self.multiprocessor_counter, round(self.duration, 2))
+
             self.multiprocessor_counter += 1
+
+        self.export_data(experiment)
 
 
     """ Multiprocessing """
@@ -188,24 +189,24 @@ class Optimize():
             self.__replace_roster(difference)
 
             for output_schedule in output_schedules:
-                self.save_data_multi(output_schedule[2], output_schedule[1]['Total'], self.multiprocessor_counter, round(self.duration, 2))
+                self.save_data(output_schedule[2], output_schedule[1]['Total'], self.multiprocessor_counter, round(self.duration, 2))
 
             # Increase iter counter
             self.multiprocessor_counter += 1
 
 
-        self.export_data_multi(experiment)
+        self.export_data(experiment)
 
 
-    def save_data_multi(self, HC_name, cost, iteration, time):
+    def save_data(self, HC_name, cost, iteration, time):
         """
-        This function saves the data made in run_multi
+        This function saves the data made in solo and multi mode 
         """
         self.data.append({'Hill Climber': HC_name, 'Cost': cost, 'Iteration': iteration, 'Duration': time})
 
-    def export_data_multi(self, experiment):
+    def export_data(self, experiment):
         """
-        This function exports the data collected in multi to a csv
+        This function exports the collected data in solo and multi mode to a csv
         """
 
         # Set headers
@@ -425,10 +426,10 @@ class Optimize():
                 for _ in range(2):
                     # Run multicore with all settings
                     with Pool(4) as p:
-                        output_schedules = p.map(self.run_HC, [(core_assignment[0], schedule, t, self.hillclimber_counter, hill_climber_iters),
-                                                                    (core_assignment[1], schedule, t, self.hillclimber_counter, hill_climber_iters),
-                                                                    (core_assignment[2], schedule, t, self.hillclimber_counter, hill_climber_iters),
-                                                                    (core_assignment[3], schedule, t, self.hillclimber_counter, hill_climber_iters)])
+                        output_schedules = p.map(self.run_HC, [(core_assignment[0], schedule, t, hill_climber_iters),
+                                                                    (core_assignment[1], schedule, t, hill_climber_iters),
+                                                                    (core_assignment[2], schedule, t, hill_climber_iters),
+                                                                    (core_assignment[3], schedule, t, hill_climber_iters)])
 
                     # Add this output to the total output list
                     total_output += output_schedules
@@ -529,8 +530,10 @@ class Optimize():
     """ Methods """
 
     def run_HC(self, hc_tuple):
-        '''Method gets called to run and climb 1 Hillclimber, depending on the parameters inside the tuple'''
-        
+        """
+        Method gets called to run and climb 1 Hillclimber, depending on the parameters inside the tuple
+        """
+
         # what hillclimber to run, current schedule, temperature, and number of iterations the hillclimber gets
         activation, schedule, T, hill_climber_iters = hc_tuple
         if activation == 0:
@@ -561,6 +564,15 @@ class Optimize():
             schedule, malus, iteration, accept_me = HC4.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC4.get_name(), iteration, accept_me
+
+
+    def __init_temp(self) -> float:
+        '''Sets the temperature to 1 to start simmulated annealing if simulated annealing is selected'''
+
+        if self.ANNEALING:
+            return 1
+        else:
+            return 0
 
     def __replace_roster(self, difference):
 
