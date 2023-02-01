@@ -40,3 +40,17 @@ To run our application, you first install the required libraries:
 - Activate the ProgLab environment
 - pip install customtkinter
 - 
+
+
+
+When running main.py, you will be confronted with a GUI. This will provide the options to reproduce any of our 5 experiments, or, create your own experiment. When selecting this, the user is presented with two switches: Initialize and Optimize, these represent the possible heuristics and algorithms to be run. If you only select Initialize, the algorithm will initialize 300 times and then present you with a historgram plotting the malus and the frequency. If however, you also turn on optimize, you are presented with a number of options to customize the algorithm:
+
+- Modes:
+- Hillclimber single core
+  
+- Hillclimber multiple cores
+- Genetic
+- Gentic Pooling
+
+
+After finishing the algorithm run, a second GUI will show up. This GUI lets the user interact with the best found schedule during the run of the algorithm. In the left siderbar there are 3 buttons indicating 'Student', 'Course' and 'Room'. Select these to see the search engine to locate the wanted schedule. Just select the room, course or student of choice and press the 'Search' button. To export the schedule on your screen, press 'Export' or 'Export all' to extract the whole schedule. These buttons will create a schedule csv in the folder AH/schedules.
