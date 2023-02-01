@@ -16,8 +16,8 @@ class Optimize():
     the git for more detail
     '''
 
-    def __init__(self, Roster, annealing, experiment_iter):
-        self.Roster = Roster
+    def __init__(self, schedule, annealing, experiment_iter):
+        self.schedule = schedule
         self.course_list = course_list
         self.student_list = student_list
         self.ITERS = 1
@@ -25,6 +25,8 @@ class Optimize():
         self.experiment_iter = experiment_iter
 
         self.MC = MalusCalculatorClass.MC()
+
+        self.malus = self.MC.compute_total_malus(self.schedule)
 
     def __init_temp(self) -> float:
         '''Sets the temperature to 1 to start simmulated annealing if simulated annealing is selected'''
@@ -37,10 +39,6 @@ class Optimize():
     """ Sequential """
 
     def run_solo(self, algorithm_duration, experiment, core_assignment, hill_climber_iters):
-
-        # Set initial schedule and malus
-        self.schedule = self.Roster.schedule
-        self.malus = self.MC.compute_total_malus(self.schedule)
 
         # Set counters
         self.multiprocessor_counter = 0
@@ -137,11 +135,14 @@ class Optimize():
 
         
 
+<<<<<<< HEAD
         # self.schedule and self.malus will always hold the best schedule
         self.schedule = self.Roster.schedule
         self.malus = self.MC.compute_total_malus(self.schedule)
         lowest_malus = self.malus['Total']
 
+=======
+>>>>>>> 21b0ddfb7d20b5d57a67b6dee17765e9bdcb59f1
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
@@ -240,10 +241,6 @@ class Optimize():
         """
 
         """ Init """
-
-        # Set initial schedule and malus
-        self.schedule = self.Roster.schedule
-        self.malus = self.MC.compute_total_malus(self.schedule)
 
         # Set Initial variable
         self.hillclimber_counter = 1
@@ -382,10 +379,6 @@ class Optimize():
 
         # Create list to record data
         self.data = []
-
-        # Set the initial schedule and malus
-        self.schedule = self.Roster.schedule
-        self.malus = self.MC.compute_total_malus(self.schedule)
 
         # Print intitial
         print(f'\nInitialization')

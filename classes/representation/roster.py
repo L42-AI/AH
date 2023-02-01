@@ -42,23 +42,25 @@ class Roster():
         room.availability[day][timeslot] = False
 
     def fill_empty_slots(self):
-        """ 
+        """
         This method makes a new key in the schedule and as value fills all the rooms and their timeslots,
         that have not been scheduled yet.
         """
 
         # Set possible timeslots and days
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-        timeslots = [9, 11, 13, 15]
-
-        # count the empty seminar moments
-        i = 0
 
         # add new key to the schedule
         self.schedule["No course"] = {}
 
+        # count the empty seminar moments
+        i = 0
+
         # check every room if they are being used at every moment
         for room in self.room_list:
+
+            # Set timeslot lists
+            timeslots = [9, 11, 13, 15]
 
             # if the room is C0.110 check the late timeslot as well
             if room.id == 'CO.110':
@@ -73,12 +75,6 @@ class Roster():
                         self.__place_in_schedule(room, day, timeslot, "No course", classes, 1000)
 
                         i += 1
-
-                # # if the room is C0.110 check the late timeslot as well
-                # if room.id == 'C0.110':
-                #     if room.availability[day][17]:
-                #         classes = f"No classes {i}"
-                #         self.__place_in_schedule(room, day, 17, "No course", classes, 1000)
 
     def fill_schedule_random(self, course, class_type, count):
         """ This function fills a schedule with no student capacity restraints in a random fassion """
