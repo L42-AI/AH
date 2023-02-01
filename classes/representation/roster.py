@@ -84,12 +84,15 @@ class Roster():
         if course.name not in self.schedule:
             self.schedule[course.name] = {}
 
-        # count
+        # counter
         i = 0
 
         succes = False
 
         while not succes:
+            
+            # count plus 1
+            i += 1
 
             # Generate a random room, day and timeslot:
             room = random.choice(self.room_list)
@@ -127,7 +130,5 @@ class Roster():
                 # roster the lecture
                 else:
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, 1000)
-
-                i += 1
                     
                 succes = True
