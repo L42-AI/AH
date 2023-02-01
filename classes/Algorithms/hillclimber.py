@@ -2,15 +2,13 @@
 This file contains the class hillclimber and all the classes that inherit this class
 """
 
-import classes.algorithms.mutate as MutateClass
 import classes.representation.malus_calc as MalusCalculatorClass
+import classes.algorithms.mutate as MutateClass
 from data.assign import student_list, course_list
 
-import random
-import copy
 import numpy as np
-import csv
 import decimal
+import random
 
 """ Main HillClimber Class """
 
@@ -25,7 +23,6 @@ class HillClimber:
     '''
 
     def __init__(self, schedule, iteration=0):
-        self.schedule_list = []
         self.course_list = course_list
         self.student_list = student_list
         self.schedule = schedule
@@ -34,28 +31,34 @@ class HillClimber:
         self.MC = MalusCalculatorClass.MC()
 
         # Compute malus with MalusCalculator
-        self.malus = self.MC.compute_total_malus(self.schedule)
+        self.malus = self.get_malus()
 
     """ Inheritable methods """
 
     def step_method(self, M):
+        """
+        Defines the step method
+        """
         pass
 
     def get_name(self):
+        """
+        Get the name of the method used
+        """
         pass
 
     def make_mutate(self, schedule):
+        """
+        Initiate mutate class
+        """
         M = MutateClass.Mutate(schedule)
         return M
 
-    def replace_roster(self, T=None):
-        self.current_best_roster = min(self.rosters, key=lambda x: x.malus_count)
-
-        if self.best_malus > self.current_best_roster.malus_count:
-            self.best_schedule = self.current_best_roster
-
-    def get_score(self):
-        return self.MC.compute_total_malus(self.schedule)['Total']
+    def get_malus(self):
+        """
+        Return the score of the current schedule
+        """
+        return self.MC.compute_total_malus(self.schedule)
 
 
     """ Main Method """
@@ -68,12 +71,11 @@ class HillClimber:
         other Hillclimbers is dependend on hill_climber_iters
         '''
 
+        # Set boolean
         self.accept_me = False
-        # Compute malus with MalusCalculator
-        self.malus = self.MC.compute_total_malus(self.schedule)
 
-        # Append the input roster
-        self.schedule_list.append(self.schedule)
+        # Compute malus with function
+        self.malus = self.get_malus()
 
         # set the number of iterations depending on user input
         if type(hill_climber_iters) == float:
@@ -99,14 +101,17 @@ class HillClimber:
             new_schedule = M.schedule
 
             # Calculate the malus points for the new schedule
-            new_malus = self.MC.compute_total_malus(new_schedule)
+            new_malus = self.get_malus()
 
             # let the hillclimber make 3 changes before a new score is calculated
             self.__accept_schedule(new_malus, new_schedule, T=T, ANNEALING=ANNEALING, fail_counter=fail_counter)
 
             self.iteration += 1
 
+            # If multipier
             if multiplier:
+
+                # Set hill climber iterations
                 self.hill_climber_iters = int(self.malus['Total'] * hill_climber_iters)
 
         return self.schedule, self.malus, self.iteration, self.accept_me
@@ -149,55 +154,55 @@ class HillClimber:
         method that makes a copy of our schedule that does not change the schedule
         when we modify the copy. This eliminates the need for deepcopy
         '''
+
+        # if instance is a dict
         if isinstance(obj, dict):
+
+            # return object comprehension with recursive function call
             return {k: self.recursive_copy(v) for k, v in obj.items()}
+
+        # if instance is a set
         elif isinstance(obj, set):
+
+            # return object comprehension with recursive function call
             return {self.recursive_copy(x) for x in obj}
         else:
+            # final return
             return obj
-
-    def save_results_multi(self):
-        with open('data/HCResults.csv', 'a') as f:
-            csv_writer = csv.DictWriter(f, fieldnames=['HC1 type','HC1 iteration','HC1 malus','HC2 type','HC2 iteration','HC2 malus','HC3 type','HC3 iteration','HC3 malus','HC4 type','HC4 iteration','HC4 malus'])
-            info = {
-                f'HC{self.core_assignment} type': self.get_name(),
-                f'HC{self.core_assignment} iteration': self.iteration,
-                f'HC{self.core_assignment} malus': self.malus['Total']
-            }
-
-            csv_writer.writerow(info)
-
-    def save_results(self):
-        with open('data/HCResults.csv', 'a') as f:
-            csv_writer = csv.DictWriter(f, fieldnames=['HC type','HC iteration','HC malus'])
-            info = {
-                f'HC type': self.get_name(),
-                f'HC iteration': self.iteration,
-                f'HC malus': self.malus['Total']
-            }
-
-            csv_writer.writerow(info)
 
 """ Inherited HillClimber Classes """
 
 class SeminarSwapRandom(HillClimber):
-    '''swaps a random class with another random class'''
+    """
+    swaps a random class with another random class
+    """
     def step_method(self, M):
-
+        """
+        Defines the step method
+        """
         # Take a random state to pass to function
         state = random.choice((True, False))
         M.swap_random_seminars(state)
 
     def get_name(self):
+        """
+        Get the name of the method used
+        """
         return "SeminarSwapRandom"
 
 class SeminarSwapCapacity(SeminarSwapRandom):
     '''swaps the class that has the most capacity malus points with a random class'''
     def make_mutate(self, schedule):
+        """
+        Initiate mutate class
+        """
         M = MutateClass.Mutate_Course_Swap_Capacity(schedule)
         return M
 
     def get_name(self):
+        """
+        Get the name of the method used
+        """
         return "SeminarSwapCapacity"
 
 class StudentSwapGapHour(HillClimber):
@@ -206,9 +211,15 @@ class StudentSwapGapHour(HillClimber):
        that has the most malus points from that group'''
 
     def step_method(self, M):
+        """
+        Defines the step method
+        """
         M.swap_bad_timeslots()
 
     def get_name(self):
+        """
+        Get the name of the method used
+        """
         return 'StudentSwapGapHour'
 
 class StudentSwapDoubleHour(HillClimber):
@@ -217,11 +228,20 @@ class StudentSwapDoubleHour(HillClimber):
        that has the most malus points from that group'''
 
     def make_mutate(self, schedule):
+        """
+        Initiate mutate class
+        """
         M = MutateClass.Mutate_double_classes(schedule)
         return M
 
     def step_method(self, M):
+        """
+        Defines the step method
+        """
         M.swap_bad_timeslots()
 
     def get_name(self):
+        """
+        Get the name of the method used
+        """
         return 'StudentSwapDoubleClasses'

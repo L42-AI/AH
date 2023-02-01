@@ -29,7 +29,19 @@ Besides a Hillclimber and a Simulated Annealing algorithm, we run a Genetic Algo
 
 Reproducibility of Results
 
-We have ran 
+We have ran
+
+Reproducibility of Lecture Graphs
+
+In order to reproduce the different plots go to the Experiment folder and run:
+
+- Experiment_best_multiplier.py for the different Multipliers plot
+- Experiment_300_Generations.py for the 300 generations Experiment
+- Experiment_avg_30_Hillclimbers.py for the average of 30 hillclimbers plot
+- plot_experiments.py and set activation to 0 for the Hillclimber with different stages and multiplier 4
+- plot_experiments.py and set activation to 1 for the Hillcimber run 30 times
+- plot_experiments.py and set activation to 2 for the Hillclimber testing Hillclimber 2
+- plot_experiments.py and set activation to 3 for the Hillclimber different stages with a multiplier of 4 and greedy
 
 
 
@@ -39,8 +51,6 @@ To run our application, you first install the required libraries:
 
 - Activate the ProgLab environment
 - pip install customtkinter
-- 
-
 
 
 When running main.py, you will be confronted with a GUI. This will provide the options to reproduce any of our 5 experiments, or, create your own experiment. When selecting this, the user is presented with two switches: Heuristics and Algorithms, these represent the possible heuristics and algorithms to be run. If you only select Heuristics, the algorithm will initialize 300 times and then present you with a historgram plotting the malus and the frequency. If however, you also turn on Algorithms, you are presented with a number of options to customize the algorithm:

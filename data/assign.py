@@ -1,13 +1,23 @@
+"""
+This file includes the code to make object lists out of the input data,
+These object lists are used in almost every file, hence making them global,
+and therefore importable is very helpful
+"""
+
 from data.data import COURSES, STUDENT_COURSES, ROOMS
 import classes.representation.course as CourseClass
 import classes.representation.student as StudentClass
 import classes.representation.room as RoomClass
 
 def assign(COURSES, STUDENT_COURSES, ROOMS):
-    """This Function takes in 3 Dataframes, loops over the dataframe and fills a list with the respective Class objects."""
+    """
+    This Function takes in 3 Dataframes, loops over the dataframe and fills a list with the respective Class objects.
+    """
 
+    # Set variables to global to make importable
     global course_list, student_list, room_list
 
+    # Set lists
     course_list = []
     student_list = []
     room_list = []
