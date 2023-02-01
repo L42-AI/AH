@@ -7,8 +7,8 @@ import random
 
 
 class Room():
+    """ This class represents a single room with all the days and timeslots """
     def __init__(self, data):
-
         # Set attributes from data
         self.id = data['Zaalnummber']
         self.capacity = data['Max. capaciteit']
