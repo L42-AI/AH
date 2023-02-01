@@ -39,6 +39,11 @@ class Optimize():
     """ Sequential """
 
     def run_solo(self, algorithm_duration, experiment, core_assignment, hill_climber_iters):
+        '''
+        This method can run any combination of our 4 Hillclimbing algorithms. Every iteration,
+        a Hillclimber is called upon 4 times. It places its current best schedule in order into
+        the hillclimbers instead of creating a pool and running it parrallel on the computer's cores.
+        '''
 
         # Set counters
         self.multiprocessor_counter = 0
@@ -253,9 +258,7 @@ class Optimize():
             HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.hillclimber_counter)
             self.schedule, self.malus, self.hillclimber_counter, _ = HC1.climb()
             print(self.malus)
-
         first_stage_duration = time.time() - first_stage_start_time
-
         print(f'\nFirst stage duration: {round(first_stage_duration, 2)} Seconds\n')
 
         """ Second Stage """
