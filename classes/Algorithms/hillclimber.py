@@ -1,5 +1,4 @@
 import classes.algorithms.mutate as MutateClass
-from helpers.shallow_copy import recursive_copy
 import classes.representation.malus_calc as MalusCalculatorClass
 from data.assign import student_list, course_list
 
@@ -69,7 +68,7 @@ class HillClimber:
         for _ in range(self.hill_climber_iters):
 
             # Make copy of schedule, complex because of dictionary
-            copied_schedule = recursive_copy(self.schedule)
+            copied_schedule = self.recursive_copy(self.schedule)
 
             # {k: {k2: {k3: [student for student in v3] for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
             # Create the mutate class
@@ -126,7 +125,13 @@ class HillClimber:
             self.malus = new_malus
             self.accept_me = True
 
-
+    def recursive_copy(self, obj):
+        if isinstance(obj, dict):
+            return {k: self.recursive_copy(v) for k, v in obj.items()}
+        elif isinstance(obj, set):
+            return {self.recursive_copy(x) for x in obj}
+        else:
+            return obj
 
     def save_results_multi(self):
         with open('data/HCResults.csv', 'a') as f:

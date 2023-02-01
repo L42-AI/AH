@@ -1,7 +1,6 @@
 import classes.algorithms.hillclimber as HillCLimberClass
 from multiprocessing import Pool
 import random
-from helpers.shallow_copy import recursive_copy
 from data.assign import student_list, course_list
 import classes.representation.malus_calc as MalusCalculatorClass
 
@@ -11,9 +10,11 @@ import csv
 
 
 class Optimize():
-    '''This class runs different types of algorithms on a given schedule. It can run Hillclimbers 
-       independent of each other, use a genetic algorithm and or simmulated annealing. README in the git
-       for more detail'''
+    '''
+    This class runs different types of algorithms on a given schedule. It can run Hillclimbers
+    independent of each other, use a genetic algorithm and or simmulated annealing. README in 
+    the git for more detail
+    '''
 
     def __init__(self, Roster, annealing, experiment_iter):
         self.Roster = Roster
@@ -159,7 +160,7 @@ class Optimize():
 
             # set schedules and malus for the next iteration
             self.malus = self.MC.compute_total_malus(self.schedule)
-            schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
+            schedule_list = [self.recursive_copy(self.schedule) for _ in range(4)]
 
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
@@ -275,7 +276,7 @@ class Optimize():
 
         self.save_data_genetic(0, time.time() - second_stage_start_time, self.malus['Total'])
 
-        schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
+        schedule_list = [self.recursive_copy(self.schedule) for _ in range(4)]
 
         while time.time() - second_stage_start_time < algorithm_duration:
 
@@ -286,7 +287,7 @@ class Optimize():
             if self.ANNEALING:
                 # if sim annealing worsening did not result in long run improvements, return to old state
                 if counter_since_improvement > 3000:
-                    schedule_list = [recursive_copy(best_schedule) for _ in range(4)]
+                    schedule_list = [self.recursive_copy(best_schedule) for _ in range(4)]
 
             # flag variable to stop running one iteration if a sim annealing worsening happened
             accepted = False
@@ -420,7 +421,7 @@ class Optimize():
         self.save_data_genetic(0, time.time() - second_stage_start_time, self.malus['Total'])
 
         # Make a list of four copies of the schedule
-        schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
+        schedule_list = [self.recursive_copy(self.schedule) for _ in range(4)]
 
         # While the given duration is not achieved
         while time.time() - second_stage_start_time < algorithm_duration:
@@ -591,6 +592,14 @@ class Optimize():
             print(f'Duration of iteration: {round(self.multiprocess_duration, 2)} S.')
             print(f'Duration since init: {round(self.duration, 2)} S.')
             print(self.malus)
+
+    def recursive_copy(self, obj):
+        if isinstance(obj, dict):
+            return {k: self.recursive_copy(v) for k, v in obj.items()}
+        elif isinstance(obj, set):
+            return {self.recursive_copy(x) for x in obj}
+        else:
+            return obj
 
     def save_schedule(self, schedule):
         """

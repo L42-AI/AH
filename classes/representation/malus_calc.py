@@ -54,8 +54,10 @@ class MC:
     """ Methods """
 
     def compute_schedule_malus(self, schedule) -> None:
-        '''computes the malus by looping over every course and its seminars
-           in the schedule'''
+        '''
+        computes the malus by looping over every course and its seminars
+        in the schedule
+        '''
 
         # For each course:
         for course_name in schedule:
@@ -105,8 +107,10 @@ class MC:
                     self.malus['Total'] += occupation
 
     def __days_in_schedule(self, schedule) -> dict:
-        '''returns a dictionary called timeslots that holds the information about gap and double hours
-           for every student'''
+        '''
+        returns a dictionary called timeslots that holds the information about gap and double hours
+        for every student
+        '''
 
         # Create empty dict
         timeslots = {}
@@ -130,8 +134,10 @@ class MC:
         return timeslots
 
     def compute_student_malus(self, schedule) -> None:
-        '''Uses the timeslots dictionary to go over every student in order to
-           'reward' the malus points associated with his/hers schedule'''
+        '''
+        Uses the timeslots dictionary to go over every student in order to
+        'reward' the malus points associated with his/hers schedule
+        '''
 
         # Set timeslots
         timeslots = self.__days_in_schedule(schedule)
@@ -179,8 +185,10 @@ class MC:
                                 self.malus['Total'] += 5
 
     def compute_total_malus(self, schedule) -> dict:
-        '''method to call on outside this class that calls all malus
-           calculation methods in the correct order'''
+        '''
+        method to call on outside this class that calls all malus
+        calculation methods in the correct order
+        '''
 
         self.init_malus()
         self.compute_schedule_malus(schedule)
