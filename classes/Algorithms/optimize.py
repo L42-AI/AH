@@ -109,8 +109,8 @@ class Optimize():
             finish_time = time.time()
 
             # record the time
-            self.multiprocess_duration = finish_time - iteration_start_time
-            self.duration += self.multiprocess_duration
+            self.iter_duration = finish_time - iteration_start_time
+            self.duration += self.iter_duration
 
             # replace the roster if it is better and print output
             self.__replace_roster(difference)
@@ -132,7 +132,7 @@ class Optimize():
         init_time = time.time()
 
         # Set counters
-        self.multiprocess_iter_counter = 0
+        self.multiprocessor_counter = 0
         self.hillclimber_iter_counter = 0
         self.fail_counter = 0
         self.duration = 0
@@ -156,7 +156,7 @@ class Optimize():
             start_time = time.time()
 
             # Increase iter counter
-            self.multiprocess_iter_counter += 1
+            self.multiprocessor_counter += 1
 
             # set schedules and malus for the next iteration
             self.malus = self.MC.compute_total_malus(self.schedule)
@@ -581,7 +581,7 @@ class Optimize():
         if difference >= 0:
             print(f'\n========================= Generation: {self.multiprocessor_counter} =========================\n')
             print(f'Malus improvement: {difference}')
-            print(f'Duration of iteration: {round(self.multiprocess_duration, 2)} S.')
+            print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
             print(f'Duration since init: {round(self.duration, 2)} S.')
             print(self.malus)
 
@@ -589,7 +589,7 @@ class Optimize():
             self.fail_counter += 1
             print(f'\n========================= Generation: {self.multiprocessor_counter} =========================\n')
             print('FAIL')
-            print(f'Duration of iteration: {round(self.multiprocess_duration, 2)} S.')
+            print(f'Duration of iteration: {round(self.iter_duration, 2)} S.')
             print(f'Duration since init: {round(self.duration, 2)} S.')
             print(self.malus)
 
