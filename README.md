@@ -49,14 +49,19 @@ When running main.py, you will be confronted with a GUI. This will provide the o
 - Hillclimber single core
   This uses one hillclimber at a time
 - Hillclimber multiple cores
-  This runs four hillclimbers at a time on four different cores using multiproccessor
+  This runs four hillclimbers at a time on four different cores using multiproccessor*
 - Genetic
-  This runs one hill climber until a malus of 125, and afterwards generates a gentic alogorithm where 32 schedules compete to survive.
+  This runs one hill climber until a malus of 125**, and afterwards generates a gentic alogorithm where 32 schedules compete to survive.
 - Gentic Pooling
-  This also runs one hillclimber up until a malus of 125, but afterwards runs a genetic algorithm using four cores with multiprocessing.
-  
-Note:
-When selecting multiprocessing (normal, or genetic), please ensure a high hillclimber iteration count. This is due to the fact that starting up multiprocessing takes quite some time. This makes it that the hillclimbers are only worthwile to run with a higher iteration count.
+  This also runs one hillclimber up until a malus of 125**, but afterwards runs a genetic algorithm using four cores with multiprocessing.
+ 
+ 
+
+Notes:
+
+* When selecting multiprocessing (normal, or genetic), please ensure a high hillclimber iteration count. This is due to the fact that starting up multiprocessing takes quite some time. This makes it that the hillclimbers are only worthwile to run with a higher iteration count.
+
+** Genetic runs with one hillclimber up until a malus of 125, because this has shown to be very effective in solving the initial phase of the problem. Hence, in the code of genetic runs, the process is split into two stages
 
 A tutorial showing a full interaction with this gui can be found here: ***HYPERLINK***
 
