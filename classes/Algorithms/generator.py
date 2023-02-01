@@ -1,16 +1,12 @@
 import classes.algorithms.multiprocessor as MultiprocessorClass
-
-import classes.representation.course as CourseClass
-import classes.representation.student as StudentClass
-import classes.representation.room as RoomClass
-import classes.representation.roster as RosterClass
 import classes.representation.malus_calc as MalusCalculatorClass
+import classes.representation.roster as RosterClass
 
-from data.data import COURSES, STUDENT_COURSES, ROOMS
+from data.assign import course_list
 
-import os
-from tqdm import tqdm
 import matplotlib.pyplot as plt
+from tqdm import tqdm
+import os
 
 class Generator:
     def __init__(self, capacity, popular, popular_own_day, difficult_students, annealing, visualize):
@@ -21,74 +17,17 @@ class Generator:
         self.POPULAR_OWN_DAY = popular_own_day
         self.ANNEALING = annealing
         self.DIFFICULT_STUDENTS = difficult_students
+        self.MC = MalusCalculatorClass.MC()
 
         # Save initialization
-        self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
+        self.malus, self.Roster = self.initialise()
 
         if visualize:
-            self.plot_startup(COURSES, STUDENT_COURSES, ROOMS)
+            self.plot_startup()
 
     """ INIT """
 
-    def __count_students(self, dataframe):
-        """This function Counts the amount of students enrolled for each course"""
-
-        list_courses = ['Vak1', 'Vak2', 'Vak3', 'Vak4', 'Vak5']
-        dict_count = {}
-
-        # loop over each row of the dataframe and set the count plus 1
-        for _, row in dataframe.iterrows():
-            for course in list_courses:
-
-                # make it a string, in order to easily check if it is nan
-                course_str = str(row[course])
-
-                if course_str != 'nan':
-
-                    # check if its in the dict, if not make a key and set value to 0
-                    if course_str not in dict_count:
-                        dict_count[course_str] = 0
-
-                    # count the students
-                    dict_count[course_str] += 1
-
-        return dict_count
-
-    def assign(self, COURSES, STUDENT_COURSES, ROOMS):
-        """This Function takes in 3 Dataframes, loops over the dataframe and fills a list with the respective Class objects."""
-
-        global course_list, student_list, rooms_list
-
-        course_list = []
-        student_list = []
-        rooms_list = []
-
-        # count the students that have enrolled for each course
-        dict_enrollment = self.__count_students(STUDENT_COURSES)
-
-        # create an instance for every course
-        for _, course in COURSES.iterrows():
-
-            # fill in the list with course objects
-            course_list.append(CourseClass.Course(course, dict_enrollment[course['Vak']]))
-
-        for _, student in STUDENT_COURSES.iterrows():
-
-            # fill in the list with student objects
-            student_list.append(StudentClass.Student(student, course_list))
-
-        for _, room in ROOMS.iterrows():
-
-            # fill in the list with room objects
-            rooms_list.append(RoomClass.Room(room))
-
-        for course in course_list:
-            course.enroll_students(student_list)
-            course.flag_hard_student(student_list)
-
-        return course_list, student_list, rooms_list
-
-    def schedule_fill(self, Roster, course_list, student_list):
+    def schedule_fill(self, Roster, course_list):
         ''''method schedules a timeslot for every lecture, tutorial or practical that takes place'''
 
         # first give the most popular courses a place in the schedule
@@ -132,27 +71,20 @@ class Generator:
         # timeslots in rooms that did not get used will be placed in the schedule as empty
         Roster.fill_empty_slots()
 
-        Roster.init_student_timeslots(student_list)
+        Roster.init_student_timeslots()
 
-    def initialise(self, COURSES, STUDENT_COURSES, ROOMS):
-
-
-        # starts up a random Roster
-        course_list, student_list, room_list = self.assign(COURSES, STUDENT_COURSES, ROOMS)
-
-        # Create Malus Calculator
-        MC = MalusCalculatorClass.MalusCalculator(course_list, student_list, room_list)
+    def initialise(self):
 
         # Create a roster
-        Roster = RosterClass.Roster(room_list, student_list, course_list, capacity=self.CAPACITY)
+        Roster = RosterClass.Roster(capacity=self.CAPACITY)
 
         # Fill the roster
-        self.schedule_fill(Roster, course_list, student_list)
+        self.schedule_fill(Roster, course_list)
 
         # Compute Malus
-        malus = MC.compute_total_malus(Roster.schedule)
+        malus = self.MC.compute_total_malus(Roster.schedule)
 
-        return malus, Roster, course_list, student_list, room_list, MC
+        return malus, Roster
 
     """ GET """
 
@@ -161,19 +93,19 @@ class Generator:
 
     """ METHODS """
 
-    def __run_random(self, COURSES, STUDENT_COURSES, ROOMS):
+    def __run_random(self):
         self.costs = []
         self.iterations = []
         for i in tqdm(range(100)):
 
-            self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0]['Total'])
+            self.costs.append(self.initialise()[0]['Total'])
 
             self.iterations.append(i)
 
-    def plot_startup(self, COURSES, STUDENT_COURSES, ROOMS):
+    def plot_startup(self):
         '''plots 300 random startups to get an idea of what a random score would be'''
 
-        self.__run_random(COURSES, STUDENT_COURSES, ROOMS)
+        self.__run_random()
 
         if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY:
             fig_name = f'Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}.png'
@@ -201,7 +133,8 @@ class Generator:
         plt.savefig(os.path.join(directory_plots, fig_name))
 
     def optimize(self, experiment, mode, core_assignment, hill_climber_iters, algorithm_duration, experiment_iter=0):
-        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING, experiment_iter)
+
+        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.ANNEALING, experiment_iter)
 
         if mode == 'sequential':
             pass
@@ -211,5 +144,3 @@ class Generator:
             Multiprocessor.run_genetic(algorithm_duration, experiment)
         elif mode == 'genetic pool':
             Multiprocessor.run_genetic_pool(algorithm_duration, experiment, core_assignment, hill_climber_iters)
-
-        return self.student_list

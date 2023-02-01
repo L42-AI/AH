@@ -1,8 +1,9 @@
 import copy
+from data.assign import student_list, course_list, room_list
 
-class MalusCalculator:
+class MC:
 
-    def __init__(self, course_list, student_list, room_list) -> None:
+    def __init__(self) -> None:
 
         # Set lists
         self.course_list = course_list

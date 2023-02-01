@@ -2,6 +2,7 @@ import customtkinter
 import csv
 import classes.algorithms.generator as GeneratorClass
 import classes.GUI.selector_GUI as SelectorApp
+from data.assign import student_list
 import pickle
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
@@ -241,7 +242,7 @@ class App(customtkinter.CTk):
         for i in range(30):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            student_list = G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
+            G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
 
         # Plot Funtion
 
@@ -279,7 +280,7 @@ class App(customtkinter.CTk):
         for i in range(30):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            student_list = G.Optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
+            G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
         # Plot Funtion
 
         self.finish(student_list)
@@ -316,7 +317,7 @@ class App(customtkinter.CTk):
         for i in range(30):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            student_list = G.Optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
+            G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
         # Plot Funtion
 
         self.finish(student_list)
@@ -348,7 +349,7 @@ class App(customtkinter.CTk):
 
         G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                     difficult_students, annealing, visualize)
-        student_list = G.Optimize(experiment, mode, core_assignment, duration, hill_climber_iters)
+        G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters)
         # Plot Funtion
 
         self.finish(student_list)
@@ -356,7 +357,7 @@ class App(customtkinter.CTk):
         for i, hill_climber_iters in enumerate[0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]:
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            student_list = G.Optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
+            G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
         # Plot Funtion
 
         self.finish(student_list)
@@ -389,7 +390,7 @@ class App(customtkinter.CTk):
         for i in range(30):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            student_list = G.Optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
+            G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
         # Plot Funtion
 
         self.finish(student_list)
@@ -533,7 +534,7 @@ class App(customtkinter.CTk):
         G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                     difficult_students, annealing, visualize)
         if not visualize:
-            student_list = G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters)
+            G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters)
             # Plot Funtion
 
             self.finish(student_list)

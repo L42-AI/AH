@@ -1,15 +1,16 @@
 import classes.algorithms.hillclimber as HillCLimberClass
 from multiprocessing import Pool
 import random
-import classes.GUI.selector_GUI as SelectorApp
 from helpers.shallow_copy import recursive_copy
+from data.assign import student_list, course_list
+import classes.representation.malus_calc as MalusCalculatorClass
 
 import time
 import csv
 
 
 class Multiprocessor():
-    def __init__(self, Roster, course_list, student_list, MC, annealing, experiment_iter):
+    def __init__(self, Roster, annealing, experiment_iter):
         self.Roster = Roster
         self.course_list = course_list
         self.student_list = student_list
@@ -17,7 +18,7 @@ class Multiprocessor():
         self.ANNEALING = annealing
         self.experiment_iter = experiment_iter
 
-        self.MC = MC
+        self.MC = MalusCalculatorClass.MC()
 
     # def core_assignment(self, malus) -> list:
 
