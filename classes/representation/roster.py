@@ -91,9 +91,8 @@ class Roster():
         i = 0
 
         succes = False
-        i = 0
         while not succes:
-            
+
             # count plus 1
             i += 1
 
