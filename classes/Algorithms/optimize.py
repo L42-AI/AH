@@ -71,7 +71,7 @@ class Optimize():
 
             # Run hill climber 1 if malus is larger than 125
             if self.malus['Total'] > 125:
-                schedule, malus, iteration = HC1.climb(hill_climber_iters)
+                schedule, malus, iteration, _ = HC1.climb(hill_climber_iters)
 
             else:
                 # Randomize activation from core assignment
@@ -132,7 +132,7 @@ class Optimize():
         init_time = time.time()
 
         # Set counters
-        self.multiprocessor_counter = 0
+        self.multiprocess_iter_counter = 0
         self.hillclimber_iter_counter = 0
         self.fail_counter = 0
         self.duration = 0
@@ -156,7 +156,7 @@ class Optimize():
             start_time = time.time()
 
             # Increase iter counter
-            self.multiprocessor_counter += 1
+            self.multiprocess_iter_counter += 1
 
             # set schedules and malus for the next iteration
             self.malus = self.MC.compute_total_malus(self.schedule)
@@ -185,14 +185,14 @@ class Optimize():
 
             finish_time = time.time()
 
-            self.multiprocess_duration = finish_time - start_time
-            self.duration += self.multiprocess_duration
+            self.iter_duration = finish_time - start_time
+            self.duration += self.iter_duration
 
             # replace the roster if it is better
             self.__replace_roster(difference)
 
             for output_schedule in output_schedules:
-                self.save_data_multi(output_schedule[2], output_schedule[1]['Total'], self.multiprocessor_counter, round(self.duration, 2))
+                self.save_data_multi(output_schedule[2], output_schedule[1]['Total'], self.multiprocess_iter_counter, round(self.duration, 2))
 
 
         self.export_data_multi(experiment)
@@ -594,6 +594,10 @@ class Optimize():
             print(self.malus)
 
     def recursive_copy(self, obj):
+        '''
+        method that makes a copy of our schedule that does not change the schedule
+        when we modify the copy. This eliminates the need for deepcopy
+        '''
         if isinstance(obj, dict):
             return {k: self.recursive_copy(v) for k, v in obj.items()}
         elif isinstance(obj, set):
