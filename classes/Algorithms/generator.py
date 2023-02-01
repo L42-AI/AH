@@ -148,7 +148,7 @@ class Generator:
         Optimize = OptimizeClass.Optimize(self.Roster, self.ANNEALING, experiment_iter)
 
         if mode == 'sequential':
-            pass
+            Optimize.run_solo(algorithm_duration, experiment, core_assignment, hill_climber_iters)
         elif mode == 'multiproccesing':
             Optimize.run_multi(algorithm_duration, experiment, core_assignment, hill_climber_iters)
         elif mode == 'genetic':
