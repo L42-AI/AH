@@ -40,24 +40,36 @@ class App(customtkinter.CTk):
         self.label_experiment = customtkinter.CTkLabel(master=self.toggle_frame, text="Experiments:", font=customtkinter.CTkFont(size=15, weight='bold'))
         self.label_experiment.grid(row=0, column=0, padx=20, pady=10, sticky="nsew")
 
-        self.experiment1_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 1', font=customtkinter.CTkFont(size=15), command=self.experiment1_switch_click)
+        self.buttons = []
+        self.experiment1_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 1', font=customtkinter.CTkFont(size=15), command=lambda:self.toggle_buttons(0))
         self.experiment1_switch.grid(row=1, column=0, pady=10, padx=20, sticky="nsew")
+        self.buttons.append(self.experiment1_switch)
 
-        self.experiment2_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 2', font=customtkinter.CTkFont(size=15), command=self.experiment2_switch_click)
+        self.experiment2_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 2', font=customtkinter.CTkFont(size=15), command=lambda: self.toggle_buttons(1))
         self.experiment2_switch.grid(row=2, column=0, pady=10, padx=20, sticky="nsew")
+        self.buttons.append(self.experiment2_switch)
 
-        self.experiment3_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 3', font=customtkinter.CTkFont(size=15), command=self.experiment3_switch_click)
+        
+
+        self.experiment3_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 3', font=customtkinter.CTkFont(size=15), command=lambda:self.toggle_buttons(2))
         self.experiment3_switch.grid(row=3, column=0, pady=10, padx=20, sticky="nsew")
+        self.buttons.append(self.experiment3_switch)
 
-        self.experiment4_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 4', font=customtkinter.CTkFont(size=15), command=self.experiment4_switch_click)
+
+        self.experiment4_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 4', font=customtkinter.CTkFont(size=15), command=lambda:self.toggle_buttons(3))
         self.experiment4_switch.grid(row=4, column=0, pady=10, padx=20, sticky="nsew")
+        self.buttons.append(self.experiment4_switch)
 
-        self.experiment5_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 5', font=customtkinter.CTkFont(size=15), command=self.experiment5_switch_click)
+
+        self.experiment5_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Experiment 5', font=customtkinter.CTkFont(size=15), command=lambda:self.toggle_buttons(4))
         self.experiment5_switch.grid(row=5, column=0, pady=10, padx=20, sticky="nsew")
+        self.buttons.append(self.experiment5_switch)
 
 
         self.create_own_exp_switch = customtkinter.CTkCheckBox(master=self.toggle_frame, text='Create your own:', font=customtkinter.CTkFont(size=15), command=self.create_own_experiment)
         self.create_own_exp_switch.grid(row=6, column=0, pady=10, padx=20, sticky="nsew")
+        self.buttons.append(self.create_own_exp_switch)
+
 
         """ Setup Generate Button """
 
@@ -66,51 +78,24 @@ class App(customtkinter.CTk):
         self.generate_button.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
 
     """ Toggle switches """
-
-    def experiment1_switch_click(self) -> None:
-        self.experiment2_switch.deselect()
-        self.experiment3_switch.deselect()
-        self.experiment4_switch.deselect()
-        self.experiment5_switch.deselect()
-        self.create_own_exp_switch.deselect()
-
-    def experiment2_switch_click(self) -> None:
-        self.experiment1_switch.deselect()
-        self.experiment3_switch.deselect()
-        self.experiment4_switch.deselect()
-        self.experiment5_switch.deselect()
-        self.create_own_exp_switch.deselect()
-
-    def experiment3_switch_click(self) -> None:
-        self.experiment1_switch.deselect()
-        self.experiment2_switch.deselect()
-        self.experiment4_switch.deselect()
-        self.experiment5_switch.deselect()
-        self.create_own_exp_switch.deselect()
-
-    def experiment4_switch_click(self) -> None:
-        self.experiment1_switch.deselect()
-        self.experiment2_switch.deselect()
-        self.experiment3_switch.deselect()
-        self.experiment5_switch.deselect()
-        self.create_own_exp_switch.deselect()
-
-    def experiment5_switch_click(self) -> None:
-        self.experiment1_switch.deselect()
-        self.experiment2_switch.deselect()
-        self.experiment3_switch.deselect()
-        self.experiment4_switch.deselect()
-        self.create_own_exp_switch.deselect()
+    def toggle_buttons(self, i):
+        for _, button in enumerate(self.buttons):
+            if _ != i:
+                button.deselect()
+                try: 
+                    self.create_own_exp_frame1.destroy()
+                    self.create_own_exp_frame2.destroy()
+                except:
+                    pass
+                self.width = 250
+                self.height = 450
+                self.geometry(f"{self.width}x{self.height}")
 
     def create_own_experiment(self):
 
         state_own = self.create_own_exp_switch.get()
         if state_own:
-            self.experiment1_switch.deselect()
-            self.experiment2_switch.deselect()
-            self.experiment3_switch.deselect()
-            self.experiment4_switch.deselect()
-            self.experiment5_switch.deselect()
+            self.toggle_buttons(5)
 
             self.width += 500
             self.geometry(f"{self.width}x{self.height}")
