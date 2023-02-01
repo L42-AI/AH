@@ -16,8 +16,8 @@ The goal is to minimize the maluspoints. We have a total of 3 algorithms that tr
 This is why we created our Greedy Algorithm. Greedy can lower the initial startup malus points. This results in less computing power needed when trying to minimize the cost function with our hillclimbers. When running our experiments, Greedy was turned off. This was to rigurously test the effectiveness of our hillclimbers. Also, some experiments were written in later stages of our development process, therefore, to ensure a high degree of camparabiliy, we turned off greedy in our later experiment.
 After our initialisation, we want to lower the malus points. For this we originally created 4 variations of hillclimbers, with the following functionality:
 The first two hillclimbers swap classes as a whole, meaning that they relocate the class, with their assigned students to a new class moment, or timeslot.
-- ClassesSwapRandom swaps 2 randomly chosen classes, which could be lectures, tutorials or practicals.
-- ClassesSwapCapacity selected a class based on the capacity malus count. It than picks another course to swap the timeslot of this class with. The second course was choosen randomly, to avoid the swaps following the greedy principle. By incorporating some degree of randomness we can explore different, and therefore more states in the complete statespace.
+- SeminarSwapRandom swaps 2 randomly chosen classes, which could be lectures, tutorials or practicals.
+- SeminarSwapCapacity selected a class based on the capacity malus count. It than picks another course to swap the timeslot of this class with. The second course was choosen randomly, to avoid the swaps following the greedy principle. By incorporating some degree of randomness we can explore different, and therefore more states in the complete statespace.
 
 The other two hill climbers swap the assigned groups a student is enrolled in
 - StudentSwapGapHour pickes the student with the most malus points based on gap hours. Then it looked at their 'worst day', the day that causes the most mals. This could for example be a day where he/she started at 9 and had one final siminar at 5 o'clocks, which results in 3 gap hours. This Hillclimber would then pick one of the two seminar types, tutorial or practical, and try to change the group a student is enrolled in, for example from tutorial 1, to tutorial 3. A student cannot change lecture group, since all students enrolled in a course go to the same lecture.
@@ -49,14 +49,19 @@ When running main.py, you will be confronted with a GUI. This will provide the o
 - Hillclimber single core
   This uses one hillclimber at a time
 - Hillclimber multiple cores
-  This runs four hillclimbers at a time on four different cores using multiproccessor
+  This runs four hillclimbers at a time on four different cores using multiproccessor*
 - Genetic
-  This runs one hill climber until a malus of 125, and afterwards generates a gentic alogorithm where 32 schedules compete to survive.
+  This runs one hill climber until a malus of 125**, and afterwards generates a gentic alogorithm where 32 schedules compete to survive.
 - Gentic Pooling
-  This also runs one hillclimber up until a malus of 125, but afterwards runs a genetic algorithm using four cores with multiprocessing.
-  
-Note:
-When selecting multiprocessing (normal, or genetic), please ensure a high hillclimber iteration count. This is due to the fact that starting up multiprocessing takes quite some time. This makes it that the hillclimbers are only worthwile to run with a higher iteration count.
+  This also runs one hillclimber up until a malus of 125**, but afterwards runs a genetic algorithm using four cores with multiprocessing.
+ 
+ 
+
+Notes:
+
+* When selecting multiprocessing (normal, or genetic), please ensure a high hillclimber iteration count. This is due to the fact that starting up multiprocessing takes quite some time. This makes it that the hillclimbers are only worthwile to run with a higher iteration count.
+
+** Genetic runs with one hillclimber up until a malus of 125, because this has shown to be very effective in solving the initial phase of the problem. Hence, in the code of genetic runs, the process is split into two stages
 
 A tutorial showing a full interaction with this gui can be found here: ***HYPERLINK***
 

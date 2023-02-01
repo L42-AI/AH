@@ -1,5 +1,6 @@
-# This class takes in a list of objects called rooms and makes a roster.
-# It can also calculate the total amount maluspoints
+"""
+This class takes in a list of objects called rooms and makes a roster.
+"""
 from data.assign import student_list, course_list, room_list
 import random
 
@@ -20,7 +21,7 @@ class Roster():
         self.CAPACITY = capacity
 
     def schedule_students(self):
-        """This method takes in a student list and initializes student time slots for all the students."""
+        """ This method takes in a student list and initializes student time slots for all the students """
 
         # loop over the list of students and initialize timeslots
         for student in self.student_list:
@@ -107,7 +108,7 @@ class Roster():
                             continue
                         if class_type != 'lecture' and room.id == 'C0.110' or room.id == 'C0.112':
                             continue
-                
+
                 # check if the lecture_day is None if not check if its a lecture, if it is skip the rostering
                 # part of the most POPULAR and DIFICULT_STUDENTS algorithm in generator.py
                 if course.lecture_day != None:
@@ -130,8 +131,9 @@ class Roster():
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, 1000)
 
                 succes = True
-            i += 1
 
     def reset_room_availability(self, room_list):
+        """ This method resets the availability of all the rooms back to true """
+
         for room in room_list:
             room.initialize_availability()

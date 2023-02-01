@@ -2,8 +2,10 @@ import copy
 from data.assign import student_list, course_list, room_list
 
 class MC:
-    '''Class that handles malus calculations. It uses the schedule and the set of
-       students connnected to each seminar to do so'''
+    """
+    Class that handles malus calculations. It uses the schedule and the set of
+    students connnected to each seminar to do so
+    """
 
     def __init__(self) -> None:
 
@@ -19,36 +21,54 @@ class MC:
     """ INIT """
 
     def init_malus(self) -> None:
-        '''create a malus dictionary that will hold the points'''
+        '''
+        create a malus dictionary that will hold the points
+        '''
 
         self.malus = {}
 
+        # Set all malus cause counts
         self.malus['Total'] = 0
         self.malus['Night'] = 0
         self.malus['Capacity'] = 0
-
         self.malus['Double Classes'] = 0
         self.malus['Classes Gap'] = 0
         self.malus['Triple Gap'] = 0
 
     def init_student_dict(self) -> None:
+        """
+        Create a student dict that links ids to object
+        """
+
         self.student_dict = {}
+
+        # For each student object
         for student in self.student_list:
             self.student_dict[student.id] = student
 
     def init_course_dict(self) -> None:
+        """
+        Create a course dict that links ids to object
+        """
+
         self.course_dict= {}
+
+        # For each course object
         for course in self.course_list:
             self.course_dict[course.name] = course
 
     """ GET """
 
     def get_student(self, id) -> object:
-        '''returns student object'''
+        '''
+        returns student object
+        '''
         return self.student_dict.get(id)
 
     def get_course(self, name) -> object:
-        '''returns course object'''
+        '''
+        returns course object
+        '''
         return self.course_dict.get(name)
 
     """ Methods """
@@ -171,7 +191,7 @@ class MC:
                         if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
                             lesson_gaps = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
 
-                            # check if one gap hour
+                            # check for lesson gaps and attribute malus
                             if lesson_gaps == 1:
                                 self.malus['Classes Gap'] += 1
                                 self.malus['Total'] += 1

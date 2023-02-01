@@ -1,3 +1,8 @@
+"""
+This file includes the generator class which is the class that generates our schedule
+It does the random initialization and can route the schedule to the optimizing class
+"""
+
 import classes.algorithms.optimize as OptimizeClass
 import classes.representation.malus_calc as MalusCalculatorClass
 import classes.representation.roster as RosterClass
@@ -9,8 +14,9 @@ from tqdm import tqdm
 import os
 
 class Generator:
-    def __init__(self, capacity, popular, popular_own_day, difficult_students, annealing, visualize):
+    """ This Class runs the optimize functions, randomly initiates the schedule and plots the baseline """
 
+    def __init__(self, capacity, popular, popular_own_day, difficult_students, annealing, visualize):
         # Set heuristics
         self.CAPACITY = capacity
         self.POPULAR = popular
@@ -20,12 +26,11 @@ class Generator:
         self.MC = MalusCalculatorClass.MC()
 
         # Save initialization
-        self.malus, self.Roster = self.initialise()
+        self.malus, self.Roster = self.initialize()
 
+        # if in the GUI visualize is set to true show the graph of the baseline
         if visualize:
             self.plot_startup()
-
-    """ INIT """
 
     def schedule_fill(self, Roster, course_list, room_list):
         """
@@ -45,12 +50,15 @@ class Generator:
             for i in range(5):
                 course_list[i].lecture_day = days[i]
 
+        # give the 5 most 
         if self.DIFFICULT_STUDENTS:
             course_list = sorted(course_list, key=lambda x: x.prioritise)
             for i in range(5):
                 course_list[i].lecture_day = days[i]
 
+        # loop over the course list
         for course in course_list:
+
             # go over the number of lectures and fill the schedule
             for i in range(course.lectures):
 
@@ -77,7 +85,10 @@ class Generator:
         # reset all availability of rooms
         Roster.reset_room_availability(room_list)
 
-    def initialise(self):
+    def initialize(self):
+        """
+        This method initializes the roster
+        """
 
         # Create a roster
         Roster = RosterClass.Roster(capacity=self.CAPACITY)
@@ -90,29 +101,33 @@ class Generator:
 
         return malus, Roster
 
-    """ GET """
-
-    def get_schedule(self):
-        return self.Roster.schedule
-
-    """ METHODS """
-
     def __run_random(self):
+        """
+        This method runs the initialize for 500 iterations and appends the malus points to the list cost
+        """
+
+        # make the lists
         self.costs = []
         self.iterations = []
+
+        # Run the initialize function 500 times
         for i in tqdm(range(500)):
 
-            self.costs.append(self.initialise()[0]['Total'])
+            self.costs.append(self.initialize()[0]['Total'])
 
             self.iterations.append(i)
 
     def plot_startup(self):
-        '''plots 300 random startups to get an idea of what a random score would be'''
+        """
+        This method plots 500 random startups to get an idea of what a random score would be
+        """
 
+        # Run the random function
         self.__run_random()
 
+        # Set the file name based on the heuristic that are enabled
         if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY:
-            fig_name = f'Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}.png'
+            fig_name = f'Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}_Busy_Students:{self.DIFFICULT_STUDENTS}.png'
         else:
             fig_name = "Baseline_random.png"
 
@@ -125,6 +140,7 @@ class Generator:
         # Directory "visualize"
         directory_plots = os.path.join(parent_dir, 'AH/visualize')
 
+        # Set settings for plot
         plt.figure(figsize=(10,4))
         plt.style.use('seaborn-whitegrid')
 
@@ -135,16 +151,22 @@ class Generator:
         plt.ylabel('Iterations')
         plt.xlabel('Malus')
         plt.savefig(os.path.join(directory_plots, fig_name))
+        plt.show()
 
     def optimize(self, experiment, mode, core_assignment, hill_climber_iters, algorithm_duration, experiment_iter=0):
 
+        # initiate the optimze class
         Optimize = OptimizeClass.Optimize(self.Roster, self.ANNEALING, experiment_iter)
 
+        # choose the right method from the optimize class to run
         if mode == 'sequential':
             Optimize.run_solo(algorithm_duration, experiment, core_assignment, hill_climber_iters)
+
         elif mode == 'multiproccesing':
             Optimize.run_multi(algorithm_duration, experiment, core_assignment, hill_climber_iters)
+
         elif mode == 'genetic':
             Optimize.run_genetic(algorithm_duration, experiment)
+
         elif mode == 'genetic pool':
             Optimize.run_genetic_pool(algorithm_duration, experiment, core_assignment, hill_climber_iters)

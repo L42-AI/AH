@@ -109,6 +109,7 @@ class Student():
                 self.__pick_group(course, group_dict, class_num, max_std, group)
 
     def __lecture_timeslot(self, course, current_course):
+        """ This method adds the student Id's to the lectures """
 
         if course.lectures > 0:
             # For each lecture in the course:
@@ -121,7 +122,7 @@ class Student():
                 current_course[current_lecture]['students'].add(self.id)
 
     def __pract_tut_timeslot(self, course, current_course, seminar_type):
-        """ This method adds the """
+        """ This method adds the student Id's to practicals or tutorials """
 
         #
         if seminar_type == "tutorial" and course.tutorials > 0:
@@ -159,6 +160,7 @@ class Student():
             self.__pract_tut_timeslot(course, current_course, 'practical')
 
     def __days_in_schedule(self, Roster):
+        """ This method finds out how often a student has seminars in a day and appends it into the list for that day """
 
         # Create a days dictionary
         days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
@@ -167,11 +169,12 @@ class Student():
         for course in Roster.schedule:
 
             # For each class:
-            for classes in Roster.schedule[course]:
+            for seminars in Roster.schedule[course]:
 
                 # Set the class info
-                class_info = Roster.schedule[course][classes]
+                class_info = Roster.schedule[course][seminars]
 
+                # if the student follows that seminar
                 if self.id in class_info['students']:
 
                     # Add the timeslots into the days dictionary
@@ -215,6 +218,7 @@ class Student():
                     if timeslot_list[timeslot_num] in timeslots_double_classes:
                         self.malus_cause['Double Classes'][day] += 1
                         self.malus_count += 1
+                        
                     else:
                         timeslots_double_classes.append(timeslot_list[timeslot_num])
 

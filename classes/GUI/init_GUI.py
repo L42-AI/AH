@@ -594,5 +594,3 @@ class App(customtkinter.CTk):
             # Plot Funtion
 
             self.finish(student_list)
-
-        self.mainloop()
