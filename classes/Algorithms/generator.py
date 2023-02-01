@@ -2,7 +2,7 @@ import classes.algorithms.optimize as OptimizeClass
 import classes.representation.malus_calc as MalusCalculatorClass
 import classes.representation.roster as RosterClass
 
-from data.assign import course_list
+from data.assign import course_list, student_list, room_list
 
 import matplotlib.pyplot as plt
 from tqdm import tqdm
@@ -21,14 +21,14 @@ class Generator:
         self.MC = MalusCalculatorClass.MC()
 
         # Save initialization
-        self.malus, self.schedule = self.initialize()
+        self.malus, self.schedule = self.initialize(student_list, course_list, room_list)
 
         if visualize:
             self.plot_startup()
 
     """ INIT """
 
-    def schedule_fill(self):
+    def schedule_fill(self, student_list, course_list, room_list):
         """
         This method creates the schedule
         """
@@ -55,7 +55,7 @@ class Generator:
             # go over the number of lectures and fill the schedule
             for i in range(course.lectures):
 
-                self.fill_schedule_random(course, "lecture", i + 1)
+                self.fill_schedule_random(course, "lecture", i + 1, room_list)
 
             # make a dictionary to loop over with practicals and tutorials
             seminars = {
@@ -67,18 +67,18 @@ class Generator:
             for seminar_type, (num_seminars, num_rooms) in seminars.items():
                 for i in range(num_seminars):
                     for j in range(num_rooms):
-                        self.fill_schedule_random(course, seminar_type, j + 1)
+                        self.fill_schedule_random(course, seminar_type, j + 1, room_list)
 
         # timeslots in rooms that did not get used will be placed in the schedule as empty
-        self.fill_empty_slots()
+        self.fill_empty_slots(room_list)
 
-        self.init_student_timeslots()
+        self.init_student_timeslots(student_list)
 
-    def init_student_timeslots(self):
+    def init_student_timeslots(self, student_list):
         """This method takes in a student list and initializes student time slots for all the students."""
 
         # loop over the list of students and initialize timeslots
-        for student in self.student_list:
+        for student in student_list:
             student.student_timeslots(self)
 
     def __place_in_schedule(self, room, day, timeslot, course_name, classes, max_std):
@@ -96,7 +96,7 @@ class Generator:
         # set the room availability to False in order to negate double rostering of rooms
         room.availability[day][timeslot] = False
 
-    def fill_empty_slots(self):
+    def fill_empty_slots(self, room_list):
         """
         This method makes a new key in the schedule and as value fills all the rooms and their timeslots,
         that have not been scheduled yet.
@@ -112,7 +112,7 @@ class Generator:
         i = 0
 
         # check every room if they are being used at every moment
-        for room in self.room_list:
+        for room in room_list:
 
             # Set timeslot lists
             timeslots = [9, 11, 13, 15]
@@ -131,7 +131,7 @@ class Generator:
 
                         i += 1
 
-    def fill_schedule_random(self, course, class_type, count):
+    def fill_schedule_random(self, course, class_type, count, room_list):
         """ This function fills a schedule with no student capacity restraints in a random fassion """
 
         # Make key if not existent
@@ -148,7 +148,7 @@ class Generator:
             i += 1
 
             # Generate a random room, day and timeslot:
-            room = random.choice(self.room_list)
+            room = random.choice(room_list)
             day = random.choice(list(room.availability.keys()))
             timeslot = random.choice(list(room.availability[day].keys()))
 
@@ -188,12 +188,12 @@ class Generator:
             i += 1
 
 
-    def initialize(self):
+    def initialize(self, student_list, course_list, room_list):
 
         self.schedule = {}
 
         # Fill the roster
-        self.schedule_fill()
+        self.schedule_fill(student_list, course_list, room_list)
 
         # Compute Malus
         malus = self.MC.compute_total_malus(self.schedule)
@@ -207,7 +207,7 @@ class Generator:
         self.iterations = []
         for i in tqdm(range(100)):
 
-            self.costs.append(self.initialize()[0]['Total'])
+            self.costs.append(self.initialize(student_list, course_list, room_list)[0]['Total'])
 
             self.iterations.append(i)
 
@@ -243,7 +243,7 @@ class Generator:
 
     def optimize(self, experiment, mode, core_assignment, hill_climber_iters, algorithm_duration, experiment_iter=0):
 
-        Optimize = OptimizeClass.Optimize(self.Roster, self.ANNEALING, experiment_iter)
+        Optimize = OptimizeClass.Optimize(self.schedule, self.ANNEALING, experiment_iter)
 
         if mode == 'sequential':
             Optimize.run_solo(algorithm_duration, experiment, core_assignment, hill_climber_iters)
