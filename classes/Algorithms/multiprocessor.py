@@ -5,6 +5,7 @@ from helpers.shallow_copy import recursive_copy
 from data.assign import student_list, course_list
 import classes.representation.malus_calc as MalusCalculatorClass
 
+import pickle
 import time
 import csv
 
@@ -19,27 +20,6 @@ class Multiprocessor():
         self.experiment_iter = experiment_iter
 
         self.MC = MalusCalculatorClass.MC()
-
-    # def core_assignment(self, malus) -> list:
-
-    #     core_assignment_list = []
-
-    #     student_malus_proportion = (malus['Double Classes'] + malus['Classes Gap'] + malus['Triple Gap']) / malus['Total']
-
-    #     schedule_malus_proportion = 1 - (malus['Night'] + malus['Capacity']) / malus['Total']
-
-    #     while len(core_assignment_list) < 4:
-    #         prob = random.random()
-
-    #         if prob <= schedule_malus_proportion:
-    #             method_used = random.randint(0,1)
-    #             core_assignment_list.append(method_used)
-
-    #         elif prob <= student_malus_proportion:
-    #             method_used = random.randint(2,3)
-    #             core_assignment_list.append(method_used)
-
-    #     return core_assignment_list
 
     def __init_temp(self) -> float:
         if self.ANNEALING:
@@ -69,12 +49,11 @@ class Multiprocessor():
         self.multiprocess_iter_counter = 0
         self.hillclimber_iter_counter = 0
         self.fail_counter = 0
-
-        # Set Initial variable
         self.duration = 0
 
-        self.schedule = self.Roster.schedule
+        lowest_malus = 9999
 
+        self.schedule = self.Roster.schedule
         self.malus = self.MC.compute_total_malus(self.schedule)
 
         # Print intitial
@@ -116,6 +95,10 @@ class Multiprocessor():
             # Compute difference between new roster and current roster
             difference = self.malus['Total'] - self.output_schedules[self.best_index][1]['Total']
 
+            if self.output_schedules[self.best_index][1]['Total'] < lowest_malus:
+                lowest_malus = self.output_schedules[self.best_index][1]['Total']
+                self.save_schedule(self.output_schedules[self.best_index][0])
+
             finish_time = time.time()
 
             self.iter_duration = finish_time - start_time
@@ -127,7 +110,9 @@ class Multiprocessor():
             for output_schedule in self.output_schedules:
                 self.save_data_multi(output_schedule[2], output_schedule[1]['Total'], self.multiprocess_iter_counter, round(self.duration, 2))
 
+
         self.export_data_multi(experiment)
+
 
     def save_data_multi(self, HC_name, cost, iteration, time):
         self.data.append({'Hill Climber': HC_name, 'Cost': cost, 'Iteration': iteration, 'Duration': time})
@@ -146,6 +131,125 @@ class Multiprocessor():
 
     """ Genetic """
 
+    def run_genetic(self, algorithm_duration, experiment):
+
+        # Set Initial variable
+        self.fail_counter = 0
+        self.hillclimber_iter_counter = 1
+        self.data = []
+        self.schedule = self.Roster.schedule
+        self.malus = self.MC.compute_total_malus(self.schedule)
+
+        # Print intitial
+        print(f'\nInitialization')
+        print(self.malus)
+
+        first_stage_start_time = time.time()
+
+        """ First Stage """
+
+        T = self.__init_temp()
+
+        while self.malus['Total'] > 125:
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.hillclimber_iter_counter)
+            self.schedule, self.malus, self.hillclimber_counter, _ = HC1.climb()
+            print(self.malus)
+
+        first_stage_duration = time.time() - first_stage_start_time
+
+        print(f'\nFirst stage duration: {round(first_stage_duration, 2)} Seconds\n')
+
+
+        """ Second Stage """
+
+        second_stage_start_time = time.time()
+
+        # when annealing, if the worsening did not make it better in the long run, return to best schedule
+        counter_since_improvement = 0
+        best_score = 1000
+        best_schedule = None
+        if self.ANNEALING:
+            T *= 0.995
+
+        self.save_data_genetic(0, time.time() - second_stage_start_time, self.malus['Total'])
+
+        schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
+
+        while time.time() - second_stage_start_time < algorithm_duration:
+
+            total_output = []
+
+            counter_since_improvement += 1
+
+            if self.ANNEALING:
+                # if sim annealing worsening did not result in long run improvements, return to old state
+                if counter_since_improvement > 3000:
+                    schedule_list = [recursive_copy(best_schedule) for _ in range(4)]
+
+            # flag variable to stop running one iteration if a sim annealing worsening happened
+            accepted = False
+            for schedule_index, schedule in enumerate(schedule_list):
+                for _ in range(2):
+                    for i in range(4):
+                        schedule, malus, _, _, accept_me = self.run_HC((i, schedule, T, 0, 1))
+                        if accept_me:
+
+                            # if this is the new schedule, make a data entry for every one of the 4 schedules
+                            for i in range(4):
+                                self.save_data_genetic(i, time.time(), malus['Total'])
+
+                            schedule_list = [schedule, schedule, schedule, schedule]
+                            accepted = True
+                            self.fail_counter = 0
+                            continue
+
+                        # Append result to output list
+                        total_output.append((schedule, malus))
+
+            # Continue if accepted is True
+            if accepted:
+                continue
+
+            # Randomize total output list
+            random.shuffle(total_output)
+
+            # Create populations dict
+            populations = {}
+
+            # for each output:
+            for i, output in enumerate(total_output):
+
+                # Create a key with schedule and malus as value
+                populations[i] = (output[0], output[1])
+
+            # Select best four schedules
+            populations = self.tournament(populations)
+
+            for i, pop in enumerate(populations):
+
+                # Save the data of each surviving schedule
+                self.save_data_genetic(i, time.time(), populations[pop][1]['Total'])
+
+                # If new malus is better than pior best malus
+                if populations[pop][1]['Total'] < best_score:
+
+                    # Set new schedule and malus
+                    best_score = populations[pop][1]['Total']
+                    best_schedule = populations[pop][0]
+
+                    # Save the schedule
+                    self.save_schedule(best_schedule)
+
+                    # Reset counters
+                    counter_since_improvement = 0
+                    self.fail_counter = 0
+                else:
+                    self.fail_counter += 1
+
+            schedule_list = [populations[value][0] for value in populations]
+
+        self.export_data_genetic(experiment)
+
     def run_genetic_pool(self, algorithm_duration, experiment, core_assignment, hill_climber_iters):
 
         # Set Initial variable
@@ -154,10 +258,12 @@ class Multiprocessor():
         self.fail_counter = 0
         self.duration = 0
 
+        # Set a very high lowest malus
+        lowest_malus = 9999
+
         self.data = []
 
         self.schedule = self.Roster.schedule
-
         self.malus = self.MC.compute_total_malus(self.schedule)
 
         # Print intitial
@@ -171,7 +277,7 @@ class Multiprocessor():
         t = self.__init_temp()
 
         while self.malus['Capacity'] > 15:
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.course_list, self.student_list, self.hillclimber_counter)
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.hillclimber_counter)
             self.schedule, self.malus, self.hillclimber_counter, _ = HC1.climb()
             print(self.malus)
 
@@ -214,109 +320,10 @@ class Multiprocessor():
 
             schedule_list = [populations[value][0] for value in populations]
 
-        lowest_malus = 9999
-        for pop in populations:
-            if populations[pop][1]['Total'] < lowest_malus:
-                lowest_malus = populations[pop][1]['Total']
-                self.schedule = populations[pop][0]
-
-        self.export_data_genetic(experiment)
-
-    def run_genetic(self, algorithm_duration, experiment):
-
-        # Set Initial variable
-        self.fail_counter = 0
-        self.hillclimber_iter_counter = 1
-        self.data = []
-        self.schedule = self.Roster.schedule
-        self.malus = self.MC.compute_total_malus(self.schedule)
-
-        # Print intitial
-        print(f'\nInitialization')
-        print(self.malus)
-
-        first_stage_start_time = time.time()
-
-        """ First Stage """
-
-        T = self.__init_temp()
-
-        while self.malus['Total'] > 125:
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.course_list, self.student_list, self.hillclimber_iter_counter)
-            self.schedule, self.malus, self.hillclimber_counter, _ = HC1.climb()
-            print(self.malus)
-
-        first_stage_duration = time.time() - first_stage_start_time
-
-        print(f'\nFirst stage duration: {round(first_stage_duration, 2)} Seconds\n')
-
-
-        """ Second Stage """
-
-        second_stage_start_time = time.time()
-
-        # when annealing, if the worsening did not make it better in the long run, return to best schedule
-        counter_since_improvement = 0
-        best_score = 1000
-        best_schedule = None
-        if self.ANNEALING:
-            T *= 0.995
-
-        self.save_data_genetic(0, time.time() - second_stage_start_time, self.malus['Total'])
-
-        schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
-
-        while time.time() - second_stage_start_time < algorithm_duration:
-            counter_since_improvement += 1
-
-            if self.ANNEALING:
-                # if sim annealing worsening did not result in long run improvements, return to old state
-                if counter_since_improvement > 3000:
-                    schedule_list = [best_schedule for i in range(4)]
-
-            total_output = []
-
-            # flag variable to stop running one iteration if a sim annealing worsening happened
-            accepted = False
-            for schedule_index, schedule in enumerate(schedule_list):
-                for _ in range(2):
-                    for i in range(4):
-                        schedule, malus, _, __, accept_me = self.run_HC((i, schedule, T, 0, 1))
-                        if accept_me:
-
-                            # if this is the new schedule, make a data entry for every one of the 4 schedules
-                            for i in range(4):
-                                self.save_data_genetic(i, time.time(), malus['Total'])
-
-                            schedule_list = [schedule, schedule, schedule, schedule]
-                            accepted = True
-                            self.fail_counter = 0
-                            continue
-                        total_output.append((schedule, malus))
-
-            if accepted:
-                continue
-
-            # Randomize total output list
-            random.shuffle(total_output)
-
-            populations = {}
-            for i, output in enumerate(total_output):
-                populations[i] = (output[0], output[1])
-
-            populations = self.tournament(populations)
-
-            for i, pop in enumerate(populations):
-                self.save_data_genetic(i, time.time(), populations[pop][1]['Total'])
-                if populations[pop][1]['Total'] < best_score:
-                    best_score = populations[pop][1]['Total']
-                    best_schedule = populations[pop][0]
-                    counter_since_improvement = 0
-                    self.fail_counter = 0
-                else:
-                    self.fail_counter += 1
-
-            schedule_list = [populations[value][0] for value in populations]
+            for pop in populations:
+                if populations[pop][1]['Total'] < lowest_malus:
+                    lowest_malus = populations[pop][1]['Total']
+                    self.save_schedule(populations[pop][0])
 
         self.export_data_genetic(experiment)
 
@@ -350,7 +357,7 @@ class Multiprocessor():
 
     """ Sequential """
 
-    def run_solo(self):
+    def run_solo(self, algorithm_duration, experiment):
 
         # Set counters
         self.fail_counter = 0
@@ -359,7 +366,6 @@ class Multiprocessor():
         self.duration = 0
 
         self.schedule = self.Roster.schedule
-
         self.malus = self.MC.compute_total_malus(self.schedule)
 
         # Print intitial
@@ -370,9 +376,14 @@ class Multiprocessor():
         else:
             t = 0
 
-        while self.fail_counter != 300000:
+        # Set starting time for the process
+        process_start_time = time.time()
 
-            start_time = time.time()
+        # while time is smaller than input duration
+        while time.time() - process_start_time < algorithm_duration:
+
+            # Set start time for iteration
+            iteration_start_time = time.time()
 
             if self.ANNEALING:
                 if t > .5:
@@ -385,36 +396,45 @@ class Multiprocessor():
             else:
                 t = 0
 
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.course_list, self.student_list, self.hillclimber_counter)
-            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(self.schedule, self.course_list, self.student_list, self.hillclimber_counter)
-            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.schedule, self.course_list, self.student_list, self.hillclimber_counter)
-            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.schedule, self.course_list, self.student_list, self.hillclimber_counter)
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.hillclimber_counter)
+            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(self.schedule, self.hillclimber_counter)
+            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.schedule, self.hillclimber_counter)
+            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.schedule, self.hillclimber_counter)
 
             if self.malus['Total'] > 200:
-                self.schedule, malus, iteration = HC1.climb(t)
+                schedule, malus, iteration = HC1.climb(t)
 
             else:
                 activation = random.choice([1,2,3,4])
                 if activation == 1:
-                    self.schedule, malus, iteration = HC1.climb(t)
+                    schedule, malus, iteration = HC1.climb(t)
                 if activation == 2:
-                    self.schedule, malus, iteration = HC2.climb(t)
+                    schedule, malus, iteration = HC2.climb(t)
                 if activation == 3:
-                    self.schedule, malus, iteration = HC3.climb(t)
+                    schedule, malus, iteration = HC3.climb(t)
                 if activation == 4:
-                    self.schedule, malus, iteration = HC4.climb(t)
+                    schedule, malus, iteration = HC4.climb(t)
 
             self.hillclimber_counter = iteration
 
             # Compute difference between new roster and current roster
             difference = self.malus['Total'] - malus['Total']
 
-            self.malus = malus
+            # If new malus is smaller than set malus
+            if malus['Total'] < self.malus['Total']:
+
+                # Save the schedule
+                self.save_schedule(schedule)
+
+                # Set schedule to self
+                self.schedule = schedule
+
+                self.malus = malus
 
             # Set finish time
             finish_time = time.time()
 
-            self.multiprocess_duration = finish_time - start_time
+            self.multiprocess_duration = finish_time - iteration_start_time
             self.duration += self.multiprocess_duration
 
             # replace the roster if it is better
@@ -422,34 +442,32 @@ class Multiprocessor():
 
             self.multiprocessor_counter += 1
 
-        self.finish()
-
     def run_HC(self, hc_tuple):
         activation, schedule, T, iteration, hill_climber_iters = hc_tuple
         if activation == 0:
 
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.course_list, self.student_list, iteration)
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, iteration)
             schedule, malus, iteration, accept_me = HC1.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC1.get_name(), iteration, accept_me
 
         elif activation == 1:
 
-            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.course_list, self.student_list, iteration)
+            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, iteration)
             schedule, malus, iteration, accept_me = HC2.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC2.get_name(), iteration, accept_me
 
         elif activation == 2:
 
-            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.course_list, self.student_list, iteration)
+            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, iteration)
             schedule, malus, iteration, accept_me = HC3.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC3.get_name(), iteration, accept_me
 
         elif activation == 3:
 
-            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.course_list, self.student_list, iteration)
+            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, iteration)
             schedule, malus, iteration, accept_me = HC4.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC4.get_name(), iteration, accept_me
@@ -484,3 +502,7 @@ class Multiprocessor():
             # print(f'Duration of iteration: {round(self.multiprocess_duration, 2)} S.')
             # print(f'Duration since init: {round(self.duration, 2)} S.')
             # print(self.malus)
+
+    def save_schedule(schedule):
+        with open('schedule.pkl', 'wb') as f:
+            pickle.dump(schedule, f)
