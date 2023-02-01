@@ -185,17 +185,21 @@ class App(customtkinter.CTk):
     def hilli_multi(self):
         if self.hillclimber_multi.get():
             self.hillclimber_single.deselect()
-            self.annealing_switch.deselect()
             self.genetic_switch_pool.deselect()
             self.genetic_switch_solo.deselect()
-
+            try:
+                self.annealing_switch.destroy()
+            except:
+                pass
     def hilli_single(self):
         if self.hillclimber_single.get():
             self.hillclimber_multi.deselect()
-            self.annealing_switch.deselect()
             self.genetic_switch_pool.deselect()
             self.genetic_switch_solo.deselect()
-
+            try:
+                self.annealing_switch.destroy()
+            except:
+                pass
     def genni_single(self):
         if self.genetic_switch_solo.get():
             self.annealing_switch = customtkinter.CTkSwitch(master=self.create_own_exp_frame2, text='Sim. Annealing', font=customtkinter.CTkFont(size=15), command=self.simmi_an)
@@ -204,14 +208,20 @@ class App(customtkinter.CTk):
             self.hillclimber_single.deselect()
             self.hillclimber_multi.deselect()
         else:
-            self.annealing_switch.destroy()
+            try:
+                self.annealing_switch.destroy()
+            except:
+                pass
 
     def genni_multi(self):
         if self.genetic_switch_pool.get():
             self.genetic_switch_solo.deselect()
             self.hillclimber_single.deselect()
             self.hillclimber_multi.deselect()
-            self.annealing_switch.deselect()
+        try:
+            self.annealing_switch.destroy()
+        except:
+            pass
 
     def simmi_an(self):
         if not self.genetic_switch_solo.get():
@@ -221,13 +231,9 @@ class App(customtkinter.CTk):
             self.hillclimber_multi.deselect()
             self.genetic_switch_pool.deselect()
 
-
     def button_click_event(self):
         dialog = customtkinter.CTkInputDialog(text="Please enter 4 digits from 0 to 3\nDefault: 0123", title="Hillclimbers")
-        if len(dialog.get_input()) < 4:
-            self.core_assignment = '0123'
-        else:
-            self.core_assignment = dialog.get_input()
+        self.hillclimber_assignment = dialog.get_input()
 
     def hillclimber_switch_click(self) -> None:
 
@@ -342,7 +348,7 @@ class App(customtkinter.CTk):
 
         mode = 'multiproccesing'
 
-        core_assignment = [0,0,2,2]
+        hillclimber_assignment = [0,0,2,2]
 
         hill_climber_iters = 50
 
@@ -353,7 +359,7 @@ class App(customtkinter.CTk):
         for i in range(30):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
+            G.optimize(experiment, mode, hillclimber_assignment, duration, hill_climber_iters, i)
 
         # Plot Funtion
 
@@ -380,7 +386,7 @@ class App(customtkinter.CTk):
 
         mode = 'multiproccesing'
 
-        core_assignment = [0,0,0,0]
+        hillclimber_assignment = [0,0,0,0]
 
         hill_climber_iters = 50
 
@@ -391,7 +397,7 @@ class App(customtkinter.CTk):
         for i in range(30):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
+            G.optimize(experiment, mode, hillclimber_assignment, duration, hill_climber_iters, i)
         # Plot Funtion
 
         self.finish(student_list)
@@ -417,7 +423,7 @@ class App(customtkinter.CTk):
 
         mode = 'multiproccesing'
 
-        core_assignment = [2,2,2,2]
+        hillclimber_assignment = [2,2,2,2]
 
         hill_climber_iters = 50
 
@@ -428,7 +434,7 @@ class App(customtkinter.CTk):
         for i in range(30):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
+            G.optimize(experiment, mode, hillclimber_assignment, duration, hill_climber_iters, i)
         # Plot Funtion
 
         self.finish(student_list)
@@ -452,7 +458,7 @@ class App(customtkinter.CTk):
 
         mode = 'multiproccesing'
 
-        core_assignment = [2,2,2,2]
+        hillclimber_assignment = [2,2,2,2]
 
         hill_climber_iters = 0.1
 
@@ -462,7 +468,7 @@ class App(customtkinter.CTk):
 
         G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                     difficult_students, annealing, visualize)
-        G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters)
+        G.optimize(experiment, mode, hillclimber_assignment, duration, hill_climber_iters)
         # Plot Funtion
 
         self.finish(student_list)
@@ -470,7 +476,7 @@ class App(customtkinter.CTk):
         for i, hill_climber_iters in enumerate[0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]:
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
+            G.optimize(experiment, mode, hillclimber_assignment, duration, hill_climber_iters, i)
         # Plot Funtion
 
         self.finish(student_list)
@@ -494,7 +500,7 @@ class App(customtkinter.CTk):
 
         mode = 'genetic pool'
 
-        core_assignment = [0,0,2,2]
+        hillclimber_assignment = [0,0,2,2]
 
         hill_climber_iters = 400
 
@@ -505,7 +511,7 @@ class App(customtkinter.CTk):
         for i in range(30):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters, i)
+            G.optimize(experiment, mode, hillclimber_assignment, duration, hill_climber_iters, i)
         # Plot Funtion
 
         self.finish(student_list)
@@ -644,11 +650,17 @@ class App(customtkinter.CTk):
             else:
                 return
 
-        core_assignment = []
-        for digit in self.core_assignment:
-            core_assignment.append(int(digit))
-
-        print(core_assignment)
+        hillclimber_assignment = []
+        try:
+            if len(self.hillclimber_assignment) < 4:
+                hillclimber_assignment = [0,1,2,3]
+        except:
+            hillclimber_assignment = [0,1,2,3]
+        else:
+            for digit in self.hillclimber_assignment:
+                hillclimber_assignment.append(int(digit))
+        print('The Hillclimbers you selected are:')
+        print(hillclimber_assignment)
 
         # Destroy window
         self.destroy()
@@ -662,7 +674,7 @@ class App(customtkinter.CTk):
         G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                     difficult_students, annealing, visualize)
         if not visualize:
-            G.optimize(experiment, mode, core_assignment, duration, hill_climber_iters)
+            G.optimize(experiment, mode, hillclimber_assignment, duration, hill_climber_iters)
             # Plot Funtion
 
             self.finish(student_list)
