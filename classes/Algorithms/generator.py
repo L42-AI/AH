@@ -29,7 +29,7 @@ class Generator:
 
     def schedule_fill(self, Roster, course_list):
         """
-        This function creates the schedule
+        This method creates the schedule
         """
 
         # Set the days list
@@ -51,13 +51,24 @@ class Generator:
                 course_list[i].lecture_day = days[i]
 
         for course in course_list:
-            # go over the number of lectures, tutorials and practicals needed
+            # go over the number of lectures and fill the schedule
             for i in range(course.lectures):
 
                 Roster.fill_schedule_random(course, "lecture", i + 1)
 
+            # make a dictionary to loop over with practicals and tutorials
+            # seminars = {
+            #     'tutorial': (course.tutorials, course.tutorial_rooms),
+            #     'practical': (course.practicals, course.practical_rooms)
+            # }
+
+            # loop over the dict items for each seminar and their rooms needed
+            # for seminar_type, (num_seminars, num_rooms) in seminars.items():
+            #     for i in range(num_seminars):
+            #         for j in range(num_rooms):
+            #             Roster.fill_schedule_random(course, seminar_type, j + 1)
             # outer loop is incase more than one tut per group
-            ## in csv there is always one tut or pract, but we want to make the program scalable 
+            # in csv there is always one tut or pract, but we want to make the program scalable 
             for _ in range(course.tutorials):
                 for i in range(course.tutorial_rooms):
 
