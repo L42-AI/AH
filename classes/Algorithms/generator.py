@@ -1,3 +1,8 @@
+"""
+This file includes the generator class which is the class that generates our schedule
+It does the random initialization and can route the schedule to the optimizing class
+"""
+
 import classes.algorithms.optimize as OptimizeClass
 import classes.representation.malus_calc as MalusCalculatorClass
 import classes.representation.roster as RosterClass

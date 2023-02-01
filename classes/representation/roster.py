@@ -1,5 +1,6 @@
-# This class takes in a list of objects called rooms and makes a roster.
-# It can also calculate the total amount maluspoints
+"""
+This class takes in a list of objects called rooms and makes a roster.
+"""
 from data.assign import student_list, course_list, room_list
 import random
 
