@@ -80,13 +80,14 @@ class Roster():
             # If timeslot is available
             if room.availability[day][timeslot]:
 
-                # first try with specific room for the type of class
+                # first try with specific room for the type of class / part of the greedy algorithm
                 if self.CAPACITY:
                     if i < 20:
                         if class_type == 'lecture' and room.id == 'A1.08' or room.id == 'A1.06':
                             continue
                         if class_type != 'lecture' and room.id == 'C0.110' or room.id == 'C0.112':
                             continue
+
                 if course.lecture_day != None:
                     if course.lecture_day != day and class_type == 'lecture':
                         continue
@@ -95,7 +96,7 @@ class Roster():
                 class_number = f"{class_type} {count}"
                 
                 if class_number[0] == 't':
-                    self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std)
+                    self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_tutorial)
                     # print(f'tut: {course.max_std}')
                 elif class_number[0] == 'p':
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_practical)

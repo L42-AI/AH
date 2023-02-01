@@ -16,11 +16,11 @@ class Course():
         self.lectures = data['#Hoorcolleges']
         self.enrolled = enrolled
         self.enrolled_students = set()
-        self.lecture_day= None
+        self.lecture_day = None
 
         # Set the attributes about the tutorials
         self.tutorials = data['#Werkcolleges']
-        self.max_std = data['Max. stud. Werkcollege']
+        self.max_std_tutorial = data['Max. stud. Werkcollege']
         self.tutorial_rooms = 0
 
         # Set the attributes about the practica
@@ -59,10 +59,10 @@ class Course():
 
         # only create groups when there are tutorials and practical
         if self.tutorials != 0:
-            self.tutorial_rooms = int(self.enrolled / self.max_std)
+            self.tutorial_rooms = int(self.enrolled / self.max_std_tutorial)
 
             # int cuts 3.1 to 3, but 3.1 would require 4 groups
-            if self.enrolled % self.max_std != 0:
+            if self.enrolled % self.max_std_tutorial != 0:
                 self.tutorial_rooms += 1
 
         if self.practicals != 0:

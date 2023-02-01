@@ -1,4 +1,4 @@
-import classes.algorithms.multiprocessor as MultiprocessorClass
+import classes.algorithms.optimize as OptimizeClass
 import classes.representation.malus_calc as MalusCalculatorClass
 import classes.representation.roster as RosterClass
 
@@ -43,12 +43,12 @@ class Generator:
         # give the 5 most popular courses their own day to hold their lectures, to prevent gap hours
         if self.POPULAR_OWN_DAY:
             for i in range(5):
-                course_list[i].day = days[i]
+                course_list[i].lecture_day = days[i]
 
         if self.DIFFICULT_STUDENTS:
             course_list = sorted(course_list, key=lambda x: x.prioritise)
             for i in range(5):
-                course_list[i].day = days[i]
+                course_list[i].lecture_day = days[i]
 
         for course in course_list:
             # go over the number of lectures, tutorials and practicals needed
@@ -139,13 +139,13 @@ class Generator:
 
     def optimize(self, experiment, mode, core_assignment, hill_climber_iters, algorithm_duration, experiment_iter=0):
 
-        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.ANNEALING, experiment_iter)
+        Optimize = OptimizeClass.Optimize(self.Roster, self.ANNEALING, experiment_iter)
 
         if mode == 'sequential':
             pass
         elif mode == 'multiproccesing':
-            Multiprocessor.run_multi(algorithm_duration, experiment, core_assignment, hill_climber_iters)
+            Optimize.run_multi(algorithm_duration, experiment, core_assignment, hill_climber_iters)
         elif mode == 'genetic':
-            Multiprocessor.run_genetic(algorithm_duration, experiment)
+            Optimize.run_genetic(algorithm_duration, experiment)
         elif mode == 'genetic pool':
-            Multiprocessor.run_genetic_pool(algorithm_duration, experiment, core_assignment, hill_climber_iters)
+            Optimize.run_genetic_pool(algorithm_duration, experiment, core_assignment, hill_climber_iters)

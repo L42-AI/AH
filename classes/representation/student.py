@@ -12,7 +12,6 @@ class Student():
     """This class represents a single student"""
 
     def __init__(self, data, courses):
-
         # Set attributes
         self.f_name = data['Voornaam']
         self.l_name = data['Achternaam']
@@ -26,20 +25,6 @@ class Student():
 
         # Make dictionaries for practicum and tutorial groups
         self.select_groups()
-
-        # Make list of timeslots
-        self.timeslots = {}
-        
-        # Initiate malus
-        self.init_malus()
-
-    def init_malus(self):
-        self.malus_count = 0
-        self.malus_cause = {}
-        self.malus_cause['Classes Gap'] = {}
-        self.malus_cause['Double Classes'] = {}
-        self.malus_cause['Tripple Gap'] = {}
-
 
     def init_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -64,7 +49,7 @@ class Student():
             # Set all values of tutorial
             group_dict = course.tut_group_dict
             class_num = course.tutorials
-            max_std = course.max_std
+            max_std = course.max_std_tutorial
             group = self.tut_group
         else:
             # Set all values of practica
@@ -123,7 +108,6 @@ class Student():
                 # Run the pick group function
                 self.__pick_group(course, group_dict, class_num, max_std, group)
 
-
     def __lecture_timeslot(self, course, current_course):
 
         if course.lectures > 0:
@@ -167,8 +151,6 @@ class Student():
         This method adds the timeslots for classes per week.
         The dictionary timeslots is linked to the Roster schedule.
         """
-
-        # print(schedule.schedule)
 
         # For each course:
         for course in self.courses:

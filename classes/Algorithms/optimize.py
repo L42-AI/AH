@@ -10,7 +10,11 @@ import time
 import csv
 
 
-class Multiprocessor():
+class Optimize():
+    '''This class runs different types of algorithms on a given schedule. It can run Hillclimbers 
+       independent of each other, use a genetic algorithm and or simmulated annealing. README in the git
+       for more detail'''
+
     def __init__(self, Roster, annealing, experiment_iter):
         self.Roster = Roster
         self.course_list = course_list
@@ -22,28 +26,23 @@ class Multiprocessor():
         self.MC = MalusCalculatorClass.MC()
 
     def __init_temp(self) -> float:
+        '''Sets the temperature to 1 to start simmulated annealing if simulated annealing is selected'''
+
         if self.ANNEALING:
             return 1
-        else:
-            return 0
-
-    def __set_temp(self, T) -> float:
-        if self.ANNEALING:
-            if T > .5:
-                return self.__get_temperature(T)
-            elif T <= .5:
-                T = self.__get_temperature(T, alpha=0.65)
-
-            if T < 0.01:
-                return 0.05
         else:
             return 0
 
     """ Multiprocessing """
 
     def run_multi(self, algorithm_duration, experiment, core_assignment, hill_climber_iters):
+        '''This method can run any combination of our 4 Hillclimbing algorithms. Every iteration,
+           a Hillclimber is called upon 4 times. Since each Hillclimber works independent, the task can
+           be split up to run on multiple cores. Only advised to do when choosing high iterations per Hillclimber.
+           read README on git for more info'''
 
         self.data = []
+        init_time = time.time()
 
         # Set counters
         self.multiprocess_iter_counter = 0
@@ -51,40 +50,37 @@ class Multiprocessor():
         self.fail_counter = 0
         self.duration = 0
 
+        # set a 'lowest' malus
         lowest_malus = 9999
 
+        # self.schedule and self.malus will always hold the best schedule
         self.schedule = self.Roster.schedule
         self.malus = self.MC.compute_total_malus(self.schedule)
 
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
-        if self.ANNEALING:
-            t = 1
-        else:
-            t = 0
 
-        init_time = time.time()
+        # set a temperature dependend on simulated annealing or not
+        t = self.__init_temp()
 
-        # while self.Roster.malus_cause['Dubble Classes'] != 0 or self.Roster.malus_cause['Capacity'] != 0:
+        # run for a given amount of time
         while time.time() - init_time < algorithm_duration:
-        # while self.iter_counter != 2:
-
             start_time = time.time()
 
             # Increase iter counter
             self.multiprocess_iter_counter += 1
 
+            # set schedules and malus for the next iteration
             self.malus = self.MC.compute_total_malus(self.schedule)
-
             schedule_list = [recursive_copy(self.schedule) for _ in range(4)]
 
             # Fill the pool with all functions and their rosters
             with Pool(4) as p:
-                self.output_schedules = p.map(self.run_HC, [(core_assignment[0], schedule_list[0], t, self.hillclimber_iter_counter, hill_climber_iters),
-                                                            (core_assignment[1], schedule_list[1], t, self.hillclimber_iter_counter, hill_climber_iters),
-                                                            (core_assignment[2], schedule_list[2], t, self.hillclimber_iter_counter, hill_climber_iters),
-                                                            (core_assignment[3], schedule_list[3], t, self.hillclimber_iter_counter, hill_climber_iters)])
+                self.output_schedules = p.map(self.run_HC, [(core_assignment[0], schedule_list[0], t, hill_climber_iters),
+                                                            (core_assignment[1], schedule_list[1], t, hill_climber_iters),
+                                                            (core_assignment[2], schedule_list[2], t, hill_climber_iters),
+                                                            (core_assignment[3], schedule_list[3], t, hill_climber_iters)])
 
             # find the lowest malus of the output rosters
             min_malus = min([i[1]['Total'] for i in self.output_schedules])
@@ -443,31 +439,31 @@ class Multiprocessor():
             self.multiprocessor_counter += 1
 
     def run_HC(self, hc_tuple):
-        activation, schedule, T, iteration, hill_climber_iters = hc_tuple
+        activation, schedule, T, hill_climber_iters = hc_tuple
         if activation == 0:
 
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, iteration)
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.hillclimber_iter_counter)
             schedule, malus, iteration, accept_me = HC1.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC1.get_name(), iteration, accept_me
 
         elif activation == 1:
 
-            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, iteration)
+            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.hillclimber_iter_counter)
             schedule, malus, iteration, accept_me = HC2.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC2.get_name(), iteration, accept_me
 
         elif activation == 2:
 
-            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, iteration)
+            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.hillclimber_iter_counter)
             schedule, malus, iteration, accept_me = HC3.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC3.get_name(), iteration, accept_me
 
         elif activation == 3:
 
-            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, iteration)
+            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.hillclimber_itekrrhillclimber_iter_counter)
             schedule, malus, iteration, accept_me = HC4.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC4.get_name(), iteration, accept_me
@@ -503,6 +499,6 @@ class Multiprocessor():
             # print(f'Duration since init: {round(self.duration, 2)} S.')
             # print(self.malus)
 
-    def save_schedule(schedule):
+    def save_schedule(self, schedule):
         with open('schedule.pkl', 'wb') as f:
             pickle.dump(schedule, f)
