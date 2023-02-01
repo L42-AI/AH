@@ -52,8 +52,6 @@ class Optimize():
         print(f'\nInitialization')
         print(self.malus)
 
-        t = self.__init_temp()
-
         # Set starting time for the process
         process_start_time = time.time()
 
@@ -79,13 +77,13 @@ class Optimize():
 
                 # Run hill climber
                 if activation == 1:
-                    schedule, malus, iteration = HC1.climb(hill_climber_iters)
+                    schedule, malus, iteration, _ = HC1.climb(hill_climber_iters)
                 elif activation == 2:
-                    schedule, malus, iteration = HC2.climb(hill_climber_iters)
+                    schedule, malus, iteration, _ = HC2.climb(hill_climber_iters)
                 elif activation == 3:
-                    schedule, malus, iteration = HC3.climb(hill_climber_iters)
+                    schedule, malus, iteration, _ = HC3.climb(hill_climber_iters)
                 elif activation == 4:
-                    schedule, malus, iteration = HC4.climb(hill_climber_iters)
+                    schedule, malus, iteration, _ = HC4.climb(hill_climber_iters)
 
             # Set the iteration
             self.hillclimber_counter += iteration
@@ -132,8 +130,13 @@ class Optimize():
         init_time = time.time()
 
         # Set counters
+<<<<<<< HEAD
         self.multiprocessor_counter = 0
         self.hillclimber_iter_counter = 0
+=======
+        self.multiprocessor_counter = 1
+        self.hillclimber_counter = 1
+>>>>>>> 1f4afd840b588fed3b7bc3f05d84cb9b655541fa
         self.fail_counter = 0
         self.duration = 0
 
@@ -155,9 +158,12 @@ class Optimize():
         while time.time() - init_time < algorithm_duration:
             start_time = time.time()
 
+<<<<<<< HEAD
             # Increase iter counter
             self.multiprocessor_counter += 1
 
+=======
+>>>>>>> 1f4afd840b588fed3b7bc3f05d84cb9b655541fa
             # set schedules and malus for the next iteration
             self.malus = self.MC.compute_total_malus(self.schedule)
             schedule_list = [self.recursive_copy(self.schedule) for _ in range(4)]
@@ -193,6 +199,9 @@ class Optimize():
 
             for output_schedule in output_schedules:
                 self.save_data_multi(output_schedule[2], output_schedule[1]['Total'], self.multiprocess_iter_counter, round(self.duration, 2))
+
+            # Increase iter counter
+            self.multiprocessor_counter += 1
 
 
         self.export_data_multi(experiment)
@@ -240,7 +249,7 @@ class Optimize():
         self.malus = self.MC.compute_total_malus(self.schedule)
 
         # Set Initial variable
-        self.hillclimber_iter_counter = 1
+        self.hillclimber_counter = 1
         self.fail_counter = 0
         self.data = []
 
@@ -255,7 +264,7 @@ class Optimize():
         T = self.__init_temp()
 
         while self.malus['Total'] > 125:
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.hillclimber_iter_counter)
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.hillclimber_counter)
             self.schedule, self.malus, self.hillclimber_counter, _ = HC1.climb()
             print(self.malus)
 
@@ -545,35 +554,31 @@ class Optimize():
         if activation == 0:
 
             # create the class and climb.
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.hillclimber_iter_counter)
+            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.hillclimber_counter)
             schedule, malus, iteration, accept_me = HC1.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC1.get_name(), iteration, accept_me
 
         elif activation == 1:
 
-            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.hillclimber_iter_counter)
+            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.hillclimber_counter)
             schedule, malus, iteration, accept_me = HC2.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC2.get_name(), iteration, accept_me
 
         elif activation == 2:
 
-            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.hillclimber_iter_counter)
+            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.hillclimber_counter)
             schedule, malus, iteration, accept_me = HC3.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC3.get_name(), iteration, accept_me
 
         elif activation == 3:
 
-            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.hillclimber_iter_counter)
+            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.hillclimber_counter)
             schedule, malus, iteration, accept_me = HC4.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC4.get_name(), iteration, accept_me
-
-    def __get_temperature(self, t, alpha=0.995):
-        """Exponential decay temperature schedule"""
-        return t * alpha
 
     def __replace_roster(self, difference):
 
