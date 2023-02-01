@@ -2,30 +2,34 @@ import random
 from data.assign import student_list, course_list
 
 class Mutate():
+    '''Mutate class performs changes to a schedule. It can swap seminars (lectures, tutorials or practicals)
+       or swap students from group a to group b'''
     def __init__(self, schedule):
         self.schedule = schedule
         self.course_list = course_list
         self.student_list = student_list
 
+    '''THESE ARE THE TWO METHODS THAT HILLCLIMBER CALL UPON'''
+    def swap_random_seminars(self, empty):
+        '''Method swaps two random seminars. It picks two random courses and from those picks two seminars'''
 
-    """ Method 2 """
+        # get courses and the seminars they hold
+        all_seminars_random_1, all_seminars_random_2, random_course_1, random_course_2 =  self.get_two_courses(empty)
 
-    def swap_random_lessons(self, empty):
+        # choose two random seminars
+        seminar_1 = random.choice(all_seminars_random_1)
+        seminar_2 = random.choice(all_seminars_random_2)
 
-        all_lessons_random_1, all_lessons_random_2, random_course_1, random_course_2 =  self.get_two_courses(empty)
+        # find what room and timeslot they are in currently
+        roomslot1 = self.schedule[random_course_1][seminar_1]
+        roomslot2 = self.schedule[random_course_2][seminar_2]
 
-        # choose two random lessons
-        lesson_1 = random.choice(all_lessons_random_1)
-        lesson_2 = random.choice(all_lessons_random_2)
-
-        roomslot1 = self.schedule[random_course_1][lesson_1]
-        roomslot2 = self.schedule[random_course_2][lesson_2]
-
-        # first swap students, because when we swap, we want to get the students back to their course
+        # collect data we want to swap
         keys = ['day', 'timeslot', 'capacity', 'room']
         room1_data = {key: roomslot1[key] for key in keys}
         room2_data = {key: roomslot2[key] for key in keys}
 
+        # swap the seminars
         roomslot1.update(room2_data)
         roomslot2.update(room1_data)
 
@@ -56,10 +60,12 @@ class Mutate():
         switch_in_this_course, new_group, old_group = self.__pick_groups_to_switch(classes_worst_day)
         if switch_in_this_course == None:
             return
-        
+
+        # get the info for the new groups
         new_group = self.schedule[switch_in_this_course][new_group]
         old_group = self.schedule[switch_in_this_course][old_group]
 
+        # swap the students
         self.__swap_student_or_students(new_group, old_group, student_to_switch_id)
 
     '''THESE METHODS ARE HELPER FUNCTIONS TO THE METHODS THAT THE HILLCLIMBERS CALL ON'''
@@ -71,23 +77,23 @@ class Mutate():
         if empty:
             # get one random course and all the empty room time slots
             random_course_1 = random.choice(self.course_list)
-            all_lessons_random_2 = [key for key in self.schedule['No course'].keys()]
+            all_seminars_random_2 = [key for key in self.schedule['No course'].keys()]
             random_course_2 = 'No course'
 
         else:
             # get two random courses
             random_course_1, random_course_2 = random.sample(self.course_list, 2)
             random_course_2 = random_course_2.name
-            all_lessons_random_2 = list(self.schedule[random_course_2].keys())
-        
-        # get all the lessons in that course
-        random_course_1 = random_course_1.name
-        all_lessons_random_1 = list(self.schedule[random_course_1].keys())
+            all_seminars_random_2 = list(self.schedule[random_course_2].keys())
 
-        return all_lessons_random_1, all_lessons_random_2, random_course_1, random_course_2
+        # get all the seminars in that course, but not the objects
+        random_course_1 = random_course_1.name
+        all_seminars_random_1 = list(self.schedule[random_course_1].keys())
+
+        return all_seminars_random_1, all_seminars_random_2, random_course_1, random_course_2
 
     def __find_random_student(self) -> int:
-        """ This function returns a random student picked from the schedule key called students
+        """ This function returns a random student picked from the schedule key called students.
             it uses the id it gets from a random course and random class to find the student object 
             with the helper function self.__get_student_object"""
 
@@ -158,10 +164,11 @@ class Mutate():
         return switch_in_this_course, new_group, old_group
 
     def __swap_student_or_students(self, new_group, old_group, student_to_switch_id):
-        '''takes a student, a group the student came from and a group the students needs to go and makes it happen
+        '''takes a student, a group the student came from and a group the students needs to go and makes it happen.
            if the group the student needs to go to is full, it will randomly place one of the students to the original
            group to create space'''
 
+        # check if there is room in the new group
         if len(new_group['students']) < new_group['max students']:
             self.__place_student_in_group(student_to_switch_id, new_group, old_group)
             return
@@ -173,7 +180,8 @@ class Mutate():
             return
 
     def __place_student_in_group(self, student_to_switch_id, new_group, old_group):
-        '''places a student in the 'student' set that every group has'''
+        '''places a student in the 'student' set that every group has. Also removes
+           student from old group'''
         new_group['students'].add(student_to_switch_id)
         old_group['students'].remove(student_to_switch_id)
 
@@ -181,10 +189,10 @@ class Mutate():
         '''finds worst day in the schedule of a student'''
 
         worst_day = None
-        student_days, student_classes = self.__fill_timeslots_student(id)
+        student_days, _ = self.__fill_timeslots_student(id)
 
         scores_per_day = {day:(0, 0) for day in student_days}
-        
+
         # For each week
         for day in student_days:
 
@@ -201,20 +209,20 @@ class Mutate():
                     if timeslot_list[timeslot_num] == timeslot_list[timeslot_num + 1]:
                         scores_per_day[day] = (scores_per_day[day][0], scores_per_day[day][1] + 1)
 
-                    # claculate the amount of gaps between lessons
+                    # claculate the amount of gaps between seminars
                     if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
-                        lesson_gaps = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
+                        seminar_gaps = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
 
                         ## update this with global variables!! ##
 
                         # check if one gap hour
-                        if lesson_gaps == 1:
+                        if seminar_gaps == 1:
                             scores_per_day[day] = (scores_per_day[day][0] + 1, scores_per_day[day][1])
 
-                        elif lesson_gaps == 2:
+                        elif seminar_gaps == 2:
                             scores_per_day[day] = (scores_per_day[day][0] + 3, scores_per_day[day][1])
 
-                        elif lesson_gaps > 2:
+                        elif seminar_gaps > 2:
                             scores_per_day[day] = (scores_per_day[day][0] + 5, scores_per_day[day][1])
 
         # gets the day with most gap or double hours
@@ -224,10 +232,15 @@ class Mutate():
         return worst_day
 
     def __fill_timeslots_student(self, id) -> dict:
-        '''fills the timeslot of a student based on the complete schedule 
-           days keeps track of the timeslot, classes of the info of that specific class'''
+        '''fills the timeslot of a student based on the complete schedule days keeps track of
+           the timeslot, classes of the info of that specific class. returns two dicts:
+           - student_days holds integers connected to timeslots that day
+           - student_course holds seminar information
+           this split is made because different methods call on this method for different purposes'''
+
         student_days = {'Monday': [], 'Tuesday': [], 'Wednesday': [], 'Thursday': [], 'Friday': []}
         student_classes = {'Monday': {}, 'Tuesday': {}, 'Wednesday': {}, 'Thursday': {}, 'Friday': {}}
+
         # go over the schedule and find what timeslots this student has
         for _course in self.schedule:
             for _class in self.schedule[_course]:
@@ -241,31 +254,28 @@ class Mutate():
 
         return student_days, student_classes
 
-   
-
     def get_day_gap_or_double(self, scores_per_day):
-        '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
-        
+        '''returns the day with the highest gap hours'''
         return max(scores_per_day, key=lambda x: x[0])
 
 
     def return_none(self,scores_per_day, worst_day):
-        '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
+        '''make sure there are actually gap hours'''
         if scores_per_day[worst_day][0] == 0:
             worst_day = None
         return worst_day
 
 class Mutate_double_classes(Mutate):
-    '''mutate class that is the same as normal but makes changes to 
+    '''mutate class that is the same as normal but makes changes to
        the schedule based on the malus points caused by double hours instead
        of the gap hour points'''
 
     def get_day_gap_or_double(self, scores_per_day):
-        '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
+        '''returns the day with the most double hours'''
         return max(scores_per_day, key=lambda x: x[1])
 
     def return_none(self,scores_per_day, worst_day):
-        '''EDIT THIS IN THE DOUBLE HOUR CLASS'''
+        '''make sure there are actually double hours'''
         if scores_per_day[worst_day][1] == 0:
             worst_day = None
         return worst_day
@@ -274,15 +284,18 @@ class Mutate_Course_Swap_Capacity(Mutate):
     '''same as the normal mutate, but instead of switching
        lectures or tutorials randomly, it checks what lecture or tutorial
        causes the most capacity trouble'''
-       
+
     def get_two_courses(self, empty):
+        '''returns two courses, 2nd one will be an empty timeslot if empty=true.
+           This method will is adjusted to select the first course based upon capacity malus'''
+
         # check if you want to swap with an empty room or not
         self.course_list.sort(key=lambda x: x.capacity_malus, reverse=True)
         course_1 = self.course_list[0]
 
         if empty:
             # get one random course and all the empty room time slots
-            all_lessons_random_2 = [key for key in self.schedule['No course'].keys()]
+            all_seminars_random_2 = [key for key in self.schedule['No course'].keys()]
             random_course_2 = 'No course'
 
         else:
@@ -292,11 +305,11 @@ class Mutate_Course_Swap_Capacity(Mutate):
             # pick a random second course
             random_course_2 = random.sample(course_list, 1)[0]
             
-            # find all the lessons associated with it
-            all_lessons_random_2 = list(self.schedule[random_course_2].keys())
+            # find all the seminars associated with it
+            all_seminars_random_2 = list(self.schedule[random_course_2].keys())
         
-        # get all the lessons from course 1
+        # get all the seminars from course 1
         course_1 = course_1.name
-        all_lessons_random_1 = list(self.schedule[course_1].keys())
+        all_seminars_random_1 = list(self.schedule[course_1].keys())
 
-        return all_lessons_random_1, all_lessons_random_2, course_1, random_course_2
+        return all_seminars_random_1, all_seminars_random_2, course_1, random_course_2
