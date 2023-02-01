@@ -58,10 +58,10 @@ class Optimize():
             iteration_start_time = time.time()
 
             # Initiate the hillclimbers
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.hillclimber_counter)
-            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(self.schedule, self.hillclimber_counter)
-            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(self.schedule, self.hillclimber_counter)
-            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(self.schedule, self.hillclimber_counter)
+            HC1 = HillCLimberClass.ClassesSwapRandom(self.schedule, self.hillclimber_counter)
+            HC2 = HillCLimberClass.ClassesSwapCapacity(self.schedule, self.hillclimber_counter)
+            HC3 = HillCLimberClass.StudentSwapGapHour(self.schedule, self.hillclimber_counter)
+            HC4 = HillCLimberClass.StudentSwapDoubleHour(self.schedule, self.hillclimber_counter)
 
             # Run hill climber 1 if malus is larger than 125
             if self.malus['Total'] > 125:
@@ -257,7 +257,7 @@ class Optimize():
         T = self.__init_temp()
 
         while self.malus['Total'] > 125:
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.hillclimber_counter)
+            HC1 = HillCLimberClass.ClassesSwapRandom(self.schedule, self.hillclimber_counter)
             self.schedule, self.malus, self.hillclimber_counter, _ = HC1.climb()
             print(self.malus)
         first_stage_duration = time.time() - first_stage_start_time
@@ -393,7 +393,7 @@ class Optimize():
         while self.malus['Total'] > 125:
 
             # Create the first hillclimber
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(self.schedule, self.hillclimber_counter)
+            HC1 = HillCLimberClass.ClassesSwapRandom(self.schedule, self.hillclimber_counter)
 
             # Do a climb iteration
             self.schedule, self.malus, self.hillclimber_counter, _ = HC1.climb(hill_climber_iters)
@@ -543,28 +543,28 @@ class Optimize():
         if activation == 0:
 
             # create the class and climb.
-            HC1 = HillCLimberClass.HC_TimeSlotSwapRandom(schedule, self.hillclimber_counter)
+            HC1 = HillCLimberClass.ClassesSwapRandom(schedule, self.hillclimber_counter)
             schedule, malus, iteration, accept_me = HC1.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC1.get_name(), iteration, accept_me
 
         elif activation == 1:
 
-            HC2 = HillCLimberClass.HC_TimeSlotSwapCapacity(schedule, self.hillclimber_counter)
+            HC2 = HillCLimberClass.ClassesSwapCapacity(schedule, self.hillclimber_counter)
             schedule, malus, iteration, accept_me = HC2.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC2.get_name(), iteration, accept_me
 
         elif activation == 2:
 
-            HC3 = HillCLimberClass.HC_SwapBadTimeslots_GapHour(schedule, self.hillclimber_counter)
+            HC3 = HillCLimberClass.StudentSwapGapHour(schedule, self.hillclimber_counter)
             schedule, malus, iteration, accept_me = HC3.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC3.get_name(), iteration, accept_me
 
         elif activation == 3:
 
-            HC4 = HillCLimberClass.HC_SwapBadTimeslots_DoubleClasses(schedule, self.hillclimber_counter)
+            HC4 = HillCLimberClass.StudentSwapDoubleHour(schedule, self.hillclimber_counter)
             schedule, malus, iteration, accept_me = HC4.climb(hill_climber_iters, T=T, ANNEALING=self.ANNEALING, fail_counter=self.fail_counter)
 
             return schedule, malus, HC4.get_name(), iteration, accept_me

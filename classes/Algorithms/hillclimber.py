@@ -176,7 +176,7 @@ class HillClimber:
 
 """ Inherited HillClimber Classes """
 
-class HC_TimeSlotSwapRandom(HillClimber):
+class ClassesSwapRandom(HillClimber):
     '''swaps a random class with another random class'''
     def step_method(self, M):
 
@@ -187,7 +187,7 @@ class HC_TimeSlotSwapRandom(HillClimber):
     def get_name(self):
         return "TimeSlotSwapRandom"
 
-class HC_TimeSlotSwapCapacity(HC_TimeSlotSwapRandom):
+class ClassesSwapCapacity(ClassesSwapRandom):
     '''swaps the class that has the most capacity malus points with a random class'''
     def make_mutate(self, schedule):
         M = MutateClass.Mutate_Course_Swap_Capacity(schedule)
@@ -196,7 +196,7 @@ class HC_TimeSlotSwapCapacity(HC_TimeSlotSwapRandom):
     def get_name(self):
         return "TimeSlotSwapCapacity"
 
-class HC_SwapBadTimeslots_GapHour(HillClimber):
+class StudentSwapGapHour(HillClimber):
     '''This class takes a random student and finds the day with the most gap hours.
        When found, it will swap one tut or pract with a student from a different group
        that has the most malus points from that group'''
@@ -207,7 +207,7 @@ class HC_SwapBadTimeslots_GapHour(HillClimber):
     def get_name(self):
         return 'SwapBadTimeslots_GapHour'
 
-class HC_SwapBadTimeslots_DoubleClasses(HillClimber):
+class StudentSwapDoubleHour(HillClimber):
     '''This class takes a random student and finds the day with the most double classes.
        When found, it will swap one tut or pract with a student from a different group
        that has the most malus points from that group'''
