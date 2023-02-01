@@ -34,7 +34,8 @@ class Generator:
 
     def schedule_fill(self, Roster, course_list, room_list):
         """
-        This method creates the schedule
+        This method takes in a Roster Object, a list of Course Objects and a list of Roob Objects.
+        It then fills the schedule of the Roster with the help of the course and room objects in a random fassion.
         """
 
         # Set the days list
@@ -82,7 +83,7 @@ class Generator:
         # schedule in all students
         Roster.schedule_students()
 
-        # reset all availability of rooms
+        # reset all availability of rooms for in the case of doing several initiates
         Roster.reset_room_availability(room_list)
 
     def initialize(self):
