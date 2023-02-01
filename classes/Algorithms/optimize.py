@@ -131,7 +131,7 @@ class Optimize():
         init_time = time.time()
 
         # Set counters
-        self.multiprocess_iter_counter = 0
+        self.multiprocessor_counter = 0
         self.hillclimber_iter_counter = 0
         self.fail_counter = 0
         self.duration = 0
@@ -155,7 +155,7 @@ class Optimize():
             start_time = time.time()
 
             # Increase iter counter
-            self.multiprocess_iter_counter += 1
+            self.multiprocessor_counter += 1
 
             # set schedules and malus for the next iteration
             self.malus = self.MC.compute_total_malus(self.schedule)
@@ -184,14 +184,14 @@ class Optimize():
 
             finish_time = time.time()
 
-            self.iter_duration = finish_time - start_time
-            self.duration += self.iter_duration
+            self.multiprocess_duration = finish_time - start_time
+            self.duration += self.multiprocess_duration
 
             # replace the roster if it is better
             self.__replace_roster(difference)
 
             for output_schedule in output_schedules:
-                self.save_data_multi(output_schedule[2], output_schedule[1]['Total'], self.multiprocess_iter_counter, round(self.duration, 2))
+                self.save_data_multi(output_schedule[2], output_schedule[1]['Total'], self.multiprocessor_counter, round(self.duration, 2))
 
 
         self.export_data_multi(experiment)
