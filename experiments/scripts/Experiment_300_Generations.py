@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     # get the longest amount of time the maluspoints were the same
     df['count'] = (df['Iteration.1'] != df['Iteration.1'].shift()).cumsum()
-    grouped = df.groupby('count')['Iteration.1']
+    grouped = df.groupby('Iteration.1')['count']
     longest_seq = grouped.count().idxmax()
     malus = grouped.apply(lambda x: x.iloc[0]).loc[longest_seq]
 
