@@ -23,28 +23,6 @@ class Roster():
         for student in self.student_list:
             student.student_timeslots(self)
 
-    def total_malus(self):
-        """This function loops over the list filled with Student objects and calculates the total maluspoints"""
-
-        self.check_malus()
-
-        # For each student
-        for student in self.student_list:
-
-            # Compute the malus
-            student.malus_points(self)
-
-            # Add to complete malus counter
-            self.malus_count += student.malus_count
-
-            # Add to complete malus counter
-            days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-            for day in days:
-
-                self.malus_cause['Tripple Gap'] += student.malus_cause['Tripple Gap'][day]
-                self.malus_cause['Classes Gap'] += student.malus_cause['Classes Gap'][day]
-                self.malus_cause['Double Classes'] += student.malus_cause['Double Classes'][day]
-
     def __place_in_schedule(self, room, day, timeslot, course_name, classes, max_std):
         # if classes[0] != 'l' and course_name != 'No course':
             # print(max_std)
@@ -127,55 +105,3 @@ class Roster():
                     
 
                 succes = True
-
-    def check_malus(self):
-        """
-        This function checks if a course group is in the late timeslot and 
-        whether the amount of attending students is higher then the capacity of that room.
-        It then increases the maluspoints respectively.
-        """
-
-        # For each course:
-        for course in self.course_list:
-
-            # Find all classes
-            for classes in self.schedule[course.name]:
-
-                # Set the number of class
-                class_number = int(classes[-1])
-
-                # Set attending amount of correct class type
-                if classes.startswith('tut'):
-                    attending = course.tut_group_dict[class_number]
-                elif classes.startswith('prac'):
-                    attending = course.pract_group_dict[class_number]
-                else:
-                    attending = course.enrolled
-
-                # Set timeslot of class
-                timeslot = self.schedule[course.name][classes]['timeslot']
-
-                # For each room:
-                for room in self.room_list:
-
-                    # If room id is room id of class
-                    if self.schedule[course.name][classes]['room'] == room.id:
-
-                        # Set capacity
-                        capacity = room.capacity
-
-                # Penalty for late night lesson
-                if timeslot == 17:
-                    self.malus_cause['Night'] += 5
-                    self.malus_count += 5
-
-                # Penalty for overrun capacity
-                occupation = attending - capacity
-                if occupation > 0:
-                    self.malus_cause['Capacity'] += occupation
-                    self.malus_count += occupation
-
-                    # store inside the course how many occupation malus it caused
-                    course.capacity_malus += occupation
-
-        self.course_capacity_malus_sorted = sorted(self.course_list, key=lambda x: x.capacity_malus)
