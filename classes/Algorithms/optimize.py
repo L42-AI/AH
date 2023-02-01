@@ -140,8 +140,6 @@ class Optimize():
         self.fail_counter = 0
         self.duration = 0
 
-        self.malus = self.MC.compute_total_malus(self.schedule)
-
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
@@ -208,6 +206,8 @@ class Optimize():
         """
         This function saves the data made in solo and multi mode 
         """
+
+        # Append data of interest to data list
         self.data.append({'Hill Climber': HC_name, 'Cost': cost, 'Iteration': iteration, 'Duration': time})
 
     def export_data(self, experiment):
@@ -512,6 +512,7 @@ class Optimize():
         """
         This function saves the data made in genetic
         """
+        # Append data of interest to data list
         self.data.append({'Schedule Index': schedule_index, 'Duration': time, 'Cost': cost})
 
     def export_data_genetic(self, experiment) -> None:
@@ -572,7 +573,6 @@ class Optimize():
 
             return schedule, malus, HC4.get_name(), iteration, accept_me
 
-
     def __init_temp(self) -> float:
         '''Sets the temperature to 1 to start simmulated annealing if simulated annealing is selected'''
 
@@ -582,7 +582,9 @@ class Optimize():
             return 0
 
     def __replace_roster(self, difference):
-
+        """
+        Method to print progress
+        """
         # print output
         if difference > 0:
             print(f'\n========================= Generation: {self.multiprocessor_counter} =========================\n')
@@ -604,11 +606,20 @@ class Optimize():
         method that makes a copy of our schedule that does not change the schedule
         when we modify the copy. This eliminates the need for deepcopy
         '''
+
+        # if instance is a dict
         if isinstance(obj, dict):
+
+            # return object comprehension with recursive function call
             return {k: self.recursive_copy(v) for k, v in obj.items()}
+
+        # if instance is a set
         elif isinstance(obj, set):
+
+            # return object comprehension with recursive function call
             return {self.recursive_copy(x) for x in obj}
         else:
+            # final return
             return obj
 
     def save_schedule(self, schedule):
