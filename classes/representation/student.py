@@ -9,6 +9,8 @@ compute_malus runs these functions.
 import random
 
 class Student():
+    """This class represents a single student"""
+
     def __init__(self, data, courses):
 
         # Set attributes

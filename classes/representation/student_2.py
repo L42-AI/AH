@@ -9,8 +9,9 @@ compute_malus runs these functions.
 import random
 
 class Student():
-    def __init__(self, data, courses):
+    """ This class represents a single student """
 
+    def __init__(self, data, courses):
         # Set attributes
         self.f_name = data['Voornaam']
         self.l_name = data['Achternaam']
@@ -25,22 +26,8 @@ class Student():
         # Make dictionaries for practicum and tutorial groups
         self.select_groups()
 
-        # Make list of timeslots
-        self.timeslots = {}
-        
-        # Initiate malus
-        self.init_malus()
-
-    # def __str__(self):
-    #     return f"{self.f_name} {self.l_name}"
-
-    def init_malus(self):
-        self.malus_count = 0
-        self.malus_cause = {}
-        self.malus_cause['Classes Gap'] = {}
-        self.malus_cause['Double Classes'] = {}
-        self.malus_cause['Tripple Gap'] = {}
-
+        # # Make list of timeslots
+        # self.timeslots = {}
 
     def init_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -209,8 +196,6 @@ class Student():
 
     def malus_points(self, Roster):
         """ This method calculates the malus points for the student """
-        # Reset malus points to avoid summing dubble malus
-        self.init_malus()
 
         # update the dictionary (later this should be linked to the roster schedule)'
         self.student_timeslots(Roster)
@@ -251,7 +236,7 @@ class Student():
                     if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
                         lesson_gaps = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
 
-                        # check if one gap hour
+                        # check if one, two or more then two gap hours
                         if lesson_gaps == 1:
                             self.malus_cause['Classes Gap'][day] += 1
                             self.malus_count += 1
@@ -260,11 +245,8 @@ class Student():
                             self.malus_cause['Classes Gap'][day] += 3
                             self.malus_count += 3
 
+                        # we choose to give triple hours or more a value of 5, because it makes the data visibly more appealing
+                        # and with this value the 'Tripple Gap' always convergace
                         elif lesson_gaps > 2:
                             self.malus_cause['Tripple Gap'][day] += 5
                             self.malus_count += 5
-
-    def compute_malus(self, schedule):
-        """ Run required functions to compute student malus """
-        self.student_timeslots(schedule)
-        self.malus_points(schedule)
