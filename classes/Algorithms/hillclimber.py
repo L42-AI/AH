@@ -103,7 +103,7 @@ class HillClimber:
             self.iteration += 1
 
             if multiplier:
-                self.hill_climber_iters = int(self.malus['total'] * hill_climber_iters)
+                self.hill_climber_iters = int(self.malus['Total'] * hill_climber_iters)
 
         return self.schedule, self.malus, self.iteration, self.accept_me
 
