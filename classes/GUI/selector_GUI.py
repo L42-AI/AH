@@ -14,13 +14,16 @@ class App(customtkinter.CTk):
     def __init__(self, student_list, schedule):
         super().__init__()
 
+        # Set self objects
         self.schedule = schedule
 
+        # Create converting dict to translate student id to student names
         self.student_convert_dict = self.create_student_convert_dict(student_list)
 
-        self.student_dict, self.course_dict, self.room_dict = self.represent_schedule()
+        # Create shedule dicts
+        self.student_schedule_frame_dict, self.course_schedule_frame_dict, self.room_schedule_dict = self.represent_schedule()
 
-        # configure window
+        # Configure GUI window
         self.title("Scheduly")
         self.geometry(f"{1340}x{790}")
 
@@ -42,93 +45,135 @@ class App(customtkinter.CTk):
     """ Init """
 
     def create_student_convert_dict(self, student_list) -> dict:
+        """
+        This function creates a dictionary mapping each student id to the stundent name
+        """
+
         student_convert_dict = {}
+
+        # For each student
         for student in student_list:
+
+            # Set student id to string of student first name and last name
             student_convert_dict[student.id] = f'{student.f_name} {student.l_name}'
+
         return student_convert_dict
 
     def represent_schedule(self) -> tuple:
+        """
+        This function takes the schedule as input,
+        converts it into schedules for stundets, courses and rooms
+        """
 
-        student_dict = self.__init_student_schedule(self.schedule)
-        course_dict = self.__init_course_schedule(self.schedule)
-        room_dict = self.__init_room_schedule(self.schedule)
+        student_schedule_dict = self.init_student_schedule(self.schedule)
+        course_schedule_dict = self.init_course_schedule(self.schedule)
+        room_schedule_dict = self.init_room_schedule(self.schedule)
 
-        return student_dict, course_dict, room_dict
+        return student_schedule_dict, course_schedule_dict, room_schedule_dict
 
-    def __init_student_schedule(self, schedule) -> dict:
+    def __init_schedule(self, schedule, schedule_type) -> dict:
+        """
+        This function coverts the input shedule and type into a schedule for each type
+        """
 
-        student_dict = {}
+        schedule_dict = {}
 
+        # For each course:
         for course in schedule:
 
-            for _class in schedule[course]:
-
-                timeslot = schedule[course][_class]
-
-                for student_id in schedule[course][_class]['students']:
-
-                    student_name = self.get_student_name(student_id)
-
-                    if student_name not in student_dict:
-                        student_dict[student_name] = {}
-                    if course not in student_dict[student_name]:
-                        student_dict[student_name][course] = []
-
-                    class_data = (_class, timeslot['day'], timeslot['timeslot'], timeslot['room'])
-
-                    student_dict[student_name][course].append(class_data)
-
-        return student_dict
-
-    def __init_course_schedule(self, schedule) -> dict:
-
-        course_dict = {}
-
-        for course in schedule:
+            # Skip all 'No course' keys
             if course == "No course":
                 continue
 
-            if course not in course_dict:
-                course_dict[course] = {}
-
+            # For each class:
             for _class in schedule[course]:
 
-                timeslot = schedule[course][_class]
+                # Set this as the class moment
+                class_moment = schedule[course][_class]
 
-                class_data = (timeslot['day'], timeslot['timeslot'], timeslot['room'])
+                # Check schedule type
+                if schedule_type == "student":
 
-                course_dict[course][_class] =(class_data)
+                    # For each student in this class moment:
+                    for student_id in class_moment['students']:
 
-        return course_dict
+                        # Get the student name from the coverting dictionary
+                        student_name = self.get_student_name(student_id)
 
-    def __init_room_schedule(self, schedule) -> dict:
+                        # Make student key if not present in dict
+                        if student_name not in schedule_dict:
+                            schedule_dict[student_name] = {}
 
-        room_dict = {}
+                        # Make course key if not present in student key
+                        if course not in schedule_dict[student_name]:
+                            schedule_dict[student_name][course] = []
 
-        for course in schedule:
+                        # Save all data of interest about this class in tuple
+                        class_data = _class, class_moment['day'], class_moment['timeslot'], class_moment['room']
 
-            for _class in schedule[course]:
+                        # Append the class data to the course key
+                        schedule_dict[student_name][course].append(class_data)
 
-                timeslot = schedule[course][_class]
+                elif schedule_type == "course":
 
-                if timeslot['room'] not in room_dict:
-                    room_dict[timeslot['room']] = []
+                    # Make course key if not present in dict
+                    if course not in schedule_dict:
+                        schedule_dict[course] = {}
 
-                class_data = (course, _class, timeslot['day'], timeslot['timeslot'])
+                    # Save all data of interest about this class in tuple
+                    class_data = class_moment['day'], class_moment['timeslot'], class_moment['room']
 
-                room_dict[timeslot['room']].append(class_data)
+                    # Set class data to the class key
+                    schedule_dict[course][_class] = class_data
 
-        return room_dict
+                elif schedule_type == "room":
+
+                    # Set room
+                    room = class_moment['room']
+
+                    # Make room key if not present in dict
+                    if room not in schedule_dict:
+                        schedule_dict[room] = []
+
+                    # Save all data of interest about this class in tuple
+                    class_data = course, _class, class_moment['day'], class_moment['timeslot']
+
+                    # Append the class data to the course key
+                    schedule_dict[room].append(class_data)
+
+        return schedule_dict
+
+    def init_student_schedule(self, schedule) -> dict:
+        """
+        This function runs the schedule funciton wiht the type "student"
+        """
+        return self.__init_schedule(schedule, "student")
+
+    def init_course_schedule(self, schedule) -> dict:
+        """
+        This function runs the schedule funciton wiht the type "course"
+        """
+        return self.__init_schedule(schedule, "course")
+
+    def init_room_schedule(self, schedule) -> dict:
+        """
+        This function runs the schedule funciton wiht the type "room"
+        """
+        return self.__init_schedule(schedule, "room")
 
     def create_sidebar(self) -> None:
+        """
+        This function creates the GUI widgets to be displayed in the sidebar
+        """
 
         # Frame
         self.sidebar_frame = customtkinter.CTkFrame(self, width=140, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
+        self.sidebar_frame.rowconfigure((0,1,2,3,4,5), weight=1)
 
         # Text
-        self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Schedule Selector", font=customtkinter.CTkFont(size=20, weight="bold"))
-        self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 20))
+        self.application_name = customtkinter.CTkLabel(self.sidebar_frame, text="Schedule Selector", font=customtkinter.CTkFont(size=20, weight="bold"))
+        self.application_name.grid(row=0, column=0, padx=20, pady=20)
 
         # Buttons
         self.student_button = customtkinter.CTkButton(self.sidebar_frame, text="Student", command=self.show_student_frame)
@@ -139,14 +184,17 @@ class App(customtkinter.CTk):
         self.room_button.grid(row=3, column=0, padx=20, pady=20)
 
         # Export
-        self.export_button= customtkinter.CTkButton(self.sidebar_frame, text="Export", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.export)
-        self.export_button.grid(row=4, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        self.export_button = customtkinter.CTkButton(self.sidebar_frame, text="Export", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.export)
+        self.export_button.grid(row=4, column=0, padx=20, pady=20, sticky="sew")
 
         # Export All
-        self.export_all_button= customtkinter.CTkButton(self.sidebar_frame, text="Export All", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.export_all)
-        self.export_all_button.grid(row=8, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        self.export_all_button = customtkinter.CTkButton(self.sidebar_frame, text="Export All", fg_color="transparent", border_width=2, text_color=("gray10", "#DCE4EE"), command=self.export_all)
+        self.export_all_button.grid(row=5, column=0, padx=20, pady=20, sticky="sew")
 
     def create_frames(self) -> None:
+        """
+        This function creates the GUI frames where the students, courses, or rooms will be shown
+        """
 
         # Create student frame
         self.student_frame = customtkinter.CTkFrame(self, width=200, corner_radius=10)
@@ -154,7 +202,8 @@ class App(customtkinter.CTk):
         self.student_frame.grid_columnconfigure(0, weight=1)
         self.student_frame.grid_rowconfigure((1,2,3,4,5,6), weight=1)
 
-        self.frame_student_content()
+        # Create the student frame content
+        self.student_frame_content()
 
 
         # Create course frame
@@ -163,7 +212,8 @@ class App(customtkinter.CTk):
         self.course_frame.grid_columnconfigure(0, weight=1)
         self.course_frame.grid_rowconfigure((1,2,3,4,5,6), weight=1)
 
-        self.frame_course_content()
+        # Create the course frame content
+        self.course_frame_content()
 
         # Create room frame
         self.room_frame = customtkinter.CTkFrame(self, width=200, height=200, corner_radius=10)
@@ -171,10 +221,13 @@ class App(customtkinter.CTk):
         self.room_frame.grid_columnconfigure(0, weight=1)
         self.room_frame.grid_rowconfigure((1,2,3,4,5,6), weight=1)
 
-        self.frame_room_content()
+        # Create the room frame content
+        self.room_frame_content()
 
-
-    def frame_student_content(self) -> None:
+    def student_frame_content(self) -> None:
+        """
+        This function creates the GUI widget content for the student frame
+        """
 
         # Search Frame
         self.student_search_frame = customtkinter.CTkFrame(self.student_frame, corner_radius=10)
@@ -184,7 +237,8 @@ class App(customtkinter.CTk):
 
         # Student option
         self.student_option = customtkinter.CTkOptionMenu(self.student_search_frame,
-                                                values=sorted([student for student in self.student_dict]))
+                                                # Take all students from the student dict and sort the list alphabetically
+                                                values=sorted([student for student in self.student_schedule_frame_dict]))
         self.student_option.grid(row=0, column=0, columnspan=7, padx=20, pady=20, sticky="ew")
         self.student_option.set('Student')
 
@@ -192,14 +246,16 @@ class App(customtkinter.CTk):
         self.student_add_button = customtkinter.CTkButton(self.student_search_frame, text="Search", command=self.student_button_click)
         self.student_add_button.grid(row=0, column=7, columnspan=2, padx=20, pady=20, sticky="ew")
 
-        # Student Roster
-        self.student_schedule = customtkinter.CTkFrame(self.student_frame, corner_radius=10)
-        self.student_schedule.grid(row=1, column=0, rowspan=6, padx=20, pady=20, sticky="nsew")
-        self.student_schedule.grid_columnconfigure((0,1,2,3,4), weight=1)
-        self.student_schedule.grid_rowconfigure((0,1,2,3,4), weight=1)
+        # Student Schedule Frame
+        self.student_schedule_frame = customtkinter.CTkFrame(self.student_frame, corner_radius=10)
+        self.student_schedule_frame.grid(row=1, column=0, rowspan=6, padx=20, pady=20, sticky="nsew")
+        self.student_schedule_frame.grid_columnconfigure((0,1,2,3,4), weight=1)
+        self.student_schedule_frame.grid_rowconfigure((0,1,2,3,4), weight=1)
 
-    def frame_course_content(self) -> None:
-
+    def course_frame_content(self) -> None:
+        """
+        This function creates the GUI widget content for the course frame
+        """
         # Search Frame
         self.course_search_frame = customtkinter.CTkFrame(self.course_frame, corner_radius=10)
         self.course_search_frame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
@@ -208,7 +264,8 @@ class App(customtkinter.CTk):
 
         # Course option
         self.course_option = customtkinter.CTkOptionMenu(self.course_search_frame,
-                                                values=sorted([course for course in self.course_dict]))
+                                                # Take all courses from the course dict and sort the list alphabetically
+                                                values=sorted([course for course in self.course_schedule_frame_dict]))
         self.course_option.grid(row=0, column=0, columnspan=7, padx=20, pady=20, sticky="ew")
         self.course_option.set('Course')
 
@@ -216,13 +273,16 @@ class App(customtkinter.CTk):
         self.course_add_button = customtkinter.CTkButton(self.course_search_frame, text="Search", command=self.course_button_click)
         self.course_add_button.grid(row=0, column=7, columnspan=2, padx=20, pady=20, sticky="ew")
 
-        # Course Roster
-        self.course_schedule = customtkinter.CTkFrame(self.course_frame, corner_radius=10)
-        self.course_schedule.grid(row=1, column=0, rowspan=6, padx=20, pady=20, sticky="nsew")
-        self.course_schedule.grid_columnconfigure((0,1,2,3,4), weight=1)
-        self.course_schedule.grid_rowconfigure((0,1,2,3,4), weight=1)
+        # Course Schedule Frame
+        self.course_schedule_frame = customtkinter.CTkFrame(self.course_frame, corner_radius=10)
+        self.course_schedule_frame.grid(row=1, column=0, rowspan=6, padx=20, pady=20, sticky="nsew")
+        self.course_schedule_frame.grid_columnconfigure((0,1,2,3,4), weight=1)
+        self.course_schedule_frame.grid_rowconfigure((0,1,2,3,4), weight=1)
 
-    def frame_room_content(self) -> None:
+    def room_frame_content(self) -> None:
+        """
+        This function creates the GUI widget content for the room frame
+        """
 
         # Search Frame
         self.room_search_frame = customtkinter.CTkFrame(self.room_frame, corner_radius=10)
@@ -232,7 +292,7 @@ class App(customtkinter.CTk):
 
         # Room option
         self.room_option = customtkinter.CTkOptionMenu(self.room_search_frame,
-                                                values=sorted([room for room in self.room_dict]))
+                                                values=sorted([room for room in self.room_schedule_dict]))
         self.room_option.grid(row=0, column=0, columnspan=7, padx=20, pady=20, sticky="ew")
         self.room_option.set('Room')
 
@@ -240,91 +300,144 @@ class App(customtkinter.CTk):
         self.room_add_button = customtkinter.CTkButton(self.room_search_frame, text="Search", command=self.room_button_click)
         self.room_add_button.grid(row=0, column=7, columnspan=2, padx=20, pady=20, sticky="ew")
 
-        # Room Roster
+        # Room Schedule Frame
         self.room_schedule = customtkinter.CTkFrame(self.room_frame, corner_radius=10)
         self.room_schedule.grid(row=1, column=0, rowspan=6, padx=20, pady=20, sticky="nsew")
         self.room_schedule.grid_columnconfigure((0,1,2,3,4), weight=1)
         self.room_schedule.grid_rowconfigure((0,1,2,3,4), weight=1)
 
     def create_export_directory(self) -> None:
+        """
+        This function erases the content of / creates the export directories
+        """
 
+        # Set the working directory
         working_dir = os.getcwd()
 
+        # Delete content of desired directory if already existent
         if os.path.exists(f'{working_dir}/schedules'):
             shutil.rmtree(f'{working_dir}/schedules')
             os.makedirs(f'{working_dir}/schedules')
         else:
+            # Create new directory
             os.makedirs(f'{working_dir}/schedules')
 
     """ Get """
 
     def get_student_name(self, id) -> str:
+        """
+        This function retrieves the student name based on the student id
+        """
         return self.student_convert_dict.get(id)
 
     """ Methods """
 
     def show_student_frame(self) -> None:
-        self.student_frame.tkraise()
+        """
+        This function describes what happens when the show student button is clicked
+        """
 
         # Destroy any prior schedule
-        for widget in self.student_schedule.winfo_children():
+        for widget in self.student_schedule_frame.winfo_children():
             widget.destroy()
 
+        # Set the seach option to 'Student'
         self.student_option.set('Student')
 
+        # Make the frame visible
+        self.student_frame.tkraise()
+
+        # Change shown state
         self.shown = 'student'
 
     def show_course_frame(self) -> None:
-        self.course_frame.tkraise()
+        """
+        This function describes what happens when the show course button is clicked
+        """
 
         # Destroy any prior schedule
-        for widget in self.course_schedule.winfo_children():
+        for widget in self.course_schedule_frame.winfo_children():
             widget.destroy()
 
+        # Set the seach option to 'Course'
         self.course_option.set('Course')
 
+        # Make the frame visible
+        self.course_frame.tkraise()
+
+        # Change shown state
         self.shown = 'course'
 
     def show_room_frame(self) -> None:
-        self.room_frame.tkraise()
-
+        """
+        This function describes what happens when the show room button is clicked
+        """
         # Destroy any prior schedule
         for widget in self.room_schedule.winfo_children():
             widget.destroy()
 
+        # Set the seach option to 'Room'
         self.room_option.set('Room')
 
+        # Make the frame visible
+        self.room_frame.tkraise()
+
+        # Change shown state
         self.shown = 'room'
 
 
     def student_button_click(self) -> None:
+        """
+        This function describes what happens when the find student button is clicked
+        """
 
-        student = None
-        while student == None:
-            student = self.student_option.get()
+        # Get the student from the student option widget
+        student = self.student_option.get()
 
-        frame = self.student_schedule
+        # Do not run function if no student is selected
+        if student == 'Student':
+            return
 
+        # Set the frame
+        frame = self.student_schedule_frame
+
+        # Run the fill grid function to show schedule
         self.fill_grid(frame, 'student', student)
 
     def course_button_click(self) -> None:
+        """
+        This function describes what happens when the find course button is clicked
+        """
 
-        course = None
-        while course == None:
-            course = self.course_option.get()
+        # Get the course from the course option widget
+        course = self.course_option.get()
 
-        frame = self.course_schedule
+        # Do not run function if no course is selected
+        if course == 'Course':
+            return
 
+        # Set the frame
+        frame = self.course_schedule_frame
+
+        # Run the fill grid function to show schedule
         self.fill_grid(frame, 'course', course)
 
     def room_button_click(self) -> None:
+        """
+        This function describes what happens when the find room button is clicked
+        """
 
-        room = None
-        while room == None:
-            room = self.room_option.get()
+        # Get the course from the room option widget
+        room = self.room_option.get()
 
+        # Do not run function if no room is selected
+        if room == 'Room':
+            return
+
+        # Set the frame
         frame = self.room_schedule
 
+        # Run the fill grid function to show schedule
         self.fill_grid(frame, 'room', room)
 
 
@@ -351,7 +464,7 @@ class App(customtkinter.CTk):
         days, timeslot_to_num = self.create_grid(frame)
 
         if search_type == 'student':
-            schedule_dict = self.student_dict
+            schedule_dict = self.student_schedule_frame_dict
 
             # For each course:
             for course in schedule_dict[key]:
@@ -367,7 +480,7 @@ class App(customtkinter.CTk):
                     self.grid(days, timeslot_to_num, day, timeslot)
 
         elif search_type == 'course':
-            schedule_dict = self.course_dict
+            schedule_dict = self.course_schedule_frame_dict
 
             # For each class
             for _class in schedule_dict[key]:
@@ -380,7 +493,7 @@ class App(customtkinter.CTk):
                 self.grid(days, timeslot_to_num, day, timeslot)
 
         elif search_type == 'room':
-            schedule_dict = self.room_dict
+            schedule_dict = self.room_schedule_dict
 
             # for each class moment:
             for class_moments in schedule_dict[key]:
@@ -414,7 +527,7 @@ class App(customtkinter.CTk):
 
         if self.shown == 'student':
             item = self.student_option.get()
-            dictionary = self.student_dict
+            dictionary = self.student_schedule_frame_dict
 
             for course in dictionary[item]:
                 for class_info in dictionary[item][course]:
@@ -432,7 +545,7 @@ class App(customtkinter.CTk):
 
         elif self.shown == 'course':
             item = self.course_option.get()
-            dictionary = self.course_dict
+            dictionary = self.course_schedule_frame_dict
 
             for _class in dictionary[item]:
 
@@ -451,7 +564,7 @@ class App(customtkinter.CTk):
 
         else:
             item = self.room_option.get()
-            dictionary = self.room_dict
+            dictionary = self.room_schedule_dict
 
             for class_info in dictionary[item]:
 
@@ -475,13 +588,13 @@ class App(customtkinter.CTk):
         df_room_list = []
 
         # For each student:
-        for student in sorted(self.student_dict):
+        for student in sorted(self.student_schedule_frame_dict):
 
             # For each course:
-            for course in self.student_dict[student]:
+            for course in self.student_schedule_frame_dict[student]:
 
                 # For each class:
-                for class_data in self.student_dict[student][course]:
+                for class_data in self.student_schedule_frame_dict[student][course]:
 
                     # Add all relevant information ito lists
                     df_student_list.append(student)
