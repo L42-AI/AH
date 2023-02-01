@@ -10,7 +10,11 @@ import time
 import csv
 
 
-class Multiprocessor():
+class Optimize():
+    '''This class runs different types of algorithms on a given schedule. It can run Hillclimbers 
+       independent of each other, use a genetic algorithm and or simmulated annealing. README in the git
+       for more detail'''
+
     def __init__(self, Roster, annealing, experiment_iter):
         self.Roster = Roster
         self.course_list = course_list
@@ -22,26 +26,20 @@ class Multiprocessor():
         self.MC = MalusCalculatorClass.MC()
 
     def __init_temp(self) -> float:
+        '''Sets the temperature to 1 to start simmulated annealing if simulated annealing is selected'''
+
         if self.ANNEALING:
             return 1
-        else:
-            return 0
-
-    def __set_temp(self, T) -> float:
-        if self.ANNEALING:
-            if T > .5:
-                return self.__get_temperature(T)
-            elif T <= .5:
-                T = self.__get_temperature(T, alpha=0.65)
-
-            if T < 0.01:
-                return 0.05
         else:
             return 0
 
     """ Multiprocessing """
 
     def run_multi(self, algorithm_duration, experiment, core_assignment, hill_climber_iters):
+        '''This method can run any combination of our 4 Hillclimbing algorithms. Every iteration,
+           a Hillclimber is called upon 4 times. Since each Hillclimber works independent, the task can
+           be split up to run on multiple cores. Only advised to do when choosing high iterations per Hillclimber.
+           read README on git for more info'''
 
         self.data = []
 
@@ -51,18 +49,19 @@ class Multiprocessor():
         self.fail_counter = 0
         self.duration = 0
 
+        # set a 'lowest' malus
         lowest_malus = 9999
 
+        # self.schedule and self.malus will always hold the best schedule
         self.schedule = self.Roster.schedule
         self.malus = self.MC.compute_total_malus(self.schedule)
 
         # Print intitial
         print(f'\nInitialization')
         print(self.malus)
-        if self.ANNEALING:
-            t = 1
-        else:
-            t = 0
+
+
+        t = self.__init_temp()
 
         init_time = time.time()
 
