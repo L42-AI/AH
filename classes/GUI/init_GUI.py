@@ -224,7 +224,10 @@ class App(customtkinter.CTk):
 
     def button_click_event(self):
         dialog = customtkinter.CTkInputDialog(text="Please enter 4 digits from 0 to 3\nDefault: 0123", title="Hillclimbers")
-        self.core_assignment = dialog.get_input()
+        if len(dialog.get_input()) < 4:
+            self.core_assignment = '0123'
+        else:
+            self.core_assignment = dialog.get_input()
 
     def hillclimber_switch_click(self) -> None:
 
