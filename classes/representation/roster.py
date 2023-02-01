@@ -41,18 +41,26 @@ class Roster():
     def fill_empty_slots(self):
         """ 
         This method makes a new key in the schedule and as value fills all the rooms and their timeslots,
-        that have not been scheduled yet as empty
+        that have not been scheduled yet.
         """
 
+        # Set possible timeslots and days
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-
-        # Set possible timeslots
         timeslots = [9, 11, 13, 15]
+
+        # count the empty seminar moments
+        i = 0
+
+        # add new key to the schedule
         self.schedule["No course"] = {}
-        i = 1
 
         # check every room if they are being used at every moment
         for room in self.room_list:
+
+            # if the room is C0.110 check the late timeslot as well
+            if room.id == 'CO.110':
+                timeslots = [9, 11, 13, 15, 17]
+
             for day in days:
                 for timeslot in timeslots:
                     if room.availability[day][timeslot]:
@@ -61,19 +69,23 @@ class Roster():
                         # schedule the room as empty
                         self.__place_in_schedule(room, day, timeslot, "No course", classes, 1000)
 
-                if room.id == 'C0.110':
-                    if room.availability[day][17]:
-                        classes = f"No classes {i}"
-                        self.__place_in_schedule(room, day, 17, "No course", classes, 1000)
+                        i += 1
+
+                # # if the room is C0.110 check the late timeslot as well
+                # if room.id == 'C0.110':
+                #     if room.availability[day][17]:
+                #         classes = f"No classes {i}"
+                #         self.__place_in_schedule(room, day, 17, "No course", classes, 1000)
 
     def fill_schedule_random(self, course, class_type, count):
-        """ This function fills a schedule with no student capacity restraints """
+        """ This function fills a schedule with no student capacity restraints in a random fassion """
 
         # Make key if not existent
         if course.name not in self.schedule:
             self.schedule[course.name] = {}
 
         succes = False
+
         while not succes:
 
             # Generate a random room, day and timeslot:
@@ -91,7 +103,9 @@ class Roster():
                             continue
                         if class_type != 'lecture' and room.id == 'C0.110' or room.id == 'C0.112':
                             continue
-
+                
+                # check if the lecture_day is None if not check if its a lecture, if it is skip the rostering
+                # part of the most POPULAR and DIFICULT_STUDENTS algorithm in generator.py
                 if course.lecture_day != None:
                     if course.lecture_day != day and class_type == 'lecture':
                         continue
@@ -99,11 +113,15 @@ class Roster():
                 self.schedule[course.name][f'{class_type} {count}'] = {}
                 class_number = f"{class_type} {count}"
                 
-                # if 
+                # if the class is a tutorial roster it
                 if class_number[0] == 't':
-                    self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_tutorial)
+                    self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_tutorial)\
+                
+                # if the class is a practical roster it
                 elif class_number[0] == 'p':
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, course.max_std_practical)
+
+                # roster the lecture
                 else:
                     self.__place_in_schedule(room, day, timeslot, course.name, class_number, 1000)
                     
