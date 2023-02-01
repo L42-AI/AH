@@ -44,7 +44,7 @@ class Optimize():
 
         # Set counters
         self.multiprocessor_counter = 0
-        self.hillclimber_counter = 0
+        self.hillclimber_counter = 1
         self.fail_counter = 0
         self.duration = 0
 
@@ -130,13 +130,8 @@ class Optimize():
         init_time = time.time()
 
         # Set counters
-<<<<<<< HEAD
         self.multiprocessor_counter = 0
-        self.hillclimber_iter_counter = 0
-=======
-        self.multiprocessor_counter = 1
         self.hillclimber_counter = 1
->>>>>>> 1f4afd840b588fed3b7bc3f05d84cb9b655541fa
         self.fail_counter = 0
         self.duration = 0
 
@@ -158,12 +153,9 @@ class Optimize():
         while time.time() - init_time < algorithm_duration:
             start_time = time.time()
 
-<<<<<<< HEAD
             # Increase iter counter
             self.multiprocessor_counter += 1
 
-=======
->>>>>>> 1f4afd840b588fed3b7bc3f05d84cb9b655541fa
             # set schedules and malus for the next iteration
             self.malus = self.MC.compute_total_malus(self.schedule)
             schedule_list = [self.recursive_copy(self.schedule) for _ in range(4)]
@@ -185,8 +177,9 @@ class Optimize():
             difference = self.malus['Total'] - output_schedules[self.best_index][1]['Total']
 
 
-            if output_schedules[self.best_index][1]['Total'] < lowest_malus:
-                lowest_malus = output_schedules[self.best_index][1]['Total']
+            if output_schedules[self.best_index][1]['Total'] < self.malus['Total']:
+                self.malus = output_schedules[self.best_index][1]
+                self.schedule = output_schedules[self.best_index][0]
                 self.save_schedule(output_schedules[self.best_index][0])
 
             finish_time = time.time()
@@ -198,7 +191,7 @@ class Optimize():
             self.__replace_roster(difference)
 
             for output_schedule in output_schedules:
-                self.save_data_multi(output_schedule[2], output_schedule[1]['Total'], self.multiprocess_iter_counter, round(self.duration, 2))
+                self.save_data_multi(output_schedule[2], output_schedule[1]['Total'], self.multiprocessor_counter, round(self.duration, 2))
 
             # Increase iter counter
             self.multiprocessor_counter += 1
