@@ -1,18 +1,24 @@
 import classes.algorithms.mutate as MutateClass
+from helpers.shallow_copy import recursive_copy
 import random
 import copy
 import numpy as np
+import csv
+import decimal
 
 """ Main HillClimber Class """
 
 class HillClimber:
-    def __init__(self, schedule, course_list, student_list, MC):
+    def __init__(self, schedule, course_list, student_list, MC, iteration=0):
         self.schedule_list = []
         self.course_list = course_list
         self.student_list = student_list
         self.schedule = schedule
         self.MC = MC
-        self.multiplyer = 0.1
+        self.iteration = iteration
+
+        # Compute malus with MalusCalculator
+        self.malus = self.MC.compute_total_malus(self.schedule)
 
     """ Inheritable methods """
 
@@ -38,22 +44,28 @@ class HillClimber:
 
     """ Main Method """
 
-    def climb(self, T):
+    def climb(self, hill_climber_iters=400, T=0, ANNEALING=False, fail_counter=None):
         self.double = {'l': set(), 't': set(), 'p': set()}
-
+        self.accept_me = False
         # Compute malus with MalusCalculator
         self.malus = self.MC.compute_total_malus(self.schedule)
 
         # Append the input roster
         self.schedule_list.append(self.schedule)
-        double_hc = {'l': {'v': 0, 'student': []}, 't': {'v': 0, 'student': []}, 'p': {'v': 0, 'student': []}}
 
-        # let the hillclimber take some steps
-        for _ in range(int(self.malus['Total'] * self.multiplyer)):
-            # self.malus = self.MC.compute_total_malus(self.schedule)
+        if type(hill_climber_iters) == float:
+            multiplier = True
+            self.hill_climber_iters = int(self.malus['total'] * hill_climber_iters)
+        else:
+            multiplier = False
+            self.hill_climber_iters = hill_climber_iters
+
+        # let the hillclimber take some steps 
+        # for _ in range(int(self.malus['Total'] * self.multiplyer)):
+        for _ in range(self.hill_climber_iters):
 
             # Make copy of schedule, complex because of dictionary
-            copied_schedule = copy.deepcopy(self.schedule)
+            copied_schedule = recursive_copy(self.schedule)
 
             # {k: {k2: {k3: [student for student in v3] for k3, v3 in v2.items()} for k2, v2 in v.items()} for k, v in self.schedule.items()}
             # Create the mutate class
@@ -68,54 +80,71 @@ class HillClimber:
             # Calculate the malus points for the new schedule
             new_malus = self.MC.compute_total_malus(new_schedule)
 
-            # let the hillclimber make 3 changes before a new score is calculated
-            self.__accept_schedule(new_malus, new_schedule, T, double_hc, M)
-        # print(self.get_name(), self.double)
-        # Return new roster
-        return self.schedule, self.malus
+            # self.save_results()
 
-    def __accept_schedule(self, new_malus, new_schedule, T, double_hc, M):
+            # let the hillclimber make 3 changes before a new score is calculated
+            self.__accept_schedule(new_malus, new_schedule, T=T, ANNEALING=ANNEALING, fail_counter=fail_counter)
+
+            self.iteration += 1
+
+            if multiplier:
+                self.hill_climber_iters = int(self.malus['total'] * hill_climber_iters)
+
+        return self.schedule, self.malus, self.iteration, self.accept_me
+
+    def __accept_schedule(self, new_malus, new_schedule, T=0, ANNEALING=False, fail_counter=None):
         '''Takes in the new malus (dict) and schedule (dict) and compares it to the current version
            If it is better, it will update the self.schedule and malus'''
 
-
+        prob = random.random()
         # only accept annealing if the rise in malus is not too large
         difference = self.malus['Total'] - new_malus['Total']
 
-        # if difference = 0 it will overflow
-        if difference < 0.01:
-            prob = 0
-        elif T != 0:
-            prob = np.exp(-difference / T )
-            prob /= 1000
+        # only accept annealing if the rise in malus is not too large
+        difference = self.malus['Total'] - new_malus['Total']
+        prob = random.random()
+
+        # create an accept threshold when using simulated annealing
+        if new_malus['Total'] < 120 and ANNEALING and not self.accept_me and fail_counter > 500:
+            accept = decimal.Decimal(1 - np.exp(-difference/T))
         else:
-            prob = 1
+            accept = 2 # 2 can never be accepted
 
         # Compare with prior malus points
         if new_malus['Total'] <= self.malus['Total']:
-            # print(self.get_name(), self.malus['Total'], new_malus['Total'])
             self.schedule = new_schedule
             self.malus = new_malus
-            double_hc['l']['v'] += M.double['l']['v']
-            double_hc['t']['v'] += M.double['t']['v']
-            double_hc['p']['v'] += M.double['p']['v']
-            double_hc['l']['student'].append(M.double['l']['student'])
-            double_hc['t']['student'].append(M.double['t']['student'])
-            double_hc['p']['student'].append(M.double['p']['student'])
-            
-            for key in double_hc:
-                # print(key)
-                # print(self.double[key])
-                if double_hc[key]['student']:
-                    for student in double_hc[key]['student']:
-                        if student:
-                            for id in student:
-                                if id not in self.double[key]:
-                                    self.double[key].add(id)
-        elif prob < T:
-            print(f'worsening of {difference} got accepted at T: {T}')
+
+        elif prob > accept and difference < 20:
+            T = 0
+            # print(f'worsening of {-difference} got accepted at T: {T}')
             self.schedule = new_schedule
             self.malus = new_malus
+            self.accept_me = True
+
+
+
+    def save_results_multi(self):
+        with open('data/HCResults.csv', 'a') as f:
+            csv_writer = csv.DictWriter(f, fieldnames=['HC1 type','HC1 iteration','HC1 malus','HC2 type','HC2 iteration','HC2 malus','HC3 type','HC3 iteration','HC3 malus','HC4 type','HC4 iteration','HC4 malus'])
+            info = {
+                f'HC{self.core_assignment} type': self.get_name(),
+                f'HC{self.core_assignment} iteration': self.iteration,
+                f'HC{self.core_assignment} malus': self.malus['Total']
+            }
+
+            csv_writer.writerow(info)
+
+    def save_results(self):
+        with open('data/HCResults.csv', 'a') as f:
+            csv_writer = csv.DictWriter(f, fieldnames=['HC type','HC iteration','HC malus'])
+            info = {
+                f'HC type': self.get_name(),
+                f'HC iteration': self.iteration,
+                f'HC malus': self.malus['Total']
+            }
+
+            csv_writer.writerow(info)
 
 """ Inherited HillClimber Classes """
 
