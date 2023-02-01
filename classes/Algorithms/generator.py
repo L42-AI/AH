@@ -72,14 +72,15 @@ class Generator:
         # timeslots in rooms that did not get used will be placed in the schedule as empty
         self.fill_empty_slots(room_list)
 
-        self.init_student_timeslots(student_list)
+        self.schedule_students(student_list)
 
-    def init_student_timeslots(self, student_list):
+    def schedule_students(self, student_list):
         """This method takes in a student list and initializes student time slots for all the students."""
 
-        # loop over the list of students and initialize timeslots
+        # For each student:
         for student in student_list:
-            student.student_timeslots(self)
+
+            student.student_timeslots(self.schedule)
 
     def __place_in_schedule(self, room, day, timeslot, course_name, classes, max_std):
         """ This method places a dictionary into the right class with all the necessary information """

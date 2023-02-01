@@ -171,7 +171,7 @@ class Student():
     #         current_seminar = f'{seminar_type} {index + index_offset}'
     #         current_course[current_seminar]['students'].add(self.id)
 
-    def student_timeslots(self, Roster):
+    def student_timeslots(self, schedule):
         """
         This method adds the timeslots for classes per week.
         The dictionary timeslots is linked to the Roster schedule.
@@ -181,7 +181,7 @@ class Student():
         for course in self.courses:
 
             # Set the current course dict
-            current_course = Roster.schedule[course.name]
+            current_course = schedule[course.name]
 
             # Find and save the lecture timeslot
             self.__lecture_timeslot(course, current_course)
