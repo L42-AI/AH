@@ -52,7 +52,7 @@ class Course():
 
     def flag_hard_student(self, student_list):
         for student in student_list:
-            if student in self.enrolled_students and len(student.courses) > 5:
+            if student in self.enrolled_students and len(student.courses) > 4:
                 self.prioritise = True
 
     def rooms_needed(self):
