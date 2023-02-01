@@ -1,6 +1,8 @@
 import classes.algorithms.mutate as MutateClass
 from helpers.shallow_copy import recursive_copy
 import classes.representation.malus_calc as MalusCalculatorClass
+from data.assign import student_list, course_list
+
 import random
 import copy
 import numpy as np
@@ -10,7 +12,7 @@ import decimal
 """ Main HillClimber Class """
 
 class HillClimber:
-    def __init__(self, schedule, course_list, student_list, iteration=0):
+    def __init__(self, schedule, iteration=0):
         self.schedule_list = []
         self.course_list = course_list
         self.student_list = student_list
