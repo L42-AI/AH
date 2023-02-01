@@ -70,7 +70,7 @@ if __name__ == '__main__':
 
     if activation == 0:
         visualize_experiments('One Hillclimber different stages multiplier_4.csv', 'Plot Hillclimber Multiplier 4.png', 'Experiment Hillclimber Multiplier 4', \
-            'list_iterations' ,'Iteration.1', 1700, 1750, 20, 50, (12, 12))
+            'list_iterations' ,'Iteration.1', 1400, 1450, 20, 50, (12, 12))
 
     elif activation == 1:
         visualize_experiments('Testing Hillclimber_0 30 times.csv', 'Plot Testing Hillclimber_0.png', 'Experiment Hillclimber Swap Random Lessons', \
