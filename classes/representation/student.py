@@ -218,6 +218,7 @@ class Student():
                     if timeslot_list[timeslot_num] in timeslots_double_classes:
                         self.malus_cause['Double Classes'][day] += 1
                         self.malus_count += 1
+                        
                     else:
                         timeslots_double_classes.append(timeslot_list[timeslot_num])
 
