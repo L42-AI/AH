@@ -44,7 +44,6 @@ After seeing improvements in the effectiveness of our application, we started to
 For our fifth and final experiment we ran a two staged process of singular hillclimbing, combined with an genetic multiprocessing algorithm.
 
 When using the application, the user can select any of these experiments to reproduce the results in the interest of reliability and replicability.
-Reproducibility of Lecture Graphs
 
 In order to reproduce the different plots go to the Experiment folder and run:
 
