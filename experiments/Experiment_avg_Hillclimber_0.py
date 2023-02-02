@@ -15,6 +15,7 @@ if __name__ == '__main__':
 
     # cut so the plot is prittier
     df_2 = df[df['Iteration.1'] <= 400]
+    df_2 = df_2[df_2['list_iterations'] <= 300]
     
     # plot and save the graph
     plt.figure(figsize=(10, 4))
