@@ -1,8 +1,13 @@
 import copy
+from data.assign import student_list, course_list, room_list
 
-class MalusCalculator:
+class MC:
+    """
+    Class that handles malus calculations. It uses the schedule and the set of
+    students connnected to each seminar to do so
+    """
 
-    def __init__(self, course_list, student_list, room_list) -> None:
+    def __init__(self) -> None:
 
         # Set lists
         self.course_list = course_list
@@ -16,37 +21,63 @@ class MalusCalculator:
     """ INIT """
 
     def init_malus(self) -> None:
+        '''
+        create a malus dictionary that will hold the points
+        '''
+
         self.malus = {}
 
+        # Set all malus cause counts
         self.malus['Total'] = 0
         self.malus['Night'] = 0
         self.malus['Capacity'] = 0
-
         self.malus['Double Classes'] = 0
         self.malus['Classes Gap'] = 0
         self.malus['Triple Gap'] = 0
 
     def init_student_dict(self) -> None:
+        """
+        Create a student dict that links ids to object
+        """
+
         self.student_dict = {}
+
+        # For each student object
         for student in self.student_list:
             self.student_dict[student.id] = student
 
     def init_course_dict(self) -> None:
+        """
+        Create a course dict that links ids to object
+        """
+
         self.course_dict= {}
+
+        # For each course object
         for course in self.course_list:
             self.course_dict[course.name] = course
 
     """ GET """
 
     def get_student(self, id) -> object:
+        '''
+        returns student object
+        '''
         return self.student_dict.get(id)
 
     def get_course(self, name) -> object:
+        '''
+        returns course object
+        '''
         return self.course_dict.get(name)
 
     """ Methods """
 
     def compute_schedule_malus(self, schedule) -> None:
+        '''
+        computes the malus by looping over every course and its seminars
+        in the schedule
+        '''
 
         # For each course:
         for course_name in schedule:
@@ -96,6 +127,10 @@ class MalusCalculator:
                     self.malus['Total'] += occupation
 
     def __days_in_schedule(self, schedule) -> dict:
+        '''
+        returns a dictionary called timeslots that holds the information about gap and double hours
+        for every student
+        '''
 
         # Create empty dict
         timeslots = {}
@@ -119,6 +154,10 @@ class MalusCalculator:
         return timeslots
 
     def compute_student_malus(self, schedule) -> None:
+        '''
+        Uses the timeslots dictionary to go over every student in order to
+        'reward' the malus points associated with his/hers schedule
+        '''
 
         # Set timeslots
         timeslots = self.__days_in_schedule(schedule)
@@ -152,7 +191,7 @@ class MalusCalculator:
                         if timeslot_list[timeslot_num] - timeslot_list[timeslot_num + 1] != 0:
                             lesson_gaps = int((timeslot_list[timeslot_num] - (timeslot_list[timeslot_num + 1] + 2)) / 2)
 
-                            # check if one gap hour
+                            # check for lesson gaps and attribute malus
                             if lesson_gaps == 1:
                                 self.malus['Classes Gap'] += 1
                                 self.malus['Total'] += 1
@@ -166,6 +205,11 @@ class MalusCalculator:
                                 self.malus['Total'] += 5
 
     def compute_total_malus(self, schedule) -> dict:
+        '''
+        method to call on outside this class that calls all malus
+        calculation methods in the correct order
+        '''
+
         self.init_malus()
         self.compute_schedule_malus(schedule)
         self.compute_student_malus(schedule)

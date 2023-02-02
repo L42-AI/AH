@@ -9,8 +9,9 @@ compute_malus runs these functions.
 import random
 
 class Student():
-    def __init__(self, data, courses):
+    """This class represents a single student"""
 
+    def __init__(self, data, courses):
         # Set attributes
         self.f_name = data['Voornaam']
         self.l_name = data['Achternaam']
@@ -24,23 +25,6 @@ class Student():
 
         # Make dictionaries for practicum and tutorial groups
         self.select_groups()
-
-        # Make list of timeslots
-        self.timeslots = {}
-        
-        # Initiate malus
-        self.init_malus()
-
-    # def __str__(self):
-    #     return f"{self.f_name} {self.l_name}"
-
-    def init_malus(self):
-        self.malus_count = 0
-        self.malus_cause = {}
-        self.malus_cause['Classes Gap'] = {}
-        self.malus_cause['Double Classes'] = {}
-        self.malus_cause['Tripple Gap'] = {}
-
 
     def init_courses(self, courses):
         """ Assign all the courses to the student and set the enrollment dictionary """
@@ -57,7 +41,7 @@ class Student():
 
 
     def __set_type(self, course, class_type):
-        """ This function sets parameters used in pick_group"""
+        """ This function sets parameters used in pick_group """
 
         # If class is tutorial:
         if class_type == 'Tutorial':
@@ -65,7 +49,7 @@ class Student():
             # Set all values of tutorial
             group_dict = course.tut_group_dict
             class_num = course.tutorials
-            max_std = course.max_std
+            max_std = course.max_std_tutorial
             group = self.tut_group
         else:
             # Set all values of practica
@@ -124,8 +108,8 @@ class Student():
                 # Run the pick group function
                 self.__pick_group(course, group_dict, class_num, max_std, group)
 
-
     def __lecture_timeslot(self, course, current_course):
+        """ This method adds the student Id's to the lectures """
 
         if course.lectures > 0:
             # For each lecture in the course:
@@ -137,39 +121,28 @@ class Student():
                 # Add course and class to timeslot info
                 current_course[current_lecture]['students'].add(self.id)
 
-    def __tutorial_timeslot(self, course, current_course):
+    def __pract_tut_timeslot(self, course, current_course, seminar_type):
+        """ This method adds the student Id's to practicals or tutorials """
 
-        if course.tutorials > 0:
-            # For each tutorial in the course:
-            for index in range(course.tutorials):
+        #
+        if seminar_type == "tutorial" and course.tutorials > 0:
+            group = self.tut_group[course.name]
 
-                # Set the current class
-                # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
-                current_tutorial = f"tutorial {(self.tut_group[course.name] + self.tut_group[course.name] * index)}"
+        elif seminar_type == "practical" and course.practicals > 0:
+            group = self.pract_group[course.name]
 
-                # Add course and class to timeslot info
-                current_course[current_tutorial]['students'].add(self.id)
+        else:
+            return "Error No Seminar of this type!"
 
-    def __practicum_timeslot(self, course, current_course):
-
-        if course.practicals > 0:       ## This if is unnecassary, because if it is zero it will not do the for loop even once
-            # For each practicum in the course:
-            for index in range(course.practicals):
-
-                # Set the current class
-                # tut*index is incase group needs 2 tutorials, so they need timeslots from 2 entries
-                current_practicum = f"practical {(self.pract_group[course.name] + self.pract_group[course.name] * index)}"
-
-                # Add course and class to timeslot info
-                current_course[current_practicum]['students'].add(self.id)
+        for index in range(eval(f"course.{seminar_type}s")):
+            current_class = f"{seminar_type} {group + group * index}"
+            current_course[current_class]['students'].add(self.id)
 
     def student_timeslots(self, Roster):
         """
         This method adds the timeslots for classes per week.
         The dictionary timeslots is linked to the Roster schedule.
         """
-
-        # print(schedule.schedule)
 
         # For each course:
         for course in self.courses:
@@ -181,13 +154,13 @@ class Student():
             self.__lecture_timeslot(course, current_course)
 
             # Find and save the tutorial timeslot
-            self.__tutorial_timeslot(course, current_course)
+            self.__pract_tut_timeslot(course, current_course, 'tutorial')
 
             # Find and save the practicum timeslot
-            self.__practicum_timeslot(course, current_course)
-
+            self.__pract_tut_timeslot(course, current_course, 'practical')
 
     def __days_in_schedule(self, Roster):
+        """ This method finds out how often a student has seminars in a day and appends it into the list for that day """
 
         # Create a days dictionary
         days = {'Monday':[], 'Tuesday':[], 'Wednesday':[], 'Thursday':[], 'Friday':[]}
@@ -196,11 +169,12 @@ class Student():
         for course in Roster.schedule:
 
             # For each class:
-            for classes in Roster.schedule[course]:
+            for seminars in Roster.schedule[course]:
 
                 # Set the class info
-                class_info = Roster.schedule[course][classes]
+                class_info = Roster.schedule[course][seminars]
 
+                # if the student follows that seminar
                 if self.id in class_info['students']:
 
                     # Add the timeslots into the days dictionary
@@ -244,6 +218,7 @@ class Student():
                     if timeslot_list[timeslot_num] in timeslots_double_classes:
                         self.malus_cause['Double Classes'][day] += 1
                         self.malus_count += 1
+                        
                     else:
                         timeslots_double_classes.append(timeslot_list[timeslot_num])
 
@@ -260,11 +235,8 @@ class Student():
                             self.malus_cause['Classes Gap'][day] += 3
                             self.malus_count += 3
 
+                        # we choose to give triple hours or more a value of 5, because it makes the data visibly more appealing
+                        # and with this value the 'Tripple Gap' always convergace
                         elif lesson_gaps > 2:
                             self.malus_cause['Tripple Gap'][day] += 5
                             self.malus_count += 5
-
-    def compute_malus(self, schedule):
-        """ Run required functions to compute student malus """
-        self.student_timeslots(schedule)
-        self.malus_points(schedule)

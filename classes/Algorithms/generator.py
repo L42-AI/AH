@@ -1,182 +1,134 @@
-import classes.algorithms.multiprocessor as MultiprocessorClass
+"""
+This file includes the generator class which is the class that generates our schedule
+It does the random initialization and can route the schedule to the optimizing class
+"""
 
-import classes.representation.course as CourseClass
-import classes.representation.student as StudentClass
-import classes.representation.room as RoomClass
-import classes.representation.roster as RosterClass
+import classes.algorithms.optimize as OptimizeClass
 import classes.representation.malus_calc as MalusCalculatorClass
+import classes.representation.roster as RosterClass
 
-from data.data import COURSES, STUDENT_COURSES, ROOMS
+from data.assign import course_list, room_list
 
-import os
-from tqdm import tqdm
 import matplotlib.pyplot as plt
+from tqdm import tqdm
+import os
 
 class Generator:
-    def __init__(self, capacity, popular, popular_own_day, difficult_students, annealing, visualize):
+    """ This Class runs the optimize functions, randomly initiates the schedule and plots the baseline """
 
+    def __init__(self, capacity, popular, popular_own_day, difficult_students, annealing, visualize):
         # Set heuristics
         self.CAPACITY = capacity
         self.POPULAR = popular
         self.POPULAR_OWN_DAY = popular_own_day
         self.ANNEALING = annealing
         self.DIFFICULT_STUDENTS = difficult_students
+        self.MC = MalusCalculatorClass.MC()
 
         # Save initialization
-        self.malus, self.Roster, self.course_list, self.student_list, self.rooms_list, self.MC = self.initialise(COURSES, STUDENT_COURSES, ROOMS)
+        self.malus, self.Roster = self.initialize()
 
+        # if in the GUI visualize is set to true show the graph of the baseline
         if visualize:
-            self.plot_startup(COURSES, STUDENT_COURSES, ROOMS)
+            self.plot_startup()
 
-    """ INIT """
+    def schedule_fill(self, Roster, course_list, room_list):
+        """
+        This method takes in a Roster Object, a list of Course Objects and a list of Roob Objects.
+        It then fills the schedule of the Roster with the help of the course and room objects in a random fassion.
+        """
 
-    def __count_students(self, dataframe):
-        """This function Counts the amount of students enrolled for each course"""
-
-        list_courses = ['Vak1', 'Vak2', 'Vak3', 'Vak4', 'Vak5']
-        dict_count = {}
-
-        # loop over each row of the dataframe and set the count plus 1
-        for _, row in dataframe.iterrows():
-            for course in list_courses:
-
-                # make it a string, in order to easily check if it is nan
-                course_str = str(row[course])
-
-                if course_str != 'nan':
-
-                    # check if its in the dict, if not make a key and set value to 0
-                    if course_str not in dict_count:
-                        dict_count[course_str] = 0
-
-                    # count the students
-                    dict_count[course_str] += 1
-
-        return dict_count
-
-    def assign(self, COURSES, STUDENT_COURSES, ROOMS):
-        """This Function takes in 3 Dataframes, loops over the dataframe and fills a list with the respective Class objects."""
-
-        global course_list, student_list, rooms_list
-
-        course_list = []
-        student_list = []
-        rooms_list = []
-
-        # count the students that have enrolled for each course
-        dict_enrollment = self.__count_students(STUDENT_COURSES)
-
-        # create an instance for every course
-        for _, course in COURSES.iterrows():
-
-            # fill in the list with course objects
-            course_list.append(CourseClass.Course(course, dict_enrollment[course['Vak']]))
-
-        for _, student in STUDENT_COURSES.iterrows():
-
-            # fill in the list with student objects
-            student_list.append(StudentClass.Student(student, course_list))
-
-        for _, room in ROOMS.iterrows():
-
-            # fill in the list with room objects
-            rooms_list.append(RoomClass.Room(room))
-
-        for course in course_list:
-            course.enroll_students(student_list)
-            course.flag_hard_student(student_list)
-
-        return course_list, student_list, rooms_list
-
-    def schedule_fill(self, Roster, course_list, student_list):
-        ''''method schedules a timeslot for every lecture, tutorial or practical that takes place'''
-
-        # first give the most popular courses a place in the schedule
-        if self.POPULAR:
-            course_list = sorted(course_list, key = lambda x: x.enrolled, reverse = True)
+        # Set the days list
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+
+        # Check heuristics state
+        if self.POPULAR:
+            # Sort the course list on popularity (enrolled)
+            course_list = sorted(course_list, key = lambda x: x.enrolled, reverse = True)
+
         # give the 5 most popular courses their own day to hold their lectures, to prevent gap hours
         if self.POPULAR_OWN_DAY:
-
             for i in range(5):
-                course_list[i].day = days[i]
+                course_list[i].lecture_day = days[i]
 
+        # give the 5 most 
         if self.DIFFICULT_STUDENTS:
             course_list = sorted(course_list, key=lambda x: x.prioritise)
             for i in range(5):
-                course_list[i].day = days[i]
+                course_list[i].lecture_day = days[i]
 
+        # loop over the course list
         for course in course_list:
-            # go over the number of lectures, tutorials and practicals needed
+
+            # go over the number of lectures and fill the schedule
             for i in range(course.lectures):
-                # check how many students will attend this lecture
-                attending = course.enrolled
-                Roster.fill_schedule_random(course, "lecture", i + 1, attending)
 
-            # outer loop is incase more than one tut per group
-            ## in csv there is always one tut or pract, but we want to make the program scalable 
-            for _ in range(course.tutorials):
-                for i in range(course.tutorial_rooms):
+                Roster.fill_schedule_random(course, "lecture", i + 1)
 
-                    # check how many students will attend this tutorial
-                    attending = course.tut_group_dict[i + 1]
-                    Roster.fill_schedule_random(course, "tutorial", i + 1, attending)
+            # make a dictionary to loop over with practicals and tutorials
+            seminars = {
+                'tutorial': (course.tutorials, course.tutorial_rooms),
+                'practical': (course.practicals, course.practical_rooms)
+            }
 
-            for _ in range(course.practicals):
-                for i in range(course.practical_rooms):
+            # loop over the dict items for each seminar and their rooms needed
+            for seminar_type, (num_seminars, num_rooms) in seminars.items():
+                for i in range(num_seminars):
+                    for j in range(num_rooms):
+                        Roster.fill_schedule_random(course, seminar_type, j + 1)
 
-                    # check how many students will attend this practical
-                    attending = course.pract_group_dict[i + 1]
-                    Roster.fill_schedule_random(course, "practical", i + 1, attending)
-
-        # timeslots in rooms that did not get used will be placed in the schedule as empty
+        # place unused timeslots in rooms in schedule as empty
         Roster.fill_empty_slots()
 
-        Roster.init_student_timeslots(student_list)
+        # schedule in all students
+        Roster.schedule_students()
 
-    def initialise(self, COURSES, STUDENT_COURSES, ROOMS):
+        # reset all availability of rooms for in the case of doing several initiates
+        Roster.reset_room_availability(room_list)
 
-
-        # starts up a random Roster
-        course_list, student_list, room_list = self.assign(COURSES, STUDENT_COURSES, ROOMS)
-
-        # Create Malus Calculator
-        MC = MalusCalculatorClass.MalusCalculator(course_list, student_list, room_list)
+    def initialize(self):
+        """
+        This method initializes the roster
+        """
 
         # Create a roster
-        Roster = RosterClass.Roster(room_list, student_list, course_list, capacity=self.CAPACITY)
+        Roster = RosterClass.Roster(capacity=self.CAPACITY)
 
         # Fill the roster
-        self.schedule_fill(Roster, course_list, student_list)
+        self.schedule_fill(Roster, course_list, room_list)
 
         # Compute Malus
-        malus = MC.compute_total_malus(Roster.schedule)
+        malus = self.MC.compute_total_malus(Roster.schedule)
 
-        return malus, Roster, course_list, student_list, room_list, MC
+        return malus, Roster
 
-    """ GET """
+    def __run_random(self):
+        """
+        This method runs the initialize for 500 iterations and appends the malus points to the list cost
+        """
 
-    def get_schedule(self):
-        return self.Roster.schedule
-
-    """ METHODS """
-
-    def __run_random(self, COURSES, STUDENT_COURSES, ROOMS):
+        # make the lists
         self.costs = []
         self.iterations = []
-        for i in tqdm(range(100)):
 
-            self.costs.append(self.initialise(COURSES, STUDENT_COURSES, ROOMS)[0]['Total'])
+        # Run the initialize function 500 times
+        for i in tqdm(range(500)):
+
+            self.costs.append(self.initialize()[0]['Total'])
 
             self.iterations.append(i)
 
-    def plot_startup(self, COURSES, STUDENT_COURSES, ROOMS):
-        '''plots 300 random startups to get an idea of what a random score would be'''
+    def plot_startup(self):
+        """
+        This method plots 500 random startups to get an idea of what a random score would be
+        """
 
-        self.__run_random(COURSES, STUDENT_COURSES, ROOMS)
+        # Run the random function
+        self.__run_random()
 
+        # Set the file name based on the heuristic that are enabled
         if self.CAPACITY or self.POPULAR or self.POPULAR_OWN_DAY:
-            fig_name = f'Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}.png'
+            fig_name = f'Baseline_Capacity:{self.CAPACITY}_Popular:{self.POPULAR}_Popular_own_day:{self.POPULAR_OWN_DAY}_Busy_Students:{self.DIFFICULT_STUDENTS}.png'
         else:
             fig_name = "Baseline_random.png"
 
@@ -189,6 +141,7 @@ class Generator:
         # Directory "visualize"
         directory_plots = os.path.join(parent_dir, 'AH/visualize')
 
+        # Set settings for plot
         plt.figure(figsize=(10,4))
         plt.style.use('seaborn-whitegrid')
 
@@ -199,17 +152,22 @@ class Generator:
         plt.ylabel('Iterations')
         plt.xlabel('Malus')
         plt.savefig(os.path.join(directory_plots, fig_name))
+        plt.show()
 
     def optimize(self, experiment, mode, core_assignment, hill_climber_iters, algorithm_duration, experiment_iter=0):
-        Multiprocessor = MultiprocessorClass.Multiprocessor(self.Roster, self.course_list, self.student_list, self.MC, self.ANNEALING, experiment_iter)
 
+        # initiate the optimze class
+        Optimize = OptimizeClass.Optimize(self.Roster, self.ANNEALING, experiment_iter)
+
+        # choose the right method from the optimize class to run
         if mode == 'sequential':
-            pass
-        elif mode == 'multiproccesing':
-            Multiprocessor.run_multi(algorithm_duration, experiment, core_assignment, hill_climber_iters)
-        elif mode == 'genetic':
-            Multiprocessor.run_genetic(algorithm_duration, experiment)
-        elif mode == 'genetic pool':
-            Multiprocessor.run_genetic_pool(algorithm_duration, experiment, core_assignment, hill_climber_iters)
+            Optimize.run_solo(algorithm_duration, experiment, core_assignment, hill_climber_iters)
 
-        return self.student_list
+        elif mode == 'multiproccesing':
+            Optimize.run_multi(algorithm_duration, experiment, core_assignment, hill_climber_iters)
+
+        elif mode == 'genetic':
+            Optimize.run_genetic(algorithm_duration, experiment)
+
+        elif mode == 'genetic pool':
+            Optimize.run_genetic_pool(algorithm_duration, experiment, core_assignment, hill_climber_iters)
