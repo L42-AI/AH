@@ -457,7 +457,7 @@ class App(customtkinter.CTk):
             for mp in _hillclimber_iters:
                 G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-                G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
+                G.optimize(experiment, mode, hillclimber_assignment, mp, duration)
         if not test_multiplier:
             # run the experiment, good luck cooling your pc
             for i in range(30):
