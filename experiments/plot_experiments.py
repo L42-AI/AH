@@ -54,9 +54,7 @@ def visualize_experiments(file_location, save_location, title, iteration_name, m
     plt.ylabel('Malus')
     plt.title(title, fontsize=20)
 
-    # save the figure at correct size
-    plt.savefig(save_location, dpi=1000)
-
+    # save the fig
     fig = plt.gcf()
     fig.set_size_inches(figsize, forward=False)
     fig.savefig(save_location, dpi=1000)
