@@ -74,7 +74,7 @@ class HillClimber:
         self.accept_me = False
 
         # Compute malus with function
-        self.malus = self.get_malus(self.new_schedule)
+        self.malus = self.get_malus(self.schedule)
 
         # set the number of iterations depending on user input
         if type(hill_climber_iters) == float:
