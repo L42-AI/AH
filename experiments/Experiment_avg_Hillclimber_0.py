@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
 
     # load the data into a dataframe
-    df = pd.read_csv('Testing Hillclimber_0 30 times.csv')
+    df = pd.read_csv(r'data/Testing Hillclimber_0 30 times.csv')
 
     if zoomed:
         # cut so the plot is prittier
@@ -33,6 +33,6 @@ if __name__ == '__main__':
     plt.xlabel('Iteration')
     plt.ylabel('Malus')
 
-    plt.savefig('Plot Average Seminars Swap.png', dpi=1000)
+    plt.savefig(r'plots/Plot Average Seminars Swap.png', dpi=1000)
 
     plt.show()

@@ -3,7 +3,7 @@ import pandas as pd
 import seaborn as sns
 
 
-df = pd.read_csv('experiments/experiment2.csv')
+df = pd.read_csv(r'data/experiments/experiment2.csv')
 
 hillclimbers = df['Hill Climber'].unique()
 
