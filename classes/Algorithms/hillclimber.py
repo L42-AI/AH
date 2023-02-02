@@ -31,7 +31,7 @@ class HillClimber:
         self.MC = MalusCalculatorClass.MC()
 
         # Compute malus with MalusCalculator
-        self.malus = self.get_malus()
+        self.malus = self.get_malus(self.schedule)
 
     """ Inheritable methods """
 
@@ -54,11 +54,11 @@ class HillClimber:
         M = MutateClass.Mutate(schedule)
         return M
 
-    def get_malus(self):
+    def get_malus(self, schedule):
         """
         Return the score of the current schedule
         """
-        return self.MC.compute_total_malus(self.schedule)
+        return self.MC.compute_total_malus(schedule)
 
     """ Main Method """
 
@@ -74,7 +74,7 @@ class HillClimber:
         self.accept_me = False
 
         # Compute malus with function
-        self.malus = self.get_malus()
+        self.malus = self.get_malus(self.new_schedule)
 
         # set the number of iterations depending on user input
         if type(hill_climber_iters) == float:
@@ -100,7 +100,7 @@ class HillClimber:
             new_schedule = M.schedule
 
             # Calculate the malus points for the new schedule
-            new_malus = self.get_malus()
+            new_malus = self.get_malus(new_schedule)
 
             # let the hillclimber make 3 changes before a new score is calculated
             self.__accept_schedule(new_malus, new_schedule, T=T, ANNEALING=ANNEALING, fail_counter=fail_counter)
