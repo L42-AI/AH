@@ -44,7 +44,6 @@ After seeing improvements in the effectiveness of our application, we started to
 For our fifth and final experiment we ran a two staged process of singular hillclimbing, combined with an genetic multiprocessing algorithm.
 
 When using the application, the user can select any of these experiments to reproduce the results in the interest of reliability and replicability.
-Reproducibility of Lecture Graphs
 
 In order to reproduce the different plots go to the Experiment folder and run:
 
@@ -62,7 +61,8 @@ this will result in the following plots:
 ![Plot Hillclimber 30 times](https://user-images.githubusercontent.com/70103333/216187954-272c9ae7-a122-4ab5-b178-fdfa1030043d.png)
 The plots where each hillclimber is tested seperately will be added later as they are still loading.
 However, we do have the plot that came from running our Simulated Annealing. It shows that it tries to escape local optima but cannot find values lower than our best hillclimbers did on their own.
-![Annealing](https://user-images.githubusercontent.com/70103333/216189342-3c218602-e00f-4e93-b751-7ea28c784b98.png)
+![Annealing](https://user-images.githubusercontent.com/70103333/216325149-3e5ab29e-28e8-46e2-b92c-0e9c61305a10.png)
+
 
 ## Usage
 
