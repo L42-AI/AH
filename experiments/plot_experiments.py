@@ -66,7 +66,7 @@ def visualize_experiments(file_location, save_location, title, iteration_name, m
 
 if __name__ == '__main__':
 
-    activation = 4
+    activation = 3
 
     if activation == 0:
         visualize_experiments('One Hillclimber different stages multiplier_4.csv', 'Plot Hillclimber Multiplier 4.png', 'Experiment Hillclimber Multiplier 4', \
@@ -81,9 +81,5 @@ if __name__ == '__main__':
             'list_iterations', 'Iteration.1', 1500, 1550, 30, 50, (12, 12))
 
     elif activation == 3:
-        visualize_experiments('Normal Hillclimber geen multiplier 30 keer.csv', 'Plot Hillclimber 30 times.png', 'Running Hillclimber 30 times', \
-            'Iteration', 'Total Malus', 1500, 1550, 60, 50, (14, 12))
-
-    elif activation == 4:
         visualize_experiments('One Hillclimber different stages multiplier_4 with greedy.csv', 'Plot Hillclimber Greedy.png', 'Experiment Hillclimber Greedy', \
             'list_iterations', 'Iteration.1', 1300, 1350, 50, 70, (12, 10))
