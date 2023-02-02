@@ -438,7 +438,7 @@ class App(customtkinter.CTk):
         annealing = False
         visualize = False
         experiment = _experiment
-        duration = 15 * 60
+        duration = 20 * 60
         mode = _mode
         hillclimber_assignment = _hillclimber_assignment
         hill_climber_iters = _hillclimber_iters
@@ -449,7 +449,7 @@ class App(customtkinter.CTk):
         self.__reset_data_file(experiment)
 
         # run the experiment, good luck cooling your pc
-        for i in range(30):
+        for i in range(6):
             G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
             G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
