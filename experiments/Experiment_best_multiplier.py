@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-df = pd.read_csv('Different Multipliers.csv')
+df = pd.read_csv(r'data/Different Multipliers.csv')
 
 split_indices = np.where(df['List Iterations'] == 0)[0]
 
@@ -37,6 +37,6 @@ axis.set_xlabel('Multipliers')
 axis.set_ylabel('Values')
 axis.legend()
 plt.title('Duration and Malus of different Multipliers')
-plt.savefig('Plot Duration and Malus different Multipliers.png', dpi=1000)
+plt.savefig(r'plots/Plot Duration and Malus different Multipliers.png', dpi=1000)
 
 plt.show()

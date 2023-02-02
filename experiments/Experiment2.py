@@ -5,7 +5,6 @@ import seaborn as sns
 # export data to a csv
 df = pd.read_csv(r'data/experiment2.csv')
 
-# extract a list of used hillclimbers
 hillclimbers = df['Hill Climber'].unique()
 
 # create different dataframes for each hillclimber

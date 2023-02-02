@@ -7,7 +7,7 @@ import pandas as pd
 if __name__ == '__main__':
 
     # load the csv into a dataframe
-    df = pd.read_csv('experiment4.csv')
+    df = pd.read_csv(r'data/experiment4.csv')
 
     # get the lowest malus and their itirations
     minimum_y = df['Cost'].min()
@@ -24,6 +24,6 @@ if __name__ == '__main__':
     plt.xlabel('Iteration')
     plt.ylabel('Malus')
     
-    plt.savefig('Genetic.png', dpi=1000)
+    plt.savefig(r'plots/Genetic.png', dpi=1000)
 
     plt.show()
