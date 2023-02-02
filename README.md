@@ -50,9 +50,12 @@ In order to reproduce the different plots go to the Experiment folder and run:
 - Experiment_best_multiplier.py for the different Multipliers plot
 - Experiment_300_Generations.py for the 300 generations Experiment
 - Experiment_avg_30_Hillclimbers.py for the average of 30 hillclimbers plot
+- Experiment_avg_Hillclimber_0.py for the average of Seminar Swap plot
+- Experiment_avg_Hillclimber_0.py and change the zoom variable to true for the zoomed in average of Seminar Swap plot
+- Experiment_Swap_Students.py for the Genetic Plot
 - plot_experiments.py and set activation to 0 for the Hillclimber with different stages and multiplier 4
-- plot_experiments.py and set activation to 1 for the Hillcimber run 30 times
-- plot_experiments.py and set activation to 2 for the Hillclimber testing Hillclimber 2
+- plot_experiments.py and set activation to 1 for the plot testing Hillcimber Swap random Seminar
+- plot_experiments.py and set activation to 2 for the plot testing Hillclimber Swap random student Gaphour
 - plot_experiments.py and set activation to 3 for the Hillclimber different stages with a multiplier of 4 and greedy
 
 this will result in the following plots:

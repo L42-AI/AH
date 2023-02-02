@@ -443,7 +443,7 @@ class App(customtkinter.CTk):
         annealing = False
         visualize = False
         experiment = _experiment
-        duration = 15 * 60
+        duration = 20 * 60
         mode = _mode
         hillclimber_assignment = _hillclimber_assignment
         hill_climber_iters = _hillclimber_iters
