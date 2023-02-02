@@ -58,6 +58,7 @@ In order to reproduce the different plots go to the Experiment folder and run:
 
 this will result in the following plots:
 ![Plot Duration and Malus different Multipliers](https://user-images.githubusercontent.com/70103333/216183743-fbe1525b-3d97-48b0-872a-405342545189.png)
+![Plot Hillcimber 300 Generations](https://user-images.githubusercontent.com/70103333/216198113-4b9a312e-46d7-4d3b-ba1a-c9a04180a480.png)
 ![Plot Hillclimber 30 times](https://user-images.githubusercontent.com/70103333/216187954-272c9ae7-a122-4ab5-b178-fdfa1030043d.png)
 The plots where each hillclimber is tested seperately will be added later as they are still loading.
 However, we do have the plot that came from running our Simulated Annealing. It shows that it tries to escape local optima but cannot find values lower than our best hillclimbers did on their own.
