@@ -393,28 +393,27 @@ class App(customtkinter.CTk):
         # set the experiment parameters accordingly
         if exp1:
             mode = 'multiproccesing'
-            hillclimber_assignment = [0,0,2,2]
+            hillclimber_assignment = [0,0,1,1]
             hill_climber_iters = 50
             experiment = 1
-            self.run_exp(mode, hillclimber_assignment)
         elif exp2:
             mode = 'multiproccesing'
-            hillclimber_assignment = [0,0,0,0]
+            hillclimber_assignment = [2,2,3,3]
             hill_climber_iters = 50
             experiment = 2
         elif exp3:
             mode = 'multiproccesing'
-            hillclimber_assignment = [2,2,2,2]
+            hillclimber_assignment = [0,1,2,3]
             hill_climber_iters = 50
             experiment = 13
         elif exp4:
             mode = 'multiproccesing'
-            hillclimber_assignment = [2,2,2,2]
+            hillclimber_assignment = [0,1,2,3]
             hill_climber_iters = 0.1
             experiment = 4
         elif exp5:
             mode = 'genetic pool'
-            hillclimber_assignment = [0,0,2,2]
+            hillclimber_assignment = [0,1,2,3]
             hill_climber_iters = 400
             experiment = 5
 
