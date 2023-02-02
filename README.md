@@ -44,16 +44,18 @@ After seeing improvements in the effectiveness of our application, we started to
 For our fifth and final experiment we ran a two staged process of singular hillclimbing, combined with an genetic multiprocessing algorithm.
 
 When using the application, the user can select any of these experiments to reproduce the results in the interest of reliability and replicability.
-Reproducibility of Lecture Graphs
 
 In order to reproduce the different plots go to the Experiment folder and run:
 
 - Experiment_best_multiplier.py for the different Multipliers plot
 - Experiment_300_Generations.py for the 300 generations Experiment
 - Experiment_avg_30_Hillclimbers.py for the average of 30 hillclimbers plot
+- Experiment_avg_Hillclimber_0.py for the average of Seminar Swap plot
+- Experiment_avg_Hillclimber_0.py and change the zoom variable to true for the zoomed in average of Seminar Swap plot
+- Experiment_Swap_Students.py for the Genetic Plot
 - plot_experiments.py and set activation to 0 for the Hillclimber with different stages and multiplier 4
-- plot_experiments.py and set activation to 1 for the Hillcimber run 30 times
-- plot_experiments.py and set activation to 2 for the Hillclimber testing Hillclimber 2
+- plot_experiments.py and set activation to 1 for the plot testing Hillcimber Swap random Seminar
+- plot_experiments.py and set activation to 2 for the plot testing Hillclimber Swap random student Gaphour
 - plot_experiments.py and set activation to 3 for the Hillclimber different stages with a multiplier of 4 and greedy
 
 this will result in the following plots:
@@ -61,7 +63,8 @@ this will result in the following plots:
 ![Plot Hillclimber 30 times](https://user-images.githubusercontent.com/70103333/216187954-272c9ae7-a122-4ab5-b178-fdfa1030043d.png)
 The plots where each hillclimber is tested seperately will be added later as they are still loading.
 However, we do have the plot that came from running our Simulated Annealing. It shows that it tries to escape local optima but cannot find values lower than our best hillclimbers did on their own.
-![Annealing](https://user-images.githubusercontent.com/70103333/216189342-3c218602-e00f-4e93-b751-7ea28c784b98.png)
+![Annealing](https://user-images.githubusercontent.com/70103333/216325149-3e5ab29e-28e8-46e2-b92c-0e9c61305a10.png)
+
 
 ## Usage
 

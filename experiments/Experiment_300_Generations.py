@@ -4,7 +4,7 @@ import pandas as pd
 
 if __name__ == '__main__':
 
-    df = pd.read_csv('Hillclimber Run for 300 Generatinos Multiplier 4.csv')
+    df = pd.read_csv(r'data/Hillclimber Run for 300 Generatinos Multiplier 4.csv')
 
     sns.lineplot(data=df, x=df.index, y='Iteration.1')
 
@@ -29,6 +29,6 @@ if __name__ == '__main__':
 
     plt.title('Run Hillclimber for 300 Generations')
 
-    plt.savefig('Plot Hillcimber 300 Generations.png')
+    plt.savefig(r'plots/Plot Hillcimber 300 Generations.png')
 
     plt.show()

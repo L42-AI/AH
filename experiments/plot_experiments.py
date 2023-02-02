@@ -54,9 +54,7 @@ def visualize_experiments(file_location, save_location, title, iteration_name, m
     plt.ylabel('Malus')
     plt.title(title, fontsize=20)
 
-    # save the figure at correct size
-    plt.savefig(save_location, dpi=1000)
-
+    # save the fig
     fig = plt.gcf()
     fig.set_size_inches(figsize, forward=False)
     fig.savefig(save_location, dpi=1000)
@@ -66,24 +64,20 @@ def visualize_experiments(file_location, save_location, title, iteration_name, m
 
 if __name__ == '__main__':
 
-    activation = 0
+    activation = 3
 
     if activation == 0:
-        visualize_experiments('One Hillclimber different stages multiplier_4.csv', 'Plot Hillclimber Multiplier 4.png', 'Experiment Hillclimber Multiplier 4', \
-            'list_iterations' ,'Iteration.1', 1400, 1450, 20, 50, (12, 12))
+        visualize_experiments(r'data/One Hillclimber different stages multiplier_4.csv', r'plots/Plot Hillclimber Multiplier 4.png', 'Experiment Hillclimber Multiplier 4', \
+            'list_iterations' ,'Iteration.1', 1550, 1600, 60, 50, (12, 12))
 
     elif activation == 1:
-        visualize_experiments('Testing Hillclimber_0 30 times.csv', 'Plot Testing Hillclimber_0.png', 'Experiment Hillclimber Swap Random Lessons', \
+        visualize_experiments(r'data/Testing Hillclimber_0 30 times.csv', r'plots/Plot Testing Hillclimber_0.png', 'Experiment Hillclimber Swap Random Lessons', \
             'list_iterations', 'Iteration.1', 1700, 1750, 80, 50, (12, 12))
     
     elif activation == 2:
-        visualize_experiments('Testing Hillclimber_2 30 keer.csv', 'Plot Testing Hillclimber_2.png', 'Experiment Hillclimber Swap Student Gaphour', \
+        visualize_experiments(r'data/Testing Hillclimber_2 30 keer.csv', r'plots/Plot Testing Hillclimber_2.png', 'Experiment Hillclimber Swap Student Gaphour', \
             'list_iterations', 'Iteration.1', 1500, 1550, 30, 50, (12, 12))
 
     elif activation == 3:
-        visualize_experiments('Normal Hillclimber geen multiplier 30 keer.csv', 'Plot Hillclimber 30 times.png', 'Running Hillclimber 30 times', \
-            'Iteration', 'Total Malus', 1500, 1550, 60, 50, (14, 12))
-
-    elif activation == 4:
-        visualize_experiments('One Hillclimber different stages multiplier_4 with greedy.csv', 'Plot Hillclimber Greedy.png', 'Experiment Hillclimber Greedy', \
-            'list_iterations', 'Iteration.1', 1700, 1750, 50, 70, (12, 10))
+        visualize_experiments(r'data/One Hillclimber different stages multiplier_4 with greedy.csv', r'plots/Plot Hillclimber Greedy.png', 'Experiment Hillclimber Greedy', \
+            'list_iterations', 'Iteration.1', 1300, 1350, 50, 70, (12, 10))

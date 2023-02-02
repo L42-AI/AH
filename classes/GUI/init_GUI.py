@@ -393,34 +393,38 @@ class App(customtkinter.CTk):
         # set the experiment parameters accordingly
         if exp1:
             mode = 'multiproccesing'
-            hillclimber_assignment = [0,0,2,2]
+            hillclimber_assignment = [0,0,1,1]
             hill_climber_iters = 50
             experiment = 1
-            self.run_exp(mode, hillclimber_assignment)
+            test_multiplier = False
         elif exp2:
             mode = 'multiproccesing'
-            hillclimber_assignment = [0,0,0,0]
+            hillclimber_assignment = [2,2,3,3]
             hill_climber_iters = 50
             experiment = 2
+            test_multiplier = False
         elif exp3:
             mode = 'multiproccesing'
-            hillclimber_assignment = [2,2,2,2]
+            hillclimber_assignment = [0,1,2,3]
             hill_climber_iters = 50
             experiment = 13
+            test_multiplier = False
         elif exp4:
             mode = 'multiproccesing'
-            hillclimber_assignment = [2,2,2,2]
-            hill_climber_iters = 0.1
+            hillclimber_assignment = [0,1,2,3]
+            hill_climber_iters = [0.1,0.5,1.0,1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0]
             experiment = 4
+            test_multiplier = True
         elif exp5:
             mode = 'genetic pool'
-            hillclimber_assignment = [0,0,2,2]
+            hillclimber_assignment = [0,1,2,3]
             hill_climber_iters = 400
             experiment = 5
+            test_multiplier = False
 
         # run a standart experiment
         if not own_exp:
-            self.run_exp(mode, hillclimber_assignment, hill_climber_iters, experiment)
+            self.run_exp(mode, hillclimber_assignment, hill_climber_iters, experiment, test_multiplier=test_multiplier)
 
         if own_exp:
 
@@ -429,7 +433,7 @@ class App(customtkinter.CTk):
 
             self.__run_algorithm(settings)
 
-    def run_exp(self, _mode, _hillclimber_assignment, _hillclimber_iters, _experiment) -> None:
+    def run_exp(self, _mode, _hillclimber_assignment, _hillclimber_iters, _experiment, test_multiplier=False) -> None:
 
         # Set setting for initialization plot or optimalization
         capacity = False
@@ -439,7 +443,7 @@ class App(customtkinter.CTk):
         annealing = False
         visualize = False
         experiment = _experiment
-        duration = 15 * 60
+        duration = 20 * 60
         mode = _mode
         hillclimber_assignment = _hillclimber_assignment
         hill_climber_iters = _hillclimber_iters
@@ -449,14 +453,19 @@ class App(customtkinter.CTk):
 
         self.__reset_data_file(experiment)
 
-        # run the experiment, good luck cooling your pc
-        for i in range(30):
-            G = GeneratorClass.Generator(capacity, popular, popular_own_day,
+        if test_multiplier:
+            for mp in _hillclimber_iters:
+                G = GeneratorClass.Generator(capacity, popular, popular_own_day,
                                      difficult_students, annealing, visualize)
-            G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
+                G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
+        if not test_multiplier:
+            # run the experiment, good luck cooling your pc
+            for i in range(30):
+                G = GeneratorClass.Generator(capacity, popular, popular_own_day,
+                                        difficult_students, annealing, visualize)
+                G.optimize(experiment, mode, hillclimber_assignment, hill_climber_iters, duration, i)
 
         # Plot Funtion
-
         self.finish(student_list)
 
     """ Methods """
